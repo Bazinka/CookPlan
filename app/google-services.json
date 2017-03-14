@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "90145263407",
+    "firebase_url": "https://cookplan-d5d77.firebaseio.com",
+    "project_id": "cookplan-d5d77",
+    "storage_bucket": "cookplan-d5d77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90145263407:android:f3881ecad056ad34",
+        "android_client_info": {
+          "package_name": "com.cookplan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90145263407-ltb0fhvub6ekqjnm2p2bj3k0fml3sg0b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cookplan",
+            "certificate_hash": "030007279ff32dcde569d43aff454ce4d3bb8495"
+          }
+        },
+        {
+          "client_id": "90145263407-2cojs19l0thah7c9mp4f8i66b5u5ls4s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWs-AppYEO_DF82Lvw6rFZJtu2XloDYBA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90145263407-2cojs19l0thah7c9mp4f8i66b5u5ls4s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
