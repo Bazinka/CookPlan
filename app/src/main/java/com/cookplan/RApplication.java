@@ -3,6 +3,7 @@ package com.cookplan;
 import android.app.Application;
 
 import com.bettervectordrawable.VectorDrawableCompat;
+import com.crashlytics.android.Crashlytics;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -27,7 +28,7 @@ public class RApplication extends Application {
     public void onCreate() {
         super.onCreate();
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
         JodaTimeAndroid.init(this);
         findAllVectorResourceIdsSlow();
     }
