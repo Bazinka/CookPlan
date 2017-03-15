@@ -3,19 +3,49 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primary_color</item>
-        <item name="colorPrimaryDark">@color/primary_dark_color</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent_color</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@color/primary_dark_color</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="TransparentBackground" parent="AppTheme">
+        <!-- подлупрозрачность окна -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- прозрачный цвет бэкграунда -->
+        <item name="android:windowBackground">@color/transparency_grey</item>
+        <!-- отключаем оверлей содержимого окна -->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item> <!-- отключаем заголовок -->
+        <item name="android:windowIsFloating">true</item> <!-- окно в любой части экрана -->
+        <item name="android:backgroundDimEnabled">false</item> <!-- отключаем затемнение -->
+    </style>
+
+    <style name="FirebaseUI" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent_color</item>
+        <item name="colorButtonNormal">@color/accent_color</item>
+        <item name="colorControlNormal">@color/accent_color</item>
+        <item name="colorControlActivated">@color/accent_color</item>
+        <item name="colorControlHighlight">@color/accent_color</item>
+        <item name="android:textColor">@color/authui_inputTextColorDark</item>
+        <item name="android:textColorPrimary">@color/authui_inputTextColor</item>
+        <item name="android:buttonStyle">@style/FirebaseUI.Button</item>
+        <item name="android:editTextStyle">@style/FirebaseUI.EditText</item>
+    </style>
 </resources>

@@ -97,11 +97,11 @@ public class AuthMethodPickerActivity extends AppCompatBase
                     mIdpProviders.add(new GoogleProvider(this, idpConfig));
                     break;
                 case AuthUI.FACEBOOK_PROVIDER:
-                    mIdpProviders.add(new FacebookProvider(
-                            this, idpConfig, mActivityHelper.getFlowParams().themeId));
+//                    mIdpProviders.add(new FacebookProvider(
+//                            this, idpConfig, mActivityHelper.getFlowParams().themeId));
                     break;
                 case AuthUI.TWITTER_PROVIDER:
-                    mIdpProviders.add(new TwitterProvider(this));
+//                    mIdpProviders.add(new TwitterProvider(this));
                     break;
                 case AuthUI.EMAIL_PROVIDER:
                     findViewById(R.id.email_provider).setVisibility(View.VISIBLE);
@@ -125,8 +125,8 @@ public class AuthMethodPickerActivity extends AppCompatBase
                             .inflate(R.layout.idp_button_facebook, btnHolder, false);
                     break;
                 case TwitterAuthProvider.PROVIDER_ID:
-                    loginButton = getLayoutInflater()
-                            .inflate(R.layout.idp_button_twitter, btnHolder, false);
+//                    loginButton = getLayoutInflater()
+//                            .inflate(R.layout.idp_button_twitter, btnHolder, false);
                     break;
                 default:
                     Log.e(TAG, "No button for provider " + provider.getProviderId());

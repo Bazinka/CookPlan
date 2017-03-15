@@ -89,8 +89,6 @@ public class FirebaseAuthActivity extends BaseActivity {
     private List<String> getGooglePermissions() {
         List<String> result = new ArrayList<>();
 
-        //add Google scope games
-        result.add(Scopes.GAMES);
         //add Google drive file
         result.add(Scopes.DRIVE_FILE);
         return result;
