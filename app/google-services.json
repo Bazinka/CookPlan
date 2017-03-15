@@ -13,10 +13,19 @@
           "package_name": "com.cookplan"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "90145263407-8e6rg27f9q459fu7hbsm67ps1k0dpaar.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cookplan",
+            "certificate_hash": "d8c3d07008db6b6dc70d3247b75ce0520f472379"
+          }
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDc3Wtwmbn2FATXJV17rWI5inOEE97QQ_k"
+          "current_key": "AIzaSyBpuGIfVBImgCBATNXM7OYNvO3KMg6qtnU"
         }
       ],
       "services": {
@@ -24,7 +33,7 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
+          "status": 2,
           "other_platform_oauth_client": []
         },
         "ads_service": {
