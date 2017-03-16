@@ -123,6 +123,7 @@ public class FirebaseAuthActivity extends BaseActivity {
             if (response == null) {
                 // User pressed back button
                 showSnackbar(R.string.sign_in_cancelled);
+                finish();
                 return;
             }
 

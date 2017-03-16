@@ -1,24 +1,37 @@
 package com.cookplan;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import io.fabric.sdk.android.Fabric;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.cookplan.auth.FirebaseAuthActivity;
+import com.cookplan.recipe_list.RecipeGridFragment;
+import com.cookplan.recipe_load.RecipeLoadActivity;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    private int mSelectedNavigationId;
+    private View mRootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,23 +40,52 @@ public class MainActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        mRootView = findViewById(R.id.drawer_layout);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        View headerView = navigationView.getHeaderView(0);
+        if (auth != null && auth.getCurrentUser() != null) {
+            FirebaseUser user = auth.getCurrentUser();
+            if (user.getPhotoUrl() != null) {
+                ImageView photoImageView = (ImageView) headerView.findViewById(R.id.user_photo_imageView);
+                Picasso.with(this).load(user.getPhotoUrl().getPath()).placeholder(R.drawable.logo).into(photoImageView);
+            }
+            if (user.getDisplayName() != null) {
+                TextView nameTextView = (TextView) headerView.findViewById(R.id.user_name_textView);
+                nameTextView.setText(user.getDisplayName());
+            }
+        }
+
         navigationView.setNavigationItemSelectedListener(this);
+
+        mSelectedNavigationId = R.id.nav_recipe_list;
+        navigationView.setCheckedItem(mSelectedNavigationId);
+        setRecipeListFragment();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_recipe_fab);
+        fab.setOnClickListener(view -> {
+            startNewPointActivity();
+        });
+    }
+
+    void startNewPointActivity() {
+        Intent intent = new Intent(this, RecipeLoadActivity.class);
+        startActivityWithLeftAnimation(intent);
+    }
+
+    void setRecipeListFragment() {
+        setTitle(getString(R.string.recipe_list_menu_title));
+        RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, pointListFragment);
+        transaction.commit();
     }
 
     @Override
@@ -56,46 +98,30 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        mSelectedNavigationId = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (mSelectedNavigationId == R.id.nav_recipe_list) {
+            setRecipeListFragment();
+        } else if (mSelectedNavigationId == R.id.nav_sign_out) {
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Intent in = new Intent();
+                                in.setClass(MainActivity.this, FirebaseAuthActivity.class);
+                                startActivityWithLeftAnimation(in);
+                                finish();
+                            } else {
+                                Snackbar.make(mRootView, R.string.sign_out_failed, Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
