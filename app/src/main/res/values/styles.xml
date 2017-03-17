@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -53,5 +53,26 @@
         <item name="android:textColorPrimary">@color/authui_inputTextColor</item>
         <item name="android:buttonStyle">@style/FirebaseUI.Button</item>
         <item name="android:editTextStyle">@style/FirebaseUI.EditText</item>
+    </style>
+
+    <style name="CookplanButtonStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="RecipeInputStyle">
+        <item name="android:textColor">@color/primary_text_color</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:background">@color/primary_light</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
     </style>
 </resources>

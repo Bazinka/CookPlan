@@ -1,4 +1,4 @@
-package com.cookplan.recipe_load;
+package com.cookplan.recipe_new;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,7 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
@@ -22,8 +22,8 @@ import com.cookplan.R;
 import com.cookplan.utils.PermissionUtils;
 import com.cookplan.utils.Utils;
 
-public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
-        RecipeLoadView {
+public class NewRecipeDescActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
+        NewRecipeDescView {
 
     private static final int PHOTO_REQUEST_CODE = 101;
     private static final int RC_IMAGE_PERMS = 102;
@@ -31,7 +31,7 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
             Manifest.permission.CAMERA};
 
     private ProgressDialog mProgressDialog;
-    private RecipeLoadPresenter presenter;
+    private NewRecipeDescPresenter presenter;
 
     private String language = null;
 
@@ -41,9 +41,9 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_load);
         setNavigationArrow();
-        setTitle("Загрузка нового рецепта");
+        setTitle(getString(R.string.new_recipe_desc_title));
 
-        Button captureImg = (Button) findViewById(R.id.action_btn);
+        Button captureImg = (Button) findViewById(R.id.ocr_desc_btn);
         if (captureImg != null) {
             captureImg.setOnClickListener(view -> {
                 new AlertDialog.Builder(this)
@@ -61,7 +61,7 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
 
             });
         }
-        presenter = new RecipeLoadPresenterImpl(this, this);
+        presenter = new NewRecipeDescPresenterImpl(this, this);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!PermissionUtils.isPermissionsGranted(this, permission)) {
                 PermissionUtils.requestPermissions(this, RC_IMAGE_PERMS, permission);
@@ -140,7 +140,7 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
     @Override
     public void setErrorToSnackBar(String error) {
         Snackbar.make(findViewById(R.id.root_view), error, Snackbar.LENGTH_LONG).show();
-        Utils.log(RecipeLoadActivity.class.getSimpleName(), error);
+        Utils.log(NewRecipeDescActivity.class.getSimpleName(), error);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
     public void setAsyncTextResult(String result) {
         runOnUiThread(() -> {
             if (result != null && !result.equals("")) {
-                TextView textView = (TextView) findViewById(R.id.textResult);
+                EditText textView = (EditText) findViewById(R.id.process_edit_text);
                 if (textView != null) {
                     textView.setText(result);
                 }
@@ -167,7 +167,7 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
     public void setAsyncErrorToSnackBar(String error) {
         runOnUiThread(() -> {
             Snackbar.make(findViewById(R.id.root_view), error, Snackbar.LENGTH_LONG).show();
-            Utils.log(RecipeLoadActivity.class.getSimpleName(), error);
+            Utils.log(NewRecipeDescActivity.class.getSimpleName(), error);
             if (mProgressDialog != null) {
                 mProgressDialog.dismiss();
             }

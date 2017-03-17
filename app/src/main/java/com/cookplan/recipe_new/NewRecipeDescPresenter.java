@@ -1,4 +1,4 @@
-package com.cookplan.recipe_load;
+package com.cookplan.recipe_new;
 
 import android.net.Uri;
 
@@ -6,7 +6,7 @@ import android.net.Uri;
  * Created by DariaEfimova on 16.03.17.
  */
 
-public interface RecipeLoadPresenter {
+public interface NewRecipeDescPresenter {
 
     public Uri getOutputImagePath();
 

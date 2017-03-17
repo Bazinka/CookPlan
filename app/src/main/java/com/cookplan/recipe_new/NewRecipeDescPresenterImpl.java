@@ -1,4 +1,4 @@
-package com.cookplan.recipe_load;
+package com.cookplan.recipe_new;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,17 +22,17 @@ import java.io.OutputStream;
  * Created by DariaEfimova on 16.03.17.
  */
 
-public class RecipeLoadPresenterImpl implements RecipeLoadPresenter {
-    private static final String tag = RecipeLoadPresenterImpl.class.getSimpleName();
+public class NewRecipeDescPresenterImpl implements NewRecipeDescPresenter {
+    private static final String tag = NewRecipeDescPresenterImpl.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/CookPlanImages/";
     private static final String TESSDATA = "tessdata";
 
 
-    private RecipeLoadView mainView;
+    private NewRecipeDescView mainView;
     private Context context;
     private TessBaseAPI tessBaseApi;
 
-    public RecipeLoadPresenterImpl(RecipeLoadView mainView, Context context) {
+    public NewRecipeDescPresenterImpl(NewRecipeDescView mainView, Context context) {
         this.mainView = mainView;
         this.context = context;
     }
