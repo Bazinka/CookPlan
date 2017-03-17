@@ -168,12 +168,8 @@ public class RecipeLoadPresenterImpl implements RecipeLoadPresenter {
         tessBaseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO_OSD);
         tessBaseApi.init(DATA_PATH, language);
 
-//       //EXTRA SETTINGS
-//        //For example if we only want to detect numbers
-//        tessBaseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "1234567890");
-//
         //blackList Example
-        tessBaseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-[]}{" +
+        tessBaseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*_+=-[]}{" +
                 "'\"\\|~`");
 
         Utils.log(tag, "Training file loaded");
