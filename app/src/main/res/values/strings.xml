@@ -16,4 +16,13 @@
     <string name="general_settings">General</string>
     <string name="recipe_list_menu_title">Список рецептов</string>
 
+    <!--    Permissions    -->
+    <!--<string name="permission_rationale">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>-->
+    <string name="permission_required_toast">Permission is required for this APP.</string>
+    <string name="error_generate_image_path">Error with a generating image path process</string>
+    <string name="permission_denied">Permission denied, We\'re sorry, you can\'t choose the picture</string>
+    <string name="unable_to_copy_files">Unable to copy files to tessdata</string>
+    <string name="text_wasnt_recognize">Текст не распознан, произошла ошибка.</string>
+    <string name="permission_rationale_message">Права на чтение и запись файлов необходимы для распознования текста с картинки</string>
+
 </resources>

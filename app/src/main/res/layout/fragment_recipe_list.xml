@@ -6,8 +6,8 @@
     android:name="com.cookplan.recipe_list.RecipeGridFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginLeft="@dimen/main_margin_left"
+    android:layout_marginRight="@dimen/main_margin_left"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.cookplan.recipe_list.RecipeGridFragment"
     tools:listitem="@layout/fragment_recipe_item" />
