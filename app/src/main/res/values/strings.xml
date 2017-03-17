@@ -24,5 +24,10 @@
     <string name="unable_to_copy_files">Unable to copy files to tessdata</string>
     <string name="text_wasnt_recognize">Текст не распознан, произошла ошибка.</string>
     <string name="permission_rationale_message">Права на чтение и запись файлов необходимы для распознования текста с картинки</string>
+    <string name="processing_title">Processing</string>
+    <string name="processing_ocr_message">Doing OCR...</string>
+    <string name="choose_recipe_language">Please choose the language</string>
+    <string name="english_lan_title">English</string>
+    <string name="russian_lan_title">Russian</string>
 
 </resources>

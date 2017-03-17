@@ -2,9 +2,10 @@ package com.cookplan.recipe_load;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,9 +22,6 @@ import com.cookplan.R;
 import com.cookplan.utils.PermissionUtils;
 import com.cookplan.utils.Utils;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
         RecipeLoadView {
 
@@ -32,9 +30,11 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
     private static final String[] permission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA};
 
-    String result = "empty";
-    private Uri outputFileUri;
+    private ProgressDialog mProgressDialog;
     private RecipeLoadPresenter presenter;
+
+    private String language = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,19 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
         Button captureImg = (Button) findViewById(R.id.action_btn);
         if (captureImg != null) {
             captureImg.setOnClickListener(view -> {
-                startCameraActivity();
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.choose_recipe_language)
+                        .setPositiveButton(R.string.english_lan_title, (dialog, which) -> {
+                            language = "eng";
+                            startCameraActivity();
+                        })
+                        .setNegativeButton(R.string.russian_lan_title,
+                                (dialog, which) -> {
+                                    language = "rus";
+                                    startCameraActivity();
+                                })
+                        .show();
+
             });
         }
         presenter = new RecipeLoadPresenterImpl(this, this);
@@ -65,7 +77,7 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
     private void startCameraActivity() {
         if (PermissionUtils.isPermissionsGranted(this, permission)) {
             if (presenter != null) {
-                outputFileUri = presenter.getOutputImagePath();
+                Uri outputFileUri = presenter.getOutputImagePath();
                 if (outputFileUri != null) {
                     final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
@@ -86,9 +98,16 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent data) {
         //making photo
-        if (requestCode == PHOTO_REQUEST_CODE && resultCode == Activity.RESULT_OK && presenter != null) {
-                presenter.doOCR("eng");
-
+        if (requestCode == PHOTO_REQUEST_CODE && resultCode == Activity.RESULT_OK
+                && presenter != null
+                && language != null) {
+            if (mProgressDialog == null) {
+                mProgressDialog = ProgressDialog.show(this, getString(R.string.processing_title),
+                        getString(R.string.processing_ocr_message), true);
+            } else {
+                mProgressDialog.show();
+            }
+            presenter.doOCR(language);
         } else {
             Toast.makeText(this, "ERROR: Image was not obtained.", Toast.LENGTH_SHORT).show();
         }
@@ -114,7 +133,6 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
                 } else {
                     setErrorToSnackBar(getString(R.string.permission_denied));
                 }
-                return;
             }
         }
     }
@@ -131,11 +149,29 @@ public class RecipeLoadActivity extends BaseActivity implements ActivityCompat.O
     }
 
     @Override
-    public void setTextResult(String result) {
-        TextView textView = (TextView) findViewById(R.id.textResult);
-        if (textView != null) {
-            textView.setText(result);
-        }
+    public void setAsyncTextResult(String result) {
+        runOnUiThread(() -> {
+            if (result != null && !result.equals("")) {
+                TextView textView = (TextView) findViewById(R.id.textResult);
+                if (textView != null) {
+                    textView.setText(result);
+                }
+            }
+            if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void setAsyncErrorToSnackBar(String error) {
+        runOnUiThread(() -> {
+            Snackbar.make(findViewById(R.id.root_view), error, Snackbar.LENGTH_LONG).show();
+            Utils.log(RecipeLoadActivity.class.getSimpleName(), error);
+            if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
+            }
+        });
     }
 
 }

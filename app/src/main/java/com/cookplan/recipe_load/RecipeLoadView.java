@@ -7,7 +7,10 @@ package com.cookplan.recipe_load;
 public interface RecipeLoadView {
     public void setErrorToSnackBar(String error);
 
+    public void setAsyncErrorToSnackBar(String error);
+
+
     public void setErrorToast(String error);
 
-    public void setTextResult(String result);
+    public void setAsyncTextResult(String result);
 }

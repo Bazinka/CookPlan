@@ -3,9 +3,7 @@ package com.cookplan.recipe_load;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
@@ -43,16 +41,11 @@ public class RecipeLoadPresenterImpl implements RecipeLoadPresenter {
     public Uri getOutputImagePath() {
         Uri outputFileUri = null;
         try {
-            File file = new File(context.getApplicationContext().getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "yourPicture.jpg");
+            File file = new File(context.getApplicationContext().getExternalFilesDir(
+                    android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "ocr.jpg");
             outputFileUri = FileProvider.getUriForFile(context,
                     context.getApplicationContext().getPackageName() + ".provider",
                     file);
-//            String IMGS_PATH = Environment.getExternalStorageDirectory().toString() + "/CookPlanImages/imgs";
-//            prepareDirectory(IMGS_PATH);
-//            String img_path = IMGS_PATH + "/ocr.jpg";
-//            outputFileUri = FileProvider.getUriForFile(context,
-//                    context.getApplicationContext().getPackageName() + ".provider",
-//                    new File(img_path));
         } catch (Exception e) {
             e.printStackTrace();
             if (mainView != null) {
@@ -146,66 +139,19 @@ public class RecipeLoadPresenterImpl implements RecipeLoadPresenter {
             InputStream inStream = context.getContentResolver().openInputStream(imgUri);
             Bitmap bitmap = BitmapFactory.decodeStream(inStream, new Rect(0, 0, 0, 0), options);
 
-//            bitmap = getBitmapWithRightOrientation(bitmap, imgUri.getPath());
             String result = extractText(bitmap, language);
 
             if (mainView != null) {
-                mainView.setTextResult(result);
+                mainView.setAsyncTextResult(result);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             if (mainView != null) {
-                mainView.setErrorToSnackBar(context.getString(R.string.text_wasnt_recognize));
+                mainView.setAsyncErrorToSnackBar(context.getString(R.string.text_wasnt_recognize));
             }
         }
     }
-
-//    Bitmap getBitmapWithRightOrientation(Bitmap bitmap, String _path) {
-//        ExifInterface exif = null;
-//        try {
-//            exif = new ExifInterface(_path);
-//
-//            int exifOrientation = exif.getAttributeInt(
-//                    ExifInterface.TAG_ORIENTATION,
-//                    ExifInterface.ORIENTATION_NORMAL);
-//
-//            Utils.log("getBitmapWithRightOrientation", "Orient: " + exifOrientation);
-//
-//            int rotate = 0;
-//
-//            switch (exifOrientation) {
-//                case ExifInterface.ORIENTATION_ROTATE_90:
-//                    rotate = 90;
-//                    break;
-//                case ExifInterface.ORIENTATION_ROTATE_180:
-//                    rotate = 180;
-//                    break;
-//                case ExifInterface.ORIENTATION_ROTATE_270:
-//                    rotate = 270;
-//                    break;
-//            }
-//
-//            Utils.log("getBitmapWithRightOrientation", "Rotation: " + rotate);
-//
-//            if (rotate != 0) {
-//
-//                // Getting width & height of the given image.
-//                int w = bitmap.getWidth();
-//                int h = bitmap.getHeight();
-//
-//                // Setting pre rotate
-//                Matrix mtx = new Matrix();
-//                mtx.postRotate(rotate);
-//
-//                // Rotating Bitmap
-//                bitmap = Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, false);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return bitmap;
-//    }
 
     private String extractText(Bitmap bitmap, String language) {
         try {
@@ -226,9 +172,9 @@ public class RecipeLoadPresenterImpl implements RecipeLoadPresenter {
 //        //For example if we only want to detect numbers
 //        tessBaseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "1234567890");
 //
-//        //blackList Example
-//        tessBaseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-qwertyuiop[]}{POIU" +
-//                "YTRWQasdASDfghFGHjklJKLl;L:'\"\\|~`xcvXCVbnmBNM,./<>?");
+        //blackList Example
+        tessBaseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-[]}{" +
+                "'\"\\|~`");
 
         Utils.log(tag, "Training file loaded");
         tessBaseApi.setImage(bitmap);
@@ -245,7 +191,9 @@ public class RecipeLoadPresenterImpl implements RecipeLoadPresenter {
 
     @Override
     public void doOCR(String language) {
-        prepareTesseract();
-        startOCR(getOutputImagePath(), language);
+        new Thread(() -> {
+            prepareTesseract();
+            startOCR(getOutputImagePath(), language);
+        }).start();
     }
 }
