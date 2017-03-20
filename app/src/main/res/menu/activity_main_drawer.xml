@@ -8,22 +8,22 @@
         <!--android:title="@string/map" />-->
         <item
             android:id="@+id/nav_recipe_list"
-            android:icon="@drawable/ic_local_grocery_store_white"
+            android:icon="@drawable/ic_recipe_list"
             android:title="@string/recipe_list_menu_title" />
+        <item
+            android:id="@+id/nav_shopping_list"
+            android:icon="@drawable/ic_basket"
+            android:title="@string/shopping_list_title" />
 
-        <!--<item-->
-        <!--android:id="@+id/nav_slideshow"-->
-        <!--android:icon="@drawable/ic_menu_slideshow"-->
-        <!--android:title="Slideshow" />-->
-        <!--<item-->
-        <!--android:id="@+id/nav_manage"-->
-        <!--android:icon="@drawable/ic_menu_manage"-->
-        <!--android:title="Tools" />-->
+        <item
+            android:id="@+id/nav_vocabulary"
+            android:icon="@drawable/ic_vocabulary"
+            android:title="@string/product_vocabulary_title" />
+
     </group>
 
     <item android:title="@string/general_settings">
         <menu>
-
             <item
                 android:id="@+id/nav_sign_out"
                 android:icon="@drawable/ic_menu_send"

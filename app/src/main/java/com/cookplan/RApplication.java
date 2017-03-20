@@ -1,6 +1,7 @@
 package com.cookplan;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.bettervectordrawable.VectorDrawableCompat;
 import com.crashlytics.android.Crashlytics;
@@ -22,7 +23,11 @@ public class RApplication extends Application {
     private static final String TWITTER_KEY = "0l4bGspRK4LNZQIwMx9AaWA1W";
     private static final String TWITTER_SECRET = "NiNrGfXFdhVFMIw6Y1U4nue30TAU321CZWUZ2VWrhokIRNRJpm";
 
+    private static Context context;
 
+    public static Context getAppContext() {
+        return context;
+    }
 
     @Override
     public void onCreate() {
@@ -31,6 +36,7 @@ public class RApplication extends Application {
         Fabric.with(this, new Twitter(authConfig), new Crashlytics());
         JodaTimeAndroid.init(this);
         findAllVectorResourceIdsSlow();
+        context = getApplicationContext();
     }
 
     private void findAllVectorResourceIdsSlow() {

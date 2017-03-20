@@ -36,5 +36,15 @@
     <string name="save_recipe_desc_button_title">Сохранить описание</string>
     <string name="recipe_desc_hint">Процесс приготовления</string>
     <string name="error_required_field">Recipe name is required</string>
+    <string name="product_vocabulary_title">Словарь продуктов питания</string>
+    <string name="shopping_list_title">Список покупок</string>
+    <string name="gramm_title">gr.</string>
+    <string name="unit_title">units</string>
+    <string name="kilogramm_title">kg.</string>
+    <string name="litre_title">litre</string>
+    <string name="mililitre_title">ml.</string>
+    <string name="cup_title">cups</string>
+    <string name="teaspoon_title">teaspoon</string>
+    <string name="tablespoon_title">tablespoon</string>
 
 </resources>

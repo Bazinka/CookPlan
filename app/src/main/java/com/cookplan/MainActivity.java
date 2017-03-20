@@ -17,9 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cookplan.auth.FirebaseAuthActivity;
+import com.cookplan.product_list.VocabularyListActivity;
 import com.cookplan.recipe_list.RecipeGridFragment;
 import com.cookplan.recipe_new.add_basics.EditRecipeBasicsInfoActivity;
-import com.cookplan.recipe_new.add_ingredients.EditRecipeIngridientsActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -107,6 +107,11 @@ public class MainActivity extends BaseActivity
 
         if (mSelectedNavigationId == R.id.nav_recipe_list) {
             setRecipeListFragment();
+        } else if (mSelectedNavigationId == R.id.nav_shopping_list) {
+            //TODO:доделать
+        } else if (mSelectedNavigationId == R.id.nav_vocabulary) {
+            Intent intent = new Intent(this, VocabularyListActivity.class);
+            startActivityWithLeftAnimation(intent);
         } else if (mSelectedNavigationId == R.id.nav_sign_out) {
             AuthUI.getInstance()
                     .signOut(this)
