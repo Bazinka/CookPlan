@@ -1,4 +1,4 @@
-package com.cookplan.recipe_new;
+package com.cookplan.recipe_new.add_desc;
 
 /**
  * Created by DariaEfimova on 16.03.17.

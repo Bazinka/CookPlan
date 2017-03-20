@@ -50,7 +50,7 @@
 
     <EditText
         android:id="@+id/process_edit_text"
-        style="@style/RecipeInputStyle"
+        style="@style/RecipeDescInputStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/main_margin_left"

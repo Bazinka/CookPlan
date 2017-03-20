@@ -1,4 +1,4 @@
-package com.cookplan.recipe_new;
+package com.cookplan.recipe_new.add_desc;
 
 import android.content.Context;
 import android.graphics.Bitmap;

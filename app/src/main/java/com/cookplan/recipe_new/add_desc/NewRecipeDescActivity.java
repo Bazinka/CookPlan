@@ -1,4 +1,4 @@
-package com.cookplan.recipe_new;
+package com.cookplan.recipe_new.add_desc;
 
 import android.Manifest;
 import android.app.Activity;
@@ -13,6 +13,8 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -41,7 +43,7 @@ public class NewRecipeDescActivity extends BaseActivity implements ActivityCompa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_load);
         setNavigationArrow();
-        setTitle(getString(R.string.new_recipe_desc_title));
+        setTitle(getString(R.string.add_recipe_second_screen_title));
 
         Button captureImg = (Button) findViewById(R.id.ocr_desc_btn);
         if (captureImg != null) {
@@ -172,6 +174,23 @@ public class NewRecipeDescActivity extends BaseActivity implements ActivityCompa
                 mProgressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu _menu) {
+        getMenuInflater().inflate(R.menu.add_recipe_next_menu, _menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.app_bar_next) {
+            //TODO:saving data
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
