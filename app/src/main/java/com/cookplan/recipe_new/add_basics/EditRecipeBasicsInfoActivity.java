@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import com.cookplan.R;
 import com.cookplan.recipe_new.EditRecipeBaseActicity;
-import com.cookplan.recipe_new.add_ingredients.EditRecipeIngridientsActivity;
+import com.cookplan.recipe_new.add_ingredients.EditRecipeIngredientsActivity;
 
 public class EditRecipeBasicsInfoActivity extends EditRecipeBaseActicity {
 
@@ -26,7 +26,7 @@ public class EditRecipeBasicsInfoActivity extends EditRecipeBaseActicity {
             String text = recipeEditText.getText().toString();
             if (!text.isEmpty()) {
                 //TODO: saving data
-                Intent intent = new Intent(this, EditRecipeIngridientsActivity.class);
+                Intent intent = new Intent(this, EditRecipeIngredientsActivity.class);
                 intent.putExtra(RECIPE_NAME_KEY, text);
                 startActivityWithLeftAnimation(intent);
                 finish();

@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/main_item_padding">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/ingredient_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="название" />
+        android:layout_margin="10dp"
+        android:text="Произошла какая-то ошибка во время отрисовки списка"
+        android:textColor="@color/primary" />
 </LinearLayout>

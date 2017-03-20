@@ -6,7 +6,7 @@
     android:padding="@dimen/main_item_padding">
 
     <TextView
-        android:id="@+id/ingredient_item_name"
+        android:id="@+id/item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="название" />
