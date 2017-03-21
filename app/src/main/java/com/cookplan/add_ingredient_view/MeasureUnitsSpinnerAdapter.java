@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.cookplan.R;
 import com.cookplan.models.MeasureUnit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class MeasureUnitsSpinnerAdapter extends ArrayAdapter<MeasureUnit> implem
 
     public MeasureUnitsSpinnerAdapter(Context context, List<MeasureUnit> itemsAll, List<MeasureUnit> selectedItems) {
         super(context, R.layout.measure_spinner_item_layout, itemsAll);
-        this.selectedItems = selectedItems;
+        this.selectedItems = selectedItems != null ? selectedItems : new ArrayList<>();
         this.itemsAll = itemsAll;
     }
 
