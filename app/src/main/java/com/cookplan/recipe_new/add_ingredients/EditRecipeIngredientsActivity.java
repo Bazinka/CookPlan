@@ -2,6 +2,7 @@ package com.cookplan.recipe_new.add_ingredients;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class EditRecipeIngredientsActivity extends EditRecipeBaseActicity implements EditRecipeIngredientsView {
 
-    private ShoppingListRecyclerAdapter adapter;
+    private InrgedientsRecyclerAdapter adapter;
     private EditRecipeIngredientsPresenter presenter;
 
 
@@ -28,13 +29,14 @@ public class EditRecipeIngredientsActivity extends EditRecipeBaseActicity implem
         String name = getIntent().getStringExtra(RECIPE_NAME_KEY);
         setTitle(getString(R.string.add_recipe_second_screen_title) + " " + name);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.shopping_list_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ingredients_recycler_view);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new ShoppingListRecyclerAdapter(new ArrayList<>());
+        adapter = new InrgedientsRecyclerAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
         presenter = new EditRecipeIngredientsPresenterImpl(this);

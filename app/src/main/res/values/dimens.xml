@@ -9,7 +9,10 @@
     <dimen name="menu_name_text_size">20sp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="main_margin_left">16dp</dimen>
+    <dimen name="margin_glutter">12dp</dimen>
+    <dimen name="margin_top_glutter">24dp</dimen>
     <dimen name="medium_text_size">16sp</dimen>
+    <dimen name="large_text_size">24sp</dimen>
     <dimen name="main_item_padding">10dp</dimen>
     <dimen name="spinner_separator_height">1dp</dimen>
 </resources>

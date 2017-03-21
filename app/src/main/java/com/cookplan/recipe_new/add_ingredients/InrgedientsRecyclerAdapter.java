@@ -15,12 +15,12 @@ import java.util.List;
  * Created by DariaEfimova on 18.03.17.
  */
 
-public class ShoppingListRecyclerAdapter extends RecyclerView.Adapter<ShoppingListRecyclerAdapter.MainViewHolder> {
+public class InrgedientsRecyclerAdapter extends RecyclerView.Adapter<InrgedientsRecyclerAdapter.MainViewHolder> {
 
 
     private List<Ingredient> mDataset;
 
-    public ShoppingListRecyclerAdapter(List<Ingredient> myDataset) {
+    public InrgedientsRecyclerAdapter(List<Ingredient> myDataset) {
         mDataset = myDataset;
     }
 

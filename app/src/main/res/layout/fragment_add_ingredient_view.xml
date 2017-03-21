@@ -20,7 +20,9 @@
                 android:id="@+id/product_name_edit_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
                 android:hint="@string/enter_product_title"
                 android:theme="@style/EditRecipeTextInputLayoutStyle"
                 app:hintTextAppearance="@style/EditRecipeHitInputStyle">

@@ -62,6 +62,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
 
         progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
+        unitNameEditText.requestFocus();
         unitNameEditText.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {

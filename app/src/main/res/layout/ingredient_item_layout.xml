@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/main_item_padding">
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/margin_glutter"
+    android:paddingLeft="@dimen/main_margin_left"
+    android:paddingRight="@dimen/main_margin_left"
+    android:paddingTop="@dimen/margin_top_glutter">
 
-    <TextView
-        android:id="@+id/ingredient_item_name"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="название" />
-</LinearLayout>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/ingredient_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="название"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/medium_text_size" />
+    </RelativeLayout>
+</RelativeLayout>
