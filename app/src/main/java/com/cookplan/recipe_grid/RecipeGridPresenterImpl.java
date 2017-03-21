@@ -1,7 +1,6 @@
-package com.cookplan.recipe_new.add_ingredients;
+package com.cookplan.recipe_grid;
 
 
-import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,38 +18,35 @@ import java.util.List;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public class NewRecipeIngredientsPresenterImpl implements NewRecipeIngredientsPresenter {
+public class RecipeGridPresenterImpl implements RecipeGridPresenter {
 
-    private NewRecipeIngredientsView mainView;
+    private RecipeGridView mainView;
     private DatabaseReference database;
-    private Recipe recipe;
 
-    public NewRecipeIngredientsPresenterImpl(NewRecipeIngredientsView mainView, Recipe recipe) {
+    public RecipeGridPresenterImpl(RecipeGridView mainView) {
         this.mainView = mainView;
-        this.recipe = recipe;
         this.database = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
-    public void getAsyncIngredientList() {
+    public void getAsyncRecipeList() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         String uid = null;
         if (auth != null && auth.getCurrentUser() != null) {
             uid = auth.getCurrentUser().getUid();
         }
         if (uid != null) {
-            Query items = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE)
-                    .orderByChild(DatabaseConstants.DATABASE_RECIPE_ID_FIELD).equalTo(recipe.getId());
+            Query items = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE)
+                    .orderByChild(DatabaseConstants.DATABASE_USER_ID_FIELD).equalTo(uid);
             items.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<Ingredient> ingredients = new ArrayList<>();
+                    List<Recipe> recipes = new ArrayList<>();
                     for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                        Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
-                        ingredient.setId(itemSnapshot.getKey());
-                        ingredients.add(ingredient);
+                        Recipe recipe = Recipe.getRecipeFromDBObject(itemSnapshot);
+                        recipes.add(recipe);
                     }
                     if (mainView != null) {
-                        mainView.setIngredientList(ingredients);
+                        mainView.setRecipeList(recipes);
                     }
                 }
 

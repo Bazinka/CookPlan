@@ -1,4 +1,4 @@
-package com.cookplan.recipe_list;
+package com.cookplan.recipe_grid;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,14 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class RecipeGridFragment extends Fragment {
+public class RecipeGridFragment extends Fragment implements RecipeGridView {
 
+    private RecipeGridRecyclerViewAdapter adapter;
+    private RecipeGridPresenter presenter;
 
     public RecipeGridFragment() {
     }
@@ -33,6 +37,8 @@ public class RecipeGridFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        presenter = new RecipeGridPresenterImpl(this);
+        presenter.getAsyncRecipeList();
     }
 
     @Override
@@ -46,8 +52,20 @@ public class RecipeGridFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
 
             recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
-            recyclerView.setAdapter(new RecipeGridRecyclerViewAdapter(new ArrayList<>()));
+            adapter = new RecipeGridRecyclerViewAdapter(new ArrayList<>());
+            recyclerView.setAdapter(adapter);
         }
+
         return view;
+    }
+
+    @Override
+    public void setRecipeList(List<Recipe> recipeList) {
+        adapter.updateItems(recipeList);
+    }
+
+    @Override
+    public void setErrorToast(String error) {
+        Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
     }
 }

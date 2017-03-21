@@ -46,7 +46,8 @@ public class Recipe implements Serializable {
     }
 
     public RecipeDB getRecipeDB() {
-        return new RecipeDB(name, desc);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        return new RecipeDB(auth.getCurrentUser().getUid(), name, desc);
     }
 
     public static Recipe getRecipeFromDBObject(DataSnapshot itemSnapshot) {
@@ -65,10 +66,10 @@ public class Recipe implements Serializable {
         public RecipeDB() {
         }
 
-        public RecipeDB(String name, String desc) {
+        public RecipeDB(String userId, String name, String desc) {
             this.name = name;
             this.desc = desc;
-            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            this.userId = userId;
         }
 
         public String getName() {
@@ -81,6 +82,10 @@ public class Recipe implements Serializable {
 
         public String getId() {
             return id;
+        }
+
+        public String getUserId() {
+            return userId;
         }
     }
 

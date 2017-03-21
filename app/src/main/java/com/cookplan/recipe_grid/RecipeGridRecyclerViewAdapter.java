@@ -1,4 +1,4 @@
-package com.cookplan.recipe_list;
+package com.cookplan.recipe_grid;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,7 +29,7 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getId());
+//        holder.mIdView.setText(mValues.get(position).getId());
         holder.mContentView.setText(mValues.get(position).getDesc());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +44,12 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
         });
     }
 
+    public void updateItems(List<Recipe> recipeList) {
+        mValues.clear();
+        mValues.addAll(recipeList);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mValues.size();
@@ -51,15 +57,16 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        //        public final TextView mIdView;
         public final TextView mContentView;
         public Recipe mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+//            mIdView = (TextView) view.findViewById(R.id.id);
+            mContentView = (TextView) view.findViewById(R.id.name
+            );
         }
 
         @Override

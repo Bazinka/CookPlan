@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.cookplan.auth.FirebaseAuthActivity;
 import com.cookplan.product_list.VocabularyListActivity;
-import com.cookplan.recipe_list.RecipeGridFragment;
+import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.recipe_new.add_info.NewRecipeInfoActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;

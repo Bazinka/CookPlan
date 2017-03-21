@@ -9,5 +9,5 @@
     android:layout_marginLeft="@dimen/main_margin_left"
     android:layout_marginRight="@dimen/main_margin_left"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.cookplan.recipe_list.RecipeGridFragment"
+    tools:context="com.cookplan.recipe_grid.RecipeGridFragment"
     tools:listitem="@layout/fragment_recipe_item" />
