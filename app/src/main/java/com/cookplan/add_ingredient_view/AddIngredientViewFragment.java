@@ -138,8 +138,8 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         unitNameEditText.setOnItemClickListener((parent, arg1, pos, id) -> {
             Product product = productsList.get(pos);
             if (product != null) {
-                setSpinnerValues();
                 unitNameEditText.setTag(product);
+                setSpinnerValues();
             }
         });
 
