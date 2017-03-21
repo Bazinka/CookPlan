@@ -1,8 +1,6 @@
 package com.cookplan.recipe_new.add_ingredients;
 
 
-import android.util.Log;
-
 import com.cookplan.models.Ingredient;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,7 +43,6 @@ public class EditRecipeIngredientsPresenterImpl implements EditRecipeIngredients
                     for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                         Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
                         ingredient.setId(itemSnapshot.getKey());
-                        Log.i("getAsyncProductList", itemSnapshot.child("name").getValue(String.class));
                         ingredients.add(ingredient);
                     }
                     if (mainView != null) {

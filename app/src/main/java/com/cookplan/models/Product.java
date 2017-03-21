@@ -1,8 +1,12 @@
 package com.cookplan.models;
 
+import com.cookplan.utils.DatabaseConstants;
+import com.google.firebase.database.DataSnapshot;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -105,6 +109,32 @@ public class Product implements Serializable {
 
         public String getName() {
             return name;
+        }
+
+        public static ProductDBObject parseProductDBObject(DataSnapshot dataSnapshot) {
+            ProductDBObject object = new ProductDBObject();
+            object.id = dataSnapshot.getKey();
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
+                    object.name = child.getValue().toString();
+                }
+                if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_MEASURE_LIST_FIELD)) {
+                    if (child.getValue() instanceof List) {
+                        List<Long> measDBList = (ArrayList<Long>) child.getValue();
+                        object.measureUnitIdList = new ArrayList<>();
+                        for (Long mes : measDBList) {
+                            object.measureUnitIdList.add(mes.intValue());
+                        }
+                    } else if (child.getValue() instanceof Map) {
+                        Map<Long, Long> measDBMap = (Map<Long, Long>) child.getValue();
+                        object.measureUnitIdList = new ArrayList<>();
+                        for (Map.Entry<Long, Long> mes : measDBMap.entrySet()) {
+                            object.measureUnitIdList.add(mes.getValue().intValue());
+                        }
+                    }
+                }
+            }
+            return object;
         }
     }
 }

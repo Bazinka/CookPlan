@@ -118,11 +118,13 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
 
     @Override
     public void setErrorToast(String error) {
+        progressBar.setVisibility(View.GONE);
         Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void setErrorToast(int errorId) {
+        progressBar.setVisibility(View.GONE);
         Toast.makeText(getActivity(), getString(errorId), Toast.LENGTH_LONG).show();
 
     }
@@ -136,6 +138,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         unitNameEditText.setOnItemClickListener((parent, arg1, pos, id) -> {
             Product product = productsList.get(pos);
             if (product != null) {
+                setSpinnerValues();
                 unitNameEditText.setTag(product);
             }
         });

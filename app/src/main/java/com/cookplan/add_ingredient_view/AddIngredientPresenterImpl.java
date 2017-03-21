@@ -1,7 +1,5 @@
 package com.cookplan.add_ingredient_view;
 
-import android.util.Log;
-
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
@@ -36,12 +34,11 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
         Query items = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
         items.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 List<Product> products = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    Product.ProductDBObject productDB = itemSnapshot.getValue(Product.ProductDBObject.class);
+                    Product.ProductDBObject productDB = Product.ProductDBObject.parseProductDBObject(itemSnapshot);
                     Product product = Product.getProductFromDB(productDB);
-                    product.setId(itemSnapshot.getKey());
-                    Log.i("getAsyncProductList", itemSnapshot.child("name").getValue(String.class));
                     if (product != null) {
                         products.add(product);
                     }
@@ -63,36 +60,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
     public void saveIngredient(Product product, double amount, MeasureUnit newMeasureUnit) {
         if (product != null) {
             if (product.getId() == null) {
-                DatabaseReference productRef = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-                //check if we have already had a product with the same name
-                productRef.orderByChild(DatabaseConstants.DATABASE_NAME_FIELD).equalTo(product.getName())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Product.ProductDBObject productDB = dataSnapshot.getValue(Product.ProductDBObject.class);
-                                Product product = Product.getProductFromDB(productDB);
-                                if (product != null) {//we have the same product
-                                    product.setId(dataSnapshot.getKey());
-                                    saveIngredient(product, amount, newMeasureUnit);
-                                } else {//we need to save new product
-                                    productRef.push().setValue(product.getProductDBObject(), (databaseError, reference) -> {
-                                        if (databaseError != null) {
-                                            if (mainView != null) {
-                                                mainView.setErrorToast(databaseError.getMessage());
-                                            }
-                                        } else {
-                                            product.setId(reference.getKey());
-                                            saveIngredient(product, amount, newMeasureUnit);
-                                        }
-                                    });
-                                }
-                            }
-
-                            public void onCancelled(DatabaseError databaseError) {
-                                if (mainView != null) {
-                                    mainView.setErrorToast(databaseError.getMessage());
-                                }
-                            }
-                        });
+                saveProduct(product, amount, newMeasureUnit);
             } else {
                 //update product measure list
                 DatabaseReference productRef = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
@@ -105,7 +73,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 if (needToUpdate) {
                     product.getMeasureUnitList().add(newMeasureUnit);
                     productRef.child(product.getId()).child(DatabaseConstants.DATABASE_PRODUCT_MEASURE_LIST_FIELD)
-                            .setValue(product);
+                            .setValue(product.getProductDBObject().getMeasureUnitIdList());
                 }
 
                 //save ingredient
@@ -128,5 +96,38 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 mainView.setErrorToast(R.string.unknown_product_error);
             }
         }
+    }
+
+    private void saveProduct(Product product, double amount, MeasureUnit newMeasureUnit) {
+        DatabaseReference productRef = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+        //check if we have already had a product with the same name
+        productRef.orderByChild(DatabaseConstants.DATABASE_NAME_FIELD).equalTo(product.getName())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getChildrenCount() > 0) {//we have the same product
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                Product.ProductDBObject productDB = Product.ProductDBObject.parseProductDBObject(child);
+                                saveIngredient(Product.getProductFromDB(productDB), amount, newMeasureUnit);
+                            }
+                        } else {//we need to save new product
+                            DatabaseReference productRef = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+                            productRef.push().setValue(product.getProductDBObject(), (databaseError, reference) -> {
+                                if (databaseError != null) {
+                                    if (mainView != null) {
+                                        mainView.setErrorToast(databaseError.getMessage());
+                                    }
+                                } else {
+                                    saveIngredient(product, amount, newMeasureUnit);
+                                }
+                            });
+                        }
+                    }
+
+                    public void onCancelled(DatabaseError databaseError) {
+                        if (mainView != null) {
+                            mainView.setErrorToast(databaseError.getMessage());
+                        }
+                    }
+                });
     }
 }
