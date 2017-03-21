@@ -4,6 +4,7 @@ import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
+import com.cookplan.models.Recipe;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,16 +23,17 @@ import java.util.List;
 public class AddIngredientPresenterImpl implements AddIngredientPresenter {
 
     private AddIngredientView mainView;
-    private DatabaseReference mDatabase;
+    private DatabaseReference database;
+    private Recipe recipe;
 
     public AddIngredientPresenterImpl(AddIngredientView mainView) {
         this.mainView = mainView;
-        this.mDatabase = FirebaseDatabase.getInstance().getReference();
+        this.database = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
     public void getAsyncProductList() {
-        Query items = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+        Query items = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
         items.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -63,7 +65,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 saveProduct(product, amount, newMeasureUnit);
             } else {
                 //update product measure list
-                DatabaseReference productRef = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+                DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
                 boolean needToUpdate = true;
                 for (MeasureUnit productMeasureUnit : product.getMeasureUnitList()) {
                     if (productMeasureUnit == newMeasureUnit) {
@@ -77,8 +79,12 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 }
 
                 //save ingredient
-                Ingredient ingredient = new Ingredient(product.getName(), product.getId(), newMeasureUnit, amount);
-                DatabaseReference ingredRef = mDatabase.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+                Ingredient ingredient = new Ingredient(product.getName(),
+                        product.getId(),
+                        recipe != null ? recipe.getId() : null,
+                        newMeasureUnit,
+                        amount);
+                DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
                 ingredRef.push().setValue(ingredient.getIngredientDBObject(), (databaseError, reference) -> {
                     if (databaseError != null) {
                         if (mainView != null) {
@@ -99,7 +105,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
     }
 
     private void saveProduct(Product product, double amount, MeasureUnit newMeasureUnit) {
-        DatabaseReference productRef = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+        DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
         //check if we have already had a product with the same name
         productRef.orderByChild(DatabaseConstants.DATABASE_NAME_FIELD).equalTo(product.getName())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -110,7 +116,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                                 saveIngredient(Product.getProductFromDB(productDB), amount, newMeasureUnit);
                             }
                         } else {//we need to save new product
-                            DatabaseReference productRef = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+                            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
                             productRef.push().setValue(product.getProductDBObject(), (databaseError, reference) -> {
                                 if (databaseError != null) {
                                     if (mainView != null) {
@@ -129,5 +135,9 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                         }
                     }
                 });
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

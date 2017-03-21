@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.cookplan.R;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
+import com.cookplan.models.Recipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +26,8 @@ import java.util.List;
 
 
 public class AddIngredientViewFragment extends Fragment implements AddIngredientView {
+
+    public static final String RECIPE_OBJECT_KEY = "new_recipe_name";
 
     private AddIngredientPresenter presenter;
 
@@ -44,13 +47,29 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         return fragment;
     }
 
+    public static AddIngredientViewFragment newInstance(Recipe recipe) {
+        AddIngredientViewFragment fragment = new AddIngredientViewFragment();
+        if (recipe != null) {
+            Bundle args = new Bundle();
+            args.putSerializable(RECIPE_OBJECT_KEY, recipe);
+            fragment.setArguments(args);
+        }
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new AddIngredientPresenterImpl(this);
         presenter.getAsyncProductList();
         if (getArguments() != null) {
+            Recipe recipe = (Recipe) getArguments().getSerializable(RECIPE_OBJECT_KEY);
+            if (recipe != null) {
+                presenter.setRecipe(recipe);
+            }
         }
+
+
     }
 
     @Override
@@ -90,7 +109,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
                 if (!text.isEmpty()) {
                     saveInrgedient(text);
                 } else {
-                    new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle("Dialog")
+                    new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
                             .setMessage(R.string.product_amount_not_exist)
                             .setPositiveButton(android.R.string.ok, (dialog, which) -> saveInrgedient(null))
                             .setNegativeButton(android.R.string.cancel, null)

@@ -2,6 +2,7 @@ package com.cookplan.add_ingredient_view;
 
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
+import com.cookplan.models.Recipe;
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -9,7 +10,9 @@ import com.cookplan.models.Product;
 
 public interface AddIngredientPresenter {
 
-    void getAsyncProductList();
+    public void setRecipe(Recipe recipe);
 
-    void saveIngredient(Product product, double amount, MeasureUnit measureUnit);
+    public void getAsyncProductList();
+
+    public void saveIngredient(Product product, double amount, MeasureUnit measureUnit);
 }

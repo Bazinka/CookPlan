@@ -1,6 +1,7 @@
 package com.cookplan.recipe_new.add_ingredients;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.add_ingredient_view.AddIngredientViewFragment;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 
@@ -26,13 +28,20 @@ public class NewRecipeIngredientsActivity extends BaseActivity implements NewRec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_recipe_ingredients);
+        setContentView(R.layout.activity_new_recipe_ingredients);
         setNavigationArrow();
+
         Recipe recipe = (Recipe) getIntent().getSerializableExtra(RECIPE_OBJECT_KEY);
         if (recipe == null) {
             finish();
         }
         setTitle(getString(R.string.add_recipe_second_screen_title) + " " + recipe.getName());
+
+        AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance(recipe);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ingredients_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -44,7 +53,7 @@ public class NewRecipeIngredientsActivity extends BaseActivity implements NewRec
         adapter = new InrgedientsRecyclerAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
-        presenter = new NewRecipeIngredientsPresenterImpl(this);
+        presenter = new NewRecipeIngredientsPresenterImpl(this, recipe);
         presenter.getAsyncIngredientList();
     }
 

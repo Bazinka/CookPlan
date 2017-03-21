@@ -2,6 +2,7 @@ package com.cookplan.recipe_new.add_ingredients;
 
 
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.Recipe;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,11 +21,13 @@ import java.util.List;
 
 public class NewRecipeIngredientsPresenterImpl implements NewRecipeIngredientsPresenter {
     private NewRecipeIngredientsView mainView;
-    private DatabaseReference mDatabase;
+    private DatabaseReference database;
+    private Recipe recipe;
 
-    public NewRecipeIngredientsPresenterImpl(NewRecipeIngredientsView mainView) {
+    public NewRecipeIngredientsPresenterImpl(NewRecipeIngredientsView mainView, Recipe recipe) {
         this.mainView = mainView;
-        this.mDatabase = FirebaseDatabase.getInstance().getReference();
+        this.recipe = recipe;
+        this.database = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -35,8 +38,8 @@ public class NewRecipeIngredientsPresenterImpl implements NewRecipeIngredientsPr
             uid = auth.getCurrentUser().getUid();
         }
         if (uid != null) {
-            Query items = mDatabase.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE).
-                    orderByChild(DatabaseConstants.DATABASE_USER_ID_FIELD).equalTo(uid);
+            Query items = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE)
+                    .orderByChild(DatabaseConstants.DATABASE_RECIPE_ID_FIELD).equalTo(recipe.getId());
             items.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     List<Ingredient> ingredients = new ArrayList<>();

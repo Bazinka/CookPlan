@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <fragment
-        android:id="@+id/input_text_main_layout"
-        android:name="com.cookplan.add_ingredient_view.AddIngredientViewFragment"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/main_margin_left" />
@@ -14,7 +13,7 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/input_text_main_layout"
+        android:layout_below="@id/fragment_container"
         android:background="@color/primary_light" />
 
     <android.support.v7.widget.RecyclerView

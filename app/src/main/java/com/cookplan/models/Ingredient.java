@@ -14,15 +14,17 @@ public class Ingredient implements Serializable {
     private String id;
     private String name;
     private String productId;
+    private String recipeId;
     private MeasureUnit measureUnit;
     private Double amount;
 
     public Ingredient() {
     }
 
-    public Ingredient(String name, String productId, MeasureUnit measureUnit, Double amount) {
+    public Ingredient(String name, String productId, String recipeId, MeasureUnit measureUnit, Double amount) {
         this.name = name;
         this.productId = productId;
+        this.recipeId = recipeId;
         this.measureUnit = measureUnit;
         this.amount = amount;
     }
@@ -65,13 +67,13 @@ public class Ingredient implements Serializable {
 
     public IngredientDBObject getIngredientDBObject() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        return new IngredientDBObject(auth.getCurrentUser().getUid(), productId, measureUnit, name, amount);
+        return new IngredientDBObject(auth.getCurrentUser().getUid(), productId, measureUnit, name, recipeId, amount);
     }
 
     public static Ingredient getIngredientFromDBObject(DataSnapshot itemSnapshot) {
         Ingredient.IngredientDBObject object = itemSnapshot.getValue(Ingredient.IngredientDBObject.class);
         Ingredient ingredient = new Ingredient(object.getName(), object.getProductId(),
-                MeasureUnit.getMeasureUnitById(object.getMeasureUnitId()),
+                object.getRecipeId(), MeasureUnit.getMeasureUnitById(object.getMeasureUnitId()),
                 object.getAmount());
         ingredient.setId(object.getId());
         return ingredient;
@@ -83,17 +85,19 @@ public class Ingredient implements Serializable {
         private String userId;
         private String name;
         private String productId;
+        private String recipeId;
         private int measureUnitId;
         private double amount;
 
         public IngredientDBObject() {
         }
 
-        public IngredientDBObject(String userId, String productId, MeasureUnit measureUnit, String name, double amount) {
+        public IngredientDBObject(String userId, String productId, MeasureUnit measureUnit, String name, String recipeId, double amount) {
             this.userId = userId;
             this.productId = productId;
             this.measureUnitId = measureUnit != null ? measureUnit.getId() : -1;
             this.name = name;
+            this.recipeId = recipeId;
             this.amount = amount;
         }
 
@@ -119,6 +123,10 @@ public class Ingredient implements Serializable {
 
         public String getName() {
             return name;
+        }
+
+        public String getRecipeId() {
+            return recipeId;
         }
     }
 }
