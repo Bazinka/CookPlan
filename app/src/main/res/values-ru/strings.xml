@@ -49,5 +49,6 @@
     <string name="enter_product_title">Введите продукт</string>
     <string name="amount_product_title">Количество</string>
     <string name="product_amount_not_exist">Продукты без указания количества не суммируются с продуктами из других блюд и будут написаны отдельной строкой</string>
+    <string name="unknown_product_error">Unknown product</string>
 
 </resources>

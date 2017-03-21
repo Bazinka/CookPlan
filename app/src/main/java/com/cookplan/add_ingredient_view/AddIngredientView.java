@@ -13,6 +13,8 @@ public interface AddIngredientView {
 
     void setErrorToast(String error);
 
+    void setErrorToast(int errorId);
+
     void setProductsList(List<Product> productsList);
 
     void setSuccessSaveIngredient();

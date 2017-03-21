@@ -122,6 +122,12 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     }
 
     @Override
+    public void setErrorToast(int errorId) {
+        Toast.makeText(getActivity(), getString(errorId), Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
     public void setProductsList(List<Product> productsList) {
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
         ProductListAdapter adapter = new ProductListAdapter(getActivity(), productsList);
