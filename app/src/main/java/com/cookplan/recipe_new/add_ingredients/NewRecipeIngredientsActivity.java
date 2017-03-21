@@ -1,33 +1,38 @@
 package com.cookplan.recipe_new.add_ingredients;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
-import com.cookplan.recipe_new.EditRecipeBaseActicity;
-import com.cookplan.recipe_new.add_desc.NewRecipeDescActivity;
+import com.cookplan.models.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditRecipeIngredientsActivity extends EditRecipeBaseActicity implements EditRecipeIngredientsView {
+public class NewRecipeIngredientsActivity extends BaseActivity implements NewRecipeIngredientsView {
+
+    public static final String RECIPE_OBJECT_KEY = "new_recipe_name";
 
     private InrgedientsRecyclerAdapter adapter;
-    private EditRecipeIngredientsPresenter presenter;
-
+    private NewRecipeIngredientsPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipe_ingredients);
         setNavigationArrow();
-        String name = getIntent().getStringExtra(RECIPE_NAME_KEY);
-        setTitle(getString(R.string.add_recipe_second_screen_title) + " " + name);
+        Recipe recipe = (Recipe) getIntent().getSerializableExtra(RECIPE_OBJECT_KEY);
+        if (recipe == null) {
+            finish();
+        }
+        setTitle(getString(R.string.add_recipe_second_screen_title) + " " + recipe.getName());
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ingredients_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -39,17 +44,30 @@ public class EditRecipeIngredientsActivity extends EditRecipeBaseActicity implem
         adapter = new InrgedientsRecyclerAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
-        presenter = new EditRecipeIngredientsPresenterImpl(this);
+        presenter = new NewRecipeIngredientsPresenterImpl(this);
         presenter.getAsyncIngredientList();
     }
 
     @Override
-    public void onMenuNextButtonClick() {
-        //TODO: saving data
-        Intent intent = new Intent(this, NewRecipeDescActivity.class);
-        startActivityWithLeftAnimation(intent);
-        finish();
+    public boolean onCreateOptionsMenu(Menu _menu) {
+        getMenuInflater().inflate(R.menu.add_recipe_next_menu, _menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.app_bar_next) {
+            //TODO: saving data
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivityWithLeftAnimation(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public void setIngredientList(List<Ingredient> ingredientList) {

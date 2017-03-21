@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.cookplan.auth.FirebaseAuthActivity;
 import com.cookplan.product_list.VocabularyListActivity;
 import com.cookplan.recipe_list.RecipeGridFragment;
-import com.cookplan.recipe_new.add_basics.EditRecipeBasicsInfoActivity;
+import com.cookplan.recipe_new.add_info.NewRecipeInfoActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity
     }
 
     void startNewPointActivity() {
-        Intent intent = new Intent(this, EditRecipeBasicsInfoActivity.class);
+        Intent intent = new Intent(this, NewRecipeInfoActivity.class);
         startActivityWithLeftAnimation(intent);
     }
 

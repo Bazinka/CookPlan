@@ -1,4 +1,4 @@
-package com.cookplan.recipe_new.add_desc;
+package com.cookplan.recipe_new.add_info;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,29 +22,29 @@ import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.models.Recipe;
+import com.cookplan.recipe_new.add_ingredients.NewRecipeIngredientsActivity;
 import com.cookplan.utils.PermissionUtils;
-import com.cookplan.utils.Utils;
 
-public class NewRecipeDescActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
-        NewRecipeDescView {
-
+public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
+        NewRecipeInfoView {
     private static final int PHOTO_REQUEST_CODE = 101;
     private static final int RC_IMAGE_PERMS = 102;
     private static final String[] permission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA};
 
     private ProgressDialog mProgressDialog;
-    private NewRecipeDescPresenter presenter;
+    private NewRecipeInfoPresenter presenter;
 
     private String language = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_load);
+        setContentView(R.layout.activity_edit_recipe_basics);
         setNavigationArrow();
-        setTitle(getString(R.string.add_recipe_second_screen_title));
+        setTitle(getString(R.string.add_recipe_first_screen_title));
+        setTitle(getString(R.string.add_recipe_first_screen_title));
 
         Button captureImg = (Button) findViewById(R.id.ocr_desc_btn);
         if (captureImg != null) {
@@ -63,7 +64,7 @@ public class NewRecipeDescActivity extends BaseActivity implements ActivityCompa
 
             });
         }
-        presenter = new NewRecipeDescPresenterImpl(this, this);
+        presenter = new NewRecipeInfoPresenterImpl(this, this);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!PermissionUtils.isPermissionsGranted(this, permission)) {
                 PermissionUtils.requestPermissions(this, RC_IMAGE_PERMS, permission);
@@ -142,7 +143,6 @@ public class NewRecipeDescActivity extends BaseActivity implements ActivityCompa
     @Override
     public void setErrorToSnackBar(String error) {
         Snackbar.make(findViewById(R.id.root_view), error, Snackbar.LENGTH_LONG).show();
-        Utils.log(NewRecipeDescActivity.class.getSimpleName(), error);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class NewRecipeDescActivity extends BaseActivity implements ActivityCompa
     public void setAsyncTextResult(String result) {
         runOnUiThread(() -> {
             if (result != null && !result.equals("")) {
-                EditText textView = (EditText) findViewById(R.id.process_edit_text);
+                EditText textView = (EditText) findViewById(R.id.recipe_process_edit_text);
                 if (textView != null) {
                     textView.setText(result);
                 }
@@ -169,7 +169,6 @@ public class NewRecipeDescActivity extends BaseActivity implements ActivityCompa
     public void setAsyncErrorToSnackBar(String error) {
         runOnUiThread(() -> {
             Snackbar.make(findViewById(R.id.root_view), error, Snackbar.LENGTH_LONG).show();
-            Utils.log(NewRecipeDescActivity.class.getSimpleName(), error);
             if (mProgressDialog != null) {
                 mProgressDialog.dismiss();
             }
@@ -187,10 +186,34 @@ public class NewRecipeDescActivity extends BaseActivity implements ActivityCompa
         int id = item.getItemId();
 
         if (id == R.id.app_bar_next) {
-            //TODO:saving data
+            EditText recipeNameEditText = (EditText) findViewById(R.id.recipe_name_edit_text);
+            EditText recipeDescEditText = (EditText) findViewById(R.id.recipe_process_edit_text);
+            if (recipeNameEditText != null && recipeDescEditText != null) {
+                String name = recipeNameEditText.getText().toString();
+                String desc = recipeDescEditText.getText().toString();
+                desc = desc.isEmpty() ? getString(R.string.recipe_desc_is_not_needed_title) : desc;
+                if (!name.isEmpty()) {
+                    //TODO: saving data
+                    if (presenter != null) {
+                        presenter.saveNewRecipe(name, desc);
+                    }
+                } else {
+                    TextInputLayout recipeEditLayout = (TextInputLayout) findViewById(R.id.recipe_name_edit_layout);
+                    if (recipeEditLayout != null) {
+                        recipeEditLayout.setError(getString(R.string.error_required_field));
+                    }
+                }
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void setNextActivity(Recipe recipe) {
+        Intent intent = new Intent(this, NewRecipeIngredientsActivity.class);
+        intent.putExtra(NewRecipeIngredientsActivity.RECIPE_OBJECT_KEY, recipe);
+        startActivityWithLeftAnimation(intent);
+        finish();
+    }
 }

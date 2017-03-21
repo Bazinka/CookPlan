@@ -18,11 +18,11 @@ import java.util.List;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public class EditRecipeIngredientsPresenterImpl implements EditRecipeIngredientsPresenter {
-    private EditRecipeIngredientsView mainView;
+public class NewRecipeIngredientsPresenterImpl implements NewRecipeIngredientsPresenter {
+    private NewRecipeIngredientsView mainView;
     private DatabaseReference mDatabase;
 
-    public EditRecipeIngredientsPresenterImpl(EditRecipeIngredientsView mainView) {
+    public NewRecipeIngredientsPresenterImpl(NewRecipeIngredientsView mainView) {
         this.mainView = mainView;
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
     }

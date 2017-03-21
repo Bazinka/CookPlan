@@ -1,4 +1,4 @@
-package com.cookplan.recipe_new.add_desc;
+package com.cookplan.recipe_new.add_info;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +9,11 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 
 import com.cookplan.R;
+import com.cookplan.models.Recipe;
+import com.cookplan.utils.DatabaseConstants;
 import com.cookplan.utils.Utils;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
@@ -22,19 +26,21 @@ import java.io.OutputStream;
  * Created by DariaEfimova on 16.03.17.
  */
 
-public class NewRecipeDescPresenterImpl implements NewRecipeDescPresenter {
-    private static final String tag = NewRecipeDescPresenterImpl.class.getSimpleName();
+public class NewRecipeInfoPresenterImpl implements NewRecipeInfoPresenter {
+    private static final String tag = NewRecipeInfoPresenterImpl.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/CookPlanImages/";
     private static final String TESSDATA = "tessdata";
 
 
-    private NewRecipeDescView mainView;
+    private NewRecipeInfoView mainView;
     private Context context;
     private TessBaseAPI tessBaseApi;
+    private DatabaseReference mDatabase;
 
-    public NewRecipeDescPresenterImpl(NewRecipeDescView mainView, Context context) {
+    public NewRecipeInfoPresenterImpl(NewRecipeInfoView mainView, Context context) {
         this.mainView = mainView;
         this.context = context;
+        this.mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -191,5 +197,23 @@ public class NewRecipeDescPresenterImpl implements NewRecipeDescPresenter {
             prepareTesseract();
             startOCR(getOutputImagePath(), language);
         }).start();
+    }
+
+    @Override
+    public void saveNewRecipe(String name, String desc) {
+        Recipe recipe = new Recipe(name, desc);
+        DatabaseReference recipeRef = mDatabase.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
+        recipeRef.push().setValue(recipe.getRecipeDB(), (databaseError, reference) -> {
+            if (databaseError != null) {
+                if (mainView != null) {
+                    mainView.setErrorToast(databaseError.getMessage());
+                }
+            } else {
+                if (mainView != null) {
+                    recipe.setId(reference.getKey());
+                    mainView.setNextActivity(recipe);
+                }
+            }
+        });
     }
 }
