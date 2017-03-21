@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,6 +19,7 @@ import com.cookplan.R;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -113,6 +113,8 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
             progressBar.setVisibility(View.VISIBLE);
             presenter.saveIngredient(selectedProduct, amount != null ? Double.valueOf(amount) : 0, (MeasureUnit) spinner.getSelectedItem());
             unitNameEditText.setText(null);
+            EditText unitAmoutEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
+            unitAmoutEditText.setText(null);
         }
     }
 
@@ -165,21 +167,19 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
             if (!text.isEmpty()
                     && selectedProduct != null
                     && text.equals(selectedProduct.getName())) {
-                List<MeasureUnit> measureUnits = selectedProduct.getMeasureUnitList();
-                if (measureUnits.isEmpty()) {
-                    measureUnits = Arrays.asList(MeasureUnit.values());
+                List<MeasureUnit> measureUnits = new ArrayList<>(selectedProduct.getMeasureUnitList());
+                for (MeasureUnit unit : MeasureUnit.values()) {
+                    if (!measureUnits.contains(unit)) {
+                        measureUnits.add(unit);
+                    }
                 }
-                ArrayAdapter<MeasureUnit> adapter = new ArrayAdapter(getActivity(),
-                        android.R.layout.simple_spinner_item,
-                        measureUnits);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),
+                        measureUnits, selectedProduct.getMeasureUnitList());
                 spinner.setAdapter(adapter);
                 spinner.setSelection(0);
             } else if (!text.isEmpty()) {//if this product doesn't  exist
-                ArrayAdapter<MeasureUnit> adapter = new ArrayAdapter(getActivity(),
-                        android.R.layout.simple_spinner_item,
-                        Arrays.asList(MeasureUnit.values()));
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),
+                        Arrays.asList(MeasureUnit.values()), null);
                 spinner.setAdapter(adapter);
                 spinner.setSelection(0);
             }
