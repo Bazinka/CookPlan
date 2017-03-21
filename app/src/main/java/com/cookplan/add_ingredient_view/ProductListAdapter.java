@@ -1,4 +1,4 @@
-package com.cookplan.shopping_list;
+package com.cookplan.add_ingredient_view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

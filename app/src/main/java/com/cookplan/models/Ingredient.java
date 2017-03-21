@@ -1,5 +1,8 @@
 package com.cookplan.models;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+
 import java.io.Serializable;
 
 /**
@@ -9,17 +12,17 @@ import java.io.Serializable;
 public class Ingredient implements Serializable {
 
     private String id;
-    private String userId;
-    private Product product;
+    private String name;
+    private String productId;
     private MeasureUnit measureUnit;
     private Double amount;
 
     public Ingredient() {
     }
 
-    public Ingredient(String userId, Product product, MeasureUnit measureUnit, Double amount) {
-        this.userId = userId;
-        this.product = product;
+    public Ingredient(String name, String productId, MeasureUnit measureUnit, Double amount) {
+        this.name = name;
+        this.productId = productId;
         this.measureUnit = measureUnit;
         this.amount = amount;
     }
@@ -32,20 +35,12 @@ public class Ingredient implements Serializable {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public MeasureUnit getMeasureUnit() {
@@ -64,22 +59,29 @@ public class Ingredient implements Serializable {
         this.amount = amount;
     }
 
-    public IngredientDBObject getIngredientDatabaseObject() {
-        return new IngredientDBObject(userId, product, measureUnit, amount);
+    public String getName() {
+        return name;
     }
 
-    public void fillIngredientFromDB(IngredientDBObject object, Product product) {
-        id = object.getId();
-        userId = object.getUserId();
-        measureUnit = MeasureUnit.getMeasureUnitById(object.getMeasureUnitId());
-        amount = object.getAmount();
-        this.product = product;
+    public IngredientDBObject getIngredientDBObject() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        return new IngredientDBObject(auth.getCurrentUser().getUid(), productId, measureUnit, name, amount);
+    }
+
+    public static Ingredient getIngredientFromDBObject(DataSnapshot itemSnapshot) {
+        Ingredient.IngredientDBObject object = itemSnapshot.getValue(Ingredient.IngredientDBObject.class);
+        Ingredient ingredient = new Ingredient(object.getName(), object.getProductId(),
+                MeasureUnit.getMeasureUnitById(object.getMeasureUnitId()),
+                object.getAmount());
+        ingredient.setId(object.getId());
+        return ingredient;
     }
 
     public static class IngredientDBObject {
 
         private String id;
         private String userId;
+        private String name;
         private String productId;
         private int measureUnitId;
         private double amount;
@@ -87,10 +89,11 @@ public class Ingredient implements Serializable {
         public IngredientDBObject() {
         }
 
-        public IngredientDBObject(String userId, Product product, MeasureUnit measureUnit, double amount) {
+        public IngredientDBObject(String userId, String productId, MeasureUnit measureUnit, String name, double amount) {
             this.userId = userId;
-            this.productId = product != null ? product.getId() : null;
+            this.productId = productId;
             this.measureUnitId = measureUnit != null ? measureUnit.getId() : -1;
+            this.name = name;
             this.amount = amount;
         }
 
@@ -112,6 +115,10 @@ public class Ingredient implements Serializable {
 
         public double getAmount() {
             return amount;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 }

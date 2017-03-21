@@ -22,6 +22,12 @@ public class Product implements Serializable {
         this.name = name;
     }
 
+    public Product(MeasureUnit measureUnit, String name) {
+        this.measureUnitList = new ArrayList<>();
+        measureUnitList.add(measureUnit);
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }
@@ -70,7 +76,7 @@ public class Product implements Serializable {
         return product;
     }
 
-    public class ProductDBObject {
+    public static class ProductDBObject {
 
         private String id;
         private List<Integer> measureUnitIdList;

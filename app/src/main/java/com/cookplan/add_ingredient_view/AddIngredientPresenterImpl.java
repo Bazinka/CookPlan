@@ -1,10 +1,11 @@
-package com.cookplan.shopping_list;
+package com.cookplan.add_ingredient_view;
 
 import android.util.Log;
 
+import com.cookplan.models.Ingredient;
+import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 import com.cookplan.utils.DatabaseConstants;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,12 +20,12 @@ import java.util.List;
  * Created by DariaEfimova on 20.03.17.
  */
 
-public class ShoppingListPresenterImpl implements ShoppingListPresenter {
+public class AddIngredientPresenterImpl implements AddIngredientPresenter {
 
-    private ShoppingListView mainView;
+    private AddIngredientView mainView;
     private DatabaseReference mDatabase;
 
-    public ShoppingListPresenterImpl(ShoppingListView mainView) {
+    public AddIngredientPresenterImpl(AddIngredientView mainView) {
         this.mainView = mainView;
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
     }
@@ -38,6 +39,7 @@ public class ShoppingListPresenterImpl implements ShoppingListPresenter {
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     Product.ProductDBObject productDB = itemSnapshot.getValue(Product.ProductDBObject.class);
                     Product product = Product.getProductFromDB(productDB);
+                    product.setId(itemSnapshot.getKey());
                     Log.i("getAsyncProductList", itemSnapshot.child("name").getValue(String.class));
                     if (product != null) {
                         products.add(product);
@@ -57,25 +59,30 @@ public class ShoppingListPresenterImpl implements ShoppingListPresenter {
     }
 
     @Override
-    public void getAsyncIngredientList() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        String uid = null;
-        if (auth != null && auth.getCurrentUser() != null) {
-            uid = auth.getCurrentUser().getUid();
-        }
-        if (uid != null) {
-            Query items = mDatabase.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE).
-                    orderByChild(DatabaseConstants.DATABASE_USER_ID_FIELD).equalTo(uid);
-            items.addValueEventListener(new ValueEventListener() {
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                        Log.i("getAsyncIngredientList", itemSnapshot.child("name").getValue(String.class));
-                    }
-                }
-
-                public void onCancelled(DatabaseError databaseError) {
+    public void saveIngredient(Product product, double amount, MeasureUnit measureUnit) {
+        if (product.getId() == null) {
+            DatabaseReference productRef = mDatabase.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+            productRef.push().setValue(product.getProductDBObject(), (databaseError, reference) -> {
+                if (databaseError != null) {
                     if (mainView != null) {
                         mainView.setErrorToast(databaseError.getMessage());
+                    }
+                } else {
+                    product.setId(reference.getKey());
+                    saveIngredient(product, amount, measureUnit);
+                }
+            });
+        } else {
+            Ingredient ingredient = new Ingredient(product.getName(), product.getId(), measureUnit, amount);
+            DatabaseReference ingredRef = mDatabase.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+            ingredRef.push().setValue(ingredient.getIngredientDBObject(), (databaseError, reference) -> {
+                if (databaseError != null) {
+                    if (mainView != null) {
+                        mainView.setErrorToast(databaseError.getMessage());
+                    }
+                } else {
+                    if (mainView != null) {
+                        mainView.setSuccessSaveIngredient();
                     }
                 }
             });

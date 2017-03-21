@@ -9,7 +9,7 @@ public class DatabaseConstants {
 
     public static String DATABASE_ID_FIELD = "id";
 
-    public static String DATABASE_USER_ID_FIELD = "user_id";
+    public static String DATABASE_USER_ID_FIELD = "userId";
 
     public static String DATABASE_NAME_FIELD = "name";
 

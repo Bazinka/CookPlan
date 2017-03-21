@@ -1,4 +1,4 @@
-package com.cookplan.shopping_list;
+package com.cookplan.recipe_new.add_ingredients;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,7 +37,7 @@ public class ShoppingListRecyclerAdapter extends RecyclerView.Adapter<ShoppingLi
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
         Ingredient ingredient = mDataset.get(position);
-        holder.textView.setText(ingredient.getProduct().getName());
+        holder.textView.setText(ingredient.getName());
     }
 
     @Override
