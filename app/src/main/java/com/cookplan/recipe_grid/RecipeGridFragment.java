@@ -3,6 +3,7 @@ package com.cookplan.recipe_grid;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
+import com.cookplan.utils.GridSpacingItemDecoration;
+import com.cookplan.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,8 @@ public class RecipeGridFragment extends Fragment implements RecipeGridView {
             RecyclerView recyclerView = (RecyclerView) view;
 
             recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utils.dpToPx(getActivity(), 16), true));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
             adapter = new RecipeGridRecyclerViewAdapter(new ArrayList<>());
             recyclerView.setAdapter(adapter);
         }
@@ -68,4 +73,6 @@ public class RecipeGridFragment extends Fragment implements RecipeGridView {
     public void setErrorToast(String error) {
         Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
     }
+
+
 }

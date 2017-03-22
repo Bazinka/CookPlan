@@ -3,6 +3,7 @@
     <color name="primary">#673AB7</color><!--purple-->
     <color name="primary_dark">#512DA8</color>
     <color name="primary_light">#D1C4E9</color>
+    <color name="primary_the_lightest">#EDE7F6</color>
     <color name="accent_color">#00BCD4</color><!--cyan-->
     <color name="primary_text_color">#212121</color>
     <color name="secondary_text_color">#757575</color>
