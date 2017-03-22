@@ -16,6 +16,11 @@
             android:title="@string/shopping_list_title" />
 
         <item
+            android:id="@+id/nav_whats_cooking"
+            android:icon="@drawable/ic_cooking_plan"
+            android:title="@string/whats_cooking_title" />
+
+        <item
             android:id="@+id/nav_vocabulary"
             android:icon="@drawable/ic_vocabulary"
             android:title="@string/product_vocabulary_title" />

@@ -52,5 +52,6 @@
     <string name="unknown_product_error">Unknown product</string>
     <string name="recipe_desc_is_not_needed_title">Описание не нужно, все и так понятно...</string>
     <string name="attention_title">Внимание</string>
+    <string name="whats_cooking_title">Что готовим?</string>
 
 </resources>
