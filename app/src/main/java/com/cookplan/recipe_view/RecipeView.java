@@ -12,4 +12,7 @@ public interface RecipeView {
     void setErrorToast(String error);
 
     void setIngredientList(List<Ingredient> ingredientList);
+
+    void setIngredientSuccessfulUpdate(Ingredient ingredient);
+
 }

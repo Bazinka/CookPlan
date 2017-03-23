@@ -33,12 +33,11 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
     public void getIngredientList() {
         Query items = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE)
                 .orderByChild(DatabaseConstants.DATABASE_RECIPE_ID_FIELD).equalTo(recipe.getId());
-        items.addValueEventListener(new ValueEventListener() {
+        items.addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Ingredient> ingredients = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
-                    ingredient.setId(itemSnapshot.getKey());
                     ingredients.add(ingredient);
                 }
                 if (mainView != null) {
@@ -52,5 +51,23 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
                 }
             }
         });
+    }
+
+    @Override
+    public void saveSelectIngredientList(Ingredient ingredient) {
+        DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+        ingredientRef.child(ingredient.getId())
+                .child(DatabaseConstants.DATABASE_INRGEDIENT_IS_NEEED_TO_BUY_FIELD)
+                .setValue(ingredient.getIngredientDBObject().isNeedToBuy())
+                .addOnFailureListener(e -> {
+                    if (mainView != null) {
+                        mainView.setErrorToast(e.getLocalizedMessage());
+                    }
+                })
+                .addOnSuccessListener(aVoid -> {
+                    if (mainView != null) {
+                        mainView.setIngredientSuccessfulUpdate(ingredient);
+                    }
+                });
     }
 }

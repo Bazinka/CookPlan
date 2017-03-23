@@ -52,7 +52,11 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-            adapter = new RecipeViewInrgedientsAdapter(new ArrayList<>());
+            adapter = new RecipeViewInrgedientsAdapter(new ArrayList<>(), ingredient -> {
+                if (presenter != null) {
+                    presenter.saveSelectIngredientList(ingredient);
+                }
+            });
             recyclerView.setAdapter(adapter);
 
             presenter = new RecipeViewPresenterImpl(this, recipe);
@@ -72,6 +76,20 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
                 adapter.updateItems(ingredientList);
             }
         }
+    }
+
+    @Override
+    public void setIngredientSuccessfulUpdate(Ingredient ingredient) {
+        String message = null;
+        if (ingredient.isNeedToBuy()) {
+            message = getString(R.string.ingr_added_to_shopping_list_title);
+        } else {
+            message = getString(R.string.ingr_removed_from_shopping_list_title);
+        }
+        Snackbar.make(findViewById(R.id.main_view),
+                ingredient.getName() + message,
+                Snackbar.LENGTH_LONG).show();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -78,11 +78,12 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 }
 
                 //save ingredient
-                Ingredient ingredient = new Ingredient(product.getName(),
-                        product.getId(),
-                        recipe != null ? recipe.getId() : null,
-                        newMeasureUnit,
-                        amount);
+                Ingredient ingredient = new Ingredient();
+                ingredient.setName(product.getName());
+                ingredient.setProductId(product.getId());
+                ingredient.setRecipeId(recipe != null ? recipe.getId() : null);
+                ingredient.setMeasureUnit(newMeasureUnit);
+                ingredient.setAmount(amount);
                 DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
                 ingredRef.push().setValue(ingredient.getIngredientDBObject(), (databaseError, reference) -> {
                     if (databaseError != null) {

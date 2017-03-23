@@ -39,7 +39,6 @@ public class NewRecipeIngredientsPresenterImpl implements NewRecipeIngredientsPr
                 List<Ingredient> ingredients = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
-                    ingredient.setId(itemSnapshot.getKey());
                     ingredients.add(ingredient);
                 }
                 if (mainView != null) {

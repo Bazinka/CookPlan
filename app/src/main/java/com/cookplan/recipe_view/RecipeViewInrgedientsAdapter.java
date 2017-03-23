@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.cookplan.R;
@@ -17,11 +18,12 @@ import java.util.List;
 
 public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeViewInrgedientsAdapter.MainViewHolder> {
 
+    private List<Ingredient> ingredients;
+    private IngredientsClickListener listener;
 
-    private List<Ingredient> mDataset;
-
-    public RecipeViewInrgedientsAdapter(List<Ingredient> myDataset) {
-        mDataset = myDataset;
+    public RecipeViewInrgedientsAdapter(List<Ingredient> ingredients, IngredientsClickListener listener) {
+        this.ingredients = ingredients;
+        this.listener = listener;
     }
 
     @Override
@@ -36,12 +38,18 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        Ingredient ingredient = mDataset.get(position);
+        Ingredient ingredient = ingredients.get(position);
         holder.nameTextView.setText(ingredient.getName());
 
-        if (ingredient.getAmount() != null) {
+        if (ingredient.getAmount() != null && ingredient.getMeasureUnit() != null) {
             holder.amountTextView.setVisibility(View.VISIBLE);
-            holder.amountTextView.setText(ingredient.getAmount().toString());
+
+            double amount = ingredient.getAmount();
+            if (ingredient.getMeasureUnit().isItIntValue()) {
+                holder.amountTextView.setText(String.valueOf((int) amount));
+            } else {
+                holder.amountTextView.setText(String.valueOf(amount));
+            }
 
             holder.measureTextView.setVisibility(View.VISIBLE);
             holder.measureTextView.setText(ingredient.getMeasureUnit().toString());
@@ -50,17 +58,44 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
             holder.amountTextView.setVisibility(View.GONE);
             holder.measureTextView.setVisibility(View.GONE);
         }
+
+        if (ingredient.isNeedToBuy()) {
+            holder.checkBox.setChecked(true);
+        } else {
+            holder.checkBox.setChecked(false);
+        }
+
+        View.OnClickListener clickListener = view -> {
+            int pos = (int) view.getTag();
+            Ingredient selectIngredient = ingredients.get(pos);
+            boolean isIngredientSelect = false;
+            if (selectIngredient.isNeedToBuy()) {
+                isIngredientSelect = false;
+            } else {
+                isIngredientSelect = true;
+            }
+            selectIngredient.setNeedToBuy(isIngredientSelect);
+
+            if (listener != null) {
+                listener.onIngredientItemSelected(selectIngredient);
+            }
+        };
+        holder.mainView.setTag(position);
+        holder.checkBox.setTag(position);
+        holder.mainView.setOnClickListener(clickListener);
+        holder.checkBox.setOnClickListener(clickListener);
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return ingredients.size();
     }
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
         public TextView measureTextView;
         public TextView amountTextView;
+        public CheckBox checkBox;
         public View mainView;
 
         public MainViewHolder(View v) {
@@ -68,18 +103,19 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
             nameTextView = (TextView) v.findViewById(R.id.ingredient_item_name);
             measureTextView = (TextView) v.findViewById(R.id.ingredient_item_measure);
             amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
-            mainView = v;
+            checkBox = (CheckBox) v.findViewById(R.id.add_to_shop_list_checkbox);
+            mainView = v.findViewById(R.id.main_view);
         }
     }
 
     public void updateItems(List<Ingredient> ingredientList) {
-        mDataset.clear();
-        mDataset.addAll(ingredientList);
+        ingredients.clear();
+        ingredients.addAll(ingredientList);
         notifyDataSetChanged();
     }
 
     public interface IngredientsClickListener {
 
-        public void onIngredientItemClick(Ingredient ingredient);
+        public void onIngredientItemSelected(Ingredient ingredient);
     }
 }

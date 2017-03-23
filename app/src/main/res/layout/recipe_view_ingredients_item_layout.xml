@@ -1,55 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/ripple_ingredient_item_back"
+    android:clickable="true">
 
+
+    <!--?attr/selectableItemBackground-->
     <RelativeLayout
-        android:id="@+id/main_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="false"
         android:paddingBottom="@dimen/margin_glutter"
         android:paddingLeft="@dimen/main_margin_left"
         android:paddingRight="@dimen/main_margin_left"
         android:paddingTop="@dimen/margin_top_glutter">
 
-        <TextView
-            android:id="@+id/ingredient_item_name"
+        <CheckBox
+            android:id="@+id/add_to_shop_list_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/ingredient_item_amount"
-            android:text="название"
-            android:textColor="@color/primary_text_color"
-            android:textSize="@dimen/body_text_size" />
+            android:button="@drawable/checkbox_image"
+            android:paddingLeft="@dimen/main_margin_left" />
 
-        <TextView
-            android:id="@+id/ingredient_item_measure"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="шт."
-            android:textColor="@color/secondary_text_color"
-            android:textSize="@dimen/caption_text_size" />
+            android:layout_alignBottom="@+id/add_to_shop_list_checkbox"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/add_to_shop_list_checkbox"
+            android:clickable="false">
 
-        <TextView
-            android:id="@+id/ingredient_item_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/ingredient_item_measure"
-            android:layout_toStartOf="@+id/ingredient_item_measure"
-            android:paddingLeft="@dimen/main_margin_left"
-            android:paddingRight="@dimen/main_margin_left"
-            android:text="12"
-            android:textColor="@color/primary"
-            android:textSize="@dimen/body_text_size" />
+            <TextView
+                android:id="@+id/ingredient_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@+id/ingredient_item_amount"
+                android:clickable="false"
+                android:gravity="left|center_vertical"
+                android:text="название"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/subheding_text_size" />
+
+            <TextView
+                android:id="@+id/ingredient_item_measure"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/ingredient_item_amount"
+                android:layout_alignParentRight="true"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:gravity="left|center_vertical"
+                android:lines="1"
+                android:text="шт."
+                android:textColor="@color/secondary_text_color"
+                android:textSize="@dimen/caption_text_size" />
+
+            <TextView
+                android:id="@+id/ingredient_item_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/ingredient_item_measure"
+                android:layout_toStartOf="@+id/ingredient_item_measure"
+                android:clickable="false"
+                android:gravity="right|center_vertical"
+                android:paddingLeft="@dimen/main_margin_left"
+                android:paddingRight="@dimen/small_inrgedient_padding"
+                android:text="12"
+                android:textColor="@color/secondary_text_color"
+                android:textSize="@dimen/subheding_text_size" />
+        </RelativeLayout>
     </RelativeLayout>
-
-    <!--<View-->
-    <!--android:id="@+id/separate_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:layout_below="@id/main_view"-->
-    <!--android:background="@color/primary_the_lightest" />-->
-
 </RelativeLayout>
