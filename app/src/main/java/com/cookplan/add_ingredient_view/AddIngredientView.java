@@ -18,4 +18,6 @@ public interface AddIngredientView {
     void setProductsList(List<Product> productsList);
 
     void setSuccessSaveIngredient();
+
+    boolean isAddedToActivity();
 }

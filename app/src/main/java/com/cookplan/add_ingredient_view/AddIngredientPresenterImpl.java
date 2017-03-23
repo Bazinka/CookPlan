@@ -36,7 +36,6 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
         Query items = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
         items.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 List<Product> products = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     Product.ProductDBObject productDB = Product.ProductDBObject.parseProductDBObject(itemSnapshot);
@@ -45,7 +44,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                         products.add(product);
                     }
                 }
-                if (mainView != null) {
+                if (mainView != null && mainView.isAddedToActivity()) {
                     mainView.setProductsList(products);
                 }
             }
