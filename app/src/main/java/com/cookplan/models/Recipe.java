@@ -52,7 +52,7 @@ public class Recipe implements Serializable {
 
     public static Recipe getRecipeFromDBObject(DataSnapshot itemSnapshot) {
         RecipeDB object = itemSnapshot.getValue(RecipeDB.class);
-        Recipe recipe = new Recipe(object.getId(), object.getName(), object.getDesc());
+        Recipe recipe = new Recipe(itemSnapshot.getKey(), object.getName(), object.getDesc());
         return recipe;
     }
 
