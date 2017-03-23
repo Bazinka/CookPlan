@@ -68,8 +68,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
                 presenter.setRecipe(recipe);
             }
         }
-
-
+        setRetainInstance(true);
     }
 
     @Override
@@ -210,6 +209,11 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     public void setSuccessSaveIngredient() {
         progressBar.setVisibility(View.GONE);
         unitAmountViewGroup.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean isAddedToActivity() {
+        return isAdded();
     }
 
 
