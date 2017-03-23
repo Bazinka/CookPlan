@@ -13,6 +13,7 @@
     <dimen name="main_item_padding">10dp</dimen>
     <dimen name="spinner_separator_height">1dp</dimen>
 
+    <dimen name="collapsing_app_bar_height">200dp</dimen>
 
     <dimen name="card_view_margin">10dp</dimen>
     <dimen name="card_recipe_radius">5dp</dimen>

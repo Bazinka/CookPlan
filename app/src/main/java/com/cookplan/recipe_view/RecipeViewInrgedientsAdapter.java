@@ -1,4 +1,4 @@
-package com.cookplan.recipe_new.add_ingredients;
+package com.cookplan.recipe_view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,12 +15,12 @@ import java.util.List;
  * Created by DariaEfimova on 18.03.17.
  */
 
-public class InrgedientsRecyclerAdapter extends RecyclerView.Adapter<InrgedientsRecyclerAdapter.MainViewHolder> {
+public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeViewInrgedientsAdapter.MainViewHolder> {
 
 
     private List<Ingredient> mDataset;
 
-    public InrgedientsRecyclerAdapter(List<Ingredient> myDataset) {
+    public RecipeViewInrgedientsAdapter(List<Ingredient> myDataset) {
         mDataset = myDataset;
     }
 
@@ -28,7 +28,7 @@ public class InrgedientsRecyclerAdapter extends RecyclerView.Adapter<Inrgedients
     public MainViewHolder onCreateViewHolder(ViewGroup parent,
                                              int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.ingredient_item_layout, parent, false);
+                .inflate(R.layout.recipe_view_ingredients_item_layout, parent, false);
 
         MainViewHolder vh = new MainViewHolder(v);
         return vh;
@@ -37,7 +37,19 @@ public class InrgedientsRecyclerAdapter extends RecyclerView.Adapter<Inrgedients
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
         Ingredient ingredient = mDataset.get(position);
-        holder.textView.setText(ingredient.getName());
+        holder.nameTextView.setText(ingredient.getName());
+
+        if (ingredient.getAmount() != null) {
+            holder.amountTextView.setVisibility(View.VISIBLE);
+            holder.amountTextView.setText(ingredient.getAmount().toString());
+
+            holder.measureTextView.setVisibility(View.VISIBLE);
+            holder.measureTextView.setText(ingredient.getMeasureUnit().toString());
+
+        } else {
+            holder.amountTextView.setVisibility(View.GONE);
+            holder.measureTextView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -46,25 +58,19 @@ public class InrgedientsRecyclerAdapter extends RecyclerView.Adapter<Inrgedients
     }
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
+        public TextView nameTextView;
+        public TextView measureTextView;
+        public TextView amountTextView;
         public View mainView;
 
         public MainViewHolder(View v) {
             super(v);
-            textView = (TextView) v.findViewById(R.id.ingredient_item_name);
+            nameTextView = (TextView) v.findViewById(R.id.ingredient_item_name);
+            measureTextView = (TextView) v.findViewById(R.id.ingredient_item_measure);
+            amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
             mainView = v;
         }
     }
-
-    public void addItem(Ingredient ingredient) {
-        mDataset.add(ingredient);
-        notifyDataSetChanged();
-    }
-
-//    public void addItemList(List<Ingredient> ingredientList) {
-//        mDataset.addAll(ingredientList);
-//        notifyDataSetChanged();
-//    }
 
     public void updateItems(List<Ingredient> ingredientList) {
         mDataset.clear();

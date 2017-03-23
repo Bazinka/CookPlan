@@ -14,9 +14,11 @@ import java.util.List;
 public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGridRecyclerViewAdapter.ViewHolder> {
 
     private final List<Recipe> mValues;
+    private RecipeListClickListener listener;
 
-    public RecipeGridRecyclerViewAdapter(List<Recipe> items) {
+    public RecipeGridRecyclerViewAdapter(List<Recipe> items, RecipeListClickListener listener) {
         mValues = items;
+        this.listener = listener;
     }
 
     @Override
@@ -28,18 +30,14 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).getId());
-        holder.mContentView.setText(mValues.get(position).getName());
+        Recipe recipe = mValues.get(position);
+        holder.nameView.setText(mValues.get(position).getName());
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (null != mListener) {
-//                    // Notify the active callbacks interface (the activity, if the
-//                    // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mItem);
-//                }
+        holder.mainView.setTag(recipe);
+        holder.mainView.setOnClickListener(v -> {
+            Recipe recipe1 = (Recipe) v.getTag();
+            if (listener != null && recipe1 != null) {
+                listener.onRecipeClick(recipe1);
             }
         });
     }
@@ -56,22 +54,22 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        //        public final TextView mIdView;
-        public final TextView mContentView;
-        public Recipe mItem;
+        public final View mainView;
+        public final TextView nameView;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-//            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.name
-            );
+            mainView = view;
+            nameView = (TextView) view.findViewById(R.id.name);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + nameView.getText() + "'";
         }
+    }
+
+    public interface RecipeListClickListener {
+        public void onRecipeClick(Recipe recipe);
     }
 }

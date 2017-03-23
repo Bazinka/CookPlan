@@ -1,5 +1,4 @@
-package com.cookplan.recipe_new.add_ingredients;
-
+package com.cookplan.recipe_view;
 
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
@@ -15,23 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by DariaEfimova on 21.03.17.
+ * Created by DariaEfimova on 23.03.17.
  */
 
-public class NewRecipeIngredientsPresenterImpl implements NewRecipeIngredientsPresenter {
+public class RecipeViewPresenterImpl implements RecipeViewPresenter {
 
-    private NewRecipeIngredientsView mainView;
+    private RecipeView mainView;
     private DatabaseReference database;
     private Recipe recipe;
 
-    public NewRecipeIngredientsPresenterImpl(NewRecipeIngredientsView mainView, Recipe recipe) {
+    public RecipeViewPresenterImpl(RecipeView mainView, Recipe recipe) {
         this.mainView = mainView;
         this.recipe = recipe;
         this.database = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
-    public void getAsyncIngredientList() {
+    public void getIngredientList() {
         Query items = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE)
                 .orderByChild(DatabaseConstants.DATABASE_RECIPE_ID_FIELD).equalTo(recipe.getId());
         items.addValueEventListener(new ValueEventListener() {

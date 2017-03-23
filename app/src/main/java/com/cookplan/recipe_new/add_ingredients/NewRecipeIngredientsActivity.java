@@ -22,7 +22,7 @@ public class NewRecipeIngredientsActivity extends BaseActivity implements NewRec
 
     public static final String RECIPE_OBJECT_KEY = "new_recipe_name";
 
-    private InrgedientsRecyclerAdapter adapter;
+    private NewRecipeInrgedientsAdapter adapter;
     private NewRecipeIngredientsPresenter presenter;
 
     @Override
@@ -50,7 +50,7 @@ public class NewRecipeIngredientsActivity extends BaseActivity implements NewRec
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new InrgedientsRecyclerAdapter(new ArrayList<>());
+        adapter = new NewRecipeInrgedientsAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
         presenter = new NewRecipeIngredientsPresenterImpl(this, recipe);
