@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShopListStatus;
 
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
             holder.measureTextView.setVisibility(View.GONE);
         }
 
-        if (ingredient.isNeedToBuy()) {
+        if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
             holder.checkBox.setChecked(true);
         } else {
             holder.checkBox.setChecked(false);
@@ -69,12 +70,12 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
             int pos = (int) view.getTag();
             Ingredient selectIngredient = ingredients.get(pos);
             boolean isIngredientSelect = false;
-            if (selectIngredient.isNeedToBuy()) {
+            if (selectIngredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
                 isIngredientSelect = false;
             } else {
                 isIngredientSelect = true;
             }
-            selectIngredient.setIsNeedToBuy(isIngredientSelect);
+            selectIngredient.setShopListStatus(isIngredientSelect? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
 
             if (listener != null) {
                 listener.onIngredientItemSelected(selectIngredient);

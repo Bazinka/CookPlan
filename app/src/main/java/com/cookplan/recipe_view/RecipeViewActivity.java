@@ -16,6 +16,7 @@ import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
+import com.cookplan.models.ShopListStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,7 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
     @Override
     public void setIngredientSuccessfulUpdate(Ingredient ingredient) {
         String message = null;
-        if (ingredient.isNeedToBuy()) {
+        if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
             message = getString(R.string.ingr_added_to_shopping_list_title);
         } else {
             message = getString(R.string.ingr_removed_from_shopping_list_title);

@@ -19,19 +19,19 @@ public class Ingredient implements Serializable {
     private String recipeId;
     private MeasureUnit measureUnit;
     private Double amount;
-    private boolean isNeedToBuy;
+    private ShopListStatus shopListStatus;
 
     public Ingredient() {
     }
 
-    public Ingredient(String id, String name, String productId, String recipeId, MeasureUnit measureUnit, Double amount, boolean isNeedToBuy) {
+    public Ingredient(String id, String name, String productId, String recipeId, MeasureUnit measureUnit, Double amount, ShopListStatus shopListStatus) {
         this.id = id;
         this.name = name;
         this.productId = productId;
         this.recipeId = recipeId;
         this.measureUnit = measureUnit;
         this.amount = amount;
-        this.isNeedToBuy = isNeedToBuy;
+        this.shopListStatus = shopListStatus;
     }
 
     public String getId() {
@@ -80,23 +80,25 @@ public class Ingredient implements Serializable {
 
     public IngredientDBObject getIngredientDBObject() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        return new IngredientDBObject(auth.getCurrentUser().getUid(), productId, measureUnit, name, recipeId, amount, isNeedToBuy);
+        return new IngredientDBObject(auth.getCurrentUser().getUid(), productId, measureUnit, name,
+                recipeId, amount, shopListStatus);
     }
 
     public static Ingredient getIngredientFromDBObject(DataSnapshot itemSnapshot) {
         Ingredient.IngredientDBObject object = IngredientDBObject.parseIngredientDBObject(itemSnapshot);
-        Ingredient ingredient = new Ingredient(itemSnapshot.getKey(), object.getName(), object.getProductId(),
-                object.getRecipeId(), MeasureUnit.getMeasureUnitById(object.getMeasureUnitId()),
-                object.getAmount(), object.isNeedToBuy());
+        Ingredient ingredient = new Ingredient(itemSnapshot.getKey(), object.getName(),
+                object.getProductId(), object.getRecipeId(),
+                MeasureUnit.getMeasureUnitById(object.getMeasureUnitId()), object.getAmount(),
+                ShopListStatus.getShopListStatusId(object.getShopListStatusId()));
         return ingredient;
     }
 
-    public void setIsNeedToBuy(boolean isNeedToBuy) {
-        this.isNeedToBuy = isNeedToBuy;
+    public ShopListStatus getShopListStatus() {
+        return shopListStatus;
     }
 
-    public boolean isNeedToBuy() {
-        return isNeedToBuy;
+    public void setShopListStatus(ShopListStatus shopListStatus) {
+        this.shopListStatus = shopListStatus;
     }
 
     public static class IngredientDBObject {
@@ -122,24 +124,24 @@ public class Ingredient implements Serializable {
         @PropertyName(DatabaseConstants.DATABASE_AMOUNT_FIELD)
         public double amount;
 
-        @PropertyName(DatabaseConstants.DATABASE_IS_NEEED_TO_BUY_FIELD)
-        public boolean isNeedToBuy;
+        @PropertyName(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
+        public int shopListStatusId;
 
         public IngredientDBObject() {
         }
 
-        public IngredientDBObject(String userId, String productId, MeasureUnit measureUnit, String name, String recipeId, double amount, boolean isNeedToBuy) {
+        public IngredientDBObject(String userId, String productId, MeasureUnit measureUnit, String name, String recipeId, double amount, ShopListStatus shopListStatus) {
             this.userId = userId;
             this.productId = productId;
             this.measureUnitId = measureUnit != null ? measureUnit.getId() : -1;
             this.name = name;
             this.recipeId = recipeId;
             this.amount = amount;
-            this.isNeedToBuy = isNeedToBuy;
+            this.shopListStatusId = shopListStatus != null ? shopListStatus.getId() : -1;
         }
 
-        public boolean isNeedToBuy() {
-            return isNeedToBuy;
+        public int getShopListStatusId() {
+            return shopListStatusId;
         }
 
         public String getId() {
@@ -196,8 +198,8 @@ public class Ingredient implements Serializable {
                         object.amount = ((Long) child.getValue()).doubleValue();
                     }
                 }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_IS_NEEED_TO_BUY_FIELD)) {
-                    object.isNeedToBuy = (boolean) child.getValue();
+                if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)) {
+                    object.shopListStatusId = ((Long) child.getValue()).intValue();
                 }
             }
             return object;

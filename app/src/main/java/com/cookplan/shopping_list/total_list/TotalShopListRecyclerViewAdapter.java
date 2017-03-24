@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShopListStatus;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
@@ -54,15 +55,15 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         }
 
         View.OnClickListener clickListener = view -> {
-            int pos = (int) view.getTag();
-            Ingredient selectIngredient = ingredients.get(pos);
-            boolean isIngredientSelect = false;
-            if (selectIngredient.isNeedToBuy()) {
-                isIngredientSelect = false;
-            } else {
-                isIngredientSelect = true;
-            }
-            selectIngredient.setIsNeedToBuy(isIngredientSelect);
+//            int pos = (int) view.getTag();
+//            Ingredient selectIngredient = ingredients.get(pos);
+//            boolean isIngredientSelect = false;
+//            if (selectIngredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
+//                isIngredientSelect = false;
+//            } else {
+//                isIngredientSelect = true;
+//            }
+//            selectIngredient.setIsNeedToBuy(isIngredientSelect);
 
 //            if (listener != null) {
 //                listener.onIngredientItemSelected(selectIngredient);

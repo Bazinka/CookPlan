@@ -18,19 +18,19 @@ public enum MeasureUnit {
     TABLESPOON(7, R.string.tablespoon_title, true);
 
     private int id;
-    private int nameRecourseId;
-    private boolean isItIntValue;
+        private int nameRecourseId;
+        private boolean isItIntValue;
 
-    MeasureUnit(int id, int nameRecourseId, boolean isItIntValue) {
-        this.id = id;
-        this.nameRecourseId = nameRecourseId;
-        this.isItIntValue = isItIntValue;
-    }
+        MeasureUnit(int id, int nameRecourseId, boolean isItIntValue) {
+            this.id = id;
+            this.nameRecourseId = nameRecourseId;
+            this.isItIntValue = isItIntValue;
+        }
 
-    @Override
-    public String toString() {
-        return RApplication.getAppContext().getString(nameRecourseId);
-    }
+        @Override
+        public String toString() {
+            return RApplication.getAppContext().getString(nameRecourseId);
+        }
 
     public int getId() {
         return id;

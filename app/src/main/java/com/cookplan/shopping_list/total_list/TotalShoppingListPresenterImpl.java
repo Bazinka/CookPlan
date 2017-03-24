@@ -2,6 +2,7 @@ package com.cookplan.shopping_list.total_list;
 
 
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShopListStatus;
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
     public void sortIngredientList(List<Ingredient> userIngredients) {
         List<Ingredient> ingredients = new ArrayList<>();
         for (Ingredient ingredient : userIngredients) {
-            if (ingredient.isNeedToBuy()) {
+            if (ingredient.getShopListStatus() != ShopListStatus.NONE) {
                 ingredients.add(ingredient);
             }
         }

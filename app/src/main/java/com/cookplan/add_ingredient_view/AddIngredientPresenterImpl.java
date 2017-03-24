@@ -5,6 +5,7 @@ import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 import com.cookplan.models.Recipe;
+import com.cookplan.models.ShopListStatus;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -86,7 +87,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 ingredient.setRecipeId(recipe != null ? recipe.getId() : null);
                 ingredient.setMeasureUnit(newMeasureUnit);
                 ingredient.setAmount(amount);
-                ingredient.setIsNeedToBuy(isNeedToBuy);
+                ingredient.setShopListStatus(isNeedToBuy ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
                 DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
                 ingredRef.push().setValue(ingredient.getIngredientDBObject(), (databaseError, reference) -> {
                     if (databaseError != null) {
