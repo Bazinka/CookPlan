@@ -1,5 +1,7 @@
 package com.cookplan.shopping_list.total_list;
 
+import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShopListStatus;
 import com.cookplan.shopping_list.ShoppingListBasePresenter;
 
 /**
@@ -8,4 +10,5 @@ import com.cookplan.shopping_list.ShoppingListBasePresenter;
 
 public interface TotalShoppingListPresenter extends ShoppingListBasePresenter {
 
+    public void changeShopListStatus(Ingredient ingredient, ShopListStatus newStatus);
 }

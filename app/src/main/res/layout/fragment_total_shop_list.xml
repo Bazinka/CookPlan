@@ -24,18 +24,85 @@
             android:layout_below="@id/progress_bar"
             android:layout_margin="@dimen/main_margin_left" />
 
-        <View
-            android:id="@+id/view"
+        <RelativeLayout
+            android:id="@+id/need_to_buy_layout"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/fragment_container"
-            android:background="@color/primary_light" />
+            android:layout_marginTop="@dimen/main_margin_left"
+            android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/total_shop_list_recycler"
+            <View
+                android:id="@+id/need_to_buy_devider_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/primary_light" />
+
+            <TextView
+                android:id="@+id/need_to_buy_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/need_to_buy_devider_1"
+                android:layout_margin="@dimen/small_item_padding"
+                android:gravity="center"
+                android:text="@string/need_to_buy_list_title"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/title_text_size"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/need_to_buy_devider_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/need_to_buy_title"
+                android:background="@color/primary_light" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/total_need_to_buy_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/need_to_buy_devider_2"
+                android:layout_marginBottom="@dimen/main_margin_left" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/already_bought_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/view" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/need_to_buy_layout"
+            android:orientation="vertical">
 
+            <View
+                android:id="@+id/already_bought_devider_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/primary_light" />
+
+            <TextView
+                android:id="@+id/bought_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/already_bought_devider_1"
+                android:layout_margin="@dimen/small_item_padding"
+                android:gravity="center"
+                android:text="@string/have_already_bought_list_title"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/title_text_size"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/already_bought_devider_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/bought_title"
+                android:background="@color/primary_light" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/total_bought_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/already_bought_devider_2"
+                android:layout_marginBottom="@dimen/main_margin_left" />
+        </RelativeLayout>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -60,5 +60,7 @@
     <string name="tab_all_ingredients_title">Все</string>
     <string name="tab_ingredients_by_dish_title">По блюдам</string>
     <string name="error_load_shop_list">error loading shopping list!</string>
+    <string name="have_already_bought_list_title">Куплено:</string>
+    <string name="need_to_buy_list_title">Необходимо:</string>
 
 </resources>

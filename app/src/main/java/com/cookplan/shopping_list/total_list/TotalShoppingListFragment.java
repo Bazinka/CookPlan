@@ -1,6 +1,7 @@
 package com.cookplan.shopping_list.total_list;
 
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,11 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.cookplan.R;
 import com.cookplan.add_ingredient_view.AddIngredientViewFragment;
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShopListStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +24,11 @@ import java.util.List;
 
 public class TotalShoppingListFragment extends Fragment implements TotalShoppingListView {
 
-    private OnListFragmentInteractionListener mListener;
     private ViewGroup mainView;
     private TotalShoppingListPresenter presenter;
-    private TotalShopListRecyclerViewAdapter adapter;
+    private TotalShopListRecyclerViewAdapter needToBuyAdapter;
+    private TotalShopListRecyclerViewAdapter alreadyBoughtAdapter;
+    private ProgressBar progressBar;
 
     public TotalShoppingListFragment() {
     }
@@ -51,12 +55,29 @@ public class TotalShoppingListFragment extends Fragment implements TotalShopping
                              Bundle savedInstanceState) {
         mainView = (ViewGroup) inflater.inflate(R.layout.fragment_total_shop_list, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.total_shop_list_recycler);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
 
-        adapter = new TotalShopListRecyclerViewAdapter(new ArrayList<>(), mListener);
-        recyclerView.setAdapter(adapter);
+        RecyclerView needToBuyRecyclerView = (RecyclerView) mainView.findViewById(R.id.total_need_to_buy_recycler);
+        needToBuyRecyclerView.setHasFixedSize(true);
+        needToBuyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        needToBuyAdapter = new TotalShopListRecyclerViewAdapter(new ArrayList<>(), ingredient -> {
+            if (presenter != null) {
+                presenter.changeShopListStatus(ingredient, ShopListStatus.ALREADY_BOUGHT);
+            }
+        });
+        needToBuyRecyclerView.setAdapter(needToBuyAdapter);
+
+        RecyclerView alreadyBoughtRecyclerView = (RecyclerView) mainView.findViewById(R.id.total_bought_recycler);
+        alreadyBoughtRecyclerView.setHasFixedSize(true);
+        alreadyBoughtRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        alreadyBoughtAdapter = new TotalShopListRecyclerViewAdapter(new ArrayList<>(), ingredient -> {
+            if (presenter != null) {
+                presenter.changeShopListStatus(ingredient, ShopListStatus.NEED_TO_BUY);
+            }
+        });
+        alreadyBoughtRecyclerView.setAdapter(alreadyBoughtAdapter);
 
         AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance(true);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -66,10 +87,11 @@ public class TotalShoppingListFragment extends Fragment implements TotalShopping
         if (presenter != null) {
             presenter.getShoppingList();
         }
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
         return mainView;
     }
+
+
 
     @Override
     public void onResume() {
@@ -82,15 +104,42 @@ public class TotalShoppingListFragment extends Fragment implements TotalShopping
     }
 
     @Override
-    public void setIngredientList(List<Ingredient> ingredientList) {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+    public void setIngredientLists(List<Ingredient> needToBuyIngredientList,
+                                   List<Ingredient> alreadyBoughtIngredientList) {
         progressBar.setVisibility(View.GONE);
-        if (adapter != null) {
-            adapter.update(ingredientList);
+        ViewGroup needToBuyLayout = (ViewGroup) mainView.findViewById(R.id.need_to_buy_layout);
+        if (!needToBuyIngredientList.isEmpty()) {
+            setLayoutVisability(needToBuyLayout, View.VISIBLE);
+            if (needToBuyAdapter != null) {
+                needToBuyAdapter.update(needToBuyIngredientList);
+            }
+        } else {
+            setLayoutVisability(needToBuyLayout, View.GONE);
+        }
+
+        ViewGroup alreadyBoughtLayout = (ViewGroup) mainView.findViewById(R.id.already_bought_layout);
+        if (!alreadyBoughtIngredientList.isEmpty()) {
+            setLayoutVisability(alreadyBoughtLayout, View.VISIBLE);
+            if (alreadyBoughtAdapter != null) {
+                alreadyBoughtAdapter.update(alreadyBoughtIngredientList);
+            }
+        } else {
+            setLayoutVisability(alreadyBoughtLayout, View.GONE);
         }
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Ingredient ingredient);
+    @Override
+    public void setIngredientSuccessfulUpdate(Ingredient ingredient) {
+        if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
+            setLayoutVisability((ViewGroup) mainView.findViewById(R.id.already_bought_layout),
+                    View.VISIBLE);
+        } else if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
+            setLayoutVisability((ViewGroup) mainView.findViewById(R.id.need_to_buy_layout),
+                    View.VISIBLE);
+        }
+    }
+
+    private void setLayoutVisability(ViewGroup layoutView, int visability) {
+        layoutView.setVisibility(visability);
     }
 }

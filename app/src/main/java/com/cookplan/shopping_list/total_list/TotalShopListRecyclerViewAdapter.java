@@ -1,5 +1,6 @@
 package com.cookplan.shopping_list.total_list;
 
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.ShopListStatus;
-import com.cookplan.shopping_list.total_list.TotalShoppingListFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import java.util.List;
 public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<TotalShopListRecyclerViewAdapter.ViewHolder> {
 
     private final List<Ingredient> ingredients;
-    private final OnListFragmentInteractionListener listener;
+    private final OnItemClickListener listener;
 
-    public TotalShopListRecyclerViewAdapter(List<Ingredient> items, OnListFragmentInteractionListener listener) {
+    public TotalShopListRecyclerViewAdapter(List<Ingredient> items, OnItemClickListener listener) {
         ingredients = items;
         this.listener = listener;
     }
@@ -34,6 +34,10 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Ingredient ingredient = ingredients.get(position);
+
+        if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
+            holder.nameTextView.setPaintFlags(holder.nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
         holder.nameTextView.setText(ingredient.getName());
 
         if (ingredient.getAmount() != null && ingredient.getMeasureUnit() != null) {
@@ -55,19 +59,12 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         }
 
         View.OnClickListener clickListener = view -> {
-//            int pos = (int) view.getTag();
-//            Ingredient selectIngredient = ingredients.get(pos);
-//            boolean isIngredientSelect = false;
-//            if (selectIngredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
-//                isIngredientSelect = false;
-//            } else {
-//                isIngredientSelect = true;
-//            }
-//            selectIngredient.setIsNeedToBuy(isIngredientSelect);
+            int pos = (int) view.getTag();
+            Ingredient selectIngredient = ingredients.get(pos);
 
-//            if (listener != null) {
-//                listener.onIngredientItemSelected(selectIngredient);
-//            }
+            if (listener != null) {
+                listener.OnClick(selectIngredient);
+            }
         };
         holder.mainView.setTag(position);
         holder.mainView.setOnClickListener(clickListener);
@@ -84,6 +81,16 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         notifyDataSetChanged();
     }
 
+    public void removeItem(Ingredient ingredient) {
+        ingredients.remove(ingredient);
+        notifyDataSetChanged();
+    }
+
+    public void addItem(Ingredient ingredient) {
+        ingredients.add(ingredient);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
         public TextView measureTextView;
@@ -97,5 +104,9 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
             amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
             mainView = v.findViewById(R.id.main_view);
         }
+    }
+
+    public interface OnItemClickListener {
+        void OnClick(Ingredient ingredient);
     }
 }
