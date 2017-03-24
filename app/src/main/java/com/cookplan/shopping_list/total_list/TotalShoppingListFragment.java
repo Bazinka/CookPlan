@@ -41,6 +41,7 @@ public class TotalShoppingListFragment extends Fragment implements TotalShopping
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        setRetainInstance(true);
         presenter = new TotalShoppingListPresenterImpl(this);
     }
 

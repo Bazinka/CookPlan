@@ -45,6 +45,7 @@ public class RecipeGridFragment extends Fragment implements RecipeGridView {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        setRetainInstance(true);
         presenter = new RecipeGridPresenterImpl(this);
         presenter.getAsyncRecipeList();
     }

@@ -39,6 +39,7 @@ public class ShopListByDishesFragment extends Fragment {
         if (getArguments() != null) {
         }
 
+        setRetainInstance(true);
 //        presenter = new (this);
 //        presenter.getAsyncRecipeList();
     }
