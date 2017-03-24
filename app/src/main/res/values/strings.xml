@@ -59,5 +59,6 @@
     <string name="ingr_removed_from_shopping_list_title">was removed from shopping list</string>
     <string name="tab_all_ingredients_title">Все</string>
     <string name="tab_ingredients_by_dish_title">По блюдам</string>
+    <string name="error_load_shop_list">error loading shopping list!</string>
 
 </resources>

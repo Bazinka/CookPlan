@@ -33,14 +33,43 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Ingredient ingredient = ingredients.get(position);
-        holder.mIdView.setText(ingredient.getId());
-        holder.mContentView.setText(ingredient.getName());
+        holder.nameTextView.setText(ingredient.getName());
 
-        holder.mView.setOnClickListener(v -> {
-            if (null != listener) {
-//                    listener.onListFragmentInteraction();
+        if (ingredient.getAmount() != null && ingredient.getMeasureUnit() != null) {
+            holder.amountTextView.setVisibility(View.VISIBLE);
+
+            double amount = ingredient.getAmount();
+            if (ingredient.getMeasureUnit().isItIntValue()) {
+                holder.amountTextView.setText(String.valueOf((int) amount));
+            } else {
+                holder.amountTextView.setText(String.valueOf(amount));
             }
-        });
+
+            holder.measureTextView.setVisibility(View.VISIBLE);
+            holder.measureTextView.setText(ingredient.getMeasureUnit().toString());
+
+        } else {
+            holder.amountTextView.setVisibility(View.GONE);
+            holder.measureTextView.setVisibility(View.GONE);
+        }
+
+        View.OnClickListener clickListener = view -> {
+            int pos = (int) view.getTag();
+            Ingredient selectIngredient = ingredients.get(pos);
+            boolean isIngredientSelect = false;
+            if (selectIngredient.isNeedToBuy()) {
+                isIngredientSelect = false;
+            } else {
+                isIngredientSelect = true;
+            }
+            selectIngredient.setNeedToBuy(isIngredientSelect);
+
+//            if (listener != null) {
+//                listener.onIngredientItemSelected(selectIngredient);
+//            }
+        };
+        holder.mainView.setTag(position);
+        holder.mainView.setOnClickListener(clickListener);
     }
 
     @Override
@@ -48,21 +77,24 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         return ingredients.size();
     }
 
+    public void update(List<Ingredient> ingredientList) {
+        ingredients.clear();
+        ingredients.addAll(ingredientList);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public TextView nameTextView;
+        public TextView measureTextView;
+        public TextView amountTextView;
+        public View mainView;
 
-        public ViewHolder(View view) {
-            super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+        public ViewHolder(View v) {
+            super(v);
+            nameTextView = (TextView) v.findViewById(R.id.ingredient_item_name);
+            measureTextView = (TextView) v.findViewById(R.id.ingredient_item_measure);
+            amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
+            mainView = v.findViewById(R.id.main_view);
         }
     }
 }
