@@ -3,6 +3,7 @@ package com.cookplan.models;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
 
@@ -90,8 +91,8 @@ public class Ingredient implements Serializable {
         return ingredient;
     }
 
-    public void setNeedToBuy(boolean needToBuy) {
-        isNeedToBuy = needToBuy;
+    public void setIsNeedToBuy(boolean isNeedToBuy) {
+        this.isNeedToBuy = isNeedToBuy;
     }
 
     public boolean isNeedToBuy() {
@@ -100,14 +101,29 @@ public class Ingredient implements Serializable {
 
     public static class IngredientDBObject {
 
-        private String id;
-        private String userId;
-        private String name;
-        private String productId;
-        private String recipeId;
-        private int measureUnitId;
-        private double amount;
-        private boolean isNeedToBuy;
+        @PropertyName(DatabaseConstants.DATABASE_ID_FIELD)
+        public String id;
+
+        @PropertyName(DatabaseConstants.DATABASE_USER_ID_FIELD)
+        public String userId;
+
+        @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD)
+        public String name;
+
+        @PropertyName(DatabaseConstants.DATABASE_PRODUCT_ID_FIELD)
+        public String productId;
+
+        @PropertyName(DatabaseConstants.DATABASE_RECIPE_ID_FIELD)
+        public String recipeId;
+
+        @PropertyName(DatabaseConstants.DATABASE_MEASURE_UNIT_ID_FIELD)
+        public int measureUnitId;
+
+        @PropertyName(DatabaseConstants.DATABASE_AMOUNT_FIELD)
+        public double amount;
+
+        @PropertyName(DatabaseConstants.DATABASE_IS_NEEED_TO_BUY_FIELD)
+        public boolean isNeedToBuy;
 
         public IngredientDBObject() {
         }
@@ -164,19 +180,23 @@ public class Ingredient implements Serializable {
                 if (child.getKey().equals(DatabaseConstants.DATABASE_USER_ID_FIELD)) {
                     object.userId = child.getValue().toString();
                 }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_PRODUCT_ID_FIELD)) {
+                if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_ID_FIELD)) {
                     object.productId = child.getValue().toString();
                 }
                 if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_RECIPE_ID_FIELD)) {
                     object.recipeId = child.getValue().toString();
                 }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_MEASURE_UNIT_ID_FIELD)) {
+                if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_UNIT_ID_FIELD)) {
                     object.measureUnitId = ((Long) child.getValue()).intValue();
                 }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_AMOUNT_FIELD)) {
-                    object.amount = ((Long) child.getValue()).doubleValue();
+                if (child.getKey().equals(DatabaseConstants.DATABASE_AMOUNT_FIELD)) {
+                    if (child.getValue() instanceof Double) {
+                        object.amount = (Double) child.getValue();
+                    } else {
+                        object.amount = ((Long) child.getValue()).doubleValue();
+                    }
                 }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_IS_NEEED_TO_BUY_FIELD)) {
+                if (child.getKey().equals(DatabaseConstants.DATABASE_IS_NEEED_TO_BUY_FIELD)) {
                     object.isNeedToBuy = (boolean) child.getValue();
                 }
             }

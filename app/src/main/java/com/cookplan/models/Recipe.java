@@ -1,7 +1,9 @@
 package com.cookplan.models;
 
+import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
 
@@ -58,10 +60,18 @@ public class Recipe implements Serializable {
 
     public static class RecipeDB {
 
-        private String id;
-        private String name;
-        private String desc;
-        private String userId;
+
+        @PropertyName(DatabaseConstants.DATABASE_ID_FIELD)
+        public String id;
+
+        @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD)
+        public String name;
+
+        @PropertyName(DatabaseConstants.DATABASE_DESCRIPTION_FIELD)
+        public String desc;
+
+        @PropertyName(DatabaseConstants.DATABASE_USER_ID_FIELD)
+        public String userId;
 
         public RecipeDB() {
         }

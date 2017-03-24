@@ -2,6 +2,7 @@ package com.cookplan.models;
 
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,9 +83,15 @@ public class Product implements Serializable {
 
     public static class ProductDBObject {
 
-        private String id;
-        private List<Integer> measureUnitIdList;
-        private String name;
+
+        @PropertyName(DatabaseConstants.DATABASE_ID_FIELD)
+        public String id;
+
+        @PropertyName(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)
+        public List<Integer> measureUnitIdList;
+
+        @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD)
+        public String name;
 
         public ProductDBObject() {
         }
@@ -118,7 +125,7 @@ public class Product implements Serializable {
                 if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
                     object.name = child.getValue().toString();
                 }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_MEASURE_LIST_FIELD)) {
+                if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)) {
                     if (child.getValue() instanceof List) {
                         List<Long> measDBList = (ArrayList<Long>) child.getValue();
                         object.measureUnitIdList = new ArrayList<>();
