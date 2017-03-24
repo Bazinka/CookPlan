@@ -1,7 +1,6 @@
 package com.cookplan.shopping_list.total_list;
 
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.cookplan.R;
@@ -90,7 +88,6 @@ public class TotalShoppingListFragment extends Fragment implements TotalShopping
         progressBar.setVisibility(View.VISIBLE);
         return mainView;
     }
-
 
 
     @Override
