@@ -6,7 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.cookplan.BaseActivity;
-import com.cookplan.MainActivity;
+import com.cookplan.main.MainActivity;
 import com.cookplan.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;

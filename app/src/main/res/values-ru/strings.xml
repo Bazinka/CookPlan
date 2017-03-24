@@ -57,5 +57,7 @@
     <string name="recipe_description_title">Приготовление</string>
     <string name="ingr_added_to_shopping_list_title">was added to shoppingList</string>
     <string name="ingr_removed_from_shopping_list_title">was removed from shopping list</string>
+    <string name="tab_all_ingredients_title">Все</string>
+    <string name="tab_ingredients_by_dish_title">По блюдам</string>
 
 </resources>
