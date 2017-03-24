@@ -53,6 +53,8 @@ public class RecipeGridFragment extends Fragment implements RecipeGridView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = (ViewGroup) inflater.inflate(R.layout.fragment_recipe_list, container, false);
+        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
 
         // Set the adapter
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.recipe_list_recycler);

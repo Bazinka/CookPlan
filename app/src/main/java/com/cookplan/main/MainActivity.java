@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -93,10 +94,13 @@ public class MainActivity extends BaseActivity
         mainContentView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.recipe_list_menu_title));
-        RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, pointListFragment);
-        transaction.commit();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(RecipeGridFragment.class.getSimpleName());
+        if (fragment == null) {
+            RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, pointListFragment, RecipeGridFragment.class.getSimpleName());
+            transaction.commit();
+        }
     }
 
     void setShoppingListFragment() {
