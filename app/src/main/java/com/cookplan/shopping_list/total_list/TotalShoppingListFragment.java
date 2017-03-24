@@ -125,17 +125,6 @@ public class TotalShoppingListFragment extends Fragment implements TotalShopping
         }
     }
 
-    @Override
-    public void setIngredientSuccessfulUpdate(Ingredient ingredient) {
-        if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
-            setLayoutVisability((ViewGroup) mainView.findViewById(R.id.already_bought_layout),
-                    View.VISIBLE);
-        } else if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
-            setLayoutVisability((ViewGroup) mainView.findViewById(R.id.need_to_buy_layout),
-                    View.VISIBLE);
-        }
-    }
-
     private void setLayoutVisability(ViewGroup layoutView, int visability) {
         layoutView.setVisibility(visability);
     }

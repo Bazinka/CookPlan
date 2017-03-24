@@ -5,6 +5,7 @@ import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.ShopListStatus;
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl;
+import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -115,28 +116,33 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             didntCalculated = didntCalculated.isEmpty() ? didntCalculated : " + " + didntCalculated;
             String amountString = String.valueOf(amount) + " " + unit.toString() + didntCalculated;
 
-            return new Ingredient(productName, amountString, ShopListStatus.NEED_TO_BUY);
+            return new Ingredient(productName, amountString, status);
         } else {
             return null;
         }
     }
 
+
     @Override
     public void changeShopListStatus(Ingredient ingredient, ShopListStatus newStatus) {
-//        ingredient.setShopListStatus(newStatus);
-//        DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-//        ingredientRef.child(ingredient.getId())
-//                .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-//                .setValue(ingredient.getIngredientDBObject().getShopListStatusId())
-//                .addOnFailureListener(e -> {
-//                    if (mainView != null) {
-//                        mainView.setErrorToast(e.getLocalizedMessage());
-//                    }
-//                })
-//                .addOnSuccessListener(aVoid -> {
-//                    if (mainView != null) {
-//                        mainView.setIngredientSuccessfulUpdate(ingredient);
-//                    }
-//                });
+        List<Ingredient> ingredientList = ProductToIngredientMap.get(ingredient.getName());
+        DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+        for (Ingredient ingred : ingredientList) {
+            ingred.setShopListStatus(newStatus);
+            ingredientRef
+                    .child(ingred.getId())
+                    .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
+                    .setValue(ingred.getShopListStatus().getId())
+                    .addOnFailureListener(e -> {
+                        if (mainView != null) {
+                            mainView.setErrorToast(e.getLocalizedMessage());
+                        }
+                    });
+//                    .addOnSuccessListener(aVoid -> {
+//                        if (mainView != null) {
+//                            mainView.setIngredientSuccessfulUpdate(ingredient);
+//                        }
+//                    });
+        }
     }
 }
