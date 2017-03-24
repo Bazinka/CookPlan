@@ -58,7 +58,7 @@ public class TotalShoppingListFragment extends Fragment implements TotalShopping
         adapter = new TotalShopListRecyclerViewAdapter(new ArrayList<>(), mListener);
         recyclerView.setAdapter(adapter);
 
-        AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance();
+        AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance(true);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();

@@ -17,24 +17,11 @@
             android:layout_centerHorizontal="true"
             android:indeterminate="true" />
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progress_bar"
-            android:layout_margin="@dimen/main_margin_left" />
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/fragment_container"
-            android:background="@color/primary_light" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/shop_list_by_dish_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/view" />
+            android:layout_below="@id/progress_bar" />
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

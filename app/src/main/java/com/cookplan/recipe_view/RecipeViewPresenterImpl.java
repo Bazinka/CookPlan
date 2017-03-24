@@ -57,7 +57,7 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
     public void saveSelectIngredientList(Ingredient ingredient) {
         DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
         ingredientRef.child(ingredient.getId())
-                .child(DatabaseConstants.DATABASE_INRGEDIENT_IS_NEEED_TO_BUY_FIELD)
+                .child(DatabaseConstants.DATABASE_IS_NEEED_TO_BUY_FIELD)
                 .setValue(ingredient.getIngredientDBObject().isNeedToBuy())
                 .addOnFailureListener(e -> {
                     if (mainView != null) {

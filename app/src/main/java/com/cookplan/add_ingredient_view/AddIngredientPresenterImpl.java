@@ -25,10 +25,12 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
     private AddIngredientView mainView;
     private DatabaseReference database;
     private Recipe recipe;
+    private boolean isNeedToBuy;
 
     public AddIngredientPresenterImpl(AddIngredientView mainView) {
         this.mainView = mainView;
         this.database = FirebaseDatabase.getInstance().getReference();
+        isNeedToBuy = false;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 }
                 if (needToUpdate) {
                     product.getMeasureUnitList().add(newMeasureUnit);
-                    productRef.child(product.getId()).child(DatabaseConstants.DATABASE_PRODUCT_MEASURE_LIST_FIELD)
+                    productRef.child(product.getId()).child(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)
                             .setValue(product.getProductDBObject().getMeasureUnitIdList());
                 }
 
@@ -84,6 +86,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 ingredient.setRecipeId(recipe != null ? recipe.getId() : null);
                 ingredient.setMeasureUnit(newMeasureUnit);
                 ingredient.setAmount(amount);
+                ingredient.setIsNeedToBuy(isNeedToBuy);
                 DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
                 ingredRef.push().setValue(ingredient.getIngredientDBObject(), (databaseError, reference) -> {
                     if (databaseError != null) {
@@ -137,7 +140,13 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 });
     }
 
+    @Override
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    @Override
+    public void setIsNeedToBuy(boolean isNeedToBuy) {
+        this.isNeedToBuy = isNeedToBuy;
     }
 }

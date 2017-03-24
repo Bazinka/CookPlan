@@ -12,6 +12,8 @@ public interface AddIngredientPresenter {
 
     public void setRecipe(Recipe recipe);
 
+    public void setIsNeedToBuy(boolean isNeedToBuy);
+
     public void getAsyncProductList();
 
     public void saveIngredient(Product product, double amount, MeasureUnit measureUnit);

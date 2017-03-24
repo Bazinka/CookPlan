@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/add_ingred_layout_back"
+    android:elevation="2dp">
 
     <RelativeLayout
         android:id="@+id/main_view"
@@ -43,13 +45,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/input_text_main_layout"
-            android:background="@color/transparency_grey"
             android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/unit_amount_linear_layout"
@@ -61,7 +61,9 @@
                         android:id="@+id/unit_amount_edit_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_marginBottom="@dimen/small_item_padding"
+                        android:layout_marginRight="@dimen/small_item_padding"
+                        android:layout_marginTop="@dimen/small_item_padding"
                         android:layout_weight="1"
                         android:hint="@string/amount_product_title"
                         android:theme="@style/EditRecipeTextInputLayoutStyle"
@@ -81,21 +83,25 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="5dp"
+                        android:layout_marginBottom="@dimen/small_item_padding"
+                        android:layout_marginLeft="@dimen/small_item_padding"
+                        android:layout_marginTop="@dimen/small_item_padding"
                         android:layout_weight="1" />
                 </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/save_product_image_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/unit_amount_linear_layout"
                     android:layout_marginBottom="15dp"
                     android:layout_marginRight="25dp"
                     android:layout_marginTop="15dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_done" />
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/add_ingred_button_background"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_done" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

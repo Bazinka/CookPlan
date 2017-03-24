@@ -74,7 +74,7 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
             } else {
                 isIngredientSelect = true;
             }
-            selectIngredient.setNeedToBuy(isIngredientSelect);
+            selectIngredient.setIsNeedToBuy(isIngredientSelect);
 
             if (listener != null) {
                 listener.onIngredientItemSelected(selectIngredient);

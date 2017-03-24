@@ -37,7 +37,7 @@ public class NewRecipeIngredientsActivity extends BaseActivity implements NewRec
         }
         setTitle(getString(R.string.add_recipe_second_screen_title) + " " + recipe.getName());
 
-        AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance(recipe);
+        AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance(recipe, false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();

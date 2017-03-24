@@ -62,7 +62,7 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
             } else {
                 isIngredientSelect = true;
             }
-            selectIngredient.setNeedToBuy(isIngredientSelect);
+            selectIngredient.setIsNeedToBuy(isIngredientSelect);
 
 //            if (listener != null) {
 //                listener.onIngredientItemSelected(selectIngredient);

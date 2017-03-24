@@ -11,14 +11,15 @@
     tools:ignore="NewApi">
 
     <path
-        android:fillColor="@color/primary"
+        android:fillColor="@color/accent_color"
         android:pathData="M0,12
         A10,10 0 1,1 24,12
         A10,10 0 1,1 0,12 Z"
-        better:fillColor="@color/primary"
+        better:fillColor="@color/accent_color"
         better:pathData="M0,12
         A10,10 0 1,1 24,12
         A10,10 0 1,1 0,12 Z" />
+
     <path
         android:fillColor="@color/white"
         android:pathData="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"

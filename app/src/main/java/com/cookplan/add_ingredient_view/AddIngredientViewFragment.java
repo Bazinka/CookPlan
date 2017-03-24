@@ -28,6 +28,7 @@ import java.util.List;
 public class AddIngredientViewFragment extends Fragment implements AddIngredientView {
 
     public static final String RECIPE_OBJECT_KEY = "new_recipe_name";
+    public static final String RECIPE_NEED_TO_BUY_KEY = "is_need_to_buy";
 
     private AddIngredientPresenter presenter;
 
@@ -40,20 +41,22 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     public AddIngredientViewFragment() {
     }
 
-    public static AddIngredientViewFragment newInstance() {
+    public static AddIngredientViewFragment newInstance(boolean isNeedToBuy) {
         AddIngredientViewFragment fragment = new AddIngredientViewFragment();
         Bundle args = new Bundle();
+        args.putBoolean(RECIPE_NEED_TO_BUY_KEY, isNeedToBuy);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static AddIngredientViewFragment newInstance(Recipe recipe) {
+    public static AddIngredientViewFragment newInstance(Recipe recipe, boolean isNeedToBuy) {
         AddIngredientViewFragment fragment = new AddIngredientViewFragment();
+        Bundle args = new Bundle();
         if (recipe != null) {
-            Bundle args = new Bundle();
             args.putSerializable(RECIPE_OBJECT_KEY, recipe);
-            fragment.setArguments(args);
         }
+        args.putBoolean(RECIPE_NEED_TO_BUY_KEY, isNeedToBuy);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -67,8 +70,8 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
             if (recipe != null) {
                 presenter.setRecipe(recipe);
             }
+            presenter.setIsNeedToBuy(getArguments().getBoolean(RECIPE_NEED_TO_BUY_KEY, false));
         }
-        setRetainInstance(true);
     }
 
     @Override
@@ -130,7 +133,9 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         }
         if (!name.isEmpty() && presenter != null) {
             progressBar.setVisibility(View.VISIBLE);
-            presenter.saveIngredient(selectedProduct, amount != null ? Double.valueOf(amount) : 0, (MeasureUnit) spinner.getSelectedItem());
+            presenter.saveIngredient(selectedProduct,
+                    amount != null ? Double.valueOf(amount) : 0,
+                    (MeasureUnit) spinner.getSelectedItem());
             unitNameEditText.setText(null);
             EditText unitAmoutEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
             unitAmoutEditText.setText(null);

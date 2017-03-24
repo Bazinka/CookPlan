@@ -2,7 +2,6 @@ package com.cookplan.shopping_list.list_by_dishes;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cookplan.R;
-import com.cookplan.add_ingredient_view.AddIngredientViewFragment;
 import com.cookplan.models.Ingredient;
 
 import java.util.ArrayList;
@@ -54,11 +52,6 @@ public class ShopListByDishesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         recyclerView.setAdapter(new ShopListByDishesRecyclerViewAdapter(new ArrayList<>(), listener));
-
-        AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
 
         return mainView;
     }
