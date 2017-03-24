@@ -19,6 +19,7 @@ public class Ingredient implements Serializable {
     private String recipeId;
     private MeasureUnit measureUnit;
     private Double amount;
+    private String amountString;
     private ShopListStatus shopListStatus;
 
     public Ingredient() {
@@ -31,6 +32,12 @@ public class Ingredient implements Serializable {
         this.recipeId = recipeId;
         this.measureUnit = measureUnit;
         this.amount = amount;
+        this.shopListStatus = shopListStatus;
+    }
+
+    public Ingredient(String name, String amountString, ShopListStatus shopListStatus) {
+        this.name = name;
+        this.amountString = amountString;
         this.shopListStatus = shopListStatus;
     }
 
@@ -99,6 +106,10 @@ public class Ingredient implements Serializable {
 
     public void setShopListStatus(ShopListStatus shopListStatus) {
         this.shopListStatus = shopListStatus;
+    }
+
+    public String getAmountString() {
+        return amountString;
     }
 
     public static class IngredientDBObject {

@@ -40,22 +40,13 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         }
         holder.nameTextView.setText(ingredient.getName());
 
-        if (ingredient.getAmount() != null && ingredient.getMeasureUnit() != null) {
+
+        if (ingredient.getAmountString() != null) {
             holder.amountTextView.setVisibility(View.VISIBLE);
 
-            double amount = ingredient.getAmount();
-            if (ingredient.getMeasureUnit().isItIntValue()) {
-                holder.amountTextView.setText(String.valueOf((int) amount));
-            } else {
-                holder.amountTextView.setText(String.valueOf(amount));
-            }
-
-            holder.measureTextView.setVisibility(View.VISIBLE);
-            holder.measureTextView.setText(ingredient.getMeasureUnit().toString());
-
+            holder.amountTextView.setText(ingredient.getAmountString());
         } else {
             holder.amountTextView.setVisibility(View.GONE);
-            holder.measureTextView.setVisibility(View.GONE);
         }
 
         View.OnClickListener clickListener = view -> {
@@ -93,14 +84,12 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
-        public TextView measureTextView;
         public TextView amountTextView;
         public View mainView;
 
         public ViewHolder(View v) {
             super(v);
             nameTextView = (TextView) v.findViewById(R.id.ingredient_item_name);
-            measureTextView = (TextView) v.findViewById(R.id.ingredient_item_measure);
             amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
             mainView = v.findViewById(R.id.main_view);
         }

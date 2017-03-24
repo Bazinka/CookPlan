@@ -45,19 +45,10 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
         if (ingredient.getAmount() != null && ingredient.getMeasureUnit() != null) {
             holder.amountTextView.setVisibility(View.VISIBLE);
 
-            double amount = ingredient.getAmount();
-            if (ingredient.getMeasureUnit().isItIntValue()) {
-                holder.amountTextView.setText(String.valueOf((int) amount));
-            } else {
-                holder.amountTextView.setText(String.valueOf(amount));
-            }
-
-            holder.measureTextView.setVisibility(View.VISIBLE);
-            holder.measureTextView.setText(ingredient.getMeasureUnit().toString());
+            holder.amountTextView.setText(ingredient.getMeasureUnit().toValueString(ingredient.getAmount()));
 
         } else {
             holder.amountTextView.setVisibility(View.GONE);
-            holder.measureTextView.setVisibility(View.GONE);
         }
 
         if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
@@ -75,7 +66,7 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
             } else {
                 isIngredientSelect = true;
             }
-            selectIngredient.setShopListStatus(isIngredientSelect? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
+            selectIngredient.setShopListStatus(isIngredientSelect ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
 
             if (listener != null) {
                 listener.onIngredientItemSelected(selectIngredient);
@@ -94,7 +85,6 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
-        public TextView measureTextView;
         public TextView amountTextView;
         public CheckBox checkBox;
         public View mainView;
@@ -102,7 +92,6 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
         public MainViewHolder(View v) {
             super(v);
             nameTextView = (TextView) v.findViewById(R.id.ingredient_item_name);
-            measureTextView = (TextView) v.findViewById(R.id.ingredient_item_measure);
             amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
             checkBox = (CheckBox) v.findViewById(R.id.add_to_shop_list_checkbox);
             mainView = v.findViewById(R.id.main_view);

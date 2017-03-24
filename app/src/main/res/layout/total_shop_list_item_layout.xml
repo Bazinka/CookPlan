@@ -37,32 +37,20 @@
                 android:textSize="@dimen/subheding_text_size" />
 
             <TextView
-                android:id="@+id/ingredient_item_measure"
-                android:layout_width="40dp"
+                android:id="@+id/ingredient_item_amount"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/ingredient_item_amount"
                 android:layout_alignParentRight="true"
                 android:clickable="false"
-                android:ellipsize="end"
-                android:gravity="left|center_vertical"
-                android:lines="1"
-                android:text="шт."
-                android:textColor="@color/secondary_text_color"
-                android:textSize="@dimen/caption_text_size" />
-
-            <TextView
-                android:id="@+id/ingredient_item_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/ingredient_item_measure"
-                android:layout_toStartOf="@id/ingredient_item_measure"
-                android:clickable="false"
                 android:gravity="right|center_vertical"
+                android:lines="1"
                 android:paddingLeft="@dimen/main_margin_left"
                 android:paddingRight="@dimen/small_inrgedient_padding"
                 android:text="12"
                 android:textColor="@color/secondary_text_color"
                 android:textSize="@dimen/subheding_text_size" />
+
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

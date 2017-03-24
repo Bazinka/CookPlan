@@ -18,19 +18,24 @@ public enum MeasureUnit {
     TABLESPOON(7, R.string.tablespoon_title, true);
 
     private int id;
-        private int nameRecourseId;
-        private boolean isItIntValue;
+    private int nameRecourseId;
+    private boolean isItIntValue;
 
-        MeasureUnit(int id, int nameRecourseId, boolean isItIntValue) {
-            this.id = id;
-            this.nameRecourseId = nameRecourseId;
-            this.isItIntValue = isItIntValue;
-        }
+    MeasureUnit(int id, int nameRecourseId, boolean isItIntValue) {
+        this.id = id;
+        this.nameRecourseId = nameRecourseId;
+        this.isItIntValue = isItIntValue;
+    }
 
-        @Override
-        public String toString() {
-            return RApplication.getAppContext().getString(nameRecourseId);
-        }
+    @Override
+    public String toString() {
+        return RApplication.getAppContext().getString(nameRecourseId);
+    }
+
+    public String toValueString(double value) {
+        String valueString = isItIntValue() ? String.valueOf((int) value) : String.valueOf(value);
+        return valueString + " " + toString();
+    }
 
     public int getId() {
         return id;
@@ -59,7 +64,156 @@ public enum MeasureUnit {
         }
     }
 
-    public boolean isItIntValue() {
+    public static double getMultiplier(MeasureUnit from, MeasureUnit to) {
+        switch (from) {
+            case UNITS:
+                return -1;
+            case GRAMM: {
+                switch (to) {
+                    case GRAMM:
+                        return 1;
+                    case KILOGRAMM:
+                        return 0.001;
+                    case LITRE:
+                        return 0.001;
+                    case MILILITRE:
+                        return 1;
+                    case CUP:
+                        return 0.004;
+                    case TEASPOON:
+                        return 0.2;
+                    case TABLESPOON:
+                        return 0.06;
+                    default:
+                        return -1;
+                }
+            }
+            case KILOGRAMM: {
+                switch (to) {
+                    case KILOGRAMM:
+                        return 1;
+                    case GRAMM:
+                        return 1000;
+                    case LITRE:
+                        return 1;
+                    case MILILITRE:
+                        return 1000;
+                    case CUP:
+                        return 4;
+                    case TEASPOON:
+                        return 200;
+                    case TABLESPOON:
+                        return 66.6;
+                    default:
+                        return -1;
+                }
+            }
+            case LITRE: {
+                switch (to) {
+                    case LITRE:
+                        return 1;
+                    case GRAMM:
+                        return 1000;
+                    case KILOGRAMM:
+                        return 1;
+                    case MILILITRE:
+                        return 1000;
+                    case CUP:
+                        return 4;
+                    case TEASPOON:
+                        return 200;
+                    case TABLESPOON:
+                        return 66.6;
+                    default:
+                        return -1;
+                }
+            }
+            case MILILITRE: {
+                switch (to) {
+                    case MILILITRE:
+                        return 1;
+                    case KILOGRAMM:
+                        return 0.001;
+                    case LITRE:
+                        return 0.001;
+                    case GRAMM:
+                        return 1;
+                    case CUP:
+                        return 0.004;
+                    case TEASPOON:
+                        return 0.2;
+                    case TABLESPOON:
+                        return 0.06;
+                    default:
+                        return -1;
+                }
+            }
+            case CUP: {
+                switch (to) {
+                    case CUP:
+                        return 1;
+                    case KILOGRAMM:
+                        return 0.25;
+                    case LITRE:
+                        return 0.25;
+                    case GRAMM:
+                        return 250;
+                    case MILILITRE:
+                        return 250;
+                    case TEASPOON:
+                        return 50;
+                    case TABLESPOON:
+                        return 15;
+                    default:
+                        return -1;
+                }
+            }
+            case TEASPOON: {
+                switch (to) {
+                    case TEASPOON:
+                        return 1;
+                    case KILOGRAMM:
+                        return 0.005;
+                    case LITRE:
+                        return 0.005;
+                    case MILILITRE:
+                        return 5;
+                    case CUP:
+                        return 0.02;
+                    case GRAMM:
+                        return 5;
+                    case TABLESPOON:
+                        return 16;
+                    default:
+                        return -1;
+                }
+            }
+            case TABLESPOON: {
+                switch (to) {
+                    case TABLESPOON:
+                        return 1;
+                    case KILOGRAMM:
+                        return 0.015;
+                    case LITRE:
+                        return 0.015;
+                    case MILILITRE:
+                        return 15;
+                    case CUP:
+                        return 0.06;
+                    case GRAMM:
+                        return 15;
+                    case TEASPOON:
+                        return 3;
+                    default:
+                        return -1;
+                }
+            }
+            default:
+                return -1;
+        }
+    }
+
+    private boolean isItIntValue() {
         return isItIntValue;
     }
 }
