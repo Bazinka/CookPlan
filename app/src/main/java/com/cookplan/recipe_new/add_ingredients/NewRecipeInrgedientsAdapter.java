@@ -18,10 +18,10 @@ import java.util.List;
 public class NewRecipeInrgedientsAdapter extends RecyclerView.Adapter<NewRecipeInrgedientsAdapter.MainViewHolder> {
 
 
-    private List<Ingredient> mDataset;
+    private List<Ingredient> ingredients;
 
     public NewRecipeInrgedientsAdapter(List<Ingredient> myDataset) {
-        mDataset = myDataset;
+        ingredients = myDataset;
     }
 
     @Override
@@ -36,39 +36,50 @@ public class NewRecipeInrgedientsAdapter extends RecyclerView.Adapter<NewRecipeI
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        Ingredient ingredient = mDataset.get(position);
-        holder.textView.setText(ingredient.getName());
+        Ingredient ingredient = ingredients.get(position);
+        holder.nameTextView.setText(ingredient.getName());
+
+        if (ingredient.getAmount() != null && ingredient.getMeasureUnit() != null
+                && ingredient.getAmount() > 1e-8) {
+            holder.amountTextView.setVisibility(View.VISIBLE);
+            holder.amountTextView.setText(ingredient.getMeasureUnit().toValueString(ingredient.getAmount()));
+        } else {
+            holder.amountTextView.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return ingredients.size();
     }
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
+        public TextView nameTextView;
+        public TextView amountTextView;
         public View mainView;
 
         public MainViewHolder(View v) {
             super(v);
-            textView = (TextView) v.findViewById(R.id.ingredient_item_name);
-            mainView = v;
+            nameTextView = (TextView) v.findViewById(R.id.ingredient_item_name);
+            amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
+            mainView = v.findViewById(R.id.main_view);
         }
     }
 
     public void addItem(Ingredient ingredient) {
-        mDataset.add(ingredient);
+        ingredients.add(ingredient);
         notifyDataSetChanged();
     }
 
 //    public void addItemList(List<Ingredient> ingredientList) {
-//        mDataset.addAll(ingredientList);
+//        ingredients.addAll(ingredientList);
 //        notifyDataSetChanged();
 //    }
 
     public void updateItems(List<Ingredient> ingredientList) {
-        mDataset.clear();
-        mDataset.addAll(ingredientList);
+        ingredients.clear();
+        ingredients.addAll(ingredientList);
         notifyDataSetChanged();
     }
 

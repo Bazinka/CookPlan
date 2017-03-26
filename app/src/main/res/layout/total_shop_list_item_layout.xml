@@ -40,7 +40,6 @@
                 android:id="@+id/ingredient_item_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/ingredient_item_amount"
                 android:layout_alignParentRight="true"
                 android:clickable="false"
                 android:gravity="right|center_vertical"
