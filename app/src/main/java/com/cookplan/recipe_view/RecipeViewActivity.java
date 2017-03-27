@@ -1,5 +1,6 @@
 package com.cookplan.recipe_view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,13 +18,14 @@ import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.recipe_new.add_info.NewRecipeInfoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeViewActivity extends BaseActivity implements RecipeView {
 
-    public static final String RECIPE_OBJECT_KEY = "new_recipe_name";
+    public static final String RECIPE_OBJECT_KEY = "recipe_name";
 
     private RecipeViewPresenter presenter;
     private RecipeViewInrgedientsAdapter adapter;
@@ -43,8 +45,11 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
             setTitle(recipe.getName());
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.recipe_view_fab);
-            fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show());
+            fab.setOnClickListener(view -> {
+                Intent intent = new Intent(this, NewRecipeInfoActivity.class);
+                intent.putExtra(NewRecipeInfoActivity.RECIPE_OBJECT_KEY, recipe);
+                startActivityWithLeftAnimation(intent);
+            });
 
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ingredients_recycler_view);
             recyclerView.setHasFixedSize(true);

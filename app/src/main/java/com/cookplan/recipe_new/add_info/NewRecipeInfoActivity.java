@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -28,6 +29,7 @@ import com.cookplan.utils.PermissionUtils;
 
 public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
         NewRecipeInfoView {
+    public static final String RECIPE_OBJECT_KEY = "recipe_name";
     private static final int PHOTO_REQUEST_CODE = 101;
     private static final int RC_IMAGE_PERMS = 102;
     private static final String[] permission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -42,9 +44,25 @@ public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipe_basics);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setNavigationArrow();
-        setTitle(getString(R.string.add_recipe_first_screen_title));
-        setTitle(getString(R.string.add_recipe_first_screen_title));
+
+        setTitle("");//getString(R.string.add_recipe_first_screen_title)
+
+        Recipe recipe = (Recipe) getIntent().getSerializableExtra(RECIPE_OBJECT_KEY);
+        if (recipe != null) {
+            EditText recipeEditText = (EditText) findViewById(R.id.recipe_name_edit_text);
+            if (recipeEditText != null) {
+                recipeEditText.setText(recipe.getName());
+            }
+
+//            TextInputLayout recipeEditLayout = (TextInputLayout) findViewById(R.id.recipe_process_edit_layout);
+//            if (recipeEditLayout != null) {
+//                recipeEditLayout.setText(recipe.getName());
+//            }
+        }
+
 
         Button captureImg = (Button) findViewById(R.id.ocr_desc_btn);
         if (captureImg != null) {

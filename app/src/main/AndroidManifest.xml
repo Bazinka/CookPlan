@@ -53,6 +53,7 @@
 
         <activity
             android:name=".recipe_new.add_info.NewRecipeInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".recipe_new.add_ingredients.NewRecipeIngredientsActivity" />
         <activity android:name=".product_list.VocabularyListActivity" />
