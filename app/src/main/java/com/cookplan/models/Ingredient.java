@@ -114,7 +114,6 @@ public class Ingredient implements Serializable {
 
     public static class IngredientDBObject {
 
-        @PropertyName(DatabaseConstants.DATABASE_ID_FIELD)
         public String id;
 
         @PropertyName(DatabaseConstants.DATABASE_USER_ID_FIELD)

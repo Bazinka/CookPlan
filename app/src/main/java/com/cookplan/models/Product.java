@@ -84,7 +84,6 @@ public class Product implements Serializable {
     public static class ProductDBObject {
 
 
-        @PropertyName(DatabaseConstants.DATABASE_ID_FIELD)
         public String id;
 
         @PropertyName(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)

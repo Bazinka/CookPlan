@@ -11,8 +11,6 @@ public class DatabaseConstants {
     public static String DATABASE_PRODUCT_TABLE = "product";
     public static String DATABASE_PHOTO_TABLE = "photo";
 
-
-    public static final String DATABASE_ID_FIELD = "id";
     public static final String DATABASE_USER_ID_FIELD = "userId";
     public static final String DATABASE_NAME_FIELD = "name";
 

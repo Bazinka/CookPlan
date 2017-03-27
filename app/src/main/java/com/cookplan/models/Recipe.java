@@ -61,7 +61,6 @@ public class Recipe implements Serializable {
     public static class RecipeDB {
 
 
-        @PropertyName(DatabaseConstants.DATABASE_ID_FIELD)
         public String id;
 
         @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD)
