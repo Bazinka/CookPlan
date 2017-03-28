@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.auth.FirebaseAuthActivity;
-import com.cookplan.product_list.VocabularyListActivity;
+import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.recipe_new.add_info.NewRecipeInfoActivity;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity
 
     void setShoppingListFragment() {
         View mainContentView = findViewById(R.id.main_content_layout);
-        mainContentView.setVisibility(View.GONE);
+        mainContentView.setVisibility(View.INVISIBLE);
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.VISIBLE);
@@ -122,6 +122,24 @@ public class MainActivity extends BaseActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_tabs_layout);
         tabLayout.setupWithViewPager(viewPager);
         setTitle(getString(R.string.shopping_list_title));
+    }
+
+    void setProductListFragment() {
+        View tabsLayout = findViewById(R.id.main_tabs_layout);
+        tabsLayout.setVisibility(View.GONE);
+        View viewPager = findViewById(R.id.main_tabs_viewpager);
+        viewPager.setVisibility(View.GONE);
+        View mainContentView = findViewById(R.id.main_content_layout);
+        mainContentView.setVisibility(View.VISIBLE);
+
+        setTitle(getString(R.string.product_vocabulary_title));
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProductListFragment.class.getSimpleName());
+        if (fragment == null) {
+            ProductListFragment pointListFragment = ProductListFragment.newInstance();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, pointListFragment, ProductListFragment.class.getSimpleName());
+            transaction.commit();
+        }
     }
 
     @Override
@@ -145,8 +163,7 @@ public class MainActivity extends BaseActivity
         } else if (mSelectedNavigationId == R.id.nav_shopping_list) {
             setShoppingListFragment();
         } else if (mSelectedNavigationId == R.id.nav_vocabulary) {
-            Intent intent = new Intent(this, VocabularyListActivity.class);
-            startActivityWithLeftAnimation(intent);
+            setProductListFragment();
         } else if (mSelectedNavigationId == R.id.nav_sign_out) {
             AuthUI.getInstance()
                     .signOut(this)

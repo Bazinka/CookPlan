@@ -1,4 +1,4 @@
-package com.cookplan.recipe_grid;
+package com.cookplan.product_list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,16 +7,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cookplan.R;
-import com.cookplan.models.Recipe;
+import com.cookplan.models.Product;
 
 import java.util.List;
 
-public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGridRecyclerViewAdapter.ViewHolder> {
+public class ProductListRecyclerAdapter extends RecyclerView.Adapter<ProductListRecyclerAdapter.ViewHolder> {
 
-    private final List<Recipe> mValues;
-    private RecipeListClickListener listener;
+    private final List<Product> mValues;
+    private ProductListClickListener listener;
 
-    public RecipeGridRecyclerViewAdapter(List<Recipe> items, RecipeListClickListener listener) {
+    public ProductListRecyclerAdapter(List<Product> items, ProductListClickListener listener) {
         mValues = items;
         this.listener = listener;
     }
@@ -24,27 +24,27 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recipe_list_item_layout, parent, false);
+                .inflate(R.layout.product_list_item_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Recipe recipe = mValues.get(position);
-        holder.nameView.setText(mValues.get(position).getName());
+        Product product = mValues.get(position);
+        holder.nameView.setText(product.getName());
 
-        holder.mainView.setTag(recipe);
+        holder.mainView.setTag(product);
         holder.mainView.setOnClickListener(v -> {
-            Recipe recipe1 = (Recipe) v.getTag();
-            if (listener != null && recipe1 != null) {
-                listener.onRecipeClick(recipe1);
+            Product localProduct = (Product) v.getTag();
+            if (listener != null && localProduct != null) {
+                listener.onProductClick(localProduct);
             }
         });
     }
 
-    public void updateItems(List<Recipe> recipeList) {
+    public void updateItems(List<Product> products) {
         mValues.clear();
-        mValues.addAll(recipeList);
+        mValues.addAll(products);
         notifyDataSetChanged();
     }
 
@@ -60,7 +60,7 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
         public ViewHolder(View view) {
             super(view);
             mainView = view;
-            nameView = (TextView) view.findViewById(R.id.name);
+            nameView = (TextView) view.findViewById(R.id.product_item_name);
         }
 
         @Override
@@ -69,7 +69,7 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
         }
     }
 
-    public interface RecipeListClickListener {
-        public void onRecipeClick(Recipe recipe);
+    public interface ProductListClickListener {
+        public void onProductClick(Product product);
     }
 }
