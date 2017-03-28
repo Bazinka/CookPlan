@@ -6,4 +6,6 @@ package com.cookplan.shopping_list;
 
 public interface ShoppingListView {
     void setErrorToast(String error);
+
+    void setEmptyView();
 }

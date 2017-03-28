@@ -2,7 +2,6 @@ package com.cookplan.shopping_list.total_list;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.add_ingredient_view.AddIngredientViewFragment;
 import com.cookplan.models.Ingredient;
@@ -20,9 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TotalShoppingListFragment extends Fragment implements TotalShoppingListView {
+public class TotalShoppingListFragment extends BaseFragment implements TotalShoppingListView {
 
-    private ViewGroup mainView;
     private TotalShoppingListPresenter presenter;
     private TotalShopListRecyclerViewAdapter needToBuyAdapter;
     private TotalShopListRecyclerViewAdapter alreadyBoughtAdapter;
@@ -101,9 +100,25 @@ public class TotalShoppingListFragment extends Fragment implements TotalShopping
     }
 
     @Override
+    public void setEmptyView() {
+        progressBar.setVisibility(View.GONE);
+        setEmptyViewVisability(View.VISIBLE);
+        setContentVisability(View.GONE);
+    }
+
+    private void setContentVisability(int visability) {
+        ViewGroup contentLayout = (ViewGroup) mainView.findViewById(R.id.main_content_layout);
+        if (contentLayout != null) {
+            contentLayout.setVisibility(visability);
+        }
+    }
+
+    @Override
     public void setIngredientLists(List<Ingredient> needToBuyIngredientList,
                                    List<Ingredient> alreadyBoughtIngredientList) {
         progressBar.setVisibility(View.GONE);
+        setEmptyViewVisability(View.GONE);
+        setContentVisability(View.VISIBLE);
         ViewGroup needToBuyLayout = (ViewGroup) mainView.findViewById(R.id.need_to_buy_layout);
         if (!needToBuyIngredientList.isEmpty()) {
             setLayoutVisability(needToBuyLayout, View.VISIBLE);

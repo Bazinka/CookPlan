@@ -35,4 +35,6 @@
     <dimen name="small_item_padding">7dp</dimen>
     <dimen name="group_item_margin">40dp</dimen>
     <dimen name="child_item_margin">60dp</dimen>
+    <dimen name="empty_view_icon_size">100dp</dimen>
+    <dimen name="empty_view_circle_size">170dp</dimen>
 </resources>

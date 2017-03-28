@@ -2,7 +2,6 @@ package com.cookplan.shopping_list.list_by_dishes;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 
+import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
@@ -19,9 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ShopListByDishesFragment extends Fragment implements ShopListByDishesView {
+public class ShopListByDishesFragment extends BaseFragment implements ShopListByDishesView {
 
-    private ViewGroup mainView;
     private ShopListByDishPresenter presenter;
     private ProgressBar progressBar;
 
@@ -63,18 +62,29 @@ public class ShopListByDishesFragment extends Fragment implements ShopListByDish
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void setErrorToast(String error) {
         Snackbar.make(mainView, getString(R.string.error_load_shop_list), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
+    public void setEmptyView() {
+        progressBar.setVisibility(View.GONE);
+        setEmptyViewVisability(View.VISIBLE);
+        setContentVisability(View.GONE);
+    }
+
+    private void setContentVisability(int visability) {
+        ViewGroup contentLayout = (ViewGroup) mainView.findViewById(R.id.main_content_layout);
+        if (contentLayout != null) {
+            contentLayout.setVisibility(visability);
+        }
+    }
+
+    @Override
     public void setIngredientListToRecipe(Map<Recipe, List<Ingredient>> recipeToingredientsMap) {
         progressBar.setVisibility(View.GONE);
+        setEmptyViewVisability(View.GONE);
+        setContentVisability(View.VISIBLE);
 
         ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
         ShopListExpandableListAdapter needToBuyAdapter = new ShopListExpandableListAdapter(getActivity(),

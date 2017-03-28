@@ -68,9 +68,12 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                 alreadyBoughtIngredients.add(alreadyBoughtIngred);
             }
         }
-
         if (mainView != null) {
-            mainView.setIngredientLists(needToBuyIngredients, alreadyBoughtIngredients);
+            if (ProductToIngredientMap.size() != 0) {
+                mainView.setIngredientLists(needToBuyIngredients, alreadyBoughtIngredients);
+            } else {
+                mainView.setEmptyView();
+            }
         }
     }
 
@@ -80,7 +83,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
         if (!ingredients.isEmpty()) {
             Map<MeasureUnit, Double> map = new HashMap<>();
             for (Ingredient ingredient : ingredients) {
-                if (ingredient.getShopListStatus() == status && ingredient.getAmount() > 1e-8) {
+                if (ingredient.getShopListStatus() == status) {
                     double localAmount;
                     if (map.containsKey(ingredient.getMeasureUnit())) {
                         localAmount = map.get(ingredient.getMeasureUnit()) + ingredient.getAmount();
@@ -98,24 +101,28 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             String didntCalculated = "";
             MeasureUnit unit = null;
             for (Map.Entry<MeasureUnit, Double> measureEntry : map.entrySet()) {
-                double multiplier;
-                if (unit == null) {
-                    unit = measureEntry.getKey();
-                    multiplier = 1;
-                } else {
-                    multiplier = MeasureUnit.getMultiplier(measureEntry.getKey(), unit);
-                }
-                if (multiplier < 1e-8) {
-                    String string = measureEntry.getKey().toValueString(measureEntry.getValue());
-                    didntCalculated = didntCalculated.isEmpty() ? string : " + " + string;
-                } else {
-                    amount = amount + multiplier * measureEntry.getValue();
+                if (measureEntry.getValue() > 1e-8) {
+                    double multiplier;
+                    if (unit == null) {
+                        unit = measureEntry.getKey();
+                        multiplier = 1;
+                    } else {
+                        multiplier = MeasureUnit.getMultiplier(measureEntry.getKey(), unit);
+                    }
+                    if (multiplier < 1e-8) {
+                        String string = measureEntry.getKey().toValueString(measureEntry.getValue());
+                        didntCalculated = didntCalculated.isEmpty() ? string : " + " + string;
+                    } else {
+                        amount = amount + multiplier * measureEntry.getValue();
+                    }
                 }
             }
 
             didntCalculated = didntCalculated.isEmpty() ? didntCalculated : " + " + didntCalculated;
-            String amountString = String.valueOf(amount) + " " + unit.toString() + didntCalculated;
-
+            String amountString = null;
+            if (amount > 1e-8) {
+                amountString = String.valueOf(amount) + " " + unit.toString() + didntCalculated;
+            }
             return new Ingredient(productName, amountString, status);
         } else {
             return null;

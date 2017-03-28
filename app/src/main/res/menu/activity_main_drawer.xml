@@ -12,7 +12,7 @@
             android:title="@string/recipe_list_menu_title" />
         <item
             android:id="@+id/nav_shopping_list"
-            android:icon="@drawable/ic_basket"
+            android:icon="@drawable/ic_shopping_list"
             android:title="@string/shopping_list_title" />
 
         <item

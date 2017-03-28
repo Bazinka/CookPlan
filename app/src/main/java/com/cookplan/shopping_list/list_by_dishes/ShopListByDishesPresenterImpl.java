@@ -64,34 +64,39 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
                 recipeIdToIngredientMap.put(key, ingredients);
             }
         }
-
-        Map<Recipe, List<Ingredient>> recipeToIngredientsMap = new HashMap<>();
-        for (Map.Entry<String, List<Ingredient>> entry : recipeIdToIngredientMap.entrySet()) {
-            Query items = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE).child(entry.getKey());
-            items.addListenerForSingleValueEvent(new ValueEventListener() {
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-                        Recipe recipe = Recipe.getRecipeFromDBObject(dataSnapshot);
-                        if (!recipeToIngredientsMap.containsKey(recipe)) {
-                            recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(recipe.getId()));
+        if (recipeIdToIngredientMap.size() == 0) {
+            if (mainView != null) {
+                mainView.setEmptyView();
+            }
+        } else {
+            Map<Recipe, List<Ingredient>> recipeToIngredientsMap = new HashMap<>();
+            for (Map.Entry<String, List<Ingredient>> entry : recipeIdToIngredientMap.entrySet()) {
+                Query items = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE).child(entry.getKey());
+                items.addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+                            Recipe recipe = Recipe.getRecipeFromDBObject(dataSnapshot);
+                            if (!recipeToIngredientsMap.containsKey(recipe)) {
+                                recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(recipe.getId()));
+                            }
+                        } else {
+                            Recipe recipe = new Recipe(context.getString(R.string.without_recipe_title),
+                                    context.getString(R.string.recipe_desc_is_not_needed_title));
+                            if (!recipeToIngredientsMap.containsKey(recipe)) {
+                                recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
+                            }
                         }
-                    } else {
-                        Recipe recipe = new Recipe(context.getString(R.string.without_recipe_title),
-                                context.getString(R.string.recipe_desc_is_not_needed_title));
-                        if (!recipeToIngredientsMap.containsKey(recipe)) {
-                            recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
+                        if (recipeToIngredientsMap.keySet().size() == recipeIdToIngredientMap.keySet().size()
+                                && mainView != null) {
+                            mainView.setIngredientListToRecipe(recipeToIngredientsMap);
                         }
                     }
-                    if (recipeToIngredientsMap.keySet().size() == recipeIdToIngredientMap.keySet().size()
-                            && mainView != null) {
-                        mainView.setIngredientListToRecipe(recipeToIngredientsMap);
-                    }
-                }
 
-                public void onCancelled(DatabaseError databaseError) {
-                    setError(databaseError.getMessage());
-                }
-            });
+                    public void onCancelled(DatabaseError databaseError) {
+                        setError(databaseError.getMessage());
+                    }
+                });
+            }
         }
     }
 

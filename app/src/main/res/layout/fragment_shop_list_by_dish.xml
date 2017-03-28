@@ -13,9 +13,20 @@
         android:layout_centerHorizontal="true"
         android:indeterminate="true" />
 
-    <ExpandableListView
-        android:id="@+id/shop_list_by_dish_expListView"
+    <include
+        layout="@layout/empty_shopping_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/main_content_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/progress_bar" />
+        android:layout_below="@id/progress_bar">
+
+        <ExpandableListView
+            android:id="@+id/shop_list_by_dish_expListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
 </RelativeLayout>
