@@ -114,9 +114,8 @@ public class MainActivity extends BaseActivity
         viewPager.setVisibility(View.VISIBLE);
 
         ViewPagerTabsAdapter adapter = new ViewPagerTabsAdapter(getSupportFragmentManager());
-        adapter.addFragment(ShopListByDishesFragment.newInstance(), getString(R.string.tab_ingredients_by_dish_title));
         adapter.addFragment(TotalShoppingListFragment.newInstance(), getString(R.string.tab_all_ingredients_title));
-
+        adapter.addFragment(ShopListByDishesFragment.newInstance(), getString(R.string.tab_ingredients_by_dish_title));
 //        adapter.addFragment(new ThreeFragment(), "THREE");
         viewPager.setAdapter(adapter);
 
