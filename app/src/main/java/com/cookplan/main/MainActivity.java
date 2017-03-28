@@ -2,7 +2,6 @@ package com.cookplan.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -15,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +23,6 @@ import com.cookplan.R;
 import com.cookplan.auth.FirebaseAuthActivity;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
-import com.cookplan.recipe_new.add_info.NewRecipeInfoActivity;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
 import com.firebase.ui.auth.AuthUI;
@@ -80,8 +79,9 @@ public class MainActivity extends BaseActivity
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
         viewPager.setVisibility(View.GONE);
-        View mainContentView = findViewById(R.id.main_content_layout);
-        mainContentView.setVisibility(View.VISIBLE);
+
+        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        mainConteinerView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.recipe_list_menu_title));
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(RecipeGridFragment.class.getSimpleName());
@@ -94,8 +94,8 @@ public class MainActivity extends BaseActivity
     }
 
     void setShoppingListFragment() {
-        View mainContentView = findViewById(R.id.main_content_layout);
-        mainContentView.setVisibility(View.INVISIBLE);
+//        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+//        mainConteinerView.setVisibility(View.INVISIBLE);
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.VISIBLE);
@@ -119,8 +119,9 @@ public class MainActivity extends BaseActivity
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
         viewPager.setVisibility(View.GONE);
-        View mainContentView = findViewById(R.id.main_content_layout);
-        mainContentView.setVisibility(View.VISIBLE);
+
+        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        mainConteinerView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.product_vocabulary_title));
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProductListFragment.class.getSimpleName());
