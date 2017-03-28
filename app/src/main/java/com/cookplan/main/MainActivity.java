@@ -73,16 +73,6 @@ public class MainActivity extends BaseActivity
         mSelectedNavigationId = R.id.nav_recipe_list;
         navigationView.setCheckedItem(mSelectedNavigationId);
         setRecipeListFragment();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_recipe_fab);
-        fab.setOnClickListener(view -> {
-            startNewRecipeActivity();
-        });
-    }
-
-    void startNewRecipeActivity() {
-        Intent intent = new Intent(this, NewRecipeInfoActivity.class);
-        startActivityWithLeftAnimation(intent);
     }
 
     void setRecipeListFragment() {

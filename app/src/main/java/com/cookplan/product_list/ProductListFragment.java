@@ -2,6 +2,7 @@ package com.cookplan.product_list;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -67,7 +68,10 @@ public class ProductListFragment extends BaseFragment implements ProductListView
         });
         recyclerView.setAdapter(adapter);
 
-
+        FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.add_product_fab);
+        fab.setOnClickListener(view -> {
+//            startNewRecipeActivity();
+        });
         return mainView;
     }
 

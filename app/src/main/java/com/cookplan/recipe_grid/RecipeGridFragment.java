@@ -3,6 +3,7 @@ package com.cookplan.recipe_grid;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
+import com.cookplan.recipe_new.add_info.NewRecipeInfoActivity;
 import com.cookplan.recipe_view.RecipeViewActivity;
 import com.cookplan.utils.GridSpacingItemDecoration;
 import com.cookplan.utils.Utils;
@@ -71,8 +73,19 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
         });
         recyclerView.setAdapter(adapter);
 
+        FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.add_recipe_fab);
+        fab.setOnClickListener(view -> {
+            startNewRecipeActivity();
+        });
 
         return mainView;
+    }
+
+    void startNewRecipeActivity() {
+        Intent intent = new Intent(getActivity(), NewRecipeInfoActivity.class);
+        if (getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).startActivityWithLeftAnimation(intent);
+        }
     }
 
     @Override
