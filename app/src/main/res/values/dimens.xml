@@ -33,4 +33,6 @@
     <dimen name="button_text_size">14sp</dimen>
     <dimen name="small_inrgedient_padding">5dp</dimen>
     <dimen name="small_item_padding">7dp</dimen>
+    <dimen name="group_item_margin">40dp</dimen>
+    <dimen name="child_item_margin">60dp</dimen>
 </resources>

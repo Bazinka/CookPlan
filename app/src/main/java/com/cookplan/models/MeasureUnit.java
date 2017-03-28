@@ -9,7 +9,7 @@ import com.cookplan.RApplication;
 
 public enum MeasureUnit {
     UNITS(0, R.string.unit_title, true),
-    GRAMM(1, R.string.gramm_title, false),
+    GRAMM(1, R.string.gramm_title, true),
     KILOGRAMM(2, R.string.kilogramm_title, false),
     LITRE(3, R.string.litre_title, false),
     MILILITRE(4, R.string.mililitre_title, true),
