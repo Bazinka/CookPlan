@@ -46,7 +46,11 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter {
                         recipes.add(recipe);
                     }
                     if (mainView != null) {
-                        mainView.setRecipeList(recipes);
+                        if (recipes.size() != 0) {
+                            mainView.setRecipeList(recipes);
+                        } else {
+                            mainView.setEmptyView();
+                        }
                     }
                 }
 

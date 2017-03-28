@@ -3,7 +3,6 @@ package com.cookplan.recipe_grid;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
+import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe_view.RecipeViewActivity;
@@ -23,11 +23,10 @@ import com.cookplan.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeGridFragment extends Fragment implements RecipeGridView {
+public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
 
     private RecipeGridRecyclerViewAdapter adapter;
     private RecipeGridPresenter presenter;
-    private ViewGroup mainView;
 
     public RecipeGridFragment() {
     }
@@ -77,9 +76,26 @@ public class RecipeGridFragment extends Fragment implements RecipeGridView {
     }
 
     @Override
+    public void setEmptyView() {
+        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+        setEmptyViewVisability(View.VISIBLE);
+        setRecyclerViewVisability(View.GONE);
+    }
+
+    private void setRecyclerViewVisability(int visability) {
+        View recyclerView = mainView.findViewById(R.id.recipe_list_recycler);
+        if (recyclerView != null) {
+            recyclerView.setVisibility(visability);
+        }
+    }
+
+    @Override
     public void setRecipeList(List<Recipe> recipeList) {
         ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
+        setEmptyViewVisability(View.GONE);
+        setRecyclerViewVisability(View.VISIBLE);
         adapter.updateItems(recipeList);
     }
 

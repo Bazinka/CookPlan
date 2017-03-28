@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,13 +19,20 @@
             android:layout_centerHorizontal="true"
             android:indeterminate="true" />
 
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        <include
+            layout="@layout/empty_recipe_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/progress_bar" />
+
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/recipe_list_recycler"
             android:name="com.cookplan.recipe_list.RecipeGridFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/progress_bar"
             app:layoutManager="LinearLayoutManager"
             tools:context="com.cookplan.recipe_grid.RecipeGridFragment"
             tools:listitem="@layout/fragment_recipe_item" />
     </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+</RelativeLayout>
