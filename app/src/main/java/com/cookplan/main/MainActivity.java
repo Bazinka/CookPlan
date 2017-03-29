@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -80,17 +79,18 @@ public class MainActivity extends BaseActivity
         View viewPager = findViewById(R.id.main_tabs_viewpager);
         viewPager.setVisibility(View.GONE);
 
-        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-        mainConteinerView.setVisibility(View.VISIBLE);
+//        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+//        mainConteinerView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.recipe_list_menu_title));
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(RecipeGridFragment.class.getSimpleName());
-        if (fragment == null) {
-            RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, pointListFragment, RecipeGridFragment.class.getSimpleName());
-            transaction.commit();
+        RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
+            transaction.add(R.id.fragment_container, pointListFragment);
+        } else {
+            transaction.replace(R.id.fragment_container, pointListFragment);
         }
+        transaction.commit();
     }
 
     void setShoppingListFragment() {
@@ -120,17 +120,19 @@ public class MainActivity extends BaseActivity
         View viewPager = findViewById(R.id.main_tabs_viewpager);
         viewPager.setVisibility(View.GONE);
 
-        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-        mainConteinerView.setVisibility(View.VISIBLE);
+//        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+//        mainConteinerView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.product_vocabulary_title));
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProductListFragment.class.getSimpleName());
-        if (fragment == null) {
-            ProductListFragment pointListFragment = ProductListFragment.newInstance();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, pointListFragment, ProductListFragment.class.getSimpleName());
-            transaction.commit();
+
+        ProductListFragment pointListFragment = ProductListFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
+            transaction.add(R.id.fragment_container, pointListFragment);
+        } else {
+            transaction.replace(R.id.fragment_container, pointListFragment);
         }
+        transaction.commit();
     }
 
     @Override
