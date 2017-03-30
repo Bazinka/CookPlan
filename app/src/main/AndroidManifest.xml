@@ -52,10 +52,10 @@
             android:value="106104ec1cff9417dfad0a211e594bc4c3582d55" />
 
         <activity
-            android:name=".recipe_new.add_info.NewRecipeInfoActivity"
+            android:name=".recipe_new.add_info.EditRecipeInfoActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".recipe_new.add_ingredients.NewRecipeIngredientsActivity" />
+        <activity android:name=".recipe_new.add_ingredients.EditRecipeIngredientsActivity" />
         <activity
             android:name=".recipe_view.RecipeViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />

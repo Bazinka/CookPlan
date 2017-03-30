@@ -18,7 +18,7 @@ import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
-import com.cookplan.recipe_new.add_info.NewRecipeInfoActivity;
+import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
 import com.cookplan.recipe_view.RecipeViewActivity;
 import com.cookplan.utils.GridSpacingItemDecoration;
 import com.cookplan.utils.Utils;
@@ -99,7 +99,7 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
     }
 
     void startNewRecipeActivity() {
-        Intent intent = new Intent(getActivity(), NewRecipeInfoActivity.class);
+        Intent intent = new Intent(getActivity(), EditRecipeInfoActivity.class);
         if (getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).startActivityWithLeftAnimation(intent);
         }

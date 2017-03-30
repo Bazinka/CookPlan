@@ -18,7 +18,7 @@ import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
-import com.cookplan.recipe_new.add_info.NewRecipeInfoActivity;
+import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +46,10 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.recipe_view_fab);
             fab.setOnClickListener(view -> {
-                Intent intent = new Intent(this, NewRecipeInfoActivity.class);
-                intent.putExtra(NewRecipeInfoActivity.RECIPE_OBJECT_KEY, recipe);
+                Intent intent = new Intent(this, EditRecipeInfoActivity.class);
+                intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, recipe);
                 startActivityWithLeftAnimation(intent);
+                finish();
             });
 
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ingredients_recycler_view);

@@ -18,12 +18,12 @@ import com.cookplan.models.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewRecipeIngredientsActivity extends BaseActivity implements NewRecipeIngredientsView {
+public class EditRecipeIngredientsActivity extends BaseActivity implements EditRecipeIngredientsView {
 
     public static final String RECIPE_OBJECT_KEY = "new_recipe_name";
 
-    private NewRecipeInrgedientsAdapter adapter;
-    private NewRecipeIngredientsPresenter presenter;
+    private EditRecipeInrgedientsAdapter adapter;
+    private EditRecipeIngredientsPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +50,10 @@ public class NewRecipeIngredientsActivity extends BaseActivity implements NewRec
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new NewRecipeInrgedientsAdapter(new ArrayList<>());
+        adapter = new EditRecipeInrgedientsAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
-        presenter = new NewRecipeIngredientsPresenterImpl(this, recipe);
+        presenter = new EditRecipeIngredientsPresenterImpl(this, recipe);
         presenter.getAsyncIngredientList();
     }
 

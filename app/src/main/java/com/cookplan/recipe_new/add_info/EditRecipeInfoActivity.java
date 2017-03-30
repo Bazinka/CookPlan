@@ -24,11 +24,11 @@ import android.widget.Toast;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
-import com.cookplan.recipe_new.add_ingredients.NewRecipeIngredientsActivity;
+import com.cookplan.recipe_new.add_ingredients.EditRecipeIngredientsActivity;
 import com.cookplan.utils.PermissionUtils;
 
-public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
-        NewRecipeInfoView {
+public class EditRecipeInfoActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
+        EditRecipeInfoView {
     public static final String RECIPE_OBJECT_KEY = "recipe_name";
     private static final int PHOTO_REQUEST_CODE = 101;
     private static final int RC_IMAGE_PERMS = 102;
@@ -36,9 +36,11 @@ public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompa
             Manifest.permission.CAMERA};
 
     private ProgressDialog mProgressDialog;
-    private NewRecipeInfoPresenter presenter;
+    private EditRecipeInfoPresenter presenter;
 
     private String language = null;
+
+    private Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +52,16 @@ public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompa
 
         setTitle("");//getString(R.string.add_recipe_first_screen_title)
 
-        Recipe recipe = (Recipe) getIntent().getSerializableExtra(RECIPE_OBJECT_KEY);
+        recipe = (Recipe) getIntent().getSerializableExtra(RECIPE_OBJECT_KEY);
         if (recipe != null) {
-            EditText recipeEditText = (EditText) findViewById(R.id.recipe_name_edit_text);
-            if (recipeEditText != null) {
-                recipeEditText.setText(recipe.getName());
+            EditText recipeNameEditText = (EditText) findViewById(R.id.recipe_name_edit_text);
+            if (recipeNameEditText != null) {
+                recipeNameEditText.setText(recipe.getName());
             }
-
-//            TextInputLayout recipeEditLayout = (TextInputLayout) findViewById(R.id.recipe_process_edit_layout);
-//            if (recipeEditLayout != null) {
-//                recipeEditLayout.setText(recipe.getName());
-//            }
+            EditText recipeDescEditText = (EditText) findViewById(R.id.recipe_process_edit_text);
+            if (recipeDescEditText != null) {
+                recipeDescEditText.setText(recipe.getDesc());
+            }
         }
 
 
@@ -82,7 +83,7 @@ public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompa
 
             });
         }
-        presenter = new NewRecipeInfoPresenterImpl(this, this);
+        presenter = new EditRecipeInfoPresenterImpl(this, this);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!PermissionUtils.isPermissionsGranted(this, permission)) {
                 PermissionUtils.requestPermissions(this, RC_IMAGE_PERMS, permission);
@@ -211,9 +212,8 @@ public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompa
                 String desc = recipeDescEditText.getText().toString();
                 desc = desc.isEmpty() ? getString(R.string.recipe_desc_is_not_needed_title) : desc;
                 if (!name.isEmpty()) {
-                    //TODO: saving data
                     if (presenter != null) {
-                        presenter.saveNewRecipe(name, desc);
+                        presenter.saveRecipe(recipe, name, desc);
                     }
                 } else {
                     TextInputLayout recipeEditLayout = (TextInputLayout) findViewById(R.id.recipe_name_edit_layout);
@@ -229,8 +229,8 @@ public class NewRecipeInfoActivity extends BaseActivity implements ActivityCompa
 
     @Override
     public void setNextActivity(Recipe recipe) {
-        Intent intent = new Intent(this, NewRecipeIngredientsActivity.class);
-        intent.putExtra(NewRecipeIngredientsActivity.RECIPE_OBJECT_KEY, recipe);
+        Intent intent = new Intent(this, EditRecipeIngredientsActivity.class);
+        intent.putExtra(EditRecipeIngredientsActivity.RECIPE_OBJECT_KEY, recipe);
         startActivityWithLeftAnimation(intent);
         finish();
     }

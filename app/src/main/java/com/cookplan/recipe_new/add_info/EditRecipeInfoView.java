@@ -6,7 +6,7 @@ import com.cookplan.models.Recipe;
  * Created by DariaEfimova on 16.03.17.
  */
 
-public interface NewRecipeInfoView {
+public interface EditRecipeInfoView {
     public void setErrorToSnackBar(String error);
 
     public void setAsyncErrorToSnackBar(String error);

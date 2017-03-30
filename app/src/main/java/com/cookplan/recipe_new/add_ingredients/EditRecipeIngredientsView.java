@@ -8,7 +8,7 @@ import java.util.List;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public interface NewRecipeIngredientsView {
+public interface EditRecipeIngredientsView {
 
     void setErrorToast(String error);
 

@@ -21,23 +21,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by DariaEfimova on 16.03.17.
  */
 
-public class NewRecipeInfoPresenterImpl implements NewRecipeInfoPresenter {
-    private static final String tag = NewRecipeInfoPresenterImpl.class.getSimpleName();
+public class EditRecipeInfoPresenterImpl implements EditRecipeInfoPresenter {
+    private static final String tag = EditRecipeInfoPresenterImpl.class.getSimpleName();
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/CookPlanImages/";
     private static final String TESSDATA = "tessdata";
 
 
-    private NewRecipeInfoView mainView;
+    private EditRecipeInfoView mainView;
     private Context context;
     private TessBaseAPI tessBaseApi;
     private DatabaseReference mDatabase;
 
-    public NewRecipeInfoPresenterImpl(NewRecipeInfoView mainView, Context context) {
+    public EditRecipeInfoPresenterImpl(EditRecipeInfoView mainView, Context context) {
         this.mainView = mainView;
         this.context = context;
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -200,20 +202,43 @@ public class NewRecipeInfoPresenterImpl implements NewRecipeInfoPresenter {
     }
 
     @Override
-    public void saveNewRecipe(String name, String desc) {
-        Recipe recipe = new Recipe(name, desc);
+    public void saveRecipe(Recipe recipe, String newName, String newDesc) {
+        if (recipe == null) {
+            recipe = new Recipe(newName, newDesc);
+        } else {
+            recipe.setName(newName);
+            recipe.setDesc(newDesc);
+        }
         DatabaseReference recipeRef = mDatabase.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
-        recipeRef.push().setValue(recipe.getRecipeDB(), (databaseError, reference) -> {
-            if (databaseError != null) {
-                if (mainView != null) {
-                    mainView.setErrorToast(databaseError.getMessage());
+        Recipe finalRecipe = recipe;
+        if (recipe.getId() == null) {
+            recipeRef.push().setValue(recipe.getRecipeDB(), (databaseError, reference) -> {
+                if (databaseError != null) {
+                    if (mainView != null) {
+                        mainView.setErrorToast(databaseError.getMessage());
+                    }
+                } else {
+                    if (mainView != null) {
+                        finalRecipe.setId(reference.getKey());
+                        mainView.setNextActivity(finalRecipe);
+                    }
                 }
-            } else {
-                if (mainView != null) {
-                    recipe.setId(reference.getKey());
-                    mainView.setNextActivity(recipe);
+            });
+        } else {
+            Map<String, Object> values = new HashMap<>();
+            values.put(DatabaseConstants.DATABASE_NAME_FIELD, recipe.getName());
+            values.put(DatabaseConstants.DATABASE_DESCRIPTION_FIELD, recipe.getDesc());
+            recipeRef.child(recipe.getId()).updateChildren(values, (databaseError, databaseReference) -> {
+                if (databaseError != null) {
+                    if (mainView != null) {
+                        mainView.setErrorToast(databaseError.getMessage());
+                    }
+                } else {
+                    if (mainView != null) {
+                        mainView.setNextActivity(finalRecipe);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }
