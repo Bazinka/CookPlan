@@ -26,12 +26,12 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
                 android:hint="@string/enter_product_title"
-                android:theme="@style/EditRecipeTextInputLayoutStyle"
-                app:hintTextAppearance="@style/EditRecipeHitInputStyle">
+                android:theme="@style/CookPlanTextInputLayoutStyle"
+                app:hintTextAppearance="@style/CookPlanHitInputStyle">
 
                 <AutoCompleteTextView
                     android:id="@+id/product_name_text"
-                    style="@style/EditRecipeEditTextStyle"
+                    style="@style/CookPlanEditTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
@@ -66,12 +66,12 @@
                         android:layout_marginTop="@dimen/small_item_padding"
                         android:layout_weight="1"
                         android:hint="@string/amount_product_title"
-                        android:theme="@style/EditRecipeTextInputLayoutStyle"
-                        app:hintTextAppearance="@style/EditRecipeHitInputStyle">
+                        android:theme="@style/CookPlanTextInputLayoutStyle"
+                        app:hintTextAppearance="@style/CookPlanHitInputStyle">
 
                         <EditText
                             android:id="@+id/unit_amount_edit_text"
-                            style="@style/EditRecipeEditTextStyle"
+                            style="@style/CookPlanEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
