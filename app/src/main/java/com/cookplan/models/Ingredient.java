@@ -12,15 +12,15 @@ import java.io.Serializable;
 
 public class Ingredient implements Serializable {
 
-    private String id;
-    private String userId;
-    private String name;
-    private String productId;
-    private String recipeId;
-    private MeasureUnit measureUnit;
-    private Double amount;
-    private String amountString;
-    private ShopListStatus shopListStatus;
+    public String id;
+    public String userId;
+    public String name;
+    public String productId;
+    public String recipeId;
+    public MeasureUnit measureUnit;
+    public Double amount;
+    public String amountString;
+    public ShopListStatus shopListStatus;
 
     public Ingredient() {
         FirebaseAuth auth = FirebaseAuth.getInstance();

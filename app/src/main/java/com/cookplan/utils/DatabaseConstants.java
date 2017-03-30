@@ -19,7 +19,7 @@ public class DatabaseConstants {
 
     public static final String DATABASE_RECIPE_ID_FIELD = "recipeId";
 
-    public static final String DATABASE_SHOP_LIST_STATUS_FIELD = "shop_list_status";
+    public static final String DATABASE_SHOP_LIST_STATUS_FIELD = "shopListStatus";
     public static final String DATABASE_PRODUCT_ID_FIELD = "productId";
     public static final String DATABASE_INRGEDIENT_RECIPE_ID_FIELD = "recipeId";
     public static final String DATABASE_MEASURE_UNIT_FIELD = "measureUnit";

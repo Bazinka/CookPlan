@@ -109,7 +109,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
             ingredientRef
                     .child(ingredient.getId())
                     .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                    .setValue(ingredient.getShopListStatus().getId())
+                    .setValue(ingredient.getShopListStatus())
                     .addOnFailureListener(e -> {
                         if (mainView != null) {
                             mainView.setErrorToast(e.getLocalizedMessage());
@@ -134,7 +134,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
                         });
             } else {
                 ref.child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                        .setValue(ingred.getShopListStatus().getId())
+                        .setValue(ingred.getShopListStatus())
                         .addOnFailureListener(e -> {
                             if (mainView != null) {
                                 mainView.setErrorToast(e.getLocalizedMessage());

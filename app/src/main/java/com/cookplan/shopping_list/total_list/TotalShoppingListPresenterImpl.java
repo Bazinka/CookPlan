@@ -139,7 +139,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             ingredientRef
                     .child(ingred.getId())
                     .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                    .setValue(ingred.getShopListStatus().getId())
+                    .setValue(ingred.getShopListStatus())
                     .addOnFailureListener(e -> {
                         if (mainView != null) {
                             mainView.setErrorToast(e.getLocalizedMessage());
