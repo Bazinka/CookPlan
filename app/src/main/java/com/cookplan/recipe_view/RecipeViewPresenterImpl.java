@@ -58,7 +58,7 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
         DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
         ingredientRef.child(ingredient.getId())
                 .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                .setValue(ingredient.getIngredientDBObject().getShopListStatusId())
+                .setValue(ingredient.getShopListStatus())
                 .addOnFailureListener(e -> {
                     if (mainView != null) {
                         mainView.setErrorToast(e.getLocalizedMessage());

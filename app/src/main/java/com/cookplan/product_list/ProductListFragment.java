@@ -3,6 +3,7 @@ package com.cookplan.product_list;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,9 +16,12 @@ import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Product;
+import com.cookplan.utils.FillProductDatabaseProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//import android.support.design.widget.FloatingActionButton;
 
 public class ProductListFragment extends BaseFragment implements ProductListView {
 
@@ -70,8 +74,16 @@ public class ProductListFragment extends BaseFragment implements ProductListView
 
         FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.add_product_fab);
         fab.setOnClickListener(view -> {
+
+            new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                    .setMessage("Заполнить базу данных или создать новый элемент?")
+                    .setPositiveButton("База данных", (dialog, which) -> FillProductDatabaseProvider.fillDatabase())
+                    .setNegativeButton("Новый продукт", null)
+                    .show();
 //            startNewRecipeActivity();
         });
+
+
         return mainView;
     }
 

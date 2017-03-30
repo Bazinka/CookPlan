@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.cookplan.R;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
+import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
 
 import java.util.ArrayList;
@@ -129,7 +130,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         String name = unitNameEditText.getText().toString();
         Product selectedProduct = (Product) unitNameEditText.getTag();
         if (selectedProduct == null || !name.equals(selectedProduct.getName())) {
-            selectedProduct = new Product(measureUnit, name);
+            selectedProduct = new Product(measureUnit, name, ProductCategory.WITHOUT_CATEGORY);
         }
         if (!name.isEmpty() && presenter != null) {
             progressBar.setVisibility(View.VISIBLE);

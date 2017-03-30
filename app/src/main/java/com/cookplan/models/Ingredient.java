@@ -3,7 +3,6 @@ package com.cookplan.models;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
 
@@ -14,6 +13,7 @@ import java.io.Serializable;
 public class Ingredient implements Serializable {
 
     private String id;
+    private String userId;
     private String name;
     private String productId;
     private String recipeId;
@@ -23,9 +23,12 @@ public class Ingredient implements Serializable {
     private ShopListStatus shopListStatus;
 
     public Ingredient() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        userId = auth.getCurrentUser().getUid();
     }
 
     public Ingredient(String id, String name, String productId, String recipeId, MeasureUnit measureUnit, Double amount, ShopListStatus shopListStatus) {
+        this();
         this.id = id;
         this.name = name;
         this.productId = productId;
@@ -36,6 +39,7 @@ public class Ingredient implements Serializable {
     }
 
     public Ingredient(String name, String amountString, ShopListStatus shopListStatus) {
+        this();
         this.name = name;
         this.amountString = amountString;
         this.shopListStatus = shopListStatus;
@@ -85,18 +89,36 @@ public class Ingredient implements Serializable {
         this.name = name;
     }
 
-    public IngredientDBObject getIngredientDBObject() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        return new IngredientDBObject(auth.getCurrentUser().getUid(), productId, measureUnit, name,
-                recipeId, amount, shopListStatus);
-    }
-
     public static Ingredient getIngredientFromDBObject(DataSnapshot itemSnapshot) {
-        Ingredient.IngredientDBObject object = IngredientDBObject.parseIngredientDBObject(itemSnapshot);
-        Ingredient ingredient = new Ingredient(itemSnapshot.getKey(), object.getName(),
-                object.getProductId(), object.getRecipeId(),
-                MeasureUnit.getMeasureUnitById(object.getMeasureUnitId()), object.getAmount(),
-                ShopListStatus.getShopListStatusId(object.getShopListStatusId()));
+        Ingredient ingredient = new Ingredient();
+        ingredient.id = itemSnapshot.getKey();
+        for (DataSnapshot child : itemSnapshot.getChildren()) {
+            if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
+                ingredient.name = child.getValue().toString();
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_USER_ID_FIELD)) {
+                ingredient.userId = child.getValue().toString();
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_ID_FIELD)) {
+                ingredient.productId = child.getValue().toString();
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_RECIPE_ID_FIELD)) {
+                ingredient.recipeId = child.getValue().toString();
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_UNIT_FIELD)) {
+                ingredient.measureUnit = MeasureUnit.getMeasureUnitByName((String) child.getValue());
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_AMOUNT_FIELD)) {
+                if (child.getValue() instanceof Double) {
+                    ingredient.amount = (Double) child.getValue();
+                } else {
+                    ingredient.amount = ((Long) child.getValue()).doubleValue();
+                }
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)) {
+                ingredient.shopListStatus = ShopListStatus.getShopListStatusName((String) child.getValue());
+            }
+        }
         return ingredient;
     }
 
@@ -110,109 +132,5 @@ public class Ingredient implements Serializable {
 
     public String getAmountString() {
         return amountString;
-    }
-
-    public static class IngredientDBObject {
-
-        public String id;
-
-        @PropertyName(DatabaseConstants.DATABASE_USER_ID_FIELD)
-        public String userId;
-
-        @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD)
-        public String name;
-
-        @PropertyName(DatabaseConstants.DATABASE_PRODUCT_ID_FIELD)
-        public String productId;
-
-        @PropertyName(DatabaseConstants.DATABASE_RECIPE_ID_FIELD)
-        public String recipeId;
-
-        @PropertyName(DatabaseConstants.DATABASE_MEASURE_UNIT_ID_FIELD)
-        public int measureUnitId;
-
-        @PropertyName(DatabaseConstants.DATABASE_AMOUNT_FIELD)
-        public double amount;
-
-        @PropertyName(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-        public int shopListStatusId;
-
-        public IngredientDBObject() {
-        }
-
-        public IngredientDBObject(String userId, String productId, MeasureUnit measureUnit, String name, String recipeId, double amount, ShopListStatus shopListStatus) {
-            this.userId = userId;
-            this.productId = productId;
-            this.measureUnitId = measureUnit != null ? measureUnit.getId() : -1;
-            this.name = name;
-            this.recipeId = recipeId;
-            this.amount = amount;
-            this.shopListStatusId = shopListStatus != null ? shopListStatus.getId() : -1;
-        }
-
-        public int getShopListStatusId() {
-            return shopListStatusId;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getUserId() {
-            return userId;
-        }
-
-        public String getProductId() {
-            return productId;
-        }
-
-        public int getMeasureUnitId() {
-            return measureUnitId;
-        }
-
-        public double getAmount() {
-            return amount;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getRecipeId() {
-            return recipeId;
-        }
-
-        public static IngredientDBObject parseIngredientDBObject(DataSnapshot dataSnapshot) {
-            IngredientDBObject object = new IngredientDBObject();
-            object.id = dataSnapshot.getKey();
-            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
-                    object.name = child.getValue().toString();
-                }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_USER_ID_FIELD)) {
-                    object.userId = child.getValue().toString();
-                }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_ID_FIELD)) {
-                    object.productId = child.getValue().toString();
-                }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_RECIPE_ID_FIELD)) {
-                    object.recipeId = child.getValue().toString();
-                }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_UNIT_ID_FIELD)) {
-                    object.measureUnitId = ((Long) child.getValue()).intValue();
-                }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_AMOUNT_FIELD)) {
-                    if (child.getValue() instanceof Double) {
-                        object.amount = (Double) child.getValue();
-                    } else {
-                        object.amount = ((Long) child.getValue()).doubleValue();
-                    }
-                }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)) {
-                    object.shopListStatusId = ((Long) child.getValue()).intValue();
-                }
-            }
-            return object;
-        }
     }
 }

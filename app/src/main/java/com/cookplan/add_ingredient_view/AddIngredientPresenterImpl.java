@@ -41,8 +41,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Product> products = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    Product.ProductDBObject productDB = Product.ProductDBObject.parseProductDBObject(itemSnapshot);
-                    Product product = Product.getProductFromDB(productDB);
+                    Product product = Product.parseProductFromDB(itemSnapshot);
                     if (product != null) {
                         products.add(product);
                     }
@@ -77,7 +76,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 if (needToUpdate) {
                     product.getMeasureUnitList().add(newMeasureUnit);
                     productRef.child(product.getId()).child(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)
-                            .setValue(product.getProductDBObject().getMeasureUnitIdList());
+                            .setValue(product.getMeasureUnitList());
                 }
 
                 //save ingredient
@@ -89,7 +88,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 ingredient.setAmount(amount);
                 ingredient.setShopListStatus(isNeedToBuy ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
                 DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-                ingredRef.push().setValue(ingredient.getIngredientDBObject(), (databaseError, reference) -> {
+                ingredRef.push().setValue(ingredient, (databaseError, reference) -> {
                     if (databaseError != null) {
                         if (mainView != null) {
                             mainView.setErrorToast(databaseError.getMessage());
@@ -116,12 +115,11 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getChildrenCount() > 0) {//we have the same product
                             for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                Product.ProductDBObject productDB = Product.ProductDBObject.parseProductDBObject(child);
-                                saveIngredient(Product.getProductFromDB(productDB), amount, newMeasureUnit);
+                                saveIngredient(Product.parseProductFromDB(child), amount, newMeasureUnit);
                             }
                         } else {//we need to save new product
                             DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-                            productRef.push().setValue(product.getProductDBObject(), (databaseError, reference) -> {
+                            productRef.push().setValue(product, (databaseError, reference) -> {
                                 if (databaseError != null) {
                                     if (mainView != null) {
                                         mainView.setErrorToast(databaseError.getMessage());

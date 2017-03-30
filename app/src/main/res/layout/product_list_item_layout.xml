@@ -11,16 +11,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="false"
-        android:paddingBottom="@dimen/margin_glutter"
-        android:paddingLeft="@dimen/main_margin_left"
-        android:paddingRight="@dimen/main_margin_left"
-        android:paddingTop="@dimen/margin_top_glutter">
+        android:clickable="false">
+
+        <View
+            android:id="@+id/category_view"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_layout" />
 
         <RelativeLayout
+            android:id="@+id/text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_glutter"
+            android:paddingLeft="@dimen/main_margin_left"
+            android:paddingRight="@dimen/main_margin_left"
+            android:paddingTop="@dimen/margin_top_glutter"
             android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/category_view"
             android:clickable="false">
 
             <TextView
@@ -29,13 +37,27 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@id/ingredient_item_amount"
                 android:clickable="false"
                 android:gravity="left|center_vertical"
                 android:text="название"
                 android:textColor="@color/primary_text_color"
                 android:textSize="@dimen/subheding_text_size" />
 
+            <TextView
+                android:id="@+id/category_product_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/product_item_name"
+                android:clickable="false"
+                android:gravity="left|center_vertical"
+                android:text="название"
+                android:textColor="@color/hint_or_disabled_text_color"
+                android:textSize="@dimen/body_text_size" />
+
         </RelativeLayout>
+
+
     </RelativeLayout>
 </RelativeLayout>

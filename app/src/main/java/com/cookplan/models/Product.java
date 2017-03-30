@@ -2,7 +2,6 @@ package com.cookplan.models;
 
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,16 +17,19 @@ public class Product implements Serializable {
     private String id;
     private List<MeasureUnit> measureUnitList;
     private String name;
+    private ProductCategory category;
 
-    public Product() {
+    private Product() {
     }
 
-    public Product(List<MeasureUnit> measureUnitList, String name) {
+    public Product(List<MeasureUnit> measureUnitList, String name, ProductCategory category) {
+        this.category = category;
         this.measureUnitList = measureUnitList;
         this.name = name;
     }
 
-    public Product(MeasureUnit measureUnit, String name) {
+    public Product(MeasureUnit measureUnit, String name, ProductCategory category) {
+        this.category = category;
         this.measureUnitList = new ArrayList<>();
         measureUnitList.add(measureUnit);
         this.name = name;
@@ -57,90 +59,45 @@ public class Product implements Serializable {
         this.measureUnitList = measureUnitList;
     }
 
-    public ProductDBObject getProductDBObject() {
-        return new ProductDBObject(measureUnitList, name);
+    public ProductCategory getCategory() {
+        return category;
     }
 
-    public static Product getProductFromDB(ProductDBObject object) {
-        Product product = null;
-        if (object != null) {
-            product = new Product();
-            product.id = object.getId();
-            product.name = object.getName();
+    public void setCategory(ProductCategory category) {
+        this.category = category;
+    }
 
-            if (object.getMeasureUnitIdList() != null && object.getMeasureUnitIdList().size() > 0) {
+    public static Product parseProductFromDB(DataSnapshot dataSnapshot) {
+        Product product = new Product();
+        product.id = dataSnapshot.getKey();
+        for (DataSnapshot child : dataSnapshot.getChildren()) {
+            if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
+                product.name = child.getValue().toString();
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_CATEGORY_FIELD)) {
+                product.category = ProductCategory.getProductCategoryByName((String) child.getValue());
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)) {
                 product.measureUnitList = new ArrayList<>();
-                for (Integer id : object.getMeasureUnitIdList()) {
-                    MeasureUnit measureUnit = id != null ? MeasureUnit.getMeasureUnitById(id) : null;
-                    if (measureUnit != null) {
-                        product.measureUnitList.add(measureUnit);
+                if (child.getValue() instanceof List) {
+                    List<String> measName = (List<String>) child.getValue();
+                    if (!measName.isEmpty()) {
+                        MeasureUnit measureUnit = MeasureUnit.getMeasureUnitByName(measName.get(0));
+                        if (measureUnit != null) {
+                            product.measureUnitList.add(measureUnit);
+                        }
+                    }
+                } else if (child.getValue() instanceof Map) {
+                    Map<Long, String> measDBMap = (Map<Long, String>) child.getValue();
+                    for (Map.Entry<Long, String> mes : measDBMap.entrySet()) {
+                        MeasureUnit measureUnit = MeasureUnit.getMeasureUnitByName(mes.getValue());
+                        if (measureUnit != null) {
+                            product.measureUnitList.add(measureUnit);
+                        }
                     }
                 }
             }
         }
         return product;
-    }
-
-    public static class ProductDBObject {
-
-
-        public String id;
-
-        @PropertyName(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)
-        public List<Integer> measureUnitIdList;
-
-        @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD)
-        public String name;
-
-        public ProductDBObject() {
-        }
-
-        public ProductDBObject(List<MeasureUnit> measureUnitList, String name) {
-            if (measureUnitList != null && measureUnitList.size() > 0) {
-                this.measureUnitIdList = new ArrayList<>();
-                for (MeasureUnit unit : measureUnitList) {
-                    this.measureUnitIdList.add(unit.getId());
-                }
-            }
-            this.name = name;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public List<Integer> getMeasureUnitIdList() {
-            return measureUnitIdList;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public static ProductDBObject parseProductDBObject(DataSnapshot dataSnapshot) {
-            ProductDBObject object = new ProductDBObject();
-            object.id = dataSnapshot.getKey();
-            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
-                    object.name = child.getValue().toString();
-                }
-                if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)) {
-                    if (child.getValue() instanceof List) {
-                        List<Long> measDBList = (ArrayList<Long>) child.getValue();
-                        object.measureUnitIdList = new ArrayList<>();
-                        for (Long mes : measDBList) {
-                            object.measureUnitIdList.add(mes.intValue());
-                        }
-                    } else if (child.getValue() instanceof Map) {
-                        Map<Long, Long> measDBMap = (Map<Long, Long>) child.getValue();
-                        object.measureUnitIdList = new ArrayList<>();
-                        for (Map.Entry<Long, Long> mes : measDBMap.entrySet()) {
-                            object.measureUnitIdList.add(mes.getValue().intValue());
-                        }
-                    }
-                }
-            }
-            return object;
-        }
     }
 }

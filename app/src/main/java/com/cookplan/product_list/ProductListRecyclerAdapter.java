@@ -40,6 +40,14 @@ public class ProductListRecyclerAdapter extends RecyclerView.Adapter<ProductList
                 listener.onProductClick(localProduct);
             }
         });
+
+        if (product.getCategory() != null) {
+            holder.categoryNameView.setVisibility(View.VISIBLE);
+//            holder.categoryNameView.setText(product.getCategory().getName());
+        } else {
+            holder.categoryNameView.setVisibility(View.GONE);
+            holder.categoryColorView.setVisibility(View.GONE);
+        }
     }
 
     public void updateItems(List<Product> products) {
@@ -56,11 +64,15 @@ public class ProductListRecyclerAdapter extends RecyclerView.Adapter<ProductList
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mainView;
         public final TextView nameView;
+        public final TextView categoryNameView;
+        public final View categoryColorView;
 
         public ViewHolder(View view) {
             super(view);
             mainView = view;
             nameView = (TextView) view.findViewById(R.id.product_item_name);
+            categoryNameView = (TextView) view.findViewById(R.id.category_product_item_name);
+            categoryColorView = view.findViewById(R.id.category_view);
         }
 
         @Override

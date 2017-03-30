@@ -34,7 +34,7 @@ public class ProductListPresenterImpl implements ProductListPresenter {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Product> productList = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    Product product = itemSnapshot.getValue(Product.class);
+                    Product product = Product.parseProductFromDB(itemSnapshot);
                     productList.add(product);
                 }
                 if (mainView != null) {

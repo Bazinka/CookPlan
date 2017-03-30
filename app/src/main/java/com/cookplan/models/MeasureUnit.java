@@ -15,7 +15,9 @@ public enum MeasureUnit {
     MILILITRE(4, R.string.mililitre_title, true),
     CUP(5, R.string.cup_title, true),
     TEASPOON(6, R.string.teaspoon_title, true),
-    TABLESPOON(7, R.string.tablespoon_title, true);
+    TABLESPOON(7, R.string.tablespoon_title, true),
+    BOTTLE(8, R.string.bottle_title, true),
+    PACKAGE(9, R.string.package_title, true);
 
     private int id;
     private int nameRecourseId;
@@ -41,32 +43,47 @@ public enum MeasureUnit {
         return id;
     }
 
-    public static MeasureUnit getMeasureUnitById(int id) {
-        switch (id) {
-            case 0:
-                return UNITS;
-            case 1:
-                return GRAMM;
-            case 2:
-                return KILOGRAMM;
-            case 3:
-                return LITRE;
-            case 4:
-                return MILILITRE;
-            case 5:
-                return CUP;
-            case 6:
-                return TEASPOON;
-            case 7:
-                return TABLESPOON;
-            default:
-                return null;
+    public static MeasureUnit getMeasureUnitByName(String name) {
+        if (name.equals(UNITS.name())) {
+            return UNITS;
         }
+        if (name.equals(GRAMM.name())) {
+            return GRAMM;
+        }
+        if (name.equals(KILOGRAMM.name())) {
+            return KILOGRAMM;
+        }
+        if (name.equals(LITRE.name())) {
+            return LITRE;
+        }
+        if (name.equals(MILILITRE.name())) {
+            return MILILITRE;
+        }
+        if (name.equals(CUP.name())) {
+            return CUP;
+        }
+        if (name.equals(TEASPOON.name())) {
+            return TEASPOON;
+        }
+        if (name.equals(TABLESPOON.name())) {
+            return TABLESPOON;
+        }
+        if (name.equals(BOTTLE.name())) {
+            return BOTTLE;
+        }
+        if (name.equals(PACKAGE.name())) {
+            return PACKAGE;
+        }
+        return null;
     }
 
     public static double getMultiplier(MeasureUnit from, MeasureUnit to) {
         switch (from) {
             case UNITS:
+                return -1;
+            case PACKAGE:
+                return -1;
+            case BOTTLE:
                 return -1;
             case GRAMM: {
                 switch (to) {

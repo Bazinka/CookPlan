@@ -17,16 +17,16 @@ public enum ShopListStatus {
         return id;
     }
 
-    public static ShopListStatus getShopListStatusId(int id) {
-        switch (id) {
-            case 0:
-                return NONE;
-            case 1:
-                return NEED_TO_BUY;
-            case 2:
-                return ALREADY_BOUGHT;
-            default:
-                return null;
+    public static ShopListStatus getShopListStatusName(String name) {
+        if (name.equals(NONE.name())) {
+            return NONE;
         }
+        if (name.equals(NEED_TO_BUY.name())) {
+            return NEED_TO_BUY;
+        }
+        if (name.equals(ALREADY_BOUGHT.name())) {
+            return ALREADY_BOUGHT;
+        }
+        return null;
     }
 }
