@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -63,12 +64,28 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utils.dpToPx(getActivity(), 16), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new RecipeGridRecyclerViewAdapter(new ArrayList<>(), recipe -> {
-            Activity activity = getActivity();
-            if (activity instanceof BaseActivity) {
-                Intent intent = new Intent(activity, RecipeViewActivity.class);
-                intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
-                ((BaseActivity) activity).startActivityWithLeftAnimation(intent);
+        adapter = new RecipeGridRecyclerViewAdapter(new ArrayList<>(), new RecipeGridRecyclerViewAdapter.RecipeListClickListener() {
+            @Override
+            public void onRecipeClick(Recipe recipe) {
+                Activity activity = getActivity();
+                if (activity instanceof BaseActivity) {
+                    Intent intent = new Intent(activity, RecipeViewActivity.class);
+                    intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
+                    ((BaseActivity) activity).startActivityWithLeftAnimation(intent);
+                }
+            }
+
+            @Override
+            public void onRecipeLongClick(Recipe recipe) {
+                new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                        .setMessage(R.string.are_you_sure_about_remove_question)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            if (presenter != null) {
+                                presenter.removeRecipe(recipe);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
             }
         });
         recyclerView.setAdapter(adapter);

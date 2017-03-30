@@ -100,5 +100,6 @@
     <string name="stationery_title">Канцелярские товары</string>
     <string name="books_and_printed_matter_title">Книги и печатная продукция</string>
     <string name="products_for_garden_title">Всё для сада и огорода</string>
+    <string name="are_you_sure_about_remove_question">Вы уверены, что хотите удалить элемент?</string>
 
 </resources>

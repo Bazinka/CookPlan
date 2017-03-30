@@ -62,4 +62,13 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter {
             });
         }
     }
+
+    @Override
+    public void removeRecipe(Recipe recipe) {
+        if (recipe != null && recipe.getId() != null) {
+            DatabaseReference recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
+            DatabaseReference ref = recipeRef.child(recipe.getId());
+            ref.removeValue();
+        }
+    }
 }

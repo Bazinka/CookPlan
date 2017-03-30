@@ -40,6 +40,13 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
                 listener.onRecipeClick(recipe1);
             }
         });
+        holder.mainView.setOnLongClickListener(v -> {
+            Recipe recipe1 = (Recipe) v.getTag();
+            if (listener != null && recipe1 != null) {
+                listener.onRecipeLongClick(recipe1);
+            }
+            return true;
+        });
     }
 
     public void updateItems(List<Recipe> recipeList) {
@@ -71,5 +78,7 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
 
     public interface RecipeListClickListener {
         public void onRecipeClick(Recipe recipe);
+
+        public void onRecipeLongClick(Recipe recipe);
     }
 }
