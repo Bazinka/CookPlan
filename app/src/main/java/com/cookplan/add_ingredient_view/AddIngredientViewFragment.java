@@ -244,7 +244,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
             final EditText amountEditText = (EditText) dialogView.findViewById(R.id.unit_amount_edit_text);
 
             dialogBuilder.setTitle(R.string.attention_title);
-            dialogBuilder.setPositiveButton("Done", (dialog, whichButton) -> {
+            dialogBuilder.setPositiveButton(R.string.next_default, (dialog, whichButton) -> {
                 //do something with
                 Double amount = Double.valueOf(amountEditText.getText().toString());
                 if (amount != null && presenter != null) {
@@ -252,9 +252,11 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
                     dialog.dismiss();
                 }
             });
-            dialogBuilder.setNegativeButton(android.R.string.no, (dialog, which) -> {
-                progressBar.setVisibility(View.GONE);
-                unitAmountViewGroup.setVisibility(View.GONE);
+            dialogBuilder.setNegativeButton(R.string.i_dont_know, (dialog, which) -> {
+                if (presenter != null) {
+                    presenter.addNewMeasureinfo(product, unit, -1.);
+                    dialog.dismiss();
+                }
             });
             AlertDialog b = dialogBuilder.create();
             b.show();

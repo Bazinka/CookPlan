@@ -102,8 +102,9 @@
     <string name="products_for_garden_title">Всё для сада и огорода</string>
     <string name="are_you_sure_about_remove_question">Вы уверены, что хотите удалить элемент?</string>
     <string name="one_number_title">1</string>
-    <string name="input_value_for_title">Введите значение для:</string>
+    <string name="input_value_for_title">Введите значение для списка покупок для:</string>
     <string name="equal_sign">=</string>
     <string name="nothing_wont_be_saved">Иначе ничего не будет сохранено :(</string>
+    <string name="i_dont_know">Я не знаю</string>
 
 </resources>

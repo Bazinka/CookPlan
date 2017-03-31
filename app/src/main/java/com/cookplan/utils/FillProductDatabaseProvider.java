@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.cookplan.models.MeasureUnit.BOTTLE;
 import static com.cookplan.models.MeasureUnit.GRAMM;
+import static com.cookplan.models.MeasureUnit.KILOGRAMM;
 import static com.cookplan.models.MeasureUnit.LITRE;
 import static com.cookplan.models.MeasureUnit.MILILITRE;
 import static com.cookplan.models.MeasureUnit.PACKAGE;
@@ -86,13 +87,7 @@ public class FillProductDatabaseProvider {
                 .build());
 
         //Молочные продукты ProductCategory.MILK_PRODUCT
-        list.add(new Product(LITRE, "Молоко коровье", MILK_PRODUCT));
-        list.add(new Product(LITRE, "Молоко козье", MILK_PRODUCT));
-        list.add(new Product(LITRE, "Молоко соевое", MILK_PRODUCT));
-        list.add(new Product(LITRE, "Молоко миндальное", MILK_PRODUCT));
-        list.add(new Product(LITRE, "Молоко кокосовое", MILK_PRODUCT));
-        list.add(new Product(LITRE, "Молоко овсяное", MILK_PRODUCT));
-        list.add(new Product(LITRE, "Молоко рисовое", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молоко", MILK_PRODUCT));
         list.add(new Product(LITRE, "Молочный коктейль", MILK_PRODUCT));
         list.add(new Product(MILILITRE, "Сливки", MILK_PRODUCT));
         list.add(new Product(PACKAGE, "Сливки взбитые", MILK_PRODUCT));
@@ -101,7 +96,7 @@ public class FillProductDatabaseProvider {
         list.add(new Product(BOTTLE, "Йогурт питьевой", MILK_PRODUCT));
         list.add(new Product(PACKAGE, "Сырок творожный", MILK_PRODUCT));
         list.add(new Product(PACKAGE, "Творожок", MILK_PRODUCT));
-        list.add(new Product(GRAMM, "Творог", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Творог", MILK_PRODUCT));
         list.add(new Product(PACKAGE, "Творожная масса", MILK_PRODUCT));
         list.add(new Product(LITRE, "Кефир", MILK_PRODUCT));
         list.add(new Product(UNITS, "Детское питание молочное", MILK_PRODUCT));
@@ -131,7 +126,7 @@ public class FillProductDatabaseProvider {
         list.add(new Product(GRAMM, "Сыр твердый натертый", CHEESE));
         list.add(new Product(GRAMM, "Сыр твердый (нарезка)", CHEESE));
         list.add(new Product(GRAMM, "Сыр твердый", CHEESE));
-        list.add(new Product(GRAMM, "Моцарелла", CHEESE));
+        list.add(new Product(PACKAGE, "Моцарелла", CHEESE));
         list.add(new Product(GRAMM, "Сыр творожный", CHEESE));
         list.add(new Product(GRAMM, "Брынза", CHEESE));
         list.add(new Product(GRAMM, "Сулугуни", CHEESE));
@@ -155,11 +150,11 @@ public class FillProductDatabaseProvider {
         list.add(new Product(PACKAGE, "Драже", CONFECTIONERY));
         list.add(new Product(UNITS, "Шоколадная фигурка", CONFECTIONERY));
         list.add(new Product(UNITS, "Яйцо шоколадное", CONFECTIONERY));
-        list.add(new Product(GRAMM, "Конфеты", CONFECTIONERY));
-        list.add(new Product(GRAMM, "Трюфели", CONFECTIONERY));
-        list.add(new Product(GRAMM, "Глазированные фрукты и орехи", CONFECTIONERY));
-        list.add(new Product(GRAMM, "Печенье", CONFECTIONERY));
-        list.add(new Product(GRAMM, "Вафли", CONFECTIONERY));
+        list.add(new Product(KILOGRAMM, "Конфеты", CONFECTIONERY));
+        list.add(new Product(KILOGRAMM, "Трюфели", CONFECTIONERY));
+        list.add(new Product(KILOGRAMM, "Глазированные фрукты и орехи", CONFECTIONERY));
+        list.add(new Product(KILOGRAMM, "Печенье", CONFECTIONERY));
+        list.add(new Product(KILOGRAMM, "Вафли", CONFECTIONERY));
         list.add(new Product(UNITS, "Рулет кондитерский", CONFECTIONERY));
         list.add(new Product(UNITS, "Кекс", CONFECTIONERY));
         list.add(new Product(UNITS, "Тарталетки", CONFECTIONERY));
@@ -261,15 +256,15 @@ public class FillProductDatabaseProvider {
         list.add(new Product(UNITS, "Лук репчатый", FRUITS_VEGETABLES));
         list.add(new Product(GRAMM, "Лук зеленый", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Морковь", FRUITS_VEGETABLES));
-        list.add(new Product(UNITS, "Огурец", FRUITS_VEGETABLES));
-        list.add(new Product(PACKAGE, "Перец", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Огурцы", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Перец болгарский", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Редис", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Редька", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Репа", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Свекла", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Сельдерей", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Спаржа", FRUITS_VEGETABLES));
-        list.add(new Product(PACKAGE, "Помидор", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Помидоры", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Тыква", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Фасоль", FRUITS_VEGETABLES));
         list.add(new Product(UNITS, "Чеснок", FRUITS_VEGETABLES));

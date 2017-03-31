@@ -117,13 +117,11 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
 
     @Override
     public void addNewMeasureinfo(Product product, MeasureUnit unit, double amount) {
-        if (amount > 1e-8) {
-            product.getMeasureUnitToAmoutMap().put(unit, amount);
-            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-            productRef.child(product.getId()).child(DatabaseConstants.DATABASE_MEASURE_MAP_FIELD)
-                    .setValue(product.getMeasureStringToAmoutMap());
-            saveIngredient(product, unit);
-        }
+        product.getMeasureUnitToAmoutMap().put(unit, amount);
+        DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+        productRef.child(product.getId()).child(DatabaseConstants.DATABASE_MEASURE_MAP_FIELD)
+                .setValue(product.getMeasureStringToAmoutMap());
+        saveIngredient(product, unit);
     }
 
     private void saveProduct(Product product, MeasureUnit newMeasureUnit) {
