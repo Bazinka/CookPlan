@@ -42,13 +42,13 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         }
         Product product = items.get(position);
         if (product != null) {
-            TextView productNameTextView = (TextView) v.findViewById(R.id.item_name);
+            TextView productNameTextView = (TextView) v.findViewById(R.id.product_item_name);
             if (productNameTextView != null) {
 //              Log.i(MY_DEBUG_TAG, "getView Customer Name:"+customer.getName());
                 productNameTextView.setText(product.getName());
             }
             if (product.getCategory() != null) {
-                TextView categoryNameTextView = (TextView) v.findViewById(R.id.category_item_name);
+                TextView categoryNameTextView = (TextView) v.findViewById(R.id.category_product_item_name);
                 if (categoryNameTextView != null) {
                     categoryNameTextView.setText(product.getCategory().toString());
                     categoryNameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
@@ -56,8 +56,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                 }
                 View categoryView = v.findViewById(R.id.category_view);
                 if (categoryView != null) {
-                    categoryView.setBackgroundColor(ContextCompat.getColor(RApplication.getAppContext(),
-                            product.getCategory().getColorId()));
+                    categoryView.setBackgroundResource(product.getCategory().getColorId());
                 }
             }
 

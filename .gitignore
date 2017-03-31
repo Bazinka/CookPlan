@@ -8,3 +8,5 @@
 /captures
 .externalNativeBuild
 /auth/build
+auth/src/main/assets/crashlytics-build.properties
+auth/src/main/res/values/com_crashlytics_export_strings.xml
