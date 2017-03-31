@@ -1,5 +1,6 @@
 package com.cookplan.utils;
 
+import com.cookplan.RApplication;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 import com.cookplan.models.ProductCategory;
@@ -7,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,6 +57,7 @@ public class FillProductDatabaseProvider {
         for (Product product : productList) {
             productRef.push().setValue(product);
         }
+        RApplication.savePriorityList(Arrays.asList(ProductCategory.values()));
     }
 
     private static List<Product> getProductList() {
