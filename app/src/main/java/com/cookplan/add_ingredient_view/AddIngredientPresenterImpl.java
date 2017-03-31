@@ -75,6 +75,9 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                         needToUpdate = false;
                     }
                 }
+                if (newMeasureUnit == product.getMainMeasureUnit()) {
+                    needToUpdate = false;
+                }
                 if (needToUpdate && mainView != null) {
                     lastInputAmount = amount;
                     mainView.needMoreDataAboutProduct(product, newMeasureUnit);
