@@ -85,12 +85,18 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             for (Ingredient ingredient : ingredients) {
                 if (ingredient.getShopListStatus() == status) {
                     double localAmount;
-                    if (map.containsKey(ingredient.getMeasureUnit())) {
-                        localAmount = map.get(ingredient.getMeasureUnit()) + ingredient.getAmount();
-                    } else {
-                        localAmount = ingredient.getAmount();
+                    MeasureUnit unit = ingredient.getMainMeasureUnit();
+                    double amount = ingredient.getMainAmount();
+                    if (ingredient.getShopListAmount() > 1e-8 && ingredient.getShopListMeasureUnit() != null) {
+                        unit = ingredient.getShopListMeasureUnit();
+                        amount = ingredient.getShopListAmount();
                     }
-                    map.put(ingredient.getMeasureUnit(), localAmount);
+                    if (map.containsKey(unit)) {
+                        localAmount = map.get(unit) + amount;
+                    } else {
+                        localAmount = amount;
+                    }
+                    map.put(unit, localAmount);
                 }
             }
             if (map.isEmpty()) {
@@ -145,11 +151,11 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                             mainView.setErrorToast(e.getLocalizedMessage());
                         }
                     });
-//                    .addOnSuccessListener(aVoid -> {
-//                        if (mainView != null) {
-//                            mainView.setIngredientSuccessfulUpdate(ingredient);
-//                        }
-//                    });
+            //                    .addOnSuccessListener(aVoid -> {
+            //                        if (mainView != null) {
+            //                            mainView.setIngredientSuccessfulUpdate(ingredient);
+            //                        }
+            //                    });
         }
     }
 }

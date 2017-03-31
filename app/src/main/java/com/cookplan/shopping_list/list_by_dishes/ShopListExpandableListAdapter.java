@@ -99,9 +99,9 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
             nameTextView.setText(ingredient.getName());
 
 
-            if (ingredient.getAmount() != 0 && ingredient.getMeasureUnit() != null) {
+            if (ingredient.getMainAmount() != 0 && ingredient.getMainMeasureUnit() != null) {
                 amountTextView.setVisibility(View.VISIBLE);
-                String amount = ingredient.getMeasureUnit().toValueString(ingredient.getAmount());
+                String amount = ingredient.getMainMeasureUnit().toValueString(ingredient.getMainAmount());
                 amountTextView.setText(amount);
             } else {
                 amountTextView.setVisibility(View.GONE);

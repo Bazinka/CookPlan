@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cookplan.R;
@@ -37,7 +38,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     private ProgressBar progressBar;
     private View mainView;
 
-//    private OnListFragmentInteractionListener mListener;
+    //    private OnListFragmentInteractionListener mListener;
 
     public AddIngredientViewFragment() {
     }
@@ -135,8 +136,8 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         if (!name.isEmpty() && presenter != null) {
             progressBar.setVisibility(View.VISIBLE);
             presenter.saveIngredient(selectedProduct,
-                    amount != null ? Double.valueOf(amount) : 0,
-                    (MeasureUnit) spinner.getSelectedItem());
+                                     amount != null ? Double.valueOf(amount) : 0,
+                                     (MeasureUnit) spinner.getSelectedItem());
             unitNameEditText.setText(null);
             EditText unitAmoutEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
             unitAmoutEditText.setText(null);
@@ -153,7 +154,6 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     public void setErrorToast(int errorId) {
         progressBar.setVisibility(View.GONE);
         Toast.makeText(getActivity(), getString(errorId), Toast.LENGTH_LONG).show();
-
     }
 
     @Override
@@ -192,19 +192,23 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
             if (!text.isEmpty()
                     && selectedProduct != null
                     && text.equals(selectedProduct.getName())) {
-                List<MeasureUnit> measureUnits = new ArrayList<>(selectedProduct.getMeasureUnitList());
+                List<MeasureUnit> measureUnits = new ArrayList<>();
+                measureUnits.add(selectedProduct.getMainMeasureUnit());
+                measureUnits.addAll(selectedProduct.getMeasureUnitToAmoutMap().keySet());
+                List<MeasureUnit> productsUnits = new ArrayList<>(measureUnits);
                 for (MeasureUnit unit : MeasureUnit.values()) {
                     if (!measureUnits.contains(unit)) {
                         measureUnits.add(unit);
                     }
                 }
                 MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),
-                        measureUnits, selectedProduct.getMeasureUnitList());
+                                                                                    measureUnits,
+                                                                                    productsUnits);
                 spinner.setAdapter(adapter);
                 spinner.setSelection(0);
             } else if (!text.isEmpty()) {//if this product doesn't  exist
                 MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),
-                        Arrays.asList(MeasureUnit.values()), null);
+                                                                                    Arrays.asList(MeasureUnit.values()), null);
                 spinner.setAdapter(adapter);
                 spinner.setSelection(0);
             }
@@ -218,12 +222,52 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     }
 
     @Override
+    public void needMoreDataAboutProduct(Product product, MeasureUnit unit) {
+        if (product != null && unit != null) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.input_amount_dialog, null);
+            dialogBuilder.setView(dialogView);
+            TextView nameTextView = (TextView) dialogView.findViewById(R.id.product_name_textview);
+            if (nameTextView != null) {
+                nameTextView.setText(product.getName());
+            }
+            TextView mainUnitTextView = (TextView) dialogView.findViewById(R.id.main_measure_unit_name);
+            if (mainUnitTextView != null) {
+                mainUnitTextView.setText(product.getMainMeasureUnit().toString());
+            }
+            TextView secondUnitTextView = (TextView) dialogView.findViewById(R.id.second_measure_unit_name);
+            if (secondUnitTextView != null) {
+                secondUnitTextView.setText(unit.toString());
+            }
+
+            final EditText amountEditText = (EditText) dialogView.findViewById(R.id.unit_amount_edit_text);
+
+            dialogBuilder.setTitle(R.string.attention_title);
+            dialogBuilder.setPositiveButton("Done", (dialog, whichButton) -> {
+                //do something with
+                Double amount = Double.valueOf(amountEditText.getText().toString());
+                if (amount != null && presenter != null) {
+                    presenter.addNewMeasureinfo(product, unit, amount);
+                    dialog.dismiss();
+                }
+            });
+            dialogBuilder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+                progressBar.setVisibility(View.GONE);
+                unitAmountViewGroup.setVisibility(View.GONE);
+            });
+            AlertDialog b = dialogBuilder.create();
+            b.show();
+        }
+    }
+
+    @Override
     public boolean isAddedToActivity() {
         return isAdded();
     }
 
 
-//    public interface OnListFragmentInteractionListener {
-//        void onListFragmentInteraction();
-//    }
+    //    public interface OnListFragmentInteractionListener {
+    //        void onListFragmentInteraction();
+    //    }
 }

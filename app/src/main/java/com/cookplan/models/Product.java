@@ -4,8 +4,7 @@ import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DataSnapshot;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,25 +13,34 @@ import java.util.Map;
 
 public class Product implements Serializable {
 
-    private String id;
-    private List<MeasureUnit> measureUnitList;
-    private String name;
-    private ProductCategory category;
+    public String id;
+    public Map<MeasureUnit, Double> measureUnitToAmoutMap;//amount is how many measureUnit contains in 1 mainMeasureUnit
+    public MeasureUnit mainMeasureUnit;
+    public String name;
+    public ProductCategory category;
 
     private Product() {
     }
 
-    public Product(List<MeasureUnit> measureUnitList, String name, ProductCategory category) {
+    //    public Product(List<MeasureUnit> measureUnitList, String name, ProductCategory category) {
+    //        this.category = category;
+    //        this.measureUnitList = measureUnitList;
+    //        this.name = name;
+    //    }
+
+    public Product(MeasureUnit measureUnit, Double amountMesUnitInTheMain, String name, ProductCategory category) {
         this.category = category;
-        this.measureUnitList = measureUnitList;
+        if (measureUnitToAmoutMap == null) {
+            measureUnitToAmoutMap = new HashMap<>();
+            mainMeasureUnit = measureUnit;
+        } else {
+            measureUnitToAmoutMap.put(measureUnit, amountMesUnitInTheMain);
+        }
         this.name = name;
     }
 
     public Product(MeasureUnit measureUnit, String name, ProductCategory category) {
-        this.category = category;
-        this.measureUnitList = new ArrayList<>();
-        measureUnitList.add(measureUnit);
-        this.name = name;
+        this(measureUnit, 0., name, category);
     }
 
     public String getId() {
@@ -51,12 +59,27 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public List<MeasureUnit> getMeasureUnitList() {
-        return measureUnitList;
+    //    public List<MeasureUnit> getMeasureUnitList() {
+    //        return new ArrayList<>(measureUnitToAmoutMap.keySet());
+    //    }
+
+    public Map<MeasureUnit, Double> getMeasureUnitToAmoutMap() {
+        if (measureUnitToAmoutMap == null) {
+            measureUnitToAmoutMap = new HashMap<>();
+        }
+        return measureUnitToAmoutMap;
     }
 
-    public void setMeasureUnitList(List<MeasureUnit> measureUnitList) {
-        this.measureUnitList = measureUnitList;
+    public Map<String, Double> getMeasureStringToAmoutMap() {
+        Map<String, Double> measureStringToAmoutMap = new HashMap<>();
+        for (Map.Entry<MeasureUnit, Double> entry : measureUnitToAmoutMap.entrySet()) {
+            measureStringToAmoutMap.put(entry.getKey().name(), entry.getValue());
+        }
+        return measureStringToAmoutMap;
+    }
+
+    public MeasureUnit getMainMeasureUnit() {
+        return mainMeasureUnit;
     }
 
     public ProductCategory getCategory() {
@@ -77,25 +100,24 @@ public class Product implements Serializable {
             if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_CATEGORY_FIELD)) {
                 product.category = ProductCategory.getProductCategoryByName((String) child.getValue());
             }
-            if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_LIST_FIELD)) {
-                product.measureUnitList = new ArrayList<>();
-                if (child.getValue() instanceof List) {
-                    List<String> measName = (List<String>) child.getValue();
-                    if (!measName.isEmpty()) {
-                        MeasureUnit measureUnit = MeasureUnit.getMeasureUnitByName(measName.get(0));
-                        if (measureUnit != null) {
-                            product.measureUnitList.add(measureUnit);
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_MAP_FIELD)) {
+                product.measureUnitToAmoutMap = new HashMap<>();
+                for (DataSnapshot childUnit : child.getChildren()) {
+                    MeasureUnit measureUnit = MeasureUnit.getMeasureUnitByName(childUnit.getKey());
+                    if (measureUnit != null) {
+                        double value;
+                        if (childUnit.getValue() instanceof Long) {
+                            value = ((Long) childUnit.getValue()).doubleValue();
+                        } else {
+                            value = (Double) childUnit.getValue();
                         }
+                        product.measureUnitToAmoutMap.put(measureUnit, value);
                     }
-                } else if (child.getValue() instanceof Map) {
-                    Map<Long, String> measDBMap = (Map<Long, String>) child.getValue();
-                    for (Map.Entry<Long, String> mes : measDBMap.entrySet()) {
-                        MeasureUnit measureUnit = MeasureUnit.getMeasureUnitByName(mes.getValue());
-                        if (measureUnit != null) {
-                            product.measureUnitList.add(measureUnit);
-                        }
-                    }
+
                 }
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_FIELD)) {
+                product.mainMeasureUnit = MeasureUnit.getMeasureUnitByName((String) child.getValue());
             }
         }
         return product;

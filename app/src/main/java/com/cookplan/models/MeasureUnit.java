@@ -78,13 +78,43 @@ public enum MeasureUnit {
     }
 
     public static double getMultiplier(MeasureUnit from, MeasureUnit to) {
+        if (from == to) {
+            return 1;
+        }
+
         switch (from) {
-            case UNITS:
-                return -1;
-            case PACKAGE:
-                return -1;
-            case BOTTLE:
-                return -1;
+            case UNITS: {
+                switch (to) {
+                    case PACKAGE:
+                        return 1;
+                    case BOTTLE:
+                        return 1;
+                    default:
+                        return -1;
+                }
+            }
+            case PACKAGE: {
+                switch (to) {
+                    case UNITS:
+                        return 1;
+                    case BOTTLE:
+                        return 1;
+                    default:
+                        return -1;
+                }
+
+            }
+            case BOTTLE: {
+                switch (to) {
+                    case UNITS:
+                        return 1;
+                    case PACKAGE:
+                        return 1;
+                    default:
+                        return -1;
+                }
+
+            }
             case GRAMM: {
                 switch (to) {
                     case GRAMM:

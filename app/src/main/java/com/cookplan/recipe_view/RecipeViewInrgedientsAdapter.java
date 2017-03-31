@@ -42,10 +42,10 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
         Ingredient ingredient = ingredients.get(position);
         holder.nameTextView.setText(ingredient.getName());
 
-        if (ingredient.getAmount() != null && ingredient.getMeasureUnit() != null) {
+        if (ingredient.getMainAmount() != null && ingredient.getMainMeasureUnit() != null) {
             holder.amountTextView.setVisibility(View.VISIBLE);
 
-            holder.amountTextView.setText(ingredient.getMeasureUnit().toValueString(ingredient.getAmount()));
+            holder.amountTextView.setText(ingredient.getMainMeasureUnit().toValueString(ingredient.getMainAmount()));
 
         } else {
             holder.amountTextView.setVisibility(View.GONE);

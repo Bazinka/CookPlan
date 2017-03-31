@@ -17,8 +17,10 @@ public class Ingredient implements Serializable {
     public String name;
     public String productId;
     public String recipeId;
-    public MeasureUnit measureUnit;
-    public Double amount;
+    public MeasureUnit mainMeasureUnit;
+    public Double mainAmount;
+    public MeasureUnit shopListMeasureUnit;
+    public Double shopListAmount;
     public String amountString;
     public ShopListStatus shopListStatus;
 
@@ -27,14 +29,30 @@ public class Ingredient implements Serializable {
         userId = auth.getCurrentUser().getUid();
     }
 
-    public Ingredient(String id, String name, String productId, String recipeId, MeasureUnit measureUnit, Double amount, ShopListStatus shopListStatus) {
+    public Ingredient(String id, String name, Product product, String recipeId,
+                      MeasureUnit localMeasureUnit, Double mainAmount, ShopListStatus shopListStatus) {
         this();
         this.id = id;
         this.name = name;
-        this.productId = productId;
+        if (product != null) {
+            this.productId = product.getId();
+            shopListMeasureUnit = product.getMainMeasureUnit();
+        }
         this.recipeId = recipeId;
-        this.measureUnit = measureUnit;
-        this.amount = amount;
+        this.mainMeasureUnit = localMeasureUnit;
+        this.mainAmount = mainAmount;
+        shopListAmount = -1.;
+        if (shopListMeasureUnit != null) {
+            double multiplier = MeasureUnit.getMultiplier(localMeasureUnit, shopListMeasureUnit);
+            if (product != null &&
+                    product.getMeasureUnitToAmoutMap() != null &&
+                    product.getMeasureUnitToAmoutMap().containsKey(localMeasureUnit)) {
+                multiplier = 1 / product.getMeasureUnitToAmoutMap().get(localMeasureUnit);
+            }
+            if (multiplier > 1e-8) {
+                shopListAmount = multiplier * mainAmount;
+            }
+        }
         this.shopListStatus = shopListStatus;
     }
 
@@ -65,20 +83,20 @@ public class Ingredient implements Serializable {
         this.recipeId = recipeId;
     }
 
-    public MeasureUnit getMeasureUnit() {
-        return measureUnit;
+    public MeasureUnit getMainMeasureUnit() {
+        return mainMeasureUnit;
     }
 
-    public void setMeasureUnit(MeasureUnit measureUnit) {
-        this.measureUnit = measureUnit;
+    public Double getMainAmount() {
+        return mainAmount;
     }
 
-    public Double getAmount() {
-        return amount;
+    public MeasureUnit getShopListMeasureUnit() {
+        return shopListMeasureUnit;
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
+    public Double getShopListAmount() {
+        return shopListAmount;
     }
 
     public String getName() {
@@ -105,14 +123,24 @@ public class Ingredient implements Serializable {
             if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_RECIPE_ID_FIELD)) {
                 ingredient.recipeId = child.getValue().toString();
             }
-            if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_UNIT_FIELD)) {
-                ingredient.measureUnit = MeasureUnit.getMeasureUnitByName((String) child.getValue());
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_FIELD)) {
+                ingredient.mainMeasureUnit = MeasureUnit.getMeasureUnitByName((String) child.getValue());
             }
-            if (child.getKey().equals(DatabaseConstants.DATABASE_AMOUNT_FIELD)) {
+            if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_MEASURE_UNIT_FIELD)) {
+                ingredient.shopListMeasureUnit = MeasureUnit.getMeasureUnitByName((String) child.getValue());
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_AMOUNT_FIELD)) {
                 if (child.getValue() instanceof Double) {
-                    ingredient.amount = (Double) child.getValue();
+                    ingredient.mainAmount = (Double) child.getValue();
                 } else {
-                    ingredient.amount = ((Long) child.getValue()).doubleValue();
+                    ingredient.mainAmount = ((Long) child.getValue()).doubleValue();
+                }
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_AMOUNT_FIELD)) {
+                if (child.getValue() instanceof Double) {
+                    ingredient.shopListAmount = (Double) child.getValue();
+                } else {
+                    ingredient.shopListAmount = ((Long) child.getValue()).doubleValue();
                 }
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)) {
