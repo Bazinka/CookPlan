@@ -7,7 +7,34 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
+import static com.cookplan.models.MeasureUnit.BOTTLE;
+import static com.cookplan.models.MeasureUnit.GRAMM;
+import static com.cookplan.models.MeasureUnit.LITRE;
+import static com.cookplan.models.MeasureUnit.MILILITRE;
+import static com.cookplan.models.MeasureUnit.PACKAGE;
+import static com.cookplan.models.MeasureUnit.UNITS;
+import static com.cookplan.models.ProductCategory.ALCOHOL_DRINKS;
+import static com.cookplan.models.ProductCategory.ANIMALS_PRODUCTS;
+import static com.cookplan.models.ProductCategory.BAKERY_PRODUCTS;
+import static com.cookplan.models.ProductCategory.CHEESE;
+import static com.cookplan.models.ProductCategory.CHILD_PRODUCTS;
+import static com.cookplan.models.ProductCategory.CONFECTIONERY;
+import static com.cookplan.models.ProductCategory.CONSERVATION;
+import static com.cookplan.models.ProductCategory.DRINKS_JUICE;
+import static com.cookplan.models.ProductCategory.EGGS;
+import static com.cookplan.models.ProductCategory.FISH_SEAFOOD_CAVIAR;
+import static com.cookplan.models.ProductCategory.FROZEN_FOOD;
+import static com.cookplan.models.ProductCategory.FRUITS_VEGETABLES;
+import static com.cookplan.models.ProductCategory.GROCERY;
+import static com.cookplan.models.ProductCategory.ICE_CREAM;
+import static com.cookplan.models.ProductCategory.MEAT_BIRDS;
+import static com.cookplan.models.ProductCategory.MEAT_GARSTRONOMY;
+import static com.cookplan.models.ProductCategory.MILK_PRODUCT;
+import static com.cookplan.models.ProductCategory.TEA_COFFEE_CACAO;
+import static com.cookplan.models.ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS;
 
 /**
  * Created by DariaEfimova on 29.03.17.
@@ -22,9 +49,9 @@ public class FillProductDatabaseProvider {
     }
 
     private static void fillProductDatabase() {
-        List<Product> productList = getProductList();
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+        List<Product>     productList = getProductList();
+        DatabaseReference database    = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference productRef  = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
         for (Product product : productList) {
             productRef.push().setValue(product);
         }
@@ -33,532 +60,539 @@ public class FillProductDatabaseProvider {
     private static List<Product> getProductList() {
         List<Product> list = new ArrayList<>();
         //Алкогольные напитки ProductCategory.ALCOHOL_DRINKS
-        list.add(new Product(MeasureUnit.BOTTLE, "Пиво", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Водка", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Коньяк", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Виски", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Ром", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Текила", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Джин", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Самбука", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Граппа", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Ликер", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Настойка", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Бальзам", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Вино", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Шампанское, игристое вино", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Вермут", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Вермут", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Коктейль", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Сидр", ProductCategory.ALCOHOL_DRINKS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Квас", ProductCategory.ALCOHOL_DRINKS));
+        list.addAll(new CategoryBuilder(ALCOHOL_DRINKS, BOTTLE)
+                .add("Пиво")
+                .add("Водка")
+                .add("Коньяк")
+                .add("Виски")
+                .add("Ром")
+                .add("Текила")
+                .add("Джин")
+                .add("Самбука")
+                .add("Граппа")
+                .add("Ликер")
+                .add("Настойка")
+                .add("Бальзам")
+                .add("Вино")
+                .add("Шампанское, игристое вино")
+                .add("Вермут")
+                .add("Вермут")
+                .add("Коктейль")
+                .add("Сидр")
+                .add("Квас")
+                .build());
 
         //Молочные продукты ProductCategory.MILK_PRODUCT
-        list.add(new Product(MeasureUnit.LITRE, "Молоко коровье", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Молоко козье", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Молоко соевое", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Молоко миндальное", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Молоко кокосовое", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Молоко овсяное", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Молоко рисовое", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Молочный коктейль", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.MILILITRE, "Сливки", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сливки взбитые", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Сливочный коктейль", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Йогурт", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.BOTTLE, "Йогурт питьевой", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сырок творожный", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Творожок", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.GRAMM, "Творог", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Творожная масса", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.LITRE, "Кефир", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.UNITS, "Детское питание молочное", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.BOTTLE, "Айран", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.BOTTLE, "Ацидофилин", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Варенец", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Закваска", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Бифилайф", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Мацони", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Простокваша", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Ряженка", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Снежок", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Тан", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Маргарин", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Масло кокосовое", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Масло сливочное", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Масло топленое", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Масло шоколадное", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.MILILITRE, "Сметана", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Мусс", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Пудинг", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Смусси молочный", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Каша рисовая молочная", ProductCategory.MILK_PRODUCT));
-        list.add(new Product(MeasureUnit.PACKAGE, "Каша овсяная молочная", ProductCategory.MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молоко коровье", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молоко козье", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молоко соевое", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молоко миндальное", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молоко кокосовое", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молоко овсяное", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молоко рисовое", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Молочный коктейль", MILK_PRODUCT));
+        list.add(new Product(MILILITRE, "Сливки", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Сливки взбитые", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Сливочный коктейль", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Йогурт", MILK_PRODUCT));
+        list.add(new Product(BOTTLE, "Йогурт питьевой", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Сырок творожный", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Творожок", MILK_PRODUCT));
+        list.add(new Product(GRAMM, "Творог", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Творожная масса", MILK_PRODUCT));
+        list.add(new Product(LITRE, "Кефир", MILK_PRODUCT));
+        list.add(new Product(UNITS, "Детское питание молочное", MILK_PRODUCT));
+        list.add(new Product(BOTTLE, "Айран", MILK_PRODUCT));
+        list.add(new Product(BOTTLE, "Ацидофилин", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Варенец", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Закваска", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Бифилайф", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Мацони", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Простокваша", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Ряженка", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Снежок", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Тан", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Маргарин", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Масло кокосовое", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Масло сливочное", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Масло топленое", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Масло шоколадное", MILK_PRODUCT));
+        list.add(new Product(MILILITRE, "Сметана", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Мусс", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Пудинг", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Смусси молочный", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Каша рисовая молочная", MILK_PRODUCT));
+        list.add(new Product(PACKAGE, "Каша овсяная молочная", MILK_PRODUCT));
 
         //Cыры ProductCategory.CHEESE
-        list.add(new Product(MeasureUnit.GRAMM, "Сыр твердый натертый", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Сыр твердый (нарезка)", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Сыр твердый", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Моцарелла", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Сыр творожный", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Брынза", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Сулугуни", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Маскарпоне", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Рикотта", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Сыр копченый", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сыр плавленый", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.UNITS, "Сырок плавленный", ProductCategory.CHEESE));
-        list.add(new Product(MeasureUnit.GRAMM, "Сыр деликатесный", ProductCategory.CHEESE));
+        list.add(new Product(GRAMM, "Сыр твердый натертый", CHEESE));
+        list.add(new Product(GRAMM, "Сыр твердый (нарезка)", CHEESE));
+        list.add(new Product(GRAMM, "Сыр твердый", CHEESE));
+        list.add(new Product(GRAMM, "Моцарелла", CHEESE));
+        list.add(new Product(GRAMM, "Сыр творожный", CHEESE));
+        list.add(new Product(GRAMM, "Брынза", CHEESE));
+        list.add(new Product(GRAMM, "Сулугуни", CHEESE));
+        list.add(new Product(GRAMM, "Маскарпоне", CHEESE));
+        list.add(new Product(GRAMM, "Рикотта", CHEESE));
+        list.add(new Product(GRAMM, "Сыр копченый", CHEESE));
+        list.add(new Product(PACKAGE, "Сыр плавленый", CHEESE));
+        list.add(new Product(UNITS, "Сырок плавленный", CHEESE));
+        list.add(new Product(GRAMM, "Сыр деликатесный", CHEESE));
 
         //Яйца ProductCategory.EGGS
-        list.add(new Product(MeasureUnit.UNITS, "Яйцо куриное", ProductCategory.EGGS));
-        list.add(new Product(MeasureUnit.UNITS, "Яйцо перепелиное", ProductCategory.EGGS));
+        list.add(new Product(UNITS, "Яйцо куриное", EGGS));
+        list.add(new Product(UNITS, "Яйцо перепелиное", EGGS));
 
         //Кондитерские изделия ProductCategory.CONFECTIONERY
-        list.add(new Product(MeasureUnit.UNITS, "Шоколад горький", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Шоколад молочный", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Шоколад белый", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Шоколадная паста", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Батончик шоколадный", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Драже", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Шоколадная фигурка", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Яйцо шоколадное", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Конфеты", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Трюфели", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Глазированные фрукты и орехи", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Печенье", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Вафли", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Рулет кондитерский", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Кекс", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Тарталетки", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Кукурузные палочки", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Круассан", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Штрудель", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Зефир", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Мармелад", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Маршмеллоу", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Пастила", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Сахарная вата", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Суфле", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Пирог", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Пирожное", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Торт", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Шарлотка", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Жевательная резинка", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.UNITS, "Козинак", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Кунафа", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Пахлава", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Рахат-лукум", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Халва", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Чак-чак", ProductCategory.CONFECTIONERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Щербет", ProductCategory.CONFECTIONERY));
+        list.add(new Product(UNITS, "Шоколад горький", CONFECTIONERY));
+        list.add(new Product(UNITS, "Шоколад молочный", CONFECTIONERY));
+        list.add(new Product(UNITS, "Шоколад белый", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Шоколадная паста", CONFECTIONERY));
+        list.add(new Product(UNITS, "Батончик шоколадный", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Драже", CONFECTIONERY));
+        list.add(new Product(UNITS, "Шоколадная фигурка", CONFECTIONERY));
+        list.add(new Product(UNITS, "Яйцо шоколадное", CONFECTIONERY));
+        list.add(new Product(GRAMM, "Конфеты", CONFECTIONERY));
+        list.add(new Product(GRAMM, "Трюфели", CONFECTIONERY));
+        list.add(new Product(GRAMM, "Глазированные фрукты и орехи", CONFECTIONERY));
+        list.add(new Product(GRAMM, "Печенье", CONFECTIONERY));
+        list.add(new Product(GRAMM, "Вафли", CONFECTIONERY));
+        list.add(new Product(UNITS, "Рулет кондитерский", CONFECTIONERY));
+        list.add(new Product(UNITS, "Кекс", CONFECTIONERY));
+        list.add(new Product(UNITS, "Тарталетки", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Кукурузные палочки", CONFECTIONERY));
+        list.add(new Product(UNITS, "Круассан", CONFECTIONERY));
+        list.add(new Product(UNITS, "Штрудель", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Зефир", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Мармелад", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Маршмеллоу", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Пастила", CONFECTIONERY));
+        list.add(new Product(UNITS, "Сахарная вата", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Суфле", CONFECTIONERY));
+        list.add(new Product(UNITS, "Пирог", CONFECTIONERY));
+        list.add(new Product(UNITS, "Пирожное", CONFECTIONERY));
+        list.add(new Product(UNITS, "Торт", CONFECTIONERY));
+        list.add(new Product(UNITS, "Шарлотка", CONFECTIONERY));
+        list.add(new Product(UNITS, "Жевательная резинка", CONFECTIONERY));
+        list.add(new Product(UNITS, "Козинак", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Кунафа", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Пахлава", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Рахат-лукум", CONFECTIONERY));
+        list.add(new Product(GRAMM, "Халва", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Чак-чак", CONFECTIONERY));
+        list.add(new Product(PACKAGE, "Щербет", CONFECTIONERY));
 
         //Детские товары" ProductCategory.CHILD_PRODUCTS
-        list.add(new Product(MeasureUnit.PACKAGE, "Детское питание", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Пюре детское", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Подгузники", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Пеленки", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Бутылочка детская", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Кружка детская", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Поильник детский", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Пустышка детская", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Соска детская", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Ложка детская", ProductCategory.CHILD_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Тарелка детская", ProductCategory.CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Детское питание", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Пюре детское", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Подгузники", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Пеленки", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Бутылочка детская", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Кружка детская", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Поильник детский", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Пустышка детская", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Соска детская", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Ложка детская", CHILD_PRODUCTS));
+        list.add(new Product(PACKAGE, "Тарелка детская", CHILD_PRODUCTS));
 
 //        Напитки, соки ProductCategory.DRINKS_JUICE
-        list.add(new Product(MeasureUnit.PACKAGE, "Кисель", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.BOTTLE, "Вода питьевая", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.BOTTLE, "Газировка", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.BOTTLE, "Вода минеральная", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.BOTTLE, "Лимонад", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.BOTTLE, "Тархун", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.PACKAGE, "Компот", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.PACKAGE, "Морс", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сок", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.PACKAGE, "Нектар", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.BOTTLE, "Квас", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.BOTTLE, "Холодный чай (черный)", ProductCategory.DRINKS_JUICE));
-        list.add(new Product(MeasureUnit.BOTTLE, "Холодный чай (зеленый)", ProductCategory.DRINKS_JUICE));
+        list.add(new Product(PACKAGE, "Кисель", DRINKS_JUICE));
+        list.add(new Product(BOTTLE, "Вода питьевая", DRINKS_JUICE));
+        list.add(new Product(BOTTLE, "Газировка", DRINKS_JUICE));
+        list.add(new Product(BOTTLE, "Вода минеральная", DRINKS_JUICE));
+        list.add(new Product(BOTTLE, "Лимонад", DRINKS_JUICE));
+        list.add(new Product(BOTTLE, "Тархун", DRINKS_JUICE));
+        list.add(new Product(PACKAGE, "Компот", DRINKS_JUICE));
+        list.add(new Product(PACKAGE, "Морс", DRINKS_JUICE));
+        list.add(new Product(PACKAGE, "Сок", DRINKS_JUICE));
+        list.add(new Product(PACKAGE, "Нектар", DRINKS_JUICE));
+        list.add(new Product(BOTTLE, "Квас", DRINKS_JUICE));
+        list.add(new Product(BOTTLE, "Холодный чай (черный)", DRINKS_JUICE));
+        list.add(new Product(BOTTLE, "Холодный чай (зеленый)", DRINKS_JUICE));
 
 //        Хлебобулочные изделия" ProductCategory.BAKERY_PRODUCTS
-        list.add(new Product(MeasureUnit.UNITS, "Хлеб белый", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Хлеб для тостов и сэндвичей", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Хлеб зерновой", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Хлебцы", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Хлеб черный", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Хлеб кукурузный", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сухарики", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Баранки", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Соломка", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сухари", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Лепешка", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сушки", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Хлебные палочки", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Сдобная выпечка", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Слоеная выпечка", ProductCategory.BAKERY_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Песочная выпечка", ProductCategory.BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Хлеб белый", BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Хлеб для тостов и сэндвичей", BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Хлеб зерновой", BAKERY_PRODUCTS));
+        list.add(new Product(PACKAGE, "Хлебцы", BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Хлеб черный", BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Хлеб кукурузный", BAKERY_PRODUCTS));
+        list.add(new Product(PACKAGE, "Сухарики", BAKERY_PRODUCTS));
+        list.add(new Product(PACKAGE, "Баранки", BAKERY_PRODUCTS));
+        list.add(new Product(PACKAGE, "Соломка", BAKERY_PRODUCTS));
+        list.add(new Product(PACKAGE, "Сухари", BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Лепешка", BAKERY_PRODUCTS));
+        list.add(new Product(PACKAGE, "Сушки", BAKERY_PRODUCTS));
+        list.add(new Product(PACKAGE, "Хлебные палочки", BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Сдобная выпечка", BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Слоеная выпечка", BAKERY_PRODUCTS));
+        list.add(new Product(UNITS, "Песочная выпечка", BAKERY_PRODUCTS));
 
 //        Овощи, фрукты, грибы, ягоды ProductCategory.FRUITS_VEGETABLES
-        list.add(new Product(MeasureUnit.PACKAGE, "Арахис", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Грецкий орех", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Изюм", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Кедровый орех", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Кешью", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Курага", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Миндаль", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Семечки подсолнечные", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Семечки тыквенные", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Смесь орехов", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Смесь орехов и сухофруктов", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сухофрукты", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Финики", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Фисташки", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Фундук", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Чернослив", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Ягоды сушеные", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Ягоды замороженные", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Овощное ассорти", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Авокадо", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Баклажан", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Имбирь", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Кабачок", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Капуста", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Картофель", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Кукуруза", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Лук репчатый", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Лук зеленый", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Морковь", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Огурец", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Перец", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Редис", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Редька", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Репа", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Свекла", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Сельдерей", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Спаржа", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Помидор", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Тыква", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Фасоль", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Чеснок", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Фрукты", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Айва", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Апельсин", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Арбуз", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Банан", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Виноград", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Голубика", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Гранат", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Грейпфрут", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Груша", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Дыня", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Ежевика", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Киви", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Кокос", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Кумкват", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Лимон", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Лонган", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Лайм", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Малина", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Манго", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Мандарин", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Нектарин", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Персик", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Помело", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Слива", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Смородина", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Яблоко", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Хурма", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Грибы сушеные", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.PACKAGE, "Грибы свежие", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.UNITS, "Шампиньоны", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Базилик", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Зелень в горшочке", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Мята", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Петрушка", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Пшеница", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Розмарин", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Руккола", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Салат", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Сельдерей", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Тархун", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Тимьян", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Укроп", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Фенхель", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Шпинат", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Щавель", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Оливки", ProductCategory.FRUITS_VEGETABLES));
-        list.add(new Product(MeasureUnit.GRAMM, "Маслины", ProductCategory.FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Арахис", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Грецкий орех", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Изюм", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Кедровый орех", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Кешью", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Курага", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Миндаль", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Семечки подсолнечные", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Семечки тыквенные", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Смесь орехов", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Смесь орехов и сухофруктов", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Сухофрукты", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Финики", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Фисташки", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Фундук", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Чернослив", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Ягоды сушеные", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Ягоды замороженные", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Овощное ассорти", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Авокадо", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Баклажан", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Имбирь", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Кабачок", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Капуста", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Картофель", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Кукуруза", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Лук репчатый", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Лук зеленый", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Морковь", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Огурец", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Перец", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Редис", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Редька", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Репа", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Свекла", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Сельдерей", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Спаржа", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Помидор", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Тыква", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Фасоль", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Чеснок", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Фрукты", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Айва", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Апельсин", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Арбуз", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Банан", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Виноград", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Голубика", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Гранат", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Грейпфрут", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Груша", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Дыня", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Ежевика", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Киви", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Кокос", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Кумкват", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Лимон", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Лонган", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Лайм", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Малина", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Манго", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Мандарин", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Нектарин", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Персик", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Помело", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Слива", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Смородина", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Яблоко", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Хурма", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Грибы сушеные", FRUITS_VEGETABLES));
+        list.add(new Product(PACKAGE, "Грибы свежие", FRUITS_VEGETABLES));
+        list.add(new Product(UNITS, "Шампиньоны", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Базилик", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Зелень в горшочке", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Мята", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Петрушка", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Пшеница", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Розмарин", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Руккола", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Салат", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Сельдерей", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Тархун", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Тимьян", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Укроп", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Фенхель", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Шпинат", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Щавель", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Оливки", FRUITS_VEGETABLES));
+        list.add(new Product(GRAMM, "Маслины", FRUITS_VEGETABLES));
 
 //        "Бакалея" ProductCategory.GROCERY
-        list.add(new Product(MeasureUnit.GRAMM, "Сахар-песок белый", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Сахар-песок тростниковый", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сахар рафинад", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Сахарная пудра", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Заменитель сахара", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Фруктоза", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Соль морская", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Соль поваренная", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Хлопья овсяные", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Хлопья кукурузные", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Хлопья смесь злаков", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Хлопья гречневые", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Каша-минутка", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Мюсли", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Готовый завтрак Nestle", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Смесь для выпечки", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Мука", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Чипсы", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сухарики", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Попкорн", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Снэки", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Макароны", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Суп быстрого приготовления", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Лапша быстрого приготовления", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Бантики", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Вермишель", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Витки", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Гнезда", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Гребешки", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Листы для лазаньи", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Лапша", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Перья", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Ракушки", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Рожки", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Спагетти", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.PACKAGE, "Спирали", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Рис", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Гречневая крупа", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Горох", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Фасоль", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Чечевица", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Манная крупа", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Кус-Кус", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Кукурузная крупа", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Льняная крупа", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Овес", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Перловка", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Полба", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Пшено", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Пшеница", ProductCategory.GROCERY));
-        list.add(new Product(MeasureUnit.GRAMM, "Ячмень", ProductCategory.GROCERY));
+        list.add(new Product(GRAMM, "Сахар-песок белый", GROCERY));
+        list.add(new Product(GRAMM, "Сахар-песок тростниковый", GROCERY));
+        list.add(new Product(PACKAGE, "Сахар рафинад", GROCERY));
+        list.add(new Product(GRAMM, "Сахарная пудра", GROCERY));
+        list.add(new Product(PACKAGE, "Заменитель сахара", GROCERY));
+        list.add(new Product(PACKAGE, "Фруктоза", GROCERY));
+        list.add(new Product(GRAMM, "Соль морская", GROCERY));
+        list.add(new Product(GRAMM, "Соль поваренная", GROCERY));
+        list.add(new Product(PACKAGE, "Хлопья овсяные", GROCERY));
+        list.add(new Product(PACKAGE, "Хлопья кукурузные", GROCERY));
+        list.add(new Product(PACKAGE, "Хлопья смесь злаков", GROCERY));
+        list.add(new Product(PACKAGE, "Хлопья гречневые", GROCERY));
+        list.add(new Product(PACKAGE, "Каша-минутка", GROCERY));
+        list.add(new Product(PACKAGE, "Мюсли", GROCERY));
+        list.add(new Product(PACKAGE, "Готовый завтрак Nestle", GROCERY));
+        list.add(new Product(PACKAGE, "Смесь для выпечки", GROCERY));
+        list.add(new Product(GRAMM, "Мука", GROCERY));
+        list.add(new Product(PACKAGE, "Чипсы", GROCERY));
+        list.add(new Product(PACKAGE, "Сухарики", GROCERY));
+        list.add(new Product(PACKAGE, "Попкорн", GROCERY));
+        list.add(new Product(PACKAGE, "Снэки", GROCERY));
+        list.add(new Product(PACKAGE, "Макароны", GROCERY));
+        list.add(new Product(PACKAGE, "Суп быстрого приготовления", GROCERY));
+        list.add(new Product(PACKAGE, "Лапша быстрого приготовления", GROCERY));
+        list.add(new Product(PACKAGE, "Бантики", GROCERY));
+        list.add(new Product(PACKAGE, "Вермишель", GROCERY));
+        list.add(new Product(PACKAGE, "Витки", GROCERY));
+        list.add(new Product(PACKAGE, "Гнезда", GROCERY));
+        list.add(new Product(PACKAGE, "Гребешки", GROCERY));
+        list.add(new Product(PACKAGE, "Листы для лазаньи", GROCERY));
+        list.add(new Product(PACKAGE, "Лапша", GROCERY));
+        list.add(new Product(PACKAGE, "Перья", GROCERY));
+        list.add(new Product(PACKAGE, "Ракушки", GROCERY));
+        list.add(new Product(PACKAGE, "Рожки", GROCERY));
+        list.add(new Product(PACKAGE, "Спагетти", GROCERY));
+        list.add(new Product(PACKAGE, "Спирали", GROCERY));
+        list.add(new Product(GRAMM, "Рис", GROCERY));
+        list.add(new Product(GRAMM, "Гречневая крупа", GROCERY));
+        list.add(new Product(GRAMM, "Горох", GROCERY));
+        list.add(new Product(GRAMM, "Фасоль", GROCERY));
+        list.add(new Product(GRAMM, "Чечевица", GROCERY));
+        list.add(new Product(GRAMM, "Манная крупа", GROCERY));
+        list.add(new Product(GRAMM, "Кус-Кус", GROCERY));
+        list.add(new Product(GRAMM, "Кукурузная крупа", GROCERY));
+        list.add(new Product(GRAMM, "Льняная крупа", GROCERY));
+        list.add(new Product(GRAMM, "Овес", GROCERY));
+        list.add(new Product(GRAMM, "Перловка", GROCERY));
+        list.add(new Product(GRAMM, "Полба", GROCERY));
+        list.add(new Product(GRAMM, "Пшено", GROCERY));
+        list.add(new Product(GRAMM, "Пшеница", GROCERY));
+        list.add(new Product(GRAMM, "Ячмень", GROCERY));
 
 
 //        "Мясная гастрономия" ProductCategory.MEAT_GARSTRONOMY
-        list.add(new Product(MeasureUnit.GRAMM, "Сосиски", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Cардельки", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Колбаски", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Колбаса вареная", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Колбаса копченая", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Колбаса", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Балык", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Бастурма", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Бекон", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Буженина", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Ветчина", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Грудинка копченая", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Корейка копченая", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Окорок копченый", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Ребрышки копченые", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Рулет мясной", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Рулька", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Сало", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Шейка копченая", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Шпик", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Паштет", ProductCategory.MEAT_GARSTRONOMY));
-        list.add(new Product(MeasureUnit.GRAMM, "Ливер", ProductCategory.MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Сосиски", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Cардельки", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Колбаски", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Колбаса вареная", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Колбаса копченая", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Колбаса", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Балык", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Бастурма", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Бекон", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Буженина", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Ветчина", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Грудинка копченая", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Корейка копченая", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Окорок копченый", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Ребрышки копченые", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Рулет мясной", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Рулька", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Сало", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Шейка копченая", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Шпик", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Паштет", MEAT_GARSTRONOMY));
+        list.add(new Product(GRAMM, "Ливер", MEAT_GARSTRONOMY));
 
 //        "Мясо и птица" ProductCategory.MEAT_BIRDS
-        list.add(new Product(MeasureUnit.GRAMM, "Бедро птицы", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Голень птицы", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Грудка птицы", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Крылья птицы", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Окорочок птицы", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Тушка птицы", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Филе птицы", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Зразы (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Колбаски (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Котлеты (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Крылья (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Купаты (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Медальоны (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Стейк (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Фарш (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Мясные Шарики (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Шашлык (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Шницель (полуфабрикат)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Желудки (субпродукты)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Набор суповой (субпродукты)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Печень (субпродукты)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Почки (субпродукты)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Рубец (субпродукты)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Сердце (субпродукты)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Язык (субпродукты)", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Баранина", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Говядина", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Кролик", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Свинина", ProductCategory.MEAT_BIRDS));
-        list.add(new Product(MeasureUnit.GRAMM, "Телятина", ProductCategory.MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Бедро птицы", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Голень птицы", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Грудка птицы", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Крылья птицы", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Окорочок птицы", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Тушка птицы", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Филе птицы", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Зразы (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Колбаски (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Котлеты (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Крылья (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Купаты (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Медальоны (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Стейк (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Фарш (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Мясные Шарики (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Шашлык (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Шницель (полуфабрикат)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Желудки (субпродукты)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Набор суповой (субпродукты)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Печень (субпродукты)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Почки (субпродукты)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Рубец (субпродукты)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Сердце (субпродукты)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Язык (субпродукты)", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Баранина", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Говядина", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Кролик", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Свинина", MEAT_BIRDS));
+        list.add(new Product(GRAMM, "Телятина", MEAT_BIRDS));
 
 //        "Замороженные продукты" ProductCategory.FROZEN_FOOD
-        list.add(new Product(MeasureUnit.GRAMM, "Мясо замороженное", ProductCategory.FROZEN_FOOD));
-        list.add(new Product(MeasureUnit.GRAMM, "Птица замороженная", ProductCategory.FROZEN_FOOD));
-        list.add(new Product(MeasureUnit.GRAMM, "Морепродукты замороженные", ProductCategory.FROZEN_FOOD));
+        list.add(new Product(GRAMM, "Мясо замороженное", FROZEN_FOOD));
+        list.add(new Product(GRAMM, "Птица замороженная", FROZEN_FOOD));
+        list.add(new Product(GRAMM, "Морепродукты замороженные", FROZEN_FOOD));
 
 //        "Рыба, морепродукты и икра" ProductCategory.FISH_SEAFOOD_CAVIAR
-        list.add(new Product(MeasureUnit.GRAMM, "Рыба", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Крабовое мясо, палочки", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Икра красная", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Пресервы", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Рыба соленая", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Рыба копченая", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Рыба вяленая", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Рыба сушеная", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Гребешки", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Кальмар", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Креветки", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Мидии", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Морской коктейль", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Улитки", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Горбуша", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Дорада", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Камбала", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Карась", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Карп", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Кета", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Кижуч", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Лосось", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Минтай", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Мойва", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Окунь", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Осетр", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Палтус", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Путассу", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Пангасиус", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Сибас", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Скумбрия", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Стерлядь", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Тилапия", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Судак", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Толстолобик", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Треска", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Тунец", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Форель", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Щука", ProductCategory.FISH_SEAFOOD_CAVIAR));
-        list.add(new Product(MeasureUnit.GRAMM, "Хек", ProductCategory.FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Рыба", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Крабовое мясо, палочки", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Икра красная", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Пресервы", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Рыба соленая", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Рыба копченая", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Рыба вяленая", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Рыба сушеная", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Гребешки", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Кальмар", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Креветки", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Мидии", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Морской коктейль", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Улитки", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Горбуша", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Дорада", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Камбала", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Карась", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Карп", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Кета", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Кижуч", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Лосось", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Минтай", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Мойва", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Окунь", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Осетр", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Палтус", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Путассу", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Пангасиус", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Сибас", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Скумбрия", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Стерлядь", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Тилапия", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Судак", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Толстолобик", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Треска", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Тунец", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Форель", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Щука", FISH_SEAFOOD_CAVIAR));
+        list.add(new Product(GRAMM, "Хек", FISH_SEAFOOD_CAVIAR));
 
 //        "Растительные масла, соусы и приправы" ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS
-        list.add(new Product(MeasureUnit.BOTTLE, "Масло растительное", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Масло оливковое", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Масло кунжутное", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Масло льняное", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Приправа", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Кетчуп", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Томатная паста", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Панировочные сухари", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Соус", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.BOTTLE, "Аджика", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Ароматизатор", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.UNITS, "Декор для выпечки", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Желе", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Коржи", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Корица", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Мастика", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Начинка для выпечки", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Глазурь", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Дрожжи", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Крахмал", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Кокосовая стружка", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Посыпка кондитерская", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Желатин", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Какао-порошок", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Разрыхлитель", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Лимонный сок", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Уксус столовый", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Сода пищевая", ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(BOTTLE, "Масло растительное", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(BOTTLE, "Масло оливковое", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(BOTTLE, "Масло кунжутное", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(BOTTLE, "Масло льняное", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Приправа", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(BOTTLE, "Кетчуп", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(BOTTLE, "Томатная паста", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Панировочные сухари", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(BOTTLE, "Соус", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(BOTTLE, "Аджика", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Ароматизатор", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(UNITS, "Декор для выпечки", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Желе", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Коржи", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Корица", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Мастика", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Начинка для выпечки", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Глазурь", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Дрожжи", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Крахмал", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Кокосовая стружка", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Посыпка кондитерская", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Желатин", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Какао-порошок", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Разрыхлитель", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Лимонный сок", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Уксус столовый", VEGETABLE_OIL_SAUCE_CONDIMENTS));
+        list.add(new Product(PACKAGE, "Сода пищевая", VEGETABLE_OIL_SAUCE_CONDIMENTS));
 
 //        "Чай, кофе, какао" ProductCategory.TEA_COFFEE_CACAO
-        list.add(new Product(MeasureUnit.PACKAGE, "Чай", ProductCategory.TEA_COFFEE_CACAO));
-        list.add(new Product(MeasureUnit.PACKAGE, "Кофе", ProductCategory.TEA_COFFEE_CACAO));
-        list.add(new Product(MeasureUnit.PACKAGE, "Какао", ProductCategory.TEA_COFFEE_CACAO));
-        list.add(new Product(MeasureUnit.PACKAGE, "Горячий шоколад", ProductCategory.TEA_COFFEE_CACAO));
-        list.add(new Product(MeasureUnit.PACKAGE, "Цикорий", ProductCategory.TEA_COFFEE_CACAO));
+        list.add(new Product(PACKAGE, "Чай", TEA_COFFEE_CACAO));
+        list.add(new Product(PACKAGE, "Кофе", TEA_COFFEE_CACAO));
+        list.add(new Product(PACKAGE, "Какао", TEA_COFFEE_CACAO));
+        list.add(new Product(PACKAGE, "Горячий шоколад", TEA_COFFEE_CACAO));
+        list.add(new Product(PACKAGE, "Цикорий", TEA_COFFEE_CACAO));
 
 //        "Товары для животных" ProductCategory.ANIMALS_PRODUCTS
-        list.add(new Product(MeasureUnit.PACKAGE, "Корм для животных", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Корм для животных влажный", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Корм для животных сухой", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Лакомства для животных", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Консервы для животных", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Витамины для животных", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Миска", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Игрушка", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Туалет", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Поводок", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Когтеточка", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.UNITS, "Лежанка", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Шампунь для животных", ProductCategory.ANIMALS_PRODUCTS));
-        list.add(new Product(MeasureUnit.PACKAGE, "Наполнитель для кошачьего туалета", ProductCategory.ANIMALS_PRODUCTS));
+        list.add(new Product(PACKAGE, "Корм для животных", ANIMALS_PRODUCTS));
+        list.add(new Product(PACKAGE, "Корм для животных влажный", ANIMALS_PRODUCTS));
+        list.add(new Product(PACKAGE, "Корм для животных сухой", ANIMALS_PRODUCTS));
+        list.add(new Product(UNITS, "Лакомства для животных", ANIMALS_PRODUCTS));
+        list.add(new Product(UNITS, "Консервы для животных", ANIMALS_PRODUCTS));
+        list.add(new Product(PACKAGE, "Витамины для животных", ANIMALS_PRODUCTS));
+        list.add(new Product(UNITS, "Миска", ANIMALS_PRODUCTS));
+        list.add(new Product(UNITS, "Игрушка", ANIMALS_PRODUCTS));
+        list.add(new Product(UNITS, "Туалет", ANIMALS_PRODUCTS));
+        list.add(new Product(UNITS, "Поводок", ANIMALS_PRODUCTS));
+        list.add(new Product(UNITS, "Когтеточка", ANIMALS_PRODUCTS));
+        list.add(new Product(UNITS, "Лежанка", ANIMALS_PRODUCTS));
+        list.add(new Product(PACKAGE, "Шампунь для животных", ANIMALS_PRODUCTS));
+        list.add(new Product(PACKAGE, "Наполнитель для кошачьего туалета", ANIMALS_PRODUCTS));
 
 //        "Консервация" ProductCategory.CONSERVATION
-        list.add(new Product(MeasureUnit.UNITS, "Горошек консервированный", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Кукуруза консервированная", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Огурцы соленые", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Огурцы маринованные", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Томаты консервированные", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Оливки (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Маслины (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Фасоль (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Горбуша (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Кальмар (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Кета (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Килька (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Лосось (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Мидии (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Морская капуста (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Пыжьян (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Сайра (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Сардина (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Семга (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Скумбрия (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Тунец (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Треска (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Форель (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Шпроты (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Язь (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Паштет", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Тушенка (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Сгущенка вареная", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Сгущенка с добавками", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Сгущенка цельная", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Сливки(консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Белые грибы (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Грузди (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Маслята (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Моховики (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Опята (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Рыжики (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Шампиньоны (консервы)", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, " Мед гречишный", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Мед липовый", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Мед цветочный", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Варенье", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Джем", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Компот", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Сироп", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, "Фрукты в сиропе", ProductCategory.CONSERVATION));
-        list.add(new Product(MeasureUnit.UNITS, " Ягоды протертые", ProductCategory.CONSERVATION));
+        list.add(new Product(UNITS, "Горошек консервированный", CONSERVATION));
+        list.add(new Product(UNITS, "Кукуруза консервированная", CONSERVATION));
+        list.add(new Product(UNITS, "Огурцы соленые", CONSERVATION));
+        list.add(new Product(UNITS, "Огурцы маринованные", CONSERVATION));
+        list.add(new Product(UNITS, "Томаты консервированные", CONSERVATION));
+        list.add(new Product(UNITS, "Оливки (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Маслины (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Фасоль (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Горбуша (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Кальмар (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Кета (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Килька (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Лосось (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Мидии (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Морская капуста (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Пыжьян (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Сайра (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Сардина (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Семга (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Скумбрия (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Тунец (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Треска (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Форель (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Шпроты (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Язь (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Паштет", CONSERVATION));
+        list.add(new Product(UNITS, "Тушенка (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Сгущенка вареная", CONSERVATION));
+        list.add(new Product(UNITS, "Сгущенка с добавками", CONSERVATION));
+        list.add(new Product(UNITS, "Сгущенка цельная", CONSERVATION));
+        list.add(new Product(UNITS, "Сливки(консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Белые грибы (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Грузди (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Маслята (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Моховики (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Опята (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Рыжики (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Шампиньоны (консервы)", CONSERVATION));
+        list.add(new Product(UNITS, "Мед гречишный", CONSERVATION));
+        list.add(new Product(UNITS, "Мед липовый", CONSERVATION));
+        list.add(new Product(UNITS, "Мед цветочный", CONSERVATION));
+        list.add(new Product(UNITS, "Варенье", CONSERVATION));
+        list.add(new Product(UNITS, "Джем", CONSERVATION));
+        list.add(new Product(UNITS, "Компот", CONSERVATION));
+        list.add(new Product(UNITS, "Сироп", CONSERVATION));
+        list.add(new Product(UNITS, "Фрукты в сиропе", CONSERVATION));
+        list.add(new Product(UNITS, "Ягоды протертые", CONSERVATION));
 
 //        "Мороженое" ProductCategory.ICE_CREAM
-        list.add(new Product(MeasureUnit.PACKAGE, "Мороженое", ProductCategory.ICE_CREAM));
-        list.add(new Product(MeasureUnit.GRAMM, "Пломбир", ProductCategory.ICE_CREAM));
+        list.addAll(new CategoryBuilder(ICE_CREAM, PACKAGE)
+                .add("Мороженое")
+                .add(GRAMM, "Пломбир")
+                .build());
+
+        //list.add(new Product(PACKAGE, "Мороженое", ICE_CREAM));
+        //list.add(new Product(GRAMM, "Пломбир", ICE_CREAM));
 
 //        "Диабетическое питание", ProductCategory.DIABETIC_NUTRITION
 
 //        "Готовая кулинария", ProductCategory.COOKED_FOOD
 
 //        "Бытовая химия и товары для дома" ProductCategory.HOUSEHOLD_CHEMICALS
-        list.add(new Product(MeasureUnit.PACKAGE, "Пломбир", ProductCategory.HOUSEHOLD_CHEMICALS));
+//        list.add(new Product(PACKAGE, "Пломбир", HOUSEHOLD_CHEMICALS));
 
 //        "Косметика и гигиена", R.color.category_d
 
@@ -572,5 +606,40 @@ public class FillProductDatabaseProvider {
 //        "Книги и печатная продукция", R.color.cat
 //        "Всё для сада и огорода", R.color.categor
         return list;
+    }
+
+    private static class CategoryBuilder {
+        private final ProductCategory productCategory;
+        private final MeasureUnit defaultUnit;
+        private final List<Product> products;
+
+        public CategoryBuilder(ProductCategory productCategory) {
+            this(productCategory, null);
+
+        }
+
+        public CategoryBuilder(ProductCategory productCategory, MeasureUnit defaultUnit) {
+            this(productCategory, defaultUnit, new LinkedList<>());
+        }
+
+        private CategoryBuilder(ProductCategory productCategory, MeasureUnit defaultUnit, List<Product> products) {
+            this.productCategory = productCategory;
+            this.defaultUnit = defaultUnit;
+            this.products = products;
+        }
+
+        public CategoryBuilder add(String name) {
+            products.add(new Product(defaultUnit, name, productCategory));
+            return this;
+        }
+
+        public CategoryBuilder add(MeasureUnit unit, String name) {
+            products.add(new Product(unit, name, productCategory));
+            return this;
+        }
+
+        public List<Product> build() {
+            return products;
+        }
     }
 }
