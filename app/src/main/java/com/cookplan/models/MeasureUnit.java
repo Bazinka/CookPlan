@@ -43,40 +43,6 @@ public enum MeasureUnit {
         return id;
     }
 
-    public static MeasureUnit getMeasureUnitByName(String name) {
-        if (name.equals(UNITS.name())) {
-            return UNITS;
-        }
-        if (name.equals(GRAMM.name())) {
-            return GRAMM;
-        }
-        if (name.equals(KILOGRAMM.name())) {
-            return KILOGRAMM;
-        }
-        if (name.equals(LITRE.name())) {
-            return LITRE;
-        }
-        if (name.equals(MILILITRE.name())) {
-            return MILILITRE;
-        }
-        if (name.equals(CUP.name())) {
-            return CUP;
-        }
-        if (name.equals(TEASPOON.name())) {
-            return TEASPOON;
-        }
-        if (name.equals(TABLESPOON.name())) {
-            return TABLESPOON;
-        }
-        if (name.equals(BOTTLE.name())) {
-            return BOTTLE;
-        }
-        if (name.equals(PACKAGE.name())) {
-            return PACKAGE;
-        }
-        return null;
-    }
-
     public static double getMultiplier(MeasureUnit from, MeasureUnit to) {
         if (from == to) {
             return 1;

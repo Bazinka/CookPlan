@@ -124,10 +124,10 @@ public class Ingredient implements Serializable {
                 ingredient.recipeId = child.getValue().toString();
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_FIELD)) {
-                ingredient.mainMeasureUnit = MeasureUnit.getMeasureUnitByName((String) child.getValue());
+                ingredient.mainMeasureUnit = MeasureUnit.valueOf((String) child.getValue());
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_MEASURE_UNIT_FIELD)) {
-                ingredient.shopListMeasureUnit = MeasureUnit.getMeasureUnitByName((String) child.getValue());
+                ingredient.shopListMeasureUnit = MeasureUnit.valueOf((String) child.getValue());
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_AMOUNT_FIELD)) {
                 if (child.getValue() instanceof Double) {
