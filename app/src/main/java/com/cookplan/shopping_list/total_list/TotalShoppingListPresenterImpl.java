@@ -84,14 +84,18 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             Map<MeasureUnit, Double> shopMap = new HashMap<>();
             Map<MeasureUnit, Double> restMap = new HashMap<>();
             for (Ingredient ingredient : ingredients) {
-                if (ingredient.getShopListStatus() == status) {
+                if (ingredient.getShopListStatus() == status
+                        && ingredient.getShopMeasureList() != null
+                        && ingredient.getShopAmountList() != null) {
                     double localAmount;
                     MeasureUnit unit = null;
                     double amount = -1.;
-                    for (Map.Entry<MeasureUnit, Double> entryShop : ingredient.getShopListAmountMap().entrySet()) {
-                        if (entryShop.getValue() > 1e-8) {
-                            unit = entryShop.getKey();
-                            amount = entryShop.getValue();
+                    for (int i = 0; i < ingredient.getShopMeasureList().size(); i++) {
+                        MeasureUnit shopUnit = ingredient.getShopMeasureList().get(i);
+                        double shopAmount = ingredient.getShopAmountList().get(i);
+                        if (shopAmount > 1e-8) {
+                            unit = shopUnit;
+                            amount = shopAmount;
                             if (restMap.containsKey(unit)) {
                                 localAmount = restMap.get(unit) + amount;
                             } else {

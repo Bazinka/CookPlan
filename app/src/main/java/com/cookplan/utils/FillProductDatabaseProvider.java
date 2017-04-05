@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,7 @@ import static com.cookplan.models.ProductCategory.MEAT_GARSTRONOMY;
 import static com.cookplan.models.ProductCategory.MILK_PRODUCT;
 import static com.cookplan.models.ProductCategory.TEA_COFFEE_CACAO;
 import static com.cookplan.models.ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS;
+import static com.cookplan.models.ProductCategory.WITHOUT_CATEGORY;
 
 /**
  * Created by DariaEfimova on 29.03.17.
@@ -71,6 +73,18 @@ public class FillProductDatabaseProvider {
         Map<MeasureUnit, Double> kilogramUnitMap = new UnitsMapBuilder()
                 .put(GRAMM, 1000.)
                 .build();
+
+        new CategoryBuilder(WITHOUT_CATEGORY,
+                            LITRE,
+                            new UnitsListBuilder()
+                                    .addAll(volumeUnitArray)
+                                    .build())
+                .add("Вода",
+                     new UnitsMapBuilder(litreUnitMap)
+                             .put(UNITS, 1.)
+                             .put(BOTTLE, 1.)
+                             .put(PACKAGE, 1.)
+                             .build());
 
         //Молочные продукты ProductCategory.MILK_PRODUCT
         new CategoryBuilder(MILK_PRODUCT,
@@ -861,15 +875,19 @@ public class FillProductDatabaseProvider {
                              .build());
 
         new CategoryBuilder(FRUITS_VEGETABLES,
-                            KILOGRAMM,
+                            new UnitsListBuilder()
+                                    .addAll(new MeasureUnit[]{KILOGRAMM, UNITS})
+                                    .build(),
                             new UnitsListBuilder()
                                     .addAll(new MeasureUnit[]{GRAMM, KILOGRAMM, PACKAGE, UNITS})
                                     .build())
                 .add("Финики",
+                     KILOGRAMM,
                      new UnitsMapBuilder()
                              .put(UNITS, 28.)
                              .build())
                 .add("Чернослив",
+                     KILOGRAMM,
                      new UnitsMapBuilder()
                              .put(UNITS, 100.)
                              .build())
@@ -1968,7 +1986,7 @@ public class FillProductDatabaseProvider {
 
     private static class CategoryBuilder {
         private final ProductCategory productCategory;
-        private final MeasureUnit defaultUnit;
+        private final List<MeasureUnit> defaultMainUnitList;
         private final List<MeasureUnit> defaultUnitList;
 
 
@@ -1980,12 +1998,20 @@ public class FillProductDatabaseProvider {
                                 MeasureUnit defaultUnit,
                                 List<MeasureUnit> defaultUnitList) {
             this.productCategory = productCategory;
-            this.defaultUnit = defaultUnit;
+            this.defaultMainUnitList = Collections.singletonList(defaultUnit);
             this.defaultUnitList = defaultUnitList;
         }
 
+        private CategoryBuilder(ProductCategory productCategory,
+                                List<MeasureUnit> defaultMainUnitList,
+                                List<MeasureUnit> defaultUnitList) {
+            this.productCategory = productCategory;
+            this.defaultMainUnitList = new LinkedList<>(defaultMainUnitList);
+            this.defaultUnitList = new LinkedList<>(defaultUnitList);
+        }
+
         public CategoryBuilder add(String name) {
-            add(name, defaultUnit, defaultUnitList, new HashMap<>());
+            add(name, defaultMainUnitList, defaultUnitList, new HashMap<>());
             return this;
         }
 
@@ -1995,7 +2021,7 @@ public class FillProductDatabaseProvider {
         }
 
         public CategoryBuilder add(String name, Map<MeasureUnit, Double> map) {
-            add(name, defaultUnit, defaultUnitList, map);
+            add(name, defaultMainUnitList, defaultUnitList, map);
             return this;
         }
 
@@ -2003,7 +2029,7 @@ public class FillProductDatabaseProvider {
         public CategoryBuilder add(String name,
                                    List<MeasureUnit> measureUnitList,
                                    Map<MeasureUnit, Double> map) {
-            add(name, defaultUnit, measureUnitList, map);
+            add(name, defaultMainUnitList, measureUnitList, map);
             return this;
         }
 
@@ -2025,7 +2051,7 @@ public class FillProductDatabaseProvider {
                                    MeasureUnit unit,
                                    List<MeasureUnit> measureUnitList,
                                    Map<MeasureUnit, Double> map) {
-            add(name, Arrays.asList(unit), measureUnitList, map);
+            add(name, Collections.singletonList(unit), measureUnitList, map);
             return this;
         }
 
