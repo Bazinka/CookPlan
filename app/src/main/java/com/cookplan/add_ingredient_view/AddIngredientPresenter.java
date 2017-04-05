@@ -17,6 +17,4 @@ public interface AddIngredientPresenter {
     public void getAsyncProductList();
 
     public void saveIngredient(Product product, double amount, MeasureUnit measureUnit);
-
-    public void addNewMeasureinfo(Product product, MeasureUnit unit, double amount);
 }

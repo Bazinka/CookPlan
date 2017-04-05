@@ -16,7 +16,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -68,41 +67,26 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                 lastInputAmount = amount;
                 saveProduct(product, newMeasureUnit);
             } else {
-                //update product measure map
-                boolean needToUpdate = true;
-                for (Map.Entry<MeasureUnit, Double> entry : product.getMeasureUnitToAmoutMap().entrySet()) {
-                    if (entry.getKey() == newMeasureUnit) {
-                        needToUpdate = false;
-                    }
-                }
-                if (newMeasureUnit == product.getMainMeasureUnit()) {
-                    needToUpdate = false;
-                }
-                if (needToUpdate && mainView != null) {
-                    lastInputAmount = amount;
-                    mainView.needMoreDataAboutProduct(product, newMeasureUnit);
-                } else {
-                    //save ingredient
-                    Ingredient ingredient = new Ingredient(null,
-                                                           product.getName(),
-                                                           product,
-                                                           recipe != null ? recipe.getId() : null,
-                                                           newMeasureUnit,
-                                                           amount,
-                                                           isNeedToBuy ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
-                    DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-                    ingredRef.push().setValue(ingredient, (databaseError, reference) -> {
-                        if (databaseError != null) {
-                            if (mainView != null) {
-                                mainView.setErrorToast(databaseError.getMessage());
-                            }
-                        } else {
-                            if (mainView != null) {
-                                mainView.setSuccessSaveIngredient();
-                            }
+                //save ingredient
+                Ingredient ingredient = new Ingredient(null,
+                                                       product.getName(),
+                                                       product,
+                                                       recipe != null ? recipe.getId() : null,
+                                                       newMeasureUnit,
+                                                       amount,
+                                                       isNeedToBuy ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
+                DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+                ingredRef.push().setValue(ingredient, (databaseError, reference) -> {
+                    if (databaseError != null) {
+                        if (mainView != null) {
+                            mainView.setErrorToast(databaseError.getMessage());
                         }
-                    });
-                }
+                    } else {
+                        if (mainView != null) {
+                            mainView.setSuccessSaveIngredient();
+                        }
+                    }
+                });
             }
         } else {
             if (mainView != null) {
@@ -113,15 +97,6 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
 
     public void saveIngredient(Product product, MeasureUnit newMeasureUnit) {
         saveIngredient(product, lastInputAmount, newMeasureUnit);
-    }
-
-    @Override
-    public void addNewMeasureinfo(Product product, MeasureUnit unit, double amount) {
-        product.setItemToMap(unit, amount);
-        DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-        productRef.child(product.getId()).child(DatabaseConstants.DATABASE_MEASURE_MAP_FIELD)
-                .setValue(product.getMeasureStringToAmoutMap());
-        saveIngredient(product, unit);
     }
 
     private void saveProduct(Product product, MeasureUnit newMeasureUnit) {

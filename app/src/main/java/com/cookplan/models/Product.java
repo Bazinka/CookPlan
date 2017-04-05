@@ -4,6 +4,7 @@ import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DataSnapshot;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,10 @@ public class Product implements Serializable {
         this.category = category;
     }
 
+    public List<MeasureUnit> getMeasureUnitList() {
+        return measureUnitList;
+    }
+
     public static Product parseProductFromDB(DataSnapshot dataSnapshot) {
         Product product = new Product();
         product.id = dataSnapshot.getKey();
@@ -112,6 +117,15 @@ public class Product implements Serializable {
             if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_FIELD)) {
                 product.mainMeasureUnit = MeasureUnit.valueOf((String) child.getValue());
             }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_UNIT_LIST_FIELD)) {
+                product.measureUnitList = new ArrayList<>();
+                for (DataSnapshot childUnit : child.getChildren()) {
+                    if (childUnit.getValue() instanceof String) {
+                        product.measureUnitList.add(MeasureUnit.valueOf((String) childUnit.getValue()));
+                    }
+                }
+            }
+
         }
         return product;
     }

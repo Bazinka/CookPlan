@@ -19,7 +19,5 @@ public interface AddIngredientView {
 
     void setSuccessSaveIngredient();
 
-    void needMoreDataAboutProduct(Product product, MeasureUnit unit);
-
     boolean isAddedToActivity();
 }

@@ -13,6 +13,7 @@ import com.cookplan.R;
 import com.cookplan.models.MeasureUnit;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +27,12 @@ public class MeasureUnitsSpinnerAdapter extends ArrayAdapter<MeasureUnit> implem
     public MeasureUnitsSpinnerAdapter(Context context, List<MeasureUnit> itemsAll, List<MeasureUnit> selectedItems) {
         super(context, R.layout.measure_spinner_item_layout, itemsAll);
         this.selectedItems = selectedItems != null ? selectedItems : new ArrayList<>();
+        this.itemsAll = itemsAll;
+    }
+
+    public MeasureUnitsSpinnerAdapter(Context context, List<MeasureUnit> itemsAll, MeasureUnit selectedItem) {
+        super(context, R.layout.measure_spinner_item_layout, itemsAll);
+        this.selectedItems = selectedItem != null ? Collections.singletonList(selectedItem) : new ArrayList<>();
         this.itemsAll = itemsAll;
     }
 
