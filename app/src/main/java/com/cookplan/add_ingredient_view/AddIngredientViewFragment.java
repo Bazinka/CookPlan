@@ -1,6 +1,7 @@
 package com.cookplan.add_ingredient_view;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -19,7 +20,6 @@ import android.widget.Toast;
 import com.cookplan.R;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
-import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
 
 import java.util.ArrayList;
@@ -108,7 +108,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         ImageButton saveProductButton = (ImageButton) mainView.findViewById(R.id.save_product_image_button);
         saveProductButton.setOnClickListener(view -> {
             EditText unitAmoutEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
-            if (unitAmoutEditText != null) {
+            if (checkProductField() && unitAmoutEditText != null) {
                 String text = unitAmoutEditText.getText().toString();
                 if (!text.isEmpty()) {
                     saveInrgedient(text);
@@ -124,15 +124,24 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         return mainView;
     }
 
-    void saveInrgedient(String amount) {
-        Spinner spinner = (Spinner) mainView.findViewById(R.id.measure_list_spinner);
-        MeasureUnit measureUnit = (MeasureUnit) spinner.getSelectedItem();
+    private boolean checkProductField() {
+        TextInputLayout productLayout = (TextInputLayout) mainView.findViewById(R.id.product_name_edit_layout);
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
         String name = unitNameEditText.getText().toString();
         Product selectedProduct = (Product) unitNameEditText.getTag();
-//        if (selectedProduct == null || !name.equals(selectedProduct.getName())) {
-//            selectedProduct = new Product(measureUnit, name, ProductCategory.WITHOUT_CATEGORY);
-//        }
+        if (selectedProduct == null || !name.equals(selectedProduct.getName())) {
+            productLayout.setError(getString(R.string.product_required_field));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    void saveInrgedient(String amount) {
+        Spinner spinner = (Spinner) mainView.findViewById(R.id.measure_list_spinner);
+        AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
+        String name = unitNameEditText.getText().toString();
+        Product selectedProduct = (Product) unitNameEditText.getTag();
         if (!name.isEmpty() && presenter != null) {
             progressBar.setVisibility(View.VISIBLE);
             presenter.saveIngredient(selectedProduct,

@@ -108,5 +108,6 @@
     <string name="equal_sign">=</string>
     <string name="nothing_wont_be_saved">Иначе ничего не будет сохранено :(</string>
     <string name="i_dont_know">Я не знаю</string>
+    <string name="product_required_field">Необходимо выбрать продукт из списка</string>
 
 </resources>
