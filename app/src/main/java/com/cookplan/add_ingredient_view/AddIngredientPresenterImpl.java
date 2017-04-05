@@ -1,6 +1,5 @@
 package com.cookplan.add_ingredient_view;
 
-import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
@@ -63,72 +62,37 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
     @Override
     public void saveIngredient(Product product, double amount, MeasureUnit newMeasureUnit) {
         if (product != null) {
-            if (product.getId() == null) {
-                lastInputAmount = amount;
-                saveProduct(product, newMeasureUnit);
-            } else {
-                //save ingredient
-                Ingredient ingredient = new Ingredient(null,
-                                                       product.getName(),
-                                                       product,
-                                                       recipe != null ? recipe.getId() : null,
-                                                       newMeasureUnit,
-                                                       amount,
-                                                       isNeedToBuy ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
-                DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-                ingredRef.push().setValue(ingredient, (databaseError, reference) -> {
-                    if (databaseError != null) {
-                        if (mainView != null) {
-                            mainView.setErrorToast(databaseError.getMessage());
-                        }
-                    } else {
-                        if (mainView != null) {
-                            mainView.setSuccessSaveIngredient();
-                        }
-                    }
-                });
-            }
-        } else {
-            if (mainView != null) {
-                mainView.setErrorToast(R.string.unknown_product_error);
-            }
-        }
-    }
-
-    public void saveIngredient(Product product, MeasureUnit newMeasureUnit) {
-        saveIngredient(product, lastInputAmount, newMeasureUnit);
-    }
-
-    private void saveProduct(Product product, MeasureUnit newMeasureUnit) {
-        DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-        //check if we have already had a product with the same name
-        productRef.orderByChild(DatabaseConstants.DATABASE_NAME_FIELD).equalTo(product.getName())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getChildrenCount() > 0) {//we have the same product
-                            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                saveIngredient(Product.parseProductFromDB(child), newMeasureUnit);
+            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+            productRef.child(product.getId())
+                    .child(DatabaseConstants.DATABASE_PRODUCT_COUNT_USING_FIELD)
+                    .setValue(product.increasingCount(), (databaseError, reference) -> {
+                        if (databaseError != null) {
+                            if (mainView != null) {
+                                mainView.setErrorToast(databaseError.getMessage());
                             }
-                        } else {//we need to save new product
-                            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-                            productRef.push().setValue(product, (databaseError, reference) -> {
-                                if (databaseError != null) {
-                                    if (mainView != null) {
-                                        mainView.setErrorToast(databaseError.getMessage());
-                                    }
-                                } else {
-                                    saveIngredient(product, newMeasureUnit);
-                                }
-                            });
                         }
+                    });
+            //save ingredient
+            Ingredient ingredient = new Ingredient(null,
+                                                   product.getName(),
+                                                   product,
+                                                   recipe != null ? recipe.getId() : null,
+                                                   newMeasureUnit,
+                                                   amount,
+                                                   isNeedToBuy ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
+            DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+            ingredRef.push().setValue(ingredient, (databaseError, reference) -> {
+                if (databaseError != null) {
+                    if (mainView != null) {
+                        mainView.setErrorToast(databaseError.getMessage());
                     }
-
-                    public void onCancelled(DatabaseError databaseError) {
-                        if (mainView != null) {
-                            mainView.setErrorToast(databaseError.getMessage());
-                        }
+                } else {
+                    if (mainView != null) {
+                        mainView.setSuccessSaveIngredient();
                     }
-                });
+                }
+            });
+        }
     }
 
     @Override

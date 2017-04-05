@@ -30,27 +30,28 @@ public class ProductListPresenterImpl implements ProductListPresenter {
     @Override
     public void getProductList() {
         Query items = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-        items.addValueEventListener(new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Product> productList = new ArrayList<>();
-                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    Product product = Product.parseProductFromDB(itemSnapshot);
-                    productList.add(product);
-                }
-                if (mainView != null) {
-                    if (productList.size() != 0) {
-                        mainView.setProductList(productList);
-                    } else {
-                        mainView.setEmptyView();
+        items.orderByChild(DatabaseConstants.DATABASE_PRODUCT_COUNT_USING_FIELD)
+                .addValueEventListener(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<Product> productList = new ArrayList<>();
+                        for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                            Product product = Product.parseProductFromDB(itemSnapshot);
+                            productList.add(product);
+                        }
+                        if (mainView != null) {
+                            if (productList.size() != 0) {
+                                mainView.setProductList(productList);
+                            } else {
+                                mainView.setEmptyView();
+                            }
+                        }
                     }
-                }
-            }
 
-            public void onCancelled(DatabaseError databaseError) {
-                if (mainView != null) {
-                    mainView.setErrorToast(databaseError.getMessage());
-                }
-            }
-        });
+                    public void onCancelled(DatabaseError databaseError) {
+                        if (mainView != null) {
+                            mainView.setErrorToast(databaseError.getMessage());
+                        }
+                    }
+                });
     }
 }

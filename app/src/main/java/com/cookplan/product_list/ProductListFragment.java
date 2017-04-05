@@ -61,13 +61,17 @@ public class ProductListFragment extends BaseFragment implements ProductListView
 
         // Set the adapter
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.product_list_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
+
         adapter = new ProductListRecyclerAdapter(new ArrayList<>(), recipe -> {
             Activity activity = getActivity();
             if (activity instanceof BaseActivity) {
-//                Intent intent = new Intent(activity, RecipeViewActivity.class);
-//                intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
-//                ((BaseActivity) activity).startActivityWithLeftAnimation(intent);
+                //                Intent intent = new Intent(activity, RecipeViewActivity.class);
+                //                intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
+                //                ((BaseActivity) activity).startActivityWithLeftAnimation(intent);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -80,7 +84,7 @@ public class ProductListFragment extends BaseFragment implements ProductListView
                     .setPositiveButton("База данных", (dialog, which) -> FillProductDatabaseProvider.fillDatabase())
                     .setNegativeButton("Новый продукт", null)
                     .show();
-//            startNewRecipeActivity();
+            //            startNewRecipeActivity();
         });
 
 

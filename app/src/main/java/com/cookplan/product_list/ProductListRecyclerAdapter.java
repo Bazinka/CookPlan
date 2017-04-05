@@ -16,9 +16,9 @@ import java.util.List;
 public class ProductListRecyclerAdapter extends RecyclerView.Adapter<ProductListRecyclerAdapter.ViewHolder> {
 
     private final List<Product> mValues;
-    private ProductListClickListener listener;
+    private ProductListEventListener listener;
 
-    public ProductListRecyclerAdapter(List<Product> items, ProductListClickListener listener) {
+    public ProductListRecyclerAdapter(List<Product> items, ProductListEventListener listener) {
         mValues = items;
         this.listener = listener;
     }
@@ -48,7 +48,7 @@ public class ProductListRecyclerAdapter extends RecyclerView.Adapter<ProductList
             holder.categoryColorView.setVisibility(View.VISIBLE);
             holder.categoryNameView.setText(product.getCategory().toString());
             int color = ContextCompat.getColor(RApplication.getAppContext(),
-                    product.getCategory().getColorId());
+                                               product.getCategory().getColorId());
             holder.categoryNameView.setTextColor(color);
             holder.categoryColorView.setBackgroundResource(product.getCategory().getColorId());
         } else {
@@ -88,7 +88,7 @@ public class ProductListRecyclerAdapter extends RecyclerView.Adapter<ProductList
         }
     }
 
-    public interface ProductListClickListener {
+    public interface ProductListEventListener {
         public void onProductClick(Product product);
     }
 }

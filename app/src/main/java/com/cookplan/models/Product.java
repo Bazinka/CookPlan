@@ -20,6 +20,7 @@ public class Product implements Serializable {
     public List<MeasureUnit> measureUnitList; //list of units in which product can be measured.
     public MeasureUnit mainMeasureUnit;
     public String name;
+    public int countUsing;
     public ProductCategory category;
 
     private Product() {
@@ -32,6 +33,7 @@ public class Product implements Serializable {
         this.name = name;
         this.mainMeasureUnit = measureUnit;
         this.measureUnitList = measureUnitList;
+        countUsing = 0;
     }
 
     public void fillTheMap(Map<MeasureUnit, Double> unitToAmoutMap) {
@@ -43,6 +45,10 @@ public class Product implements Serializable {
         }
     }
 
+    public int increasingCount() {
+        countUsing = countUsing + 1;
+        return countUsing;
+    }
 
     public String getId() {
         return id;
@@ -125,7 +131,9 @@ public class Product implements Serializable {
                     }
                 }
             }
-
+            if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_COUNT_USING_FIELD)) {
+                product.countUsing = ((Long) child.getValue()).intValue();
+            }
         }
         return product;
     }

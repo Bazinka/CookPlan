@@ -17,6 +17,7 @@ public class DatabaseConstants {
     public static final String DATABASE_MEASURE_MAP_FIELD = "measureUnitToAmoutMap";
     public static final String DATABASE_MEASURE_UNIT_LIST_FIELD = "measureUnitList";
     public static final String DATABASE_MAIN_MEASURE_UNIT_FIELD = "mainMeasureUnit";
+    public static final String DATABASE_PRODUCT_COUNT_USING_FIELD = "countUsing";
     public static final String DATABASE_DESCRIPTION_FIELD = "desc";
 
     public static final String DATABASE_RECIPE_ID_FIELD = "recipeId";
