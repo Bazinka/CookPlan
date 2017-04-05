@@ -2025,7 +2025,17 @@ public class FillProductDatabaseProvider {
                                    MeasureUnit unit,
                                    List<MeasureUnit> measureUnitList,
                                    Map<MeasureUnit, Double> map) {
-            Product product = new Product(productCategory, name, unit, measureUnitList);
+            add(name, Arrays.asList(unit), measureUnitList, map);
+            return this;
+        }
+
+        public CategoryBuilder add(String name,
+                                   List<MeasureUnit> mainUnits,
+                                   List<MeasureUnit> measureUnitList,
+                                   Map<MeasureUnit, Double> map) {
+            Product product = new Product(productCategory, name,
+                                          mainUnits,
+                                          measureUnitList);
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
             DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
             productRef.push().setValue(product, (databaseError, databaseReference) -> {

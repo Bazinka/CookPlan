@@ -81,58 +81,113 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
         String productName = entry.getKey();
         List<Ingredient> ingredients = entry.getValue();
         if (!ingredients.isEmpty()) {
-            Map<MeasureUnit, Double> map = new HashMap<>();
+            Map<MeasureUnit, Double> shopMap = new HashMap<>();
+            Map<MeasureUnit, Double> restMap = new HashMap<>();
             for (Ingredient ingredient : ingredients) {
                 if (ingredient.getShopListStatus() == status) {
                     double localAmount;
-                    MeasureUnit unit = ingredient.getMainMeasureUnit();
-                    double amount = ingredient.getMainAmount();
-                    if (ingredient.getShopListAmount() > 1e-8 && ingredient.getShopListMeasureUnit() != null) {
-                        unit = ingredient.getShopListMeasureUnit();
-                        amount = ingredient.getShopListAmount();
+                    MeasureUnit unit = null;
+                    double amount = -1.;
+                    for (Map.Entry<MeasureUnit, Double> entryShop : ingredient.getShopListAmountMap().entrySet()) {
+                        if (entryShop.getValue() > 1e-8) {
+                            unit = entryShop.getKey();
+                            amount = entryShop.getValue();
+                            if (restMap.containsKey(unit)) {
+                                localAmount = restMap.get(unit) + amount;
+                            } else {
+                                localAmount = amount;
+                            }
+                            shopMap.put(unit, localAmount);
+                        }
                     }
-                    if (map.containsKey(unit)) {
-                        localAmount = map.get(unit) + amount;
-                    } else {
-                        localAmount = amount;
-                    }
-                    map.put(unit, localAmount);
-                }
-            }
-            if (map.isEmpty()) {
-                return null;
-            }
 
-            Double amount = 0.;
-            String didntCalculated = "";
-            MeasureUnit unit = null;
-            for (Map.Entry<MeasureUnit, Double> measureEntry : map.entrySet()) {
-                if (measureEntry.getValue() > 1e-8) {
-                    double multiplier;
-                    if (unit == null) {
-                        unit = measureEntry.getKey();
-                        multiplier = 1;
-                    } else {
-                        multiplier = MeasureUnit.getMultiplier(measureEntry.getKey(), unit);
-                    }
-                    if (multiplier < 1e-8) {
-                        String string = measureEntry.getKey().toValueString(measureEntry.getValue());
-                        didntCalculated = didntCalculated.isEmpty() ? string : " + " + string;
-                    } else {
-                        amount = amount + multiplier * measureEntry.getValue();
+                    if (amount < 1e-8 && unit == null) {
+                        unit = ingredient.getMainMeasureUnit();
+                        amount = ingredient.getMainAmount();
+                        if (restMap.containsKey(unit)) {
+                            localAmount = restMap.get(unit) + amount;
+                        } else {
+                            localAmount = amount;
+                        }
+                        restMap.put(unit, localAmount);
                     }
                 }
             }
 
-            didntCalculated = didntCalculated.isEmpty() ? didntCalculated : " + " + didntCalculated;
-            String amountString = null;
-            if (amount > 1e-8) {
-                amountString = String.valueOf(amount) + " " + unit.toString() + didntCalculated;
+            String shopAmountString = "";
+            for (Map.Entry<MeasureUnit, Double> shopEntry : shopMap.entrySet()) {
+                String string = shopEntry.getKey().toValueString(shopEntry.getValue());
+                if (shopAmountString.isEmpty()) {
+                    shopAmountString = string;
+                } else {
+                    shopAmountString = shopAmountString + " (" + string + ")";
+                }
             }
-            return new Ingredient(productName, amountString, status);
+            String restAmountString = "";
+            for (Map.Entry<MeasureUnit, Double> measureEntry : restMap.entrySet()) {
+                String string = measureEntry.getKey().toValueString(measureEntry.getValue());
+                restAmountString = restAmountString.isEmpty() ? string : restAmountString + " + " + string;
+            }
+            shopAmountString = shopAmountString + restAmountString;
+            return new Ingredient(productName, shopAmountString, status);
         } else {
             return null;
         }
+
+
+        //        if (!ingredients.isEmpty()) {
+        //            Map<MeasureUnit, Double> map = new HashMap<>();
+        //            for (Ingredient ingredient : ingredients) {
+        //                if (ingredient.getShopListStatus() == status) {
+        //                    double localAmount;
+        //                    MeasureUnit unit = ingredient.getMainMeasureUnit();
+        //                    double amount = ingredient.getMainAmount();
+        //                    if (ingredient.getShopListAmount() > 1e-8 && ingredient.getShopListMeasureUnit() != null) {
+        //                        unit = ingredient.getShopListMeasureUnit();
+        //                        amount = ingredient.getShopListAmount();
+        //                    }
+        //                    if (map.containsKey(ingredient.getShopListMeasureUnit())) {
+        //                        localAmount = map.get(ingredient.getShopListMeasureUnit()) + ingredient.getShopListAmount();
+        //                    } else {
+        //                        localAmount = ingredient.getShopListAmount();
+        //                    }
+        //                    map.put(ingredient.getShopListMeasureUnit(), localAmount);
+        //                }
+        //            }
+        //            if (map.isEmpty()) {
+        //                return null;
+        //            }
+        //
+        //            Double amount = 0.;
+        //            String didntCalculated = "";
+        //            MeasureUnit unit = null;
+        //            for (Map.Entry<MeasureUnit, Double> measureEntry : map.entrySet()) {
+        //                if (measureEntry.getValue() > 1e-8) {
+        //                    double multiplier;
+        //                    if (unit == null) {
+        //                        unit = measureEntry.getKey();
+        //                        multiplier = 1;
+        //                    } else {
+        //                        multiplier = MeasureUnit.getMultiplier(measureEntry.getKey(), unit);
+        //                    }
+        //                    if (multiplier < 1e-8) {
+        //                        String string = measureEntry.getKey().toValueString(measureEntry.getValue());
+        //                        didntCalculated = didntCalculated.isEmpty() ? string : " + " + string;
+        //                    } else {
+        //                        amount = amount + multiplier * measureEntry.getValue();
+        //                    }
+        //                }
+        //            }
+        //
+        //            didntCalculated = didntCalculated.isEmpty() ? didntCalculated : " + " + didntCalculated;
+        //            String amountString = null;
+        //            if (amount > 1e-8) {
+        //                amountString = String.valueOf(amount) + " " + unit.toString() + didntCalculated;
+        //            }
+        //            return new Ingredient(productName, amountString, status);
+        //        } else {
+        //            return null;
+        //        }
     }
 
 

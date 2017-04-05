@@ -204,7 +204,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
                 measureUnits.addAll(selectedProduct.getMeasureUnitList());
                 MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),
                                                                                     measureUnits,
-                                                                                    selectedProduct.getMainMeasureUnit());
+                                                                                    selectedProduct.getMainMeasureUnitList());
                 spinner.setAdapter(adapter);
                 spinner.setSelection(0);
             }

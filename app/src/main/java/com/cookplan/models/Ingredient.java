@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by DariaEfimova on 18.03.17.
@@ -19,10 +21,10 @@ public class Ingredient implements Serializable {
     public String recipeId;
     public MeasureUnit mainMeasureUnit;
     public Double mainAmount;
-    public MeasureUnit shopListMeasureUnit;
-    public Double shopListAmount;
+    public Map<MeasureUnit, Double> shopListAmountMap;
     public String amountString;
     public ShopListStatus shopListStatus;
+    private Product productObject;
 
     public Ingredient() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -34,25 +36,25 @@ public class Ingredient implements Serializable {
         this();
         this.id = id;
         this.name = name;
+        shopListAmountMap = new HashMap<>();
         if (product != null) {
             this.productId = product.getId();
-            shopListMeasureUnit = product.getMainMeasureUnit();
+            double shopListAmount = -1.;
+            for (MeasureUnit unit : product.getMainMeasureUnitList()) {
+                double multiplier = MeasureUnit.getMultiplier(localMeasureUnit, unit);
+                if (product.getMeasureUnitToAmoutMap() != null &&
+                        product.getMeasureUnitToAmoutMap().containsKey(localMeasureUnit)) {
+                    multiplier = 1 / product.getMeasureUnitToAmoutMap().get(localMeasureUnit);
+                }
+                if (multiplier > 1e-8) {
+                    shopListAmount = multiplier * mainAmount;
+                }
+                shopListAmountMap.put(unit, shopListAmount);
+            }
         }
         this.recipeId = recipeId;
         this.mainMeasureUnit = localMeasureUnit;
         this.mainAmount = mainAmount;
-        shopListAmount = -1.;
-        if (shopListMeasureUnit != null) {
-            double multiplier = MeasureUnit.getMultiplier(localMeasureUnit, shopListMeasureUnit);
-            if (product != null &&
-                    product.getMeasureUnitToAmoutMap() != null &&
-                    product.getMeasureUnitToAmoutMap().containsKey(localMeasureUnit)) {
-                multiplier = 1 / product.getMeasureUnitToAmoutMap().get(localMeasureUnit);
-            }
-            if (multiplier > 1e-8) {
-                shopListAmount = multiplier * mainAmount;
-            }
-        }
         this.shopListStatus = shopListStatus;
     }
 
@@ -91,13 +93,17 @@ public class Ingredient implements Serializable {
         return mainAmount;
     }
 
-    public MeasureUnit getShopListMeasureUnit() {
-        return shopListMeasureUnit;
+    //    public MeasureUnit getShopListMeasureUnit() {
+    //        return shopListMeasureUnit;
+    //    }
+
+    public Map<MeasureUnit, Double> getShopListAmountMap() {
+        return shopListAmountMap;
     }
 
-    public Double getShopListAmount() {
-        return shopListAmount;
-    }
+    //    public Double getShopListAmount() {
+    //        return shopListAmount;
+    //    }
 
     public String getName() {
         return name;
@@ -123,11 +129,8 @@ public class Ingredient implements Serializable {
             if (child.getKey().equals(DatabaseConstants.DATABASE_INRGEDIENT_RECIPE_ID_FIELD)) {
                 ingredient.recipeId = child.getValue().toString();
             }
-            if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_FIELD)) {
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_LIST_FIELD)) {
                 ingredient.mainMeasureUnit = MeasureUnit.valueOf((String) child.getValue());
-            }
-            if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_MEASURE_UNIT_FIELD)) {
-                ingredient.shopListMeasureUnit = MeasureUnit.valueOf((String) child.getValue());
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_AMOUNT_FIELD)) {
                 if (child.getValue() instanceof Double) {
@@ -136,11 +139,16 @@ public class Ingredient implements Serializable {
                     ingredient.mainAmount = ((Long) child.getValue()).doubleValue();
                 }
             }
-            if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_AMOUNT_FIELD)) {
-                if (child.getValue() instanceof Double) {
-                    ingredient.shopListAmount = (Double) child.getValue();
-                } else {
-                    ingredient.shopListAmount = ((Long) child.getValue()).doubleValue();
+            if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_AMOUNT_MAP_FIELD)) {
+                ingredient.shopListAmountMap = new HashMap<>();
+                for (DataSnapshot childUnit : child.getChildren()) {
+                    double value;
+                    if (childUnit.getValue() instanceof Long) {
+                        value = ((Long) childUnit.getValue()).doubleValue();
+                    } else {
+                        value = (Double) childUnit.getValue();
+                    }
+                    ingredient.shopListAmountMap.put(MeasureUnit.valueOf(childUnit.getKey()), value);
                 }
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)) {
@@ -160,5 +168,13 @@ public class Ingredient implements Serializable {
 
     public String getAmountString() {
         return amountString;
+    }
+
+    public Product getProductObject() {
+        return productObject;
+    }
+
+    public void setProductObject(Product productObject) {
+        this.productObject = productObject;
     }
 }

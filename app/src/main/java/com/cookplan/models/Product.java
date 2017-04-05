@@ -18,7 +18,7 @@ public class Product implements Serializable {
     public String id;
     public Map<String, Double> measureUnitToAmoutMap;//map from measureUnitList to amount
     public List<MeasureUnit> measureUnitList; //list of units in which product can be measured.
-    public MeasureUnit mainMeasureUnit;
+    public List<MeasureUnit> mainMeasureUnitList;
     public String name;
     public int countUsing;
     public ProductCategory category;
@@ -27,11 +27,11 @@ public class Product implements Serializable {
     }
 
     public Product(ProductCategory category, String name,
-                   MeasureUnit measureUnit, List<MeasureUnit> measureUnitList) {
+                   List<MeasureUnit> mainMeasureUnitList, List<MeasureUnit> measureUnitList) {
         this.category = category;
         measureUnitToAmoutMap = new HashMap<>();
         this.name = name;
-        this.mainMeasureUnit = measureUnit;
+        this.mainMeasureUnitList = mainMeasureUnitList;
         this.measureUnitList = measureUnitList;
         countUsing = 0;
     }
@@ -82,8 +82,8 @@ public class Product implements Serializable {
         return measureUnitToAmoutMap;
     }
 
-    public MeasureUnit getMainMeasureUnit() {
-        return mainMeasureUnit;
+    public List<MeasureUnit> getMainMeasureUnitList() {
+        return mainMeasureUnitList;
     }
 
     public ProductCategory getCategory() {
@@ -120,8 +120,13 @@ public class Product implements Serializable {
                     product.measureUnitToAmoutMap.put(childUnit.getKey(), value);
                 }
             }
-            if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_FIELD)) {
-                product.mainMeasureUnit = MeasureUnit.valueOf((String) child.getValue());
+            if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_LIST_FIELD)) {
+                product.mainMeasureUnitList = new ArrayList<>();
+                for (DataSnapshot childUnit : child.getChildren()) {
+                    if (childUnit.getValue() instanceof String) {
+                        product.mainMeasureUnitList.add(MeasureUnit.valueOf((String) childUnit.getValue()));
+                    }
+                }
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_UNIT_LIST_FIELD)) {
                 product.measureUnitList = new ArrayList<>();

@@ -69,9 +69,6 @@ public class ProductListFragment extends BaseFragment implements ProductListView
         adapter = new ProductListRecyclerAdapter(new ArrayList<>(), recipe -> {
             Activity activity = getActivity();
             if (activity instanceof BaseActivity) {
-                //                Intent intent = new Intent(activity, RecipeViewActivity.class);
-                //                intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
-                //                ((BaseActivity) activity).startActivityWithLeftAnimation(intent);
             }
         });
         recyclerView.setAdapter(adapter);
