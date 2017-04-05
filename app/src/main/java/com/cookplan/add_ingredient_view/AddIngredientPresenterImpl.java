@@ -117,7 +117,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
 
     @Override
     public void addNewMeasureinfo(Product product, MeasureUnit unit, double amount) {
-        product.getMeasureUnitToAmoutMap().put(unit, amount);
+        product.setItemToMap(unit, amount);
         DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
         productRef.child(product.getId()).child(DatabaseConstants.DATABASE_MEASURE_MAP_FIELD)
                 .setValue(product.getMeasureStringToAmoutMap());

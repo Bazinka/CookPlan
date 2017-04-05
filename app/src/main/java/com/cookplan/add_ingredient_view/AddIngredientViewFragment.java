@@ -130,9 +130,9 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
         String name = unitNameEditText.getText().toString();
         Product selectedProduct = (Product) unitNameEditText.getTag();
-        if (selectedProduct == null || !name.equals(selectedProduct.getName())) {
-            selectedProduct = new Product(measureUnit, name, ProductCategory.WITHOUT_CATEGORY);
-        }
+//        if (selectedProduct == null || !name.equals(selectedProduct.getName())) {
+//            selectedProduct = new Product(measureUnit, name, ProductCategory.WITHOUT_CATEGORY);
+//        }
         if (!name.isEmpty() && presenter != null) {
             progressBar.setVisibility(View.VISIBLE);
             presenter.saveIngredient(selectedProduct,
