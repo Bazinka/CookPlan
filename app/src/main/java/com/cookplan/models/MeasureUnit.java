@@ -3,6 +3,8 @@ package com.cookplan.models;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 
+import java.util.Locale;
+
 /**
  * Created by DariaEfimova on 20.03.17.
  */
@@ -35,8 +37,37 @@ public enum MeasureUnit {
     }
 
     public String toValueString(double value) {
-        String valueString = isItIntValue() ? String.valueOf((int) value) : String.valueOf(value);
-        return valueString + " " + toString();
+        String valueString;
+        if (this == KILOGRAMM && value < 1.) {
+            valueString = getIntOrDoubleValueString(value * 1000);
+            return valueString + " " + GRAMM.toString();
+        } else if (this == GRAMM && value > 1000.) {
+            valueString = getIntOrDoubleValueString(value / 1000);
+            return valueString + " " + KILOGRAMM.toString();
+        } else if (this == LITRE && value < 1.) {
+            valueString = getIntOrDoubleValueString(value * 1000);
+            return valueString + " " + MILILITRE.toString();
+        } else if (this == MILILITRE && value > 1000.) {
+            valueString = getIntOrDoubleValueString(value / 1000);
+            return valueString + " " + LITRE.toString();
+        } else {
+            valueString = getIntOrDoubleValueString(value);
+            return valueString + " " + toString();
+        }
+    }
+
+    private String getIntOrDoubleValueString(double value) {
+        String valueString;
+        if (isItIntValue()) {
+            valueString = String.valueOf((int) value);
+        } else {
+            if (value > 10.) {
+                valueString = String.format(Locale.getDefault(), "%.0f", value);
+            } else {
+                valueString = String.format(Locale.getDefault(), "%.2f", value);
+            }
+        }
+        return valueString;
     }
 
     public int getId() {
