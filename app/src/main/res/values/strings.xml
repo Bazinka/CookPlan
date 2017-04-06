@@ -110,5 +110,6 @@
     <string name="i_dont_know">Я не знаю</string>
     <string name="product_required_field">Необходимо выбрать продукт из списка</string>
     <string name="by_the_taste">по вкусу</string>
+    <string name="done_menu_title">Done</string>
 
 </resources>

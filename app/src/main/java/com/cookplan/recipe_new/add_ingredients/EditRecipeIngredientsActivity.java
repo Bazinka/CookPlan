@@ -59,7 +59,7 @@ public class EditRecipeIngredientsActivity extends BaseActivity implements EditR
 
     @Override
     public boolean onCreateOptionsMenu(Menu _menu) {
-        getMenuInflater().inflate(R.menu.add_recipe_next_menu, _menu);
+        getMenuInflater().inflate(R.menu.edit_recipe_done_menu, _menu);
         return true;
     }
 

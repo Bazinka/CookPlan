@@ -11,12 +11,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -53,12 +53,28 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
         setTitle("");//getString(R.string.add_recipe_first_screen_title)
 
         recipe = (Recipe) getIntent().getSerializableExtra(RECIPE_OBJECT_KEY);
+        EditText recipeNameEditText = (EditText) findViewById(R.id.recipe_name_edit_text);
+        if (recipeNameEditText != null) {
+            recipeNameEditText.requestFocus();
+        }
+        EditText recipeDescEditText = (EditText) findViewById(R.id.recipe_process_edit_text);
+        if (recipeDescEditText != null) {
+            recipeDescEditText.setOnTouchListener((v, event) -> {
+                if (v.getId() == R.id.recipe_process_edit_text) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_UP:
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
+                }
+                return false;
+            });
+        }
         if (recipe != null) {
-            EditText recipeNameEditText = (EditText) findViewById(R.id.recipe_name_edit_text);
             if (recipeNameEditText != null) {
                 recipeNameEditText.setText(recipe.getName());
             }
-            EditText recipeDescEditText = (EditText) findViewById(R.id.recipe_process_edit_text);
             if (recipeDescEditText != null) {
                 recipeDescEditText.setText(recipe.getDesc());
             }
@@ -75,10 +91,10 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
                             startCameraActivity();
                         })
                         .setNegativeButton(R.string.russian_lan_title,
-                                (dialog, which) -> {
-                                    language = "rus";
-                                    startCameraActivity();
-                                })
+                                           (dialog, which) -> {
+                                               language = "rus";
+                                               startCameraActivity();
+                                           })
                         .show();
 
             });
@@ -88,6 +104,33 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
             if (!PermissionUtils.isPermissionsGranted(this, permission)) {
                 PermissionUtils.requestPermissions(this, RC_IMAGE_PERMS, permission);
                 return;
+            }
+        }
+
+        FloatingActionButton nextFab = (FloatingActionButton) findViewById(R.id.recipe_view_fab);
+        if (nextFab != null) {
+            nextFab.setOnClickListener(v -> {
+                onNextButtonClick();
+            });
+        }
+    }
+
+    private void onNextButtonClick() {
+        EditText recipeNameEditText = (EditText) findViewById(R.id.recipe_name_edit_text);
+        EditText recipeDescEditText = (EditText) findViewById(R.id.recipe_process_edit_text);
+        if (recipeNameEditText != null && recipeDescEditText != null) {
+            String name = recipeNameEditText.getText().toString();
+            String desc = recipeDescEditText.getText().toString();
+            desc = desc.isEmpty() ? getString(R.string.recipe_desc_is_not_needed_title) : desc;
+            if (!name.isEmpty()) {
+                if (presenter != null) {
+                    presenter.saveRecipe(recipe, name, desc);
+                }
+            } else {
+                TextInputLayout recipeEditLayout = (TextInputLayout) findViewById(R.id.recipe_name_edit_layout);
+                if (recipeEditLayout != null) {
+                    recipeEditLayout.setError(getString(R.string.error_required_field));
+                }
             }
         }
     }
@@ -125,7 +168,7 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
                 && language != null) {
             if (mProgressDialog == null) {
                 mProgressDialog = ProgressDialog.show(this, getString(R.string.processing_title),
-                        getString(R.string.processing_ocr_message), true);
+                                                      getString(R.string.processing_ocr_message), true);
             } else {
                 mProgressDialog.show();
             }
@@ -192,39 +235,6 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
                 mProgressDialog.dismiss();
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu _menu) {
-        getMenuInflater().inflate(R.menu.add_recipe_next_menu, _menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.app_bar_next) {
-            EditText recipeNameEditText = (EditText) findViewById(R.id.recipe_name_edit_text);
-            EditText recipeDescEditText = (EditText) findViewById(R.id.recipe_process_edit_text);
-            if (recipeNameEditText != null && recipeDescEditText != null) {
-                String name = recipeNameEditText.getText().toString();
-                String desc = recipeDescEditText.getText().toString();
-                desc = desc.isEmpty() ? getString(R.string.recipe_desc_is_not_needed_title) : desc;
-                if (!name.isEmpty()) {
-                    if (presenter != null) {
-                        presenter.saveRecipe(recipe, name, desc);
-                    }
-                } else {
-                    TextInputLayout recipeEditLayout = (TextInputLayout) findViewById(R.id.recipe_name_edit_layout);
-                    if (recipeEditLayout != null) {
-                        recipeEditLayout.setError(getString(R.string.error_required_field));
-                    }
-                }
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
