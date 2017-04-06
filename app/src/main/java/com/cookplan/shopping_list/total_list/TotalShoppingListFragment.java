@@ -24,7 +24,6 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
 
     private TotalShoppingListPresenter presenter;
     private TotalShopListRecyclerViewAdapter needToBuyAdapter;
-    private TotalShopListRecyclerViewAdapter alreadyBoughtAdapter;
     private ProgressBar progressBar;
 
     public TotalShoppingListFragment() {
@@ -60,21 +59,14 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
 
         needToBuyAdapter = new TotalShopListRecyclerViewAdapter(new ArrayList<>(), ingredient -> {
             if (presenter != null) {
-                presenter.changeShopListStatus(ingredient, ShopListStatus.ALREADY_BOUGHT);
+                if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
+                    presenter.changeShopListStatus(ingredient, ShopListStatus.ALREADY_BOUGHT);
+                } else if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
+                    presenter.changeShopListStatus(ingredient, ShopListStatus.NEED_TO_BUY);
+                }
             }
         });
         needToBuyRecyclerView.setAdapter(needToBuyAdapter);
-
-        RecyclerView alreadyBoughtRecyclerView = (RecyclerView) mainView.findViewById(R.id.total_bought_recycler);
-        alreadyBoughtRecyclerView.setHasFixedSize(true);
-        alreadyBoughtRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        alreadyBoughtAdapter = new TotalShopListRecyclerViewAdapter(new ArrayList<>(), ingredient -> {
-            if (presenter != null) {
-                presenter.changeShopListStatus(ingredient, ShopListStatus.NEED_TO_BUY);
-            }
-        });
-        alreadyBoughtRecyclerView.setAdapter(alreadyBoughtAdapter);
 
         AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance(true);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -114,29 +106,18 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
     }
 
     @Override
-    public void setIngredientLists(List<Ingredient> needToBuyIngredientList,
-                                   List<Ingredient> alreadyBoughtIngredientList) {
+    public void setIngredientLists(List<Ingredient> allIngredientList) {
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setContentVisability(View.VISIBLE);
         ViewGroup needToBuyLayout = (ViewGroup) mainView.findViewById(R.id.need_to_buy_layout);
-        if (!needToBuyIngredientList.isEmpty()) {
+        if (!allIngredientList.isEmpty()) {
             setLayoutVisability(needToBuyLayout, View.VISIBLE);
             if (needToBuyAdapter != null) {
-                needToBuyAdapter.update(needToBuyIngredientList);
+                needToBuyAdapter.update(allIngredientList);
             }
         } else {
             setLayoutVisability(needToBuyLayout, View.GONE);
-        }
-
-        ViewGroup alreadyBoughtLayout = (ViewGroup) mainView.findViewById(R.id.already_bought_layout);
-        if (!alreadyBoughtIngredientList.isEmpty()) {
-            setLayoutVisability(alreadyBoughtLayout, View.VISIBLE);
-            if (alreadyBoughtAdapter != null) {
-                alreadyBoughtAdapter.update(alreadyBoughtIngredientList);
-            }
-        } else {
-            setLayoutVisability(alreadyBoughtLayout, View.GONE);
         }
     }
 

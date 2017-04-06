@@ -66,11 +66,12 @@ public class Ingredient implements Serializable {
         }
     }
 
-    public Ingredient(String name, String amountString, ShopListStatus shopListStatus) {
+    public Ingredient(String name, String amountString, ShopListStatus shopListStatus, ProductCategory category) {
         this();
         this.name = name;
         this.amountString = amountString;
         this.shopListStatus = shopListStatus;
+        this.category = category;
     }
 
     public String getId() {

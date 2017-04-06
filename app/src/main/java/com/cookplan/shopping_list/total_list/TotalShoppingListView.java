@@ -11,6 +11,5 @@ import java.util.List;
 
 public interface TotalShoppingListView extends ShoppingListView {
 
-    void setIngredientLists(List<Ingredient> needToBuyIngredientList,
-                            List<Ingredient> alreadyBoughtIngredientList);
+    void setIngredientLists(List<Ingredient> AllIngredientsList);
 }

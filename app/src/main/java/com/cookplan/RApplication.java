@@ -50,14 +50,14 @@ public class RApplication extends Application {
     }
 
     public static void savePriorityList(List<ProductCategory> priorityOfCategories) {
-        SharedPreferences        settings;
+        SharedPreferences settings;
         SharedPreferences.Editor editor;
 
         settings = context.getSharedPreferences(PREFS_NAME,
-                Context.MODE_PRIVATE);
+                                                Context.MODE_PRIVATE);
         editor = settings.edit();
 
-        Gson   gson          = new Gson();
+        Gson gson = new Gson();
         String jsonFavorites = gson.toJson(priorityOfCategories);
 
         editor.putString(CATEGORY_PRIORITY_PREFS_NAME, jsonFavorites);
@@ -65,18 +65,18 @@ public class RApplication extends Application {
         editor.commit();
     }
 
-    public ArrayList<ProductCategory> getPriorityList() {
-        SharedPreferences     settings;
+    public static ArrayList<ProductCategory> getPriorityList() {
+        SharedPreferences settings;
         List<ProductCategory> priorityList;
 
         settings = context.getSharedPreferences(PREFS_NAME,
-                Context.MODE_PRIVATE);
+                                                Context.MODE_PRIVATE);
 
         if (settings.contains(CATEGORY_PRIORITY_PREFS_NAME)) {
             String json = settings.getString(CATEGORY_PRIORITY_PREFS_NAME, null);
-            Gson   gson = new Gson();
+            Gson gson = new Gson();
             ProductCategory[] items = gson.fromJson(json,
-                    ProductCategory[].class);
+                                                    ProductCategory[].class);
 
             priorityList = Arrays.asList(items);
             priorityList = new ArrayList<>(priorityList);

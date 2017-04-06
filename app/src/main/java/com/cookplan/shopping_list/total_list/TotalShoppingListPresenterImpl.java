@@ -1,8 +1,10 @@
 package com.cookplan.shopping_list.total_list;
 
 
+import com.cookplan.RApplication;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
+import com.cookplan.models.ProductCategory;
 import com.cookplan.models.ShopListStatus;
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl;
 import com.cookplan.utils.DatabaseConstants;
@@ -68,9 +70,18 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                 alreadyBoughtIngredients.add(alreadyBoughtIngred);
             }
         }
+        List<Ingredient> needToBuySortedIngredients = new ArrayList<>();
+        for (ProductCategory category : RApplication.getPriorityList()) {
+            for (Ingredient ingredient : needToBuyIngredients) {
+                if (ingredient.getCategory() == category) {
+                    needToBuySortedIngredients.add(ingredient);
+                }
+            }
+        }
+        needToBuySortedIngredients.addAll(alreadyBoughtIngredients);
         if (mainView != null) {
             if (ProductToIngredientMap.size() != 0) {
-                mainView.setIngredientLists(needToBuyIngredients, alreadyBoughtIngredients);
+                mainView.setIngredientLists(needToBuySortedIngredients);
             } else {
                 mainView.setEmptyView();
             }
@@ -81,6 +92,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
         String productName = entry.getKey();
         List<Ingredient> ingredients = entry.getValue();
         if (!ingredients.isEmpty()) {
+            ProductCategory category = ingredients.get(0).getCategory();
             Map<MeasureUnit, Double> shopMap = new HashMap<>();
             Map<MeasureUnit, Double> restMap = new HashMap<>();
             for (Ingredient ingredient : ingredients) {
@@ -135,8 +147,8 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                 String string = measureEntry.getKey().toValueString(measureEntry.getValue());
                 restAmountString = restAmountString.isEmpty() ? string : restAmountString + " + " + string;
             }
-            shopAmountString = shopAmountString + restAmountString;
-            return new Ingredient(productName, shopAmountString, status);
+            shopAmountString = shopAmountString + " + " + restAmountString;
+            return new Ingredient(productName, shopAmountString, status, category);
         } else {
             return null;
         }

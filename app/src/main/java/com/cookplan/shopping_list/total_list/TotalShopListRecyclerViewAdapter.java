@@ -37,7 +37,10 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
 
         if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
             holder.nameTextView.setPaintFlags(holder.nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.nameTextView.setPaintFlags(holder.nameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
+
         holder.nameTextView.setText(ingredient.getName());
 
 
@@ -49,10 +52,13 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
             holder.amountTextView.setVisibility(View.GONE);
         }
 
+        if (ingredient.getCategory() != null) {
+            holder.categoryView.setBackgroundResource(ingredient.getCategory().getColorId());
+        }
+
         View.OnClickListener clickListener = view -> {
             int pos = (int) view.getTag();
             Ingredient selectIngredient = ingredients.get(pos);
-
             if (listener != null) {
                 listener.OnClick(selectIngredient);
             }
@@ -82,15 +88,17 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView nameTextView;
-        public TextView amountTextView;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView nameTextView;
+        TextView amountTextView;
+        View categoryView;
         public View mainView;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             nameTextView = (TextView) v.findViewById(R.id.ingredient_item_name);
             amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
+            categoryView = v.findViewById(R.id.category_view);
             mainView = v.findViewById(R.id.main_view);
         }
     }
