@@ -199,7 +199,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         Spinner spinner = (Spinner) mainView.findViewById(R.id.measure_list_spinner);
         if (spinner != null) {
             Product selectedProduct = (Product) unitNameEditText.getTag();
-            if (checkProductField()) {
+            if (selectedProduct != null) {
                 List<MeasureUnit> measureUnits = new ArrayList<>();
                 measureUnits.addAll(selectedProduct.getMeasureUnitList());
                 MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),

@@ -2061,13 +2061,14 @@ public class FillProductDatabaseProvider {
                                    Map<MeasureUnit, Double> map) {
             Product product = new Product(productCategory, name,
                                           mainUnits,
-                                          measureUnitList);
+                                          measureUnitList,
+                                          map);
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
             DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
             productRef.push().setValue(product, (databaseError, databaseReference) -> {
-                product.fillTheMap(map);
-                productRef.child(databaseReference.getKey()).child(DatabaseConstants.DATABASE_MEASURE_MAP_FIELD)
-                        .setValue(product.getMeasureStringToAmoutMap());
+                //                product.fillTheMap(map);
+                //                productRef.child(databaseReference.getKey()).child(DatabaseConstants.DATABASE_MEASURE_MAP_FIELD)
+                //                        .setValue(product.getMeasureStringToAmoutMap());
             });
             return this;
         }

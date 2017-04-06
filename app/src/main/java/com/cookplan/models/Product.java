@@ -5,7 +5,6 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,31 +15,56 @@ import java.util.Map;
 public class Product implements Serializable {
 
     public String id;
-    public Map<String, Double> measureUnitToAmoutMap;//map from measureUnitList to amount
     public List<MeasureUnit> measureUnitList; //list of units in which product can be measured.
     public List<MeasureUnit> mainMeasureUnitList;
     public String name;
     public int countUsing;
     public ProductCategory category;
 
+    public List<RatioMeasure> ratioMeasureList;
+
     private Product() {
     }
 
     public Product(ProductCategory category, String name,
-                   List<MeasureUnit> mainMeasureUnitList, List<MeasureUnit> measureUnitList) {
+                   List<MeasureUnit> mainMeasureUnitList,
+                   List<MeasureUnit> measureUnitList,
+                   Map<MeasureUnit, Double> unitToAmoutMap) {
         this.category = category;
-        measureUnitToAmoutMap = new HashMap<>();
         this.name = name;
         this.mainMeasureUnitList = mainMeasureUnitList;
         this.measureUnitList = measureUnitList;
         countUsing = 0;
+        fillRatioList(unitToAmoutMap);
     }
 
-    public void fillTheMap(Map<MeasureUnit, Double> unitToAmoutMap) {
-        if (unitToAmoutMap != null) {
-            measureUnitToAmoutMap = new HashMap<>();
+    private void fillRatioList(Map<MeasureUnit, Double> unitToAmoutMap) {
+        if (unitToAmoutMap != null && !mainMeasureUnitList.isEmpty()) {
+            ratioMeasureList = new ArrayList<>();
             for (Map.Entry<MeasureUnit, Double> entry : unitToAmoutMap.entrySet()) {
-                measureUnitToAmoutMap.put(entry.getKey().name(), entry.getValue());
+                ratioMeasureList.add(new RatioMeasure(mainMeasureUnitList.get(0),
+                                                      entry.getValue(),
+                                                      entry.getKey()));
+                if (mainMeasureUnitList.get(0) == MeasureUnit.KILOGRAMM) {
+                    ratioMeasureList.add(new RatioMeasure(MeasureUnit.GRAMM,
+                                                          entry.getValue() / 1000,
+                                                          entry.getKey()));
+                }
+                if (mainMeasureUnitList.get(0) == MeasureUnit.GRAMM) {
+                    ratioMeasureList.add(new RatioMeasure(MeasureUnit.KILOGRAMM,
+                                                          1000 * entry.getValue(),
+                                                          entry.getKey()));
+                }
+                if (mainMeasureUnitList.get(0) == MeasureUnit.LITRE) {
+                    ratioMeasureList.add(new RatioMeasure(MeasureUnit.MILILITRE,
+                                                          entry.getValue() / 1000,
+                                                          entry.getKey()));
+                }
+                if (mainMeasureUnitList.get(0) == MeasureUnit.MILILITRE) {
+                    ratioMeasureList.add(new RatioMeasure(MeasureUnit.LITRE,
+                                                          1000 * entry.getValue(),
+                                                          entry.getKey()));
+                }
             }
         }
     }
@@ -66,22 +90,6 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public void setItemToMap(MeasureUnit unit, double amount) {
-        getMeasureUnitToAmoutMap().put(unit, amount);
-    }
-
-    public Map<MeasureUnit, Double> getMeasureUnitToAmoutMap() {
-        Map<MeasureUnit, Double> unitToAmoutMap = new HashMap<>();
-        for (Map.Entry<String, Double> entry : measureUnitToAmoutMap.entrySet()) {
-            unitToAmoutMap.put(MeasureUnit.valueOf(entry.getKey()), entry.getValue());
-        }
-        return unitToAmoutMap;
-    }
-
-    public Map<String, Double> getMeasureStringToAmoutMap() {
-        return measureUnitToAmoutMap;
-    }
-
     public List<MeasureUnit> getMainMeasureUnitList() {
         return mainMeasureUnitList;
     }
@@ -98,6 +106,10 @@ public class Product implements Serializable {
         return measureUnitList;
     }
 
+    public List<RatioMeasure> getRatioMeasureList() {
+        return ratioMeasureList;
+    }
+
     public static Product parseProductFromDB(DataSnapshot dataSnapshot) {
         Product product = new Product();
         product.id = dataSnapshot.getKey();
@@ -108,16 +120,16 @@ public class Product implements Serializable {
             if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_CATEGORY_FIELD)) {
                 product.category = ProductCategory.getProductCategoryByName((String) child.getValue());
             }
-            if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_MAP_FIELD)) {
-                product.measureUnitToAmoutMap = new HashMap<>();
+            if (child.getKey().equals(DatabaseConstants.DATABASE_RATIO_MEASURE_LIST_FIELD)) {
+                product.ratioMeasureList = new ArrayList<>();
                 for (DataSnapshot childUnit : child.getChildren()) {
-                    double value;
-                    if (childUnit.getValue() instanceof Long) {
-                        value = ((Long) childUnit.getValue()).doubleValue();
-                    } else {
-                        value = (Double) childUnit.getValue();
+                    if (childUnit.getValue() instanceof Map) {
+                        try {
+                            product.ratioMeasureList.add(childUnit.getValue(RatioMeasure.class));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    product.measureUnitToAmoutMap.put(childUnit.getKey(), value);
                 }
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_MAIN_MEASURE_UNIT_LIST_FIELD)) {

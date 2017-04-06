@@ -96,7 +96,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                         if (shopAmount > 1e-8) {
                             unit = shopUnit;
                             amount = shopAmount;
-                            if (restMap.containsKey(unit)) {
+                            if (shopMap.containsKey(unit)) {
                                 localAmount = restMap.get(unit) + amount;
                             } else {
                                 localAmount = amount;
@@ -118,6 +118,9 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                 }
             }
 
+            if (restMap.isEmpty() && shopMap.isEmpty()) {
+                return null;
+            }
             String shopAmountString = "";
             for (Map.Entry<MeasureUnit, Double> shopEntry : shopMap.entrySet()) {
                 String string = shopEntry.getKey().toValueString(shopEntry.getValue());
