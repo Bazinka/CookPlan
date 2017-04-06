@@ -147,7 +147,9 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                 String string = measureEntry.getKey().toValueString(measureEntry.getValue());
                 restAmountString = restAmountString.isEmpty() ? string : restAmountString + " + " + string;
             }
-            shopAmountString = shopAmountString + " + " + restAmountString;
+            if (!restAmountString.isEmpty()) {
+                shopAmountString = shopAmountString + " + " + restAmountString;
+            }
             return new Ingredient(productName, shopAmountString, status, category);
         } else {
             return null;
