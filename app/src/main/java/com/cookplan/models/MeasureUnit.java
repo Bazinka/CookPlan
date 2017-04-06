@@ -59,10 +59,10 @@ public enum MeasureUnit {
     private String getIntOrDoubleValueString(double value) {
         String valueString;
         if (isItIntValue()) {
-            valueString = String.valueOf((int) value);
+            valueString = String.valueOf(Math.round(value));
         } else {
             if (value > 10.) {
-                valueString = String.format(Locale.getDefault(), "%.0f", value);
+                valueString = String.valueOf(Math.round(value));
             } else {
                 valueString = String.format(Locale.getDefault(), "%.2f", value);
             }
