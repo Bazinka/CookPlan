@@ -56,8 +56,32 @@ public class FillProductDatabaseProvider {
     }
 
     private static void fillProductDatabase() {
-        saveProductList();
+        //        saveProductList();
+        saveAdditionProductList();
         RApplication.savePriorityList(Arrays.asList(ProductCategory.values()));
+    }
+
+    private static void saveAdditionProductList() {
+        MeasureUnit[] volumeUnitArray = new MeasureUnit[]{LITRE, MILILITRE, CUP, TEASPOON, TABLESPOON, PACKAGE, BOTTLE};
+        Map<MeasureUnit, Double> litreUnitMap = new UnitsMapBuilder()
+                .put(MILILITRE, 1000.)
+                .put(CUP, 4.) // 250 мл.
+                .put(TEASPOON, 202.)// 5 мл.
+                .put(TABLESPOON, 67.)// 15 мл.
+                .build();
+
+        MeasureUnit[] weightUnitArray = new MeasureUnit[]{GRAMM, KILOGRAMM, CUP, TEASPOON, TABLESPOON, PACKAGE, UNITS};
+        Map<MeasureUnit, Double> kilogramUnitMap = new UnitsMapBuilder()
+                .put(GRAMM, 1000.)
+                .build();
+
+
+        new CategoryBuilder(VEGETABLE_OIL_SAUCE_CONDIMENTS,
+                            PACKAGE,
+                            new UnitsListBuilder()
+                                    .addAll(new MeasureUnit[]{UNITS, PACKAGE})//GRAMM, KILOGRAMM, CUP, TEASPOON, TABLESPOON, PACKAGE, UNITS
+                                    .build())
+                .add("Лавровый лист");
     }
 
     private static void saveProductList() {
@@ -1557,6 +1581,12 @@ public class FillProductDatabaseProvider {
                             new UnitsListBuilder()
                                     .addAll(volumeUnitArray)//LITRE, MILILITRE, CUP, TEASPOON, TABLESPOON, PACKAGE, BOTTLE
                                     .build())
+                .add("Масло подсолнечное",
+                     new UnitsMapBuilder(litreUnitMap)
+                             .put(UNITS, 1.)
+                             .put(PACKAGE, 1.)
+                             .put(BOTTLE, 1.)
+                             .build())
                 .add("Масло растительное",
                      new UnitsMapBuilder(litreUnitMap)
                              .put(UNITS, 1.)

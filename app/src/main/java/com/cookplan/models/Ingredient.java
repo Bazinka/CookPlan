@@ -47,9 +47,11 @@ public class Ingredient implements Serializable {
             double shopListAmount = -1.;
             for (MeasureUnit unit : product.getMainMeasureUnitList()) {
                 double multiplier = MeasureUnit.getMultiplier(mainMeasureUnit, unit);
-                for (RatioMeasure ratio : product.getRatioMeasureList()) {
-                    if (ratio.getMultiplier(mainMeasureUnit, unit) > 1e-8) {
-                        multiplier = ratio.getMultiplier(mainMeasureUnit, unit);
+                if (product.getRatioMeasureList() != null) {
+                    for (RatioMeasure ratio : product.getRatioMeasureList()) {
+                        if (ratio.getMultiplier(mainMeasureUnit, unit) > 1e-8) {
+                            multiplier = ratio.getMultiplier(mainMeasureUnit, unit);
+                        }
                     }
                 }
                 if (multiplier > 1e-8) {
