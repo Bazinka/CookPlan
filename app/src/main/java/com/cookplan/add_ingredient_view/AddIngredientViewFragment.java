@@ -201,7 +201,18 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
             Product selectedProduct = (Product) unitNameEditText.getTag();
             if (selectedProduct != null) {
                 List<MeasureUnit> measureUnits = new ArrayList<>();
-                measureUnits.addAll(selectedProduct.getMeasureUnitList());
+                measureUnits.addAll(selectedProduct.getMainMeasureUnitList());
+                for (MeasureUnit unit : selectedProduct.getMeasureUnitList()) {
+                    boolean isMainUnit = false;
+                    for (MeasureUnit existUnit : selectedProduct.getMainMeasureUnitList()) {
+                        if (unit == existUnit) {
+                            isMainUnit = true;
+                        }
+                    }
+                    if (!isMainUnit) {
+                        measureUnits.add(unit);
+                    }
+                }
                 MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),
                                                                                     measureUnits,
                                                                                     selectedProduct.getMainMeasureUnitList());

@@ -24,23 +24,37 @@ import static com.cookplan.models.MeasureUnit.PACKAGE;
 import static com.cookplan.models.MeasureUnit.TABLESPOON;
 import static com.cookplan.models.MeasureUnit.TEASPOON;
 import static com.cookplan.models.MeasureUnit.UNITS;
+import static com.cookplan.models.ProductCategory.ALCOHOL_DRINKS;
+import static com.cookplan.models.ProductCategory.ANIMALS_PRODUCTS;
 import static com.cookplan.models.ProductCategory.BAKERY_PRODUCTS;
+import static com.cookplan.models.ProductCategory.BOOKS_PRINTED_PRODUCTS;
+import static com.cookplan.models.ProductCategory.CAR_PRODUCTS;
 import static com.cookplan.models.ProductCategory.CHEESE;
 import static com.cookplan.models.ProductCategory.CHILD_PRODUCTS;
 import static com.cookplan.models.ProductCategory.CONFECTIONERY;
 import static com.cookplan.models.ProductCategory.CONSERVATION;
+import static com.cookplan.models.ProductCategory.COOKED_FOOD;
+import static com.cookplan.models.ProductCategory.COSMETICS_HYGIENE;
+import static com.cookplan.models.ProductCategory.DIABETIC_NUTRITION;
 import static com.cookplan.models.ProductCategory.DRINKS_JUICE;
 import static com.cookplan.models.ProductCategory.EGGS;
+import static com.cookplan.models.ProductCategory.ELECTRIC_AND_HOUSEHOLD_APPLIANCES;
 import static com.cookplan.models.ProductCategory.FISH_SEAFOOD_CAVIAR;
 import static com.cookplan.models.ProductCategory.FROZEN_FOOD;
 import static com.cookplan.models.ProductCategory.FRUITS_VEGETABLES;
+import static com.cookplan.models.ProductCategory.GADREN_PRODUCTS;
+import static com.cookplan.models.ProductCategory.GAMES_AND_TOYS;
 import static com.cookplan.models.ProductCategory.GROCERY;
+import static com.cookplan.models.ProductCategory.HOUSEHOLD_CHEMICALS;
 import static com.cookplan.models.ProductCategory.ICE_CREAM;
 import static com.cookplan.models.ProductCategory.MEAT_BIRDS;
 import static com.cookplan.models.ProductCategory.MEAT_GARSTRONOMY;
 import static com.cookplan.models.ProductCategory.MILK_PRODUCT;
+import static com.cookplan.models.ProductCategory.REPAIR_COTTAGE_REST_PRODUCTS;
+import static com.cookplan.models.ProductCategory.STATIONERY;
 import static com.cookplan.models.ProductCategory.TEA_COFFEE_CACAO;
 import static com.cookplan.models.ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS;
+import static com.cookplan.models.ProductCategory.WARDROBE;
 import static com.cookplan.models.ProductCategory.WITHOUT_CATEGORY;
 
 /**
@@ -57,8 +71,41 @@ public class FillProductDatabaseProvider {
 
     private static void fillProductDatabase() {
         //        saveProductList();
-        saveAdditionProductList();
-        RApplication.savePriorityList(Arrays.asList(ProductCategory.values()));
+        //        saveAdditionProductList();
+        RApplication.savePriorityList(
+                Arrays.asList(
+                        FRUITS_VEGETABLES,
+                        COOKED_FOOD,
+                        MEAT_BIRDS,
+                        FISH_SEAFOOD_CAVIAR,
+                        MEAT_GARSTRONOMY,
+                        CHEESE,
+                        CONFECTIONERY,
+                        BAKERY_PRODUCTS,
+                        MILK_PRODUCT,
+                        TEA_COFFEE_CACAO,
+                        VEGETABLE_OIL_SAUCE_CONDIMENTS,
+                        CONSERVATION,
+                        GROCERY,
+                        EGGS,
+                        DRINKS_JUICE,
+                        FROZEN_FOOD,
+                        ICE_CREAM,
+                        HOUSEHOLD_CHEMICALS,
+                        COSMETICS_HYGIENE,
+                        CHILD_PRODUCTS,
+                        ANIMALS_PRODUCTS,
+                        DIABETIC_NUTRITION,
+                        GAMES_AND_TOYS,
+                        ELECTRIC_AND_HOUSEHOLD_APPLIANCES,
+                        REPAIR_COTTAGE_REST_PRODUCTS,
+                        CAR_PRODUCTS,
+                        WARDROBE,
+                        STATIONERY,
+                        BOOKS_PRINTED_PRODUCTS,
+                        GADREN_PRODUCTS,
+                        ALCOHOL_DRINKS,
+                        WITHOUT_CATEGORY));//ProductCategory.values()
     }
 
     private static void saveAdditionProductList() {
@@ -1263,30 +1310,6 @@ public class FillProductDatabaseProvider {
                              .put(CUP, 5.5)
                              .put(TEASPOON, 200.)
                              .put(TABLESPOON, 50.)
-                             .put(UNITS, 1.)
-                             .put(PACKAGE, 1.)
-                             .build())
-                .add("Мука",
-                     new UnitsMapBuilder()
-                             .put(CUP, 6.25)
-                             .put(TEASPOON, 125.)
-                             .put(TABLESPOON, 40.)
-                             .put(UNITS, 1.)
-                             .put(PACKAGE, 1.)
-                             .build())
-                .add("Мука",
-                     new UnitsMapBuilder()
-                             .put(CUP, 6.25)
-                             .put(TEASPOON, 125.)
-                             .put(TABLESPOON, 40.)
-                             .put(UNITS, 1.)
-                             .put(PACKAGE, 1.)
-                             .build())
-                .add("Мука",
-                     new UnitsMapBuilder()
-                             .put(CUP, 6.25)
-                             .put(TEASPOON, 125.)
-                             .put(TABLESPOON, 40.)
                              .put(UNITS, 1.)
                              .put(PACKAGE, 1.)
                              .build())
