@@ -53,4 +53,15 @@ public class EditRecipeIngredientsPresenterImpl implements EditRecipeIngredients
             }
         });
     }
+
+    @Override
+    public void removeIngredient(Ingredient ingredient) {
+        DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+        if (ingredient != null && ingredient.getId() != null) {
+            DatabaseReference ref = ingredientRef.child(ingredient.getId());
+            ref.removeValue();
+        }
+    }
+
+
 }

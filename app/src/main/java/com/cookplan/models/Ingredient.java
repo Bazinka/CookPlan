@@ -25,6 +25,7 @@ public class Ingredient implements Serializable {
     public List<MeasureUnit> shopMeasureList;
     public String amountString;
     public ShopListStatus shopListStatus;
+    public ProductCategory category;
 
     public Ingredient() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -32,7 +33,8 @@ public class Ingredient implements Serializable {
     }
 
     public Ingredient(String id, String name, Product product, String recipeId,
-                      MeasureUnit localMeasureUnit, Double mainAmount, ShopListStatus shopListStatus) {
+                      MeasureUnit localMeasureUnit, Double mainAmount,
+                      ShopListStatus shopListStatus) {
         this();
         this.id = id;
         this.name = name;
@@ -41,6 +43,7 @@ public class Ingredient implements Serializable {
         this.mainAmount = mainAmount;
         this.shopListStatus = shopListStatus;
         if (product != null) {
+            this.category = product.getCategory();
             this.productId = product.getId();
             shopAmountList = new ArrayList<>();
             shopMeasureList = new ArrayList<>();
@@ -160,6 +163,9 @@ public class Ingredient implements Serializable {
                     }
                 }
             }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_CATEGORY_FIELD)) {
+                ingredient.category = ProductCategory.getProductCategoryByName((String) child.getValue());
+            }
             if (child.getKey().equals(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)) {
                 ingredient.shopListStatus = ShopListStatus.getShopListStatusName((String) child.getValue());
             }
@@ -177,5 +183,9 @@ public class Ingredient implements Serializable {
 
     public String getAmountString() {
         return amountString;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
     }
 }

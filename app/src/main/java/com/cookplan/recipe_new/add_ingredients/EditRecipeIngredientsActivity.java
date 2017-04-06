@@ -50,7 +50,11 @@ public class EditRecipeIngredientsActivity extends BaseActivity implements EditR
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new EditRecipeInrgedientsAdapter(new ArrayList<>());
+        adapter = new EditRecipeInrgedientsAdapter(this, new ArrayList<>(), ingredient -> {
+            if (presenter != null) {
+                presenter.removeIngredient(ingredient);
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         presenter = new EditRecipeIngredientsPresenterImpl(this, recipe);
@@ -69,8 +73,8 @@ public class EditRecipeIngredientsActivity extends BaseActivity implements EditR
 
         if (id == R.id.app_bar_next) {
             //TODO: saving data
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivityWithLeftAnimation(intent);
+            //            Intent intent = new Intent(this, MainActivity.class);
+            //            startActivityWithLeftAnimation(intent);
             finish();
             return true;
         }
