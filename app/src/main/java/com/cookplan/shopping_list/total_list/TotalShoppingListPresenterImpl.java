@@ -97,7 +97,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                             unit = shopUnit;
                             amount = shopAmount;
                             if (shopMap.containsKey(unit)) {
-                                localAmount = restMap.get(unit) + amount;
+                                localAmount = shopMap.get(unit) + amount;
                             } else {
                                 localAmount = amount;
                             }
