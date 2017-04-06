@@ -10,16 +10,16 @@ import java.util.Locale;
  */
 
 public enum MeasureUnit {
-    UNITS(0, R.string.unit_title, true),
+    UNITS(0, R.string.unit_title, false),
     GRAMM(1, R.string.gramm_title, true),
     KILOGRAMM(2, R.string.kilogramm_title, false),
     LITRE(3, R.string.litre_title, false),
     MILILITRE(4, R.string.mililitre_title, true),
-    CUP(5, R.string.cup_title, true),
-    TEASPOON(6, R.string.teaspoon_title, true),
+    CUP(5, R.string.cup_title, false),
+    TEASPOON(6, R.string.teaspoon_title, false),
     TABLESPOON(7, R.string.tablespoon_title, true),
-    BOTTLE(8, R.string.bottle_title, true),
-    PACKAGE(9, R.string.package_title, true);
+    BOTTLE(8, R.string.bottle_title, false),
+    PACKAGE(9, R.string.package_title, false);
 
     private int id;
     private int nameRecourseId;
@@ -38,33 +38,33 @@ public enum MeasureUnit {
 
     public String toValueString(double value) {
         String valueString;
-        if (this == KILOGRAMM && value < 1.) {
-            valueString = getIntOrDoubleValueString(value * 1000);
-            return valueString + " " + GRAMM.toString();
-        } else if (this == GRAMM && value > 1000.) {
-            valueString = getIntOrDoubleValueString(value / 1000);
-            return valueString + " " + KILOGRAMM.toString();
-        } else if (this == LITRE && value < 1.) {
-            valueString = getIntOrDoubleValueString(value * 1000);
-            return valueString + " " + MILILITRE.toString();
-        } else if (this == MILILITRE && value > 1000.) {
-            valueString = getIntOrDoubleValueString(value / 1000);
-            return valueString + " " + LITRE.toString();
-        } else {
-            valueString = getIntOrDoubleValueString(value);
-            return valueString + " " + toString();
+        if (value < 1e-8 && value > -1e-8) {//value==0.0
+            return RApplication.getAppContext().getString(R.string.by_the_taste);
         }
+
+        if (this == KILOGRAMM && value < 1.) {
+            valueString = getIntOrDoubleValueString(value * 1000) + " " + GRAMM.toString();
+        } else if (this == GRAMM && value > 1000.) {
+            valueString = getIntOrDoubleValueString(value / 1000) + " " + KILOGRAMM.toString();
+        } else if (this == LITRE && value < 1.) {
+            valueString = getIntOrDoubleValueString(value * 1000) + " " + MILILITRE.toString();
+        } else if (this == MILILITRE && value > 1000.) {
+            valueString = getIntOrDoubleValueString(value / 1000) + " " + LITRE.toString();
+        } else {
+            valueString = getIntOrDoubleValueString(value) + " " + toString();
+        }
+        return valueString;
     }
 
     private String getIntOrDoubleValueString(double value) {
         String valueString;
-        if (isItIntValue()) {
+        if (isItIntValue(value)) {
             valueString = String.valueOf(Math.round(value));
         } else {
             if (value > 10.) {
                 valueString = String.valueOf(Math.round(value));
             } else {
-                valueString = String.format(Locale.getDefault(), "%.2f", value);
+                valueString = String.format(Locale.getDefault(), "%.1f", value);
             }
         }
         return valueString;
@@ -257,7 +257,14 @@ public enum MeasureUnit {
         }
     }
 
-    private boolean isItIntValue() {
-        return isItIntValue;
+    private boolean isItIntValue(double value) {
+        if (!isItIntValue) {
+            if ((value == Math.floor(value)) && !Double.isInfinite(value)) {
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 }
