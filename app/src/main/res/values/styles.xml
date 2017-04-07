@@ -41,23 +41,6 @@
         <item name="android:backgroundDimEnabled">false</item> <!-- отключаем затемнение -->
     </style>
 
-    <style name="FirebaseUI" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent_color</item>
-        <item name="colorButtonNormal">@color/accent_color</item>
-        <item name="colorControlNormal">@color/accent_color</item>
-        <item name="colorControlActivated">@color/accent_color</item>
-        <item name="colorControlHighlight">@color/accent_color</item>
-        <item name="android:textColor">@color/authui_inputTextColorDark</item>
-        <item name="android:textColorPrimary">@color/authui_inputTextColor</item>
-        <item name="android:buttonStyle">@style/FirebaseUI.Button</item>
-        <item name="android:editTextStyle">@style/FirebaseUI.EditText</item>
-    </style>
-
     <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:textColorPrimary">@color/primary_text_color</item>
         <item name="android:background">@color/white</item>

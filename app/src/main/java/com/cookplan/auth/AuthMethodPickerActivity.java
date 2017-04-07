@@ -25,40 +25,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.cookplan.R;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.AuthUI.IdpConfig;
-import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.ResultCodes;
-import com.firebase.ui.auth.provider.AuthCredentialHelper;
-import com.firebase.ui.auth.provider.FacebookProvider;
-import com.firebase.ui.auth.provider.GoogleProvider;
-import com.firebase.ui.auth.provider.IdpProvider;
-import com.firebase.ui.auth.provider.IdpProvider.IdpCallback;
-import com.firebase.ui.auth.provider.TwitterProvider;
-import com.firebase.ui.auth.ui.AppCompatBase;
-import com.firebase.ui.auth.ui.BaseHelper;
-import com.firebase.ui.auth.ui.FlowParameters;
-import com.firebase.ui.auth.ui.TaskFailureLogger;
-import com.firebase.ui.auth.ui.email.RegisterEmailActivity;
-import com.firebase.ui.auth.ui.idp.CredentialSignInHandler;
-import com.firebase.ui.auth.util.signincontainer.SaveSmartLock;
+import com.cookplan.auth.AuthUI.IdpConfig;
+import com.cookplan.auth.provider.AuthCredentialHelper;
+import com.cookplan.auth.provider.GoogleProvider;
+import com.cookplan.auth.provider.IdpProvider;
+import com.cookplan.auth.ui.AppCompatBase;
+import com.cookplan.auth.ui.BaseHelper;
+import com.cookplan.auth.ui.FlowParameters;
+import com.cookplan.auth.ui.TaskFailureLogger;
+import com.cookplan.auth.ui.email.RegisterEmailActivity;
+import com.cookplan.auth.ui.idp.CredentialSignInHandler;
+import com.cookplan.auth.util.signincontainer.SaveSmartLock;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.TwitterAuthProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Presents the list of authentication options for this app to the user. If an
- * identity provider option is selected, a {@link CredentialSignInHandler}
- * is launched to manage the IDP-specific sign-in flow. If email authentication is chosen,
- * the {@link RegisterEmailActivity} is started.
- */
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public class AuthMethodPickerActivity extends AppCompatBase
-        implements IdpCallback, View.OnClickListener {
+        implements IdpProvider.IdpCallback, View.OnClickListener {
     private static final String TAG = "AuthMethodPicker";
     private static final int RC_EMAIL_FLOW = 2;
     private static final int RC_ACCOUNT_LINK = 3;
@@ -97,11 +83,11 @@ public class AuthMethodPickerActivity extends AppCompatBase
                     mIdpProviders.add(new GoogleProvider(this, idpConfig));
                     break;
                 case AuthUI.FACEBOOK_PROVIDER:
-//                    mIdpProviders.add(new FacebookProvider(
-//                            this, idpConfig, mActivityHelper.getFlowParams().themeId));
+                    //                    mIdpProviders.add(new FacebookProvider(
+                    //                            this, idpConfig, mActivityHelper.getFlowParams().themeId));
                     break;
                 case AuthUI.TWITTER_PROVIDER:
-//                    mIdpProviders.add(new TwitterProvider(this));
+                    //                    mIdpProviders.add(new TwitterProvider(this));
                     break;
                 case AuthUI.EMAIL_PROVIDER:
                     findViewById(R.id.email_provider).setVisibility(View.VISIBLE);
@@ -119,14 +105,6 @@ public class AuthMethodPickerActivity extends AppCompatBase
                 case GoogleAuthProvider.PROVIDER_ID:
                     loginButton = getLayoutInflater()
                             .inflate(R.layout.idp_button_google, btnHolder, false);
-                    break;
-                case FacebookAuthProvider.PROVIDER_ID:
-                    loginButton = getLayoutInflater()
-                            .inflate(R.layout.idp_button_facebook, btnHolder, false);
-                    break;
-                case TwitterAuthProvider.PROVIDER_ID:
-//                    loginButton = getLayoutInflater()
-//                            .inflate(R.layout.idp_button_twitter, btnHolder, false);
                     break;
                 default:
                     Log.e(TAG, "No button for provider " + provider.getProviderId());

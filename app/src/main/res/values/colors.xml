@@ -55,5 +55,12 @@
     <color name="category_blue_grey">#607D8B</color>
     <color name="category_dark_blue_grey">#37474F</color>
 
+    <color name="authui_colorPrimary">@color/primary</color>
+    <color name="authui_colorPrimaryDark">@color/primary_dark</color>
+    <color name="authui_colorAccent">@color/accent_color</color>
+    <color name="authui_inputTextColor">@color/secondary_text_color</color>
+    <color name="authui_inputTextColorDark">@color/primary_text_color</color>
 
+    <color name="errorColor">#DD2C00</color>
+    <color name="linkColor">#4285F4</color>
 </resources>

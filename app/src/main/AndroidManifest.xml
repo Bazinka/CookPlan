@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.cookplan">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -59,6 +60,30 @@
         <activity
             android:name=".recipe_view.RecipeViewActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+        <activity
+            android:name=".auth.ui.email.RecoverPasswordActivity"
+            android:exported="false"
+            android:label="@string/title_recover_password_activity"/>
+
+        <activity
+            android:name=".auth.ui.email.RegisterEmailActivity"
+            android:exported="false"
+            android:label="@string/sign_in_default"/>
+
+        <activity
+            android:name=".auth.ui.accountlink.WelcomeBackIdpPrompt"
+            android:exported="false"
+            android:label="@string/title_welcome_back_idp_prompt"/>
+
+        <activity
+            android:name=".auth.ui.accountlink.WelcomeBackPasswordPrompt"
+            android:exported="false"
+            android:label="@string/title_welcome_back_password_prompt"/>
     </application>
 
 </manifest>

@@ -8,10 +8,10 @@ import android.view.View;
 import com.cookplan.BaseActivity;
 import com.cookplan.main.MainActivity;
 import com.cookplan.R;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ErrorCodes;
-import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.ResultCodes;
+import  com.cookplan.auth.AuthUI;
+import com.cookplan.auth.ErrorCodes;
+import  com.cookplan.auth.IdpResponse;
+import  com.cookplan.auth.ResultCodes;
 import com.google.android.gms.common.Scopes;
 import com.google.firebase.auth.FirebaseAuth;
 
