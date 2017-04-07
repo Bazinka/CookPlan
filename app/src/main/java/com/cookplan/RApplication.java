@@ -7,6 +7,11 @@ import android.content.SharedPreferences;
 import com.bettervectordrawable.VectorDrawableCompat;
 import com.cookplan.models.ProductCategory;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.credentials.CredentialsApi;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -86,6 +91,22 @@ public class RApplication extends Application {
     private void findAllVectorResourceIdsSlow() {
         int[] ids = VectorDrawableCompat.findAllVectorResourceIdsSlow(getResources(), R.drawable.class);
         VectorDrawableCompat.enableResourceInterceptionFor(getResources(), ids);
+    }
+
+    public static FirebaseApp getFirebaseApp() {
+        return FirebaseApp.getInstance();
+    }
+
+    public static FirebaseAuth getFirebaseAuth() {
+        return FirebaseAuth.getInstance(getFirebaseApp());
+    }
+
+    public static CredentialsApi getCredentialsApi() {
+        return Auth.CredentialsApi;
+    }
+
+    public static FirebaseUser getCurrentUser() {
+        return getFirebaseAuth().getCurrentUser();
     }
 
 }

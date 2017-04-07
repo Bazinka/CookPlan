@@ -11,18 +11,15 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package  com.cookplan.auth.ui;
+package com.cookplan.auth.ui;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
-import android.support.annotation.StyleRes;
 
-import  com.cookplan.auth.AuthUI.IdpConfig;
-import  com.cookplan.auth.util.Preconditions;
+import com.cookplan.auth.AuthUI.IdpConfig;
+import com.cookplan.auth.util.Preconditions;
 
 import java.util.List;
 
@@ -32,46 +29,22 @@ import java.util.List;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public class FlowParameters implements Parcelable {
-    @NonNull
-    public final String appName;
 
     @NonNull
     public final List<IdpConfig> providerInfo;
 
-    @StyleRes
-    public final int themeId;
-
-    @DrawableRes
-    public final int logoId;
-
-    @Nullable
-    public final String termsOfServiceUrl;
-
-    public final boolean smartLockEnabled;
+    //    public final boolean smartLockEnabled;
 
     public FlowParameters(
-            @NonNull String appName,
-            @NonNull List<IdpConfig> providerInfo,
-            @StyleRes int themeId,
-            @DrawableRes int logoId,
-            @Nullable String termsOfServiceUrl,
-            boolean smartLockEnabled) {
-        this.appName = Preconditions.checkNotNull(appName, "appName cannot be null");
+            @NonNull List<IdpConfig> providerInfo) {//,boolean smartLockEnabled)
         this.providerInfo = Preconditions.checkNotNull(providerInfo, "providerInfo cannot be null");
-        this.themeId = themeId;
-        this.logoId = logoId;
-        this.termsOfServiceUrl = termsOfServiceUrl;
-        this.smartLockEnabled = smartLockEnabled;
+        //        this.smartLockEnabled = smartLockEnabled;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(appName);
         dest.writeTypedList(providerInfo);
-        dest.writeInt(themeId);
-        dest.writeInt(logoId);
-        dest.writeString(termsOfServiceUrl);
-        dest.writeInt(smartLockEnabled ? 1 : 0);
+        //        dest.writeInt(smartLockEnabled ? 1 : 0);
     }
 
     @Override
@@ -82,21 +55,10 @@ public class FlowParameters implements Parcelable {
     public static final Creator<FlowParameters> CREATOR = new Creator<FlowParameters>() {
         @Override
         public FlowParameters createFromParcel(Parcel in) {
-            String appName = in.readString();
             List<IdpConfig> providerInfo = in.createTypedArrayList(IdpConfig.CREATOR);
-            int themeId = in.readInt();
-            int logoId = in.readInt();
-            String termsOfServiceUrl = in.readString();
-            int smartLockEnabledInt = in.readInt();
-            boolean smartLockEnabled = smartLockEnabledInt != 0;
 
             return new FlowParameters(
-                    appName,
-                    providerInfo,
-                    themeId,
-                    logoId,
-                    termsOfServiceUrl,
-                    smartLockEnabled);
+                    providerInfo);
         }
 
         @Override

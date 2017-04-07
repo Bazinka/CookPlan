@@ -44,9 +44,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".auth.AuthMethodPickerActivity"
-            android:theme="@style/AppTheme.Fullscreen"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -65,25 +62,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
 
-        <activity
-            android:name=".auth.ui.email.RecoverPasswordActivity"
-            android:exported="false"
-            android:label="@string/title_recover_password_activity"/>
-
-        <activity
-            android:name=".auth.ui.email.RegisterEmailActivity"
-            android:exported="false"
-            android:label="@string/sign_in_default"/>
-
-        <activity
-            android:name=".auth.ui.accountlink.WelcomeBackIdpPrompt"
-            android:exported="false"
-            android:label="@string/title_welcome_back_idp_prompt"/>
-
-        <activity
-            android:name=".auth.ui.accountlink.WelcomeBackPasswordPrompt"
-            android:exported="false"
-            android:label="@string/title_welcome_back_password_prompt"/>
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package  com.cookplan.auth.provider;
+package com.cookplan.auth.provider;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,9 +27,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.cookplan.R;
-import  com.cookplan.auth.AuthUI.IdpConfig;
-import  com.cookplan.auth.IdpResponse;
-import  com.cookplan.auth.util.GoogleApiConstants;
+import com.cookplan.auth.AuthUI.IdpConfig;
+import com.cookplan.auth.IdpResponse;
+import com.cookplan.auth.util.GoogleApiConstants;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -43,7 +43,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class GoogleProvider implements
         IdpProvider, OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "GoogleProvider";
-    private static final int RC_SIGN_IN = 20;
+    public static final int RC_SIGN_IN = 20;
     private static final String ERROR_KEY = "error";
 
     private GoogleApiClient mGoogleApiClient;
@@ -83,6 +83,7 @@ public class GoogleProvider implements
                 .enableAutoManage(activity, GoogleApiConstants.AUTO_MANAGE_ID0, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, builder.build())
                 .build();
+        mGoogleApiClient.connect();
     }
 
     public static AuthCredential createAuthCredential(IdpResponse response) {
