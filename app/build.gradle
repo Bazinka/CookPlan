@@ -36,18 +36,8 @@ android {
     }
 
     signingConfigs {
-//        release {
-//            storeFile file("../release_isic_keystore.jks")
-//            storePassword "isic_keystore"
-//            keyAlias "isic"
-//            keyPassword "isic_alias"
-//        }
-        debug {
-            storeFile file("/Users/DariaEfimova/Android Projects/CookPlan/debug_keystore.jks")
-            storePassword "111111"
-            keyAlias "debug_key"
-            keyPassword "111111"
-        }
+        release
+        debug
     }
 
     buildTypes {
@@ -66,6 +56,25 @@ android {
             multiDexEnabled true
         }
     }
+}
+def Properties props = new Properties()
+def propFile = new File('signing.properties')
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+
+    if (props != null && props.containsKey('DEBUG_keystoreDir') && props.containsKey('DEBUG_keystorePassword') &&
+            props.containsKey('DEBUG_keyAlias') && props.containsKey('DEBUG_aliasPassword')) {
+        android.signingConfigs.debug.storeFile = file(props['DEBUG_keystoreDir'])
+        android.signingConfigs.debug.storePassword = props['DEBUG_keystorePassword']
+        android.signingConfigs.debug.keyAlias = props['DEBUG_keyAlias']
+        android.signingConfigs.debug.keyPassword = props['DEBUG_aliasPassword']
+    } else {
+        println 'signing.properties found but some entries are missing'
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println 'signing.properties not found'
+    android.buildTypes.release.signingConfig = null
 }
 
 dependencies {
