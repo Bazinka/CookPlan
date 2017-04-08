@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.bettervectordrawable.VectorDrawableCompat;
 import com.cookplan.models.ProductCategory;
+import com.cookplan.utils.FillProductDatabaseProvider;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.CredentialsApi;
@@ -49,6 +50,9 @@ public class RApplication extends Application {
         JodaTimeAndroid.init(this);
         findAllVectorResourceIdsSlow();
         context = getApplicationContext();
+        if (getPriorityList() == null) {
+            FillProductDatabaseProvider.savePriorityList();
+        }
     }
 
     public static void savePriorityList(List<ProductCategory> priorityOfCategories) {

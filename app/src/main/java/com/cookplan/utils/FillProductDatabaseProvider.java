@@ -72,6 +72,10 @@ public class FillProductDatabaseProvider {
     private static void fillProductDatabase() {
         //        saveProductList();
         //        saveAdditionProductList();
+        savePriorityList();
+    }
+
+    public static void savePriorityList() {
         RApplication.savePriorityList(
                 Arrays.asList(
                         FRUITS_VEGETABLES,
