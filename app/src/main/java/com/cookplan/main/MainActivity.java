@@ -13,18 +13,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.auth.AuthUI;
 import com.cookplan.auth.FirebaseAuthActivity;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
-import  com.cookplan.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -58,7 +57,10 @@ public class MainActivity extends BaseActivity
             FirebaseUser user = auth.getCurrentUser();
             if (user.getPhotoUrl() != null) {
                 ImageView photoImageView = (ImageView) headerView.findViewById(R.id.user_photo_imageView);
-                Picasso.with(this).load(user.getPhotoUrl().getPath()).placeholder(R.drawable.logo).into(photoImageView);
+                Picasso.with(this)
+                        .load(user.getPhotoUrl().getPath())
+                        .placeholder(R.drawable.main_drawable)
+                        .into(photoImageView);
             }
             if (user.getDisplayName() != null) {
                 TextView nameTextView = (TextView) headerView.findViewById(R.id.user_name_textView);
@@ -79,8 +81,8 @@ public class MainActivity extends BaseActivity
         View viewPager = findViewById(R.id.main_tabs_viewpager);
         viewPager.setVisibility(View.GONE);
 
-//        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-//        mainConteinerView.setVisibility(View.VISIBLE);
+        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        //        mainConteinerView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.recipe_list_menu_title));
         RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
@@ -94,8 +96,8 @@ public class MainActivity extends BaseActivity
     }
 
     void setShoppingListFragment() {
-//        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-//        mainConteinerView.setVisibility(View.INVISIBLE);
+        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        //        mainConteinerView.setVisibility(View.INVISIBLE);
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.VISIBLE);
@@ -106,7 +108,7 @@ public class MainActivity extends BaseActivity
         ViewPagerTabsAdapter adapter = new ViewPagerTabsAdapter(getSupportFragmentManager());
         adapter.addFragment(TotalShoppingListFragment.newInstance(), getString(R.string.tab_all_ingredients_title));
         adapter.addFragment(ShopListByDishesFragment.newInstance(), getString(R.string.tab_ingredients_by_dish_title));
-//        adapter.addFragment(new ThreeFragment(), "THREE");
+        //        adapter.addFragment(new ThreeFragment(), "THREE");
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_tabs_layout);
@@ -120,8 +122,8 @@ public class MainActivity extends BaseActivity
         View viewPager = findViewById(R.id.main_tabs_viewpager);
         viewPager.setVisibility(View.GONE);
 
-//        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-//        mainConteinerView.setVisibility(View.VISIBLE);
+        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        //        mainConteinerView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.product_vocabulary_title));
 

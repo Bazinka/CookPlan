@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--deep purple-->
-    <color name="primary">#673AB7</color><!--500-->
-    <color name="primary_dark">#512DA8</color><!--700-->
-    <color name="primary_light">#D1C4E9</color><!--100-->
-    <color name="primary_the_lightest">#EDE7F6</color><!--50-->
+    <color name="primary">#607D8B</color><!--500-->
+    <color name="primary_dark">#455A64</color><!--700-->
+    <color name="primary_light">#CFD8DC</color><!--100-->
+    <color name="primary_the_lightest">#ECEFF1</color><!--50-->
 
     <!--cyan-->
-    <color name="accent_color">#00BCD4</color><!--500-->
-    <color name="accent_color_lighter">#4DD0E1</color><!--300-->
-    <color name="accent_color_light">#E0F7FA</color><!--50-->
+    <color name="accent_color">#FFC107</color><!--500-->
+    <color name="accent_color_lighter">#FFD54F</color><!--300-->
+    <color name="accent_color_light">#FFF8E1</color><!--50-->
 
     <color name="window_background_color">#FAFAFA</color>
     <color name="primary_text_color">#DF000000</color>
