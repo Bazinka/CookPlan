@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/firebase_auth_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/primary"
-    android:fitsSystemWindows="true">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/firebase_auth_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary"
+                android:fitsSystemWindows="true">
 
     <TextView
         android:id="@+id/logo_textView"
@@ -14,14 +15,37 @@
         android:gravity="center"
         android:text="@string/app_name"
         android:textColor="@color/white"
-        android:textSize="@dimen/display1_text_size" />
+        android:textSize="@dimen/display1_text_size"/>
 
     <ImageView
         android:id="@+id/auth_logo_imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_above="@id/logo_textView"
         android:layout_centerHorizontal="true"
-        android:paddingBottom="10dp"
-        android:src="@drawable/logo" />
+        android:layout_marginBottom="20dp"
+        app:srcCompat="@drawable/main_drawable"/>
+
+    <TextView
+        android:id="@+id/auth_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo_textView"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/headline_text_size"/>
+
+
+    <Button
+        android:id="@+id/sign_in_google_button"
+        style="@style/CookplanButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo_textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/sign_in"/>
 </RelativeLayout>

@@ -27,8 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.cookplan.R;
-import com.cookplan.auth.AuthUI.IdpConfig;
-import com.cookplan.auth.IdpResponse;
+import com.cookplan.auth.ui.AuthUI.IdpConfig;
 import com.cookplan.auth.util.GoogleApiConstants;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -86,8 +85,8 @@ public class GoogleProvider implements
         mGoogleApiClient.connect();
     }
 
-    public static AuthCredential createAuthCredential(IdpResponse response) {
-        return GoogleAuthProvider.getCredential(response.getIdpToken(), null);
+    public static AuthCredential createAuthCredential(GoogleSignInAccount account) {
+        return GoogleAuthProvider.getCredential(account.getIdToken(), null);
     }
 
     public String getName(Context context) {
@@ -111,18 +110,13 @@ public class GoogleProvider implements
         }
     }
 
-    private IdpResponse createIdpResponse(GoogleSignInAccount account) {
-        return new IdpResponse(
-                GoogleAuthProvider.PROVIDER_ID, account.getEmail(), account.getIdToken());
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result != null) {
                 if (result.isSuccess()) {
-                    mIDPCallback.onSuccess(createIdpResponse(result.getSignInAccount()));
+                    mIDPCallback.onSuccess(result.getSignInAccount());
                 } else {
                     onError(result);
                 }

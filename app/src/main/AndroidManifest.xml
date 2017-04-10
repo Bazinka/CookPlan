@@ -36,7 +36,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".auth.FirebaseAuthActivity"
+            android:name=".auth.ui.FirebaseAuthActivity"
             android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package  com.cookplan.auth.provider;
+package com.cookplan.auth.provider;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import  com.cookplan.auth.IdpResponse;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 public interface IdpProvider {
 
@@ -37,7 +37,7 @@ public interface IdpProvider {
     void startLogin(Activity activity);
 
     interface IdpCallback {
-        void onSuccess(IdpResponse idpResponse);
+        void onSuccess(GoogleSignInAccount account);
 
         void onFailure(Bundle extra);
     }

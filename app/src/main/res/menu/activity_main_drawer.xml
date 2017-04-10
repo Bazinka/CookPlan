@@ -9,31 +9,37 @@
         <item
             android:id="@+id/nav_recipe_list"
             android:icon="@drawable/ic_recipe_list"
-            android:title="@string/recipe_list_menu_title" />
+            android:title="@string/recipe_list_menu_title"/>
         <item
             android:id="@+id/nav_shopping_list"
             android:icon="@drawable/ic_shopping_list"
-            android:title="@string/shopping_list_title" />
+            android:title="@string/shopping_list_title"/>
 
         <item
             android:id="@+id/nav_whats_cooking"
             android:icon="@drawable/ic_cooking_plan"
-            android:title="@string/whats_cooking_title" />
+            android:title="@string/whats_cooking_title"/>
 
         <item
             android:id="@+id/nav_vocabulary"
             android:icon="@drawable/ic_product_list"
-            android:title="@string/product_vocabulary_title" />
+            android:title="@string/product_vocabulary_title"/>
 
     </group>
 
-    <item android:title="@string/general_settings">
-        <menu>
-            <item
-                android:id="@+id/nav_sign_out"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/sign_out" />
-        </menu>
-    </item>
+    <group
+        android:id="@+id/sign_in_group"
+        android:visible="true">
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/ic_sign_out"
+            android:title="@string/sign_out"
+            android:visible="false"/>
+        <item
+            android:id="@+id/nav_sign_in"
+            android:icon="@drawable/ic_sign_in"
+            android:title="@string/sign_in"
+            android:visible="false"/>
+    </group>
 
 </menu>

@@ -1,18 +1,12 @@
 package com.cookplan;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
-import com.cookplan.auth.IdpResponse;
-import com.cookplan.auth.ResultCodes;
-import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by DariaEfimova on 17.10.16.

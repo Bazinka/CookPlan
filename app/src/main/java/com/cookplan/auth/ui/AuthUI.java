@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.cookplan.auth;
+package com.cookplan.auth.ui;
 
 import android.app.Activity;
 import android.os.Parcel;
@@ -29,7 +29,6 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 

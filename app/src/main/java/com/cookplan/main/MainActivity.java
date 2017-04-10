@@ -1,7 +1,9 @@
 package com.cookplan.main;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -18,22 +20,24 @@ import android.widget.TextView;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
-import com.cookplan.auth.AuthUI;
-import com.cookplan.auth.FirebaseAuthActivity;
+import com.cookplan.auth.ui.FirebaseAuthActivity;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MainView {
 
+
+    private ProgressDialog mProgressDialog;
 
     private int mSelectedNavigationId;
-    private View mRootView;
+    private View rootView;
+
+    private MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +52,30 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        mRootView = findViewById(R.id.drawer_layout);
+        rootView = findViewById(R.id.main_snackbar_layout);
 
+        presenter = new MainPresenterImpl(this, this);
+        presenter.onCreate();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        fillNavHeader();
+        navigationView.setNavigationItemSelectedListener(this);
+        mSelectedNavigationId = R.id.nav_recipe_list;
+        navigationView.setCheckedItem(mSelectedNavigationId);
+        setRecipeListFragment();
+    }
+
+    private void fillNavHeader() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
-        if (auth != null && auth.getCurrentUser() != null) {
-            FirebaseUser user = auth.getCurrentUser();
+        FirebaseUser user = presenter.getCurrentUser();
+        if (user != null) {
+            if (user.isAnonymous()) {
+                navigationView.getMenu().findItem(R.id.nav_sign_in).setVisible(true);
+                navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(false);
+            } else {
+                navigationView.getMenu().findItem(R.id.nav_sign_in).setVisible(false);
+                navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(true);
+            }
             if (user.getPhotoUrl() != null) {
                 ImageView photoImageView = (ImageView) headerView.findViewById(R.id.user_photo_imageView);
                 Picasso.with(this)
@@ -66,13 +87,125 @@ public class MainActivity extends BaseActivity
                 TextView nameTextView = (TextView) headerView.findViewById(R.id.user_name_textView);
                 nameTextView.setText(user.getDisplayName());
             }
+        } else {
+            signedOut();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        mSelectedNavigationId = item.getItemId();
+
+        if (mSelectedNavigationId == R.id.nav_recipe_list) {
+            setRecipeListFragment();
+        } else if (mSelectedNavigationId == R.id.nav_shopping_list) {
+            setShoppingListFragment();
+        } else if (mSelectedNavigationId == R.id.nav_vocabulary) {
+            setProductListFragment();
+        } else if (mSelectedNavigationId == R.id.nav_sign_out) {
+            if (presenter != null) {
+                presenter.signOut();
+            }
+        } else if (mSelectedNavigationId == R.id.nav_sign_in) {
+            if (presenter != null) {
+                presenter.signIn();
+            }
         }
 
-        navigationView.setNavigationItemSelectedListener(this);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
-        mSelectedNavigationId = R.id.nav_recipe_list;
-        navigationView.setCheckedItem(mSelectedNavigationId);
-        setRecipeListFragment();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+        dismissDialog();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (presenter != null) {
+            presenter.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void showSnackbar(int messageRes) {
+        Snackbar.make(rootView, messageRes, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showLoadingDialog(String message) {
+        dismissDialog();
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setTitle("");
+        }
+
+        mProgressDialog.setMessage(message);
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void signedInWithAnonymous() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_sign_in).setVisible(true);
+        navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(false);
+    }
+
+    @Override
+    public void signedInWithGoogle() {
+        fillNavHeader();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_sign_in).setVisible(false);
+        navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(true);
+    }
+
+    @Override
+    public void signedInFailed() {
+        dismissDialog();
+        showSnackbar(R.string.unknown_sign_in_response);
+    }
+
+    @Override
+    public void signedOut() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_sign_in).setVisible(false);
+        navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(false);
+        Intent intent = new Intent();
+        intent.putExtra(FirebaseAuthActivity.IS_ANONYMNOUS_POSSIBLE_KEY, false);
+        intent.setClass(this, FirebaseAuthActivity.class);
+        startActivityWithLeftAnimation(intent);
+        finish();
+    }
+
+    @Override
+    public void showLoadingDialog(@StringRes int stringResource) {
+        showLoadingDialog(getString(stringResource));
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
     }
 
     void setRecipeListFragment() {
@@ -137,45 +270,5 @@ public class MainActivity extends BaseActivity
         transaction.commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        mSelectedNavigationId = item.getItemId();
-
-        if (mSelectedNavigationId == R.id.nav_recipe_list) {
-            setRecipeListFragment();
-        } else if (mSelectedNavigationId == R.id.nav_shopping_list) {
-            setShoppingListFragment();
-        } else if (mSelectedNavigationId == R.id.nav_vocabulary) {
-            setProductListFragment();
-        } else if (mSelectedNavigationId == R.id.nav_sign_out) {
-            AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Intent in = new Intent();
-                            in.setClass(MainActivity.this, FirebaseAuthActivity.class);
-                            startActivityWithLeftAnimation(in);
-                            finish();
-                        } else {
-                            Snackbar.make(mRootView, R.string.sign_out_failed, Snackbar.LENGTH_LONG).show();
-                        }
-                    });
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 }
