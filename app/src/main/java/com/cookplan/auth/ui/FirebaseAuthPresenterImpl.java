@@ -111,25 +111,22 @@ public class FirebaseAuthPresenterImpl implements FirebaseAuthPresenter, IdpProv
     @Override
     public void onSuccess(GoogleSignInAccount account) {
         AuthCredential credential = GoogleProvider.createAuthCredential(account);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            FirebaseAuth.getInstance().signInWithCredential(credential)
-                    .addOnFailureListener(e -> {
-                        if (mainView != null) {
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnFailureListener(e -> {
+                    if (mainView != null) {
+                        mainView.signedInFailed();
+                    }
+                })
+                .addOnCompleteListener(task -> {
+                    if (mainView != null) {
+                        mainView.dismissDialog();
+                        if (task.isSuccessful()) {
+                            mainView.signedInWithGoogle();
+                        } else {
                             mainView.signedInFailed();
                         }
-                    })
-                    .addOnCompleteListener(task -> {
-                        if (mainView != null) {
-                            mainView.dismissDialog();
-                            if (task.isSuccessful()) {
-                                mainView.signedInWithGoogle();
-                            } else {
-                                mainView.signedInFailed();
-                            }
-                        }
-                    });
-        }
+                    }
+                });
     }
 
     @Override

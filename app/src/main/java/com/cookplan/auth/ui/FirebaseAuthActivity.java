@@ -11,19 +11,17 @@ import android.widget.TextView;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.RApplication;
 import com.cookplan.main.MainActivity;
 
 public class FirebaseAuthActivity extends BaseActivity implements FirebaseAuthView {
 
-    public static final String IS_ANONYMNOUS_POSSIBLE_KEY = "IS_ANONYMNOUS_POSSIBLE_KEY";
 
     private ProgressDialog mProgressDialog;
     private TextView authTextView;
     private View rootView;
 
     private FirebaseAuthPresenter presenter;
-
-    private boolean isAnonymnousPossible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +30,8 @@ public class FirebaseAuthActivity extends BaseActivity implements FirebaseAuthVi
         authTextView = (TextView) findViewById(R.id.auth_textView);
         rootView = findViewById(R.id.firebase_auth_root);
 
-        isAnonymnousPossible = getIntent().getBooleanExtra(IS_ANONYMNOUS_POSSIBLE_KEY, true);
         Button signInButton = (Button) findViewById(R.id.sign_in_google_button);
-        if (isAnonymnousPossible) {
+        if (RApplication.isAnonymousPossible()) {
             authTextView.setVisibility(View.VISIBLE);
             authTextView.setText(R.string.anonymnous_auth);
             signInButton.setVisibility(View.GONE);
@@ -47,7 +44,7 @@ public class FirebaseAuthActivity extends BaseActivity implements FirebaseAuthVi
                 }
             });
         }
-        presenter = new FirebaseAuthPresenterImpl(this, this, isAnonymnousPossible);
+        presenter = new FirebaseAuthPresenterImpl(this, this, RApplication.isAnonymousPossible());
         presenter.onCreate();
     }
 
@@ -56,12 +53,20 @@ public class FirebaseAuthActivity extends BaseActivity implements FirebaseAuthVi
         super.onStart();
         if (presenter != null) {
             if (presenter.getCurrentUser() == null) {
-                if (isAnonymnousPossible) {
+                if (RApplication.isAnonymousPossible()) {
                     presenter.firstAuthSignIn();
                 }
             } else {
                 signedInWithAnonymous();
             }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (presenter != null) {
+            presenter.onActivityResult(requestCode, resultCode, data);
         }
     }
 

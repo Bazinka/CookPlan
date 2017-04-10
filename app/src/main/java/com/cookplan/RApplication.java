@@ -31,6 +31,7 @@ public class RApplication extends Application {
 
     public static final String PREFS_NAME = "COOK_PLAN_APP";
     private static final String CATEGORY_PRIORITY_PREFS_NAME = "CATEGORY_PRIORITY_PREFS_NAME";
+    private static final String IS_ANONYMOUS_POSSIBLE_PREFS_NAME = "IS_ANONYMOUS_POSSIBLE_PREFS_NAME";
 
     private static Context context;
 
@@ -48,6 +49,38 @@ public class RApplication extends Application {
         if (getPriorityList() == null) {
             FillProductDatabaseProvider.savePriorityList();
         }
+        if (!isAnonymousPossibleSaved()) {
+            saveAnonymousPossibility(true);
+        }
+    }
+
+    public static void saveAnonymousPossibility(boolean isPossible) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+
+        settings = context.getSharedPreferences(PREFS_NAME,
+                                                Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        editor.putBoolean(IS_ANONYMOUS_POSSIBLE_PREFS_NAME, isPossible);
+        editor.commit();
+    }
+
+    private static boolean isAnonymousPossibleSaved() {
+        SharedPreferences settings;
+        settings = context.getSharedPreferences(PREFS_NAME,
+                                                Context.MODE_PRIVATE);
+
+        return settings.contains(IS_ANONYMOUS_POSSIBLE_PREFS_NAME);
+    }
+
+    public static boolean isAnonymousPossible() {
+        SharedPreferences settings;
+
+        settings = context.getSharedPreferences(PREFS_NAME,
+                                                Context.MODE_PRIVATE);
+
+        return settings.getBoolean(IS_ANONYMOUS_POSSIBLE_PREFS_NAME, true);
     }
 
     public static void savePriorityList(List<ProductCategory> priorityOfCategories) {

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
@@ -189,7 +190,7 @@ public class MainActivity extends BaseActivity
         navigationView.getMenu().findItem(R.id.nav_sign_in).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(false);
         Intent intent = new Intent();
-        intent.putExtra(FirebaseAuthActivity.IS_ANONYMNOUS_POSSIBLE_KEY, false);
+        RApplication.saveAnonymousPossibility(false);
         intent.setClass(this, FirebaseAuthActivity.class);
         startActivityWithLeftAnimation(intent);
         finish();
