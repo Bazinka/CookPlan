@@ -1,6 +1,7 @@
 package com.cookplan.shopping_list.total_list;
 
 import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cookplan.R;
+import com.cookplan.RApplication;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.ShopListStatus;
 
@@ -36,9 +38,25 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         Ingredient ingredient = ingredients.get(position);
 
         if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
+            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                                                                    R.color.white));
             holder.nameTextView.setPaintFlags(holder.nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                                                                      R.color.white));
+            holder.amountTextView.setPaintFlags(holder.amountTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+            if (ingredient.getCategory() != null) {
+                holder.mainView.setBackgroundResource(ingredient.getCategory().getColorId());
+            }
         } else {
+            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                                                                    R.color.primary_text_color));
             holder.nameTextView.setPaintFlags(holder.nameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                                                                      R.color.primary_text_color));
+            holder.amountTextView.setPaintFlags(holder.amountTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            holder.mainView.setBackgroundResource(R.color.white);
         }
 
         holder.nameTextView.setText(ingredient.getName());

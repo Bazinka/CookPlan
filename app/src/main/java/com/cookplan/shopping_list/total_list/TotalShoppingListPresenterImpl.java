@@ -58,7 +58,6 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
 
         //calculate amounts
         List<Ingredient> needToBuyIngredients = new ArrayList<>();
-        List<Ingredient> alreadyBoughtIngredients = new ArrayList<>();
         for (Map.Entry<String, List<Ingredient>> entry : ProductToIngredientMap.entrySet()) {
             Ingredient needToBuyIng = calculateAmountForEntry(entry, ShopListStatus.NEED_TO_BUY);
             if (needToBuyIng != null) {
@@ -67,7 +66,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
 
             Ingredient alreadyBoughtIngred = calculateAmountForEntry(entry, ShopListStatus.ALREADY_BOUGHT);
             if (alreadyBoughtIngred != null) {
-                alreadyBoughtIngredients.add(alreadyBoughtIngred);
+                needToBuyIngredients.add(alreadyBoughtIngred);
             }
         }
         List<Ingredient> needToBuySortedIngredients = new ArrayList<>();
@@ -78,7 +77,6 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                 }
             }
         }
-        needToBuySortedIngredients.addAll(alreadyBoughtIngredients);
         if (mainView != null) {
             if (ProductToIngredientMap.size() != 0) {
                 mainView.setIngredientLists(needToBuySortedIngredients);
