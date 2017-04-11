@@ -1,6 +1,8 @@
 package com.cookplan.recipe_grid;
 
 
+import android.support.annotation.NonNull;
+
 import com.cookplan.models.Recipe;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +20,8 @@ import java.util.List;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public class RecipeGridPresenterImpl implements RecipeGridPresenter {
+public class RecipeGridPresenterImpl implements RecipeGridPresenter, FirebaseAuth.AuthStateListener {
+
 
     private RecipeGridView mainView;
     private DatabaseReference database;
@@ -26,6 +29,7 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter {
     public RecipeGridPresenterImpl(RecipeGridView mainView) {
         this.mainView = mainView;
         this.database = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth.getInstance().addAuthStateListener(this);
     }
 
     @Override
@@ -71,6 +75,13 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter {
             DatabaseReference recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
             DatabaseReference ref = recipeRef.child(recipe.getId());
             ref.removeValue();
+        }
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if (firebaseAuth.getCurrentUser() != null) {
+            getAsyncRecipeList();
         }
     }
 }

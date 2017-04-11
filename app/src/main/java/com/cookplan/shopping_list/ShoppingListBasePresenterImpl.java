@@ -1,6 +1,8 @@
 package com.cookplan.shopping_list;
 
 
+import android.support.annotation.NonNull;
+
 import com.cookplan.models.Ingredient;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,12 +20,13 @@ import java.util.List;
  * Created by DariaEfimova on 24.03.17.
  */
 
-public abstract class ShoppingListBasePresenterImpl implements ShoppingListBasePresenter {
+public abstract class ShoppingListBasePresenterImpl implements ShoppingListBasePresenter, FirebaseAuth.AuthStateListener {
 
     private DatabaseReference database;
 
     public ShoppingListBasePresenterImpl() {
         this.database = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth.getInstance().addAuthStateListener(this);
     }
 
     @Override
@@ -56,4 +59,11 @@ public abstract class ShoppingListBasePresenterImpl implements ShoppingListBaseP
     protected abstract void setError(String message);
 
     public abstract void sortIngredientList(List<Ingredient> userIngredients);
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if (firebaseAuth.getCurrentUser() != null) {
+            getShoppingList();
+        }
+    }
 }
