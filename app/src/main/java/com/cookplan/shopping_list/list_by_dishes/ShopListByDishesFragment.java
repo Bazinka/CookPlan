@@ -86,41 +86,42 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
         setEmptyViewVisability(View.GONE);
         setContentVisability(View.VISIBLE);
 
-        ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
-        ShopListExpandableListAdapter needToBuyAdapter = new ShopListExpandableListAdapter(getActivity(),
-                recipeToingredientsMap, new ShopListExpandableListAdapter.OnItemClickListener() {
-            @Override
-            public void onChildClick(Ingredient ingredient) {
-                ShopListStatus newStatus;
-                if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
-                    newStatus = ShopListStatus.ALREADY_BOUGHT;
-                } else {
-                    newStatus = ShopListStatus.NEED_TO_BUY;
+        if (getActivity() != null) {
+            ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
+            ShopListExpandableListAdapter needToBuyAdapter = new ShopListExpandableListAdapter(getActivity(),
+                                                                                               recipeToingredientsMap, new ShopListExpandableListAdapter.OnItemClickListener() {
+                @Override
+                public void onChildClick(Ingredient ingredient) {
+                    ShopListStatus newStatus;
+                    if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
+                        newStatus = ShopListStatus.ALREADY_BOUGHT;
+                    } else {
+                        newStatus = ShopListStatus.NEED_TO_BUY;
+                    }
+                    if (presenter != null) {
+                        presenter.setIngredientBought(ingredient, newStatus);
+                    }
                 }
-                if (presenter != null) {
-                    presenter.setIngredientBought(ingredient, newStatus);
+
+                @Override
+                public void onGroupClick(Recipe recipe, List<Ingredient> ingredientList) {
+                    new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                            .setMessage(R.string.delete_recipe_from_shop_list_question)
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                if (presenter != null) {
+                                    presenter.setRecipeIngredBought(recipe, ingredientList);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .show();
+
                 }
+            });
+            expandableListView.setAdapter(needToBuyAdapter);
+            int count = recipeToingredientsMap.keySet().size();
+            for (int position = 1; position <= count; position++) {
+                expandableListView.expandGroup(position - 1);
             }
-
-            @Override
-            public void onGroupClick(Recipe recipe, List<Ingredient> ingredientList) {
-                new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
-                        .setMessage(R.string.delete_recipe_from_shop_list_question)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            if (presenter != null) {
-                                presenter.setRecipeIngredBought(recipe, ingredientList);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .show();
-
-            }
-        }
-        );
-        expandableListView.setAdapter(needToBuyAdapter);
-        int count = recipeToingredientsMap.keySet().size();
-        for (int position = 1; position <= count; position++) {
-            expandableListView.expandGroup(position - 1);
         }
     }
 }

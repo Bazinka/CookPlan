@@ -88,30 +88,34 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
                         .setMessage(R.string.choose_recipe_language)
                         .setPositiveButton(R.string.english_lan_title, (dialog, which) -> {
                             language = "eng";
-                            startCameraActivity();
+                            startCameraWithPermCheck();
                         })
                         .setNegativeButton(R.string.russian_lan_title,
                                            (dialog, which) -> {
                                                language = "rus";
-                                               startCameraActivity();
+                                               startCameraWithPermCheck();
                                            })
                         .show();
 
             });
         }
         presenter = new EditRecipeInfoPresenterImpl(this, this);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!PermissionUtils.isPermissionsGranted(this, permission)) {
-                PermissionUtils.requestPermissions(this, RC_IMAGE_PERMS, permission);
-                return;
-            }
-        }
 
         FloatingActionButton nextFab = (FloatingActionButton) findViewById(R.id.recipe_view_fab);
         if (nextFab != null) {
             nextFab.setOnClickListener(v -> {
                 onNextButtonClick();
             });
+        }
+    }
+
+    private void startCameraWithPermCheck() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!PermissionUtils.isPermissionsGranted(this, permission)) {
+                PermissionUtils.requestPermissions(this, RC_IMAGE_PERMS, permission);
+            } else {
+                startCameraActivity();
+            }
         }
     }
 

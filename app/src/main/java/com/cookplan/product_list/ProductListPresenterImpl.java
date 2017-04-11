@@ -3,6 +3,7 @@ package com.cookplan.product_list;
 
 import com.cookplan.models.Product;
 import com.cookplan.utils.DatabaseConstants;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,8 +49,10 @@ public class ProductListPresenterImpl implements ProductListPresenter {
                     }
 
                     public void onCancelled(DatabaseError databaseError) {
-                        if (mainView != null) {
-                            mainView.setErrorToast(databaseError.getMessage());
+                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                            if (mainView != null) {
+                                mainView.setErrorToast(databaseError.getMessage());
+                            }
                         }
                     }
                 });

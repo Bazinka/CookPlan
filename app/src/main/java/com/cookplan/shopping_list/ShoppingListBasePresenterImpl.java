@@ -50,7 +50,9 @@ public abstract class ShoppingListBasePresenterImpl implements ShoppingListBaseP
                 }
 
                 public void onCancelled(DatabaseError databaseError) {
-                    setError(databaseError.getMessage());
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        setError(databaseError.getMessage());
+                    }
                 }
             });
         }
