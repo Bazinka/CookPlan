@@ -11,8 +11,6 @@ import com.google.firebase.auth.FirebaseUser;
 public interface FirebaseAuthPresenter {
     public FirebaseUser getCurrentUser();
 
-    public void onCreate();
-
     public void onDestroy();
 
     public void onActivityResult(int requestCode, int resultCode, Intent data);

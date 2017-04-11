@@ -56,7 +56,6 @@ public class MainActivity extends BaseActivity
         rootView = findViewById(R.id.main_snackbar_layout);
 
         presenter = new MainPresenterImpl(this, this);
-        presenter.onCreate();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         fillNavHeader();
         navigationView.setNavigationItemSelectedListener(this);

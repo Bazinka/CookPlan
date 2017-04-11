@@ -45,7 +45,6 @@ public class FirebaseAuthActivity extends BaseActivity implements FirebaseAuthVi
             });
         }
         presenter = new FirebaseAuthPresenterImpl(this, this, RApplication.isAnonymousPossible());
-        presenter.onCreate();
     }
 
     @Override

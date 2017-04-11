@@ -47,11 +47,6 @@ public class FirebaseAuthPresenterImpl implements FirebaseAuthPresenter, IdpProv
     }
 
     @Override
-    public void onCreate() {
-        provider = new GoogleProvider(activity, getGoogleProvider());
-    }
-
-    @Override
     public void onDestroy() {
         if (provider != null) {
             provider.disconnect();
@@ -64,6 +59,7 @@ public class FirebaseAuthPresenterImpl implements FirebaseAuthPresenter, IdpProv
             if (mainView != null) {
                 mainView.showLoadingDialog(R.string.progress_dialog_loading);
             }
+            provider = new GoogleProvider(activity, getGoogleProvider());
             provider.setAuthenticationCallback(this);
             provider.startLogin(activity);
         } else {
@@ -82,7 +78,7 @@ public class FirebaseAuthPresenterImpl implements FirebaseAuthPresenter, IdpProv
         }
     }
 
-    private AuthUI.IdpConfig getGoogleProvider() {
+    protected AuthUI.IdpConfig getGoogleProvider() {
 
         return new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER)
                 .setPermissions(getGooglePermissions())
@@ -101,7 +97,9 @@ public class FirebaseAuthPresenterImpl implements FirebaseAuthPresenter, IdpProv
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GoogleProvider.RC_SIGN_IN) {
-            provider.onActivityResult(requestCode, resultCode, data);
+            if (provider != null) {
+                provider.onActivityResult(requestCode, resultCode, data);
+            }
         } else if (mainView != null) {
             mainView.signedInFailed();
         }

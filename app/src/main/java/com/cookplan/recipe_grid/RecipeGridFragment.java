@@ -131,6 +131,8 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
 
     @Override
     public void setErrorToast(String error) {
-        Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -9,5 +9,6 @@ import com.cookplan.auth.ui.FirebaseAuthPresenter;
 public interface MainPresenter extends FirebaseAuthPresenter {
 
     public void signOut();
+
     public void signIn();
 }

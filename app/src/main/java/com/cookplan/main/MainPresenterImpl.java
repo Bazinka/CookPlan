@@ -8,9 +8,7 @@ import com.cookplan.auth.provider.GoogleProvider;
 import com.cookplan.auth.ui.AuthUI;
 import com.cookplan.auth.ui.FirebaseAuthPresenterImpl;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +35,7 @@ public class MainPresenterImpl extends FirebaseAuthPresenterImpl implements Main
             if (mainView != null) {
                 mainView.showLoadingDialog(R.string.progress_dialog_loading);
             }
+            provider = new GoogleProvider(activity, getGoogleProvider());
             provider.setAuthenticationCallback(this);
             provider.startLogin(activity);
         }
@@ -74,16 +73,6 @@ public class MainPresenterImpl extends FirebaseAuthPresenterImpl implements Main
         AuthCredential credential = GoogleProvider.createAuthCredential(account);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            OnCompleteListener<AuthResult> successTask = task -> {
-                if (mainView != null) {
-                    mainView.dismissDialog();
-                    if (task.isSuccessful()) {
-                        mainView.signedInWithGoogle();
-                    } else {
-                        mainView.signedInFailed();
-                    }
-                }
-            };
             user.linkWithCredential(credential)
                     .addOnFailureListener(e -> {
                         if (e instanceof FirebaseAuthUserCollisionException) {
@@ -94,14 +83,32 @@ public class MainPresenterImpl extends FirebaseAuthPresenterImpl implements Main
                                             mainView.signedInFailed();
                                         }
                                     })
-                                    .addOnCompleteListener(successTask);
+                                    .addOnCompleteListener(task -> {
+                                        if (mainView != null) {
+                                            mainView.dismissDialog();
+                                            if (task.isSuccessful()) {
+                                                mainView.signedInWithGoogle();
+                                            } else {
+                                                mainView.signedInFailed();
+                                            }
+                                        }
+                                    });
                         } else {
                             if (mainView != null) {
                                 mainView.signedInFailed();
                             }
                         }
                     })
-                    .addOnCompleteListener(successTask);
+                    .addOnCompleteListener(task -> {
+                        if (mainView != null) {
+                            mainView.dismissDialog();
+                            if (task.isSuccessful()) {
+                                mainView.signedInWithGoogle();
+                            } else if (!(task.getException() instanceof FirebaseAuthUserCollisionException)) {
+                                mainView.signedInFailed();
+                            }
+                        }
+                    });
         }
     }
 

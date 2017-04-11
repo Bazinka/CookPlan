@@ -55,8 +55,10 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter {
                 }
 
                 public void onCancelled(DatabaseError databaseError) {
-                    if (mainView != null) {
-                        mainView.setErrorToast(databaseError.getMessage());
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        if (mainView != null) {
+                            mainView.setErrorToast(databaseError.getMessage());
+                        }
                     }
                 }
             });
