@@ -16,14 +16,17 @@ public class Recipe implements Serializable {
     private String id;
     private String name;
     private String desc;
+    private String userId;
+    private String userName;
 
     public Recipe() {
     }
 
-    public Recipe(String id, String name, String desc) {
+    public Recipe(String id, String name, String desc, String userId) {
         this.id = id;
         this.name = name;
         this.desc = desc;
+        this.userId = userId;
     }
 
     public Recipe(String name, String desc) {
@@ -62,8 +65,20 @@ public class Recipe implements Serializable {
 
     public static Recipe getRecipeFromDBObject(DataSnapshot itemSnapshot) {
         RecipeDB object = itemSnapshot.getValue(RecipeDB.class);
-        Recipe recipe = new Recipe(itemSnapshot.getKey(), object.getName(), object.getDesc());
+        Recipe recipe = new Recipe(itemSnapshot.getKey(), object.getName(), object.getDesc(), object.getUserId());
         return recipe;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public static class RecipeDB {

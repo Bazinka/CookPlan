@@ -12,9 +12,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,16 +26,17 @@ import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
+import com.cookplan.models.SharedData;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
-
 
     private ProgressDialog mProgressDialog;
 
@@ -39,6 +44,9 @@ public class MainActivity extends BaseActivity
     private View rootView;
 
     private MainPresenter presenter;
+
+    private SharedData sharedData;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,6 +217,10 @@ public class MainActivity extends BaseActivity
     }
 
     void setRecipeListFragment() {
+        sharedData = SharedData.RECIPE;
+        if (menu != null) {
+            menu.findItem(R.id.app_bar_share).setVisible(true);
+        }
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -229,6 +241,10 @@ public class MainActivity extends BaseActivity
     }
 
     void setShoppingListFragment() {
+        sharedData = SharedData.INGREDIENTS;
+        if (menu != null) {
+            menu.findItem(R.id.app_bar_share).setVisible(true);
+        }
         //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
         //        mainConteinerView.setVisibility(View.INVISIBLE);
 
@@ -250,6 +266,11 @@ public class MainActivity extends BaseActivity
     }
 
     void setProductListFragment() {
+        sharedData = null;
+
+        if (menu != null) {
+            menu.findItem(R.id.app_bar_share).setVisible(false);
+        }
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -270,5 +291,56 @@ public class MainActivity extends BaseActivity
         transaction.commit();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu _menu) {
+        getMenuInflater().inflate(R.menu.main_menu, _menu);
+        menu = _menu;
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.app_bar_share) {
+            if (sharedData != null && FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.share_with_google_dialog, null);
+                alert.setView(layout);
+                final EditText userEmailInput = (EditText) layout.findViewById(R.id.user_email_editText);
+
+                alert.setTitle(R.string.attention_title)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            String emailText = userEmailInput.getText().toString();
+                            if (!emailText.isEmpty() && presenter != null) {
+                                presenter.shareData(emailText, sharedData);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
+                    FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.attention_title)
+                        .setMessage(R.string.need_to_auth)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            } else {
+                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.attention_title)
+                        .setMessage(R.string.cant_share_data)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

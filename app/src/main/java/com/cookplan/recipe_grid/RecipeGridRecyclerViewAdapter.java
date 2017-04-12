@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -31,6 +32,16 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Recipe recipe = mValues.get(position);
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        if (recipe.getUserId().equals(uid)) {
+            holder.authorNameLayout.setVisibility(View.GONE);
+        } else {
+            holder.authorNameView.setText(recipe.getUserName());
+            holder.authorNameLayout.setVisibility(View.VISIBLE);
+        }
+
         holder.nameView.setText(mValues.get(position).getName());
 
         holder.mainView.setTag(recipe);
@@ -40,6 +51,7 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
                 listener.onRecipeClick(recipe1);
             }
         });
+
         holder.mainView.setOnLongClickListener(v -> {
             Recipe recipe1 = (Recipe) v.getTag();
             if (listener != null && recipe1 != null) {
@@ -63,11 +75,15 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mainView;
         public final TextView nameView;
+        public final TextView authorNameView;
+        public final ViewGroup authorNameLayout;
 
         public ViewHolder(View view) {
             super(view);
             mainView = view;
             nameView = (TextView) view.findViewById(R.id.name);
+            authorNameView = (TextView) view.findViewById(R.id.author_name);
+            authorNameLayout = (ViewGroup) view.findViewById(R.id.author_layout);
         }
 
         @Override

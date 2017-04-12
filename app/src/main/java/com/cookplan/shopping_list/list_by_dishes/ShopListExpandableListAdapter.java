@@ -38,7 +38,7 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
         for (Map.Entry<Recipe, List<Ingredient>> entry : recipeToIngredientMap.entrySet()) {
             if (entry.getKey() == null || entry.getKey().getId() == null) {
                 recipeList.add(new Recipe(context.getString(R.string.without_recipe_title),
-                        context.getString(R.string.recipe_desc_is_not_needed_title)));
+                                          context.getString(R.string.recipe_desc_is_not_needed_title)));
                 recipeIdsToIngredientMap.put(WITHOUT_RECIPE_KEY, entry.getValue());
 
             } else {
@@ -98,6 +98,10 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
             }
             nameTextView.setText(ingredient.getName());
 
+            if (ingredient.getUserName() != null && !ingredient.getUserName().isEmpty()) {
+                nameTextView.setText(nameTextView.getText().toString() +
+                                             " (by " + " " + ingredient.getUserName() + ")");
+            }
 
             if (ingredient.getMainAmount() != 0 && ingredient.getMainMeasureUnit() != null) {
                 amountTextView.setVisibility(View.VISIBLE);

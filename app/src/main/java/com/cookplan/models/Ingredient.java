@@ -16,6 +16,7 @@ public class Ingredient implements Serializable {
 
     public String id;
     public String userId;
+    private String userName;
     public String name;
     public String productId;
     public String recipeId;
@@ -118,6 +119,10 @@ public class Ingredient implements Serializable {
         this.name = name;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
     public static Ingredient getIngredientFromDBObject(DataSnapshot itemSnapshot) {
         Ingredient ingredient = new Ingredient();
         ingredient.id = itemSnapshot.getKey();
@@ -188,5 +193,13 @@ public class Ingredient implements Serializable {
 
     public ProductCategory getCategory() {
         return category;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

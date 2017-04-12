@@ -9,9 +9,9 @@
     <!--cyan-->
     <color name="accent_color">#FFC107</color><!--500-->
     <color name="accent_color_dark">#FFA000</color><!--700-->
-    <color name="accent_color_darker">#FFA000</color><!--900-->
-    <color name="accent_color_lighter">#FF6F00</color><!--300-->
-    <color name="accent_color_light">#FFF8E1</color><!--50-->
+    <color name="accent_color_darker">#FF6F00</color><!--900-->
+    <color name="accent_color_light">#FFD54F</color><!--300-->
+    <color name="accent_color_lighter">#FFF8E1</color><!--50-->
 
     <color name="window_background_color">#FAFAFA</color>
     <color name="primary_text_color">#DF000000</color>

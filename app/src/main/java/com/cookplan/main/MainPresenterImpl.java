@@ -7,11 +7,16 @@ import com.cookplan.R;
 import com.cookplan.auth.provider.GoogleProvider;
 import com.cookplan.auth.ui.AuthUI;
 import com.cookplan.auth.ui.FirebaseAuthPresenterImpl;
+import com.cookplan.models.ShareUserInfo;
+import com.cookplan.models.SharedData;
+import com.cookplan.utils.DatabaseConstants;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by DariaEfimova on 10.04.17.
@@ -38,6 +43,28 @@ public class MainPresenterImpl extends FirebaseAuthPresenterImpl implements Main
             provider = new GoogleProvider(activity, getGoogleProvider());
             provider.setAuthenticationCallback(this);
             provider.startLogin(activity);
+        }
+    }
+
+    @Override
+    public void shareData(String userEmail, SharedData data) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String myUid = user.getUid();
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference userShareRef = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE);
+            userShareRef.push().setValue(new ShareUserInfo(myUid, user.getDisplayName(), userEmail, data),
+                                         (databaseError, reference) -> {
+                                             if (databaseError != null) {
+                                                 if (mainView != null) {
+                                                     mainView.showSnackbar(R.string.error_share_title);
+                                                 }
+                                             } else {
+                                                 if (mainView != null) {
+                                                     mainView.showSnackbar(R.string.share_success_title);
+                                                 }
+                                             }
+                                         });
         }
     }
 

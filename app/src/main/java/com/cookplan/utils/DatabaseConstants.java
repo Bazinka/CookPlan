@@ -9,7 +9,13 @@ public class DatabaseConstants {
     public static String DATABASE_RECIPE_TABLE = "recipe";
     public static String DATABASE_INRGEDIENT_TABLE = "ingredient";
     public static String DATABASE_PRODUCT_TABLE = "product";
+    public static String DATABASE_SHARE_TO_GOOGLE_USER_TABLE = "share_google";
     public static String DATABASE_PHOTO_TABLE = "photo";
+
+
+    public static final String DATABASE_OWNER_USER_ID_FIELD = "ownerUserId";
+    public static final String DATABASE_CLIENT_USER_EMAIL_FIELD = "clientUserEmail";
+    public static final String DATABASE_SHARED_DATA_FIELD = "sharedData";
 
     public static final String DATABASE_USER_ID_FIELD = "userId";
     public static final String DATABASE_NAME_FIELD = "name";

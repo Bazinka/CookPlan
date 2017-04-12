@@ -81,7 +81,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
                             }
                         } else {
                             Recipe recipe = new Recipe(context.getString(R.string.without_recipe_title),
-                                    context.getString(R.string.recipe_desc_is_not_needed_title));
+                                                       context.getString(R.string.recipe_desc_is_not_needed_title));
                             if (!recipeToIngredientsMap.containsKey(recipe)) {
                                 recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
                             }

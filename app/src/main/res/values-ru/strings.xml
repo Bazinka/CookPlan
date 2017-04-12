@@ -100,11 +100,6 @@
     <string name="books_and_printed_matter_title">Книги и печатная продукция</string>
     <string name="products_for_garden_title">Всё для сада и огорода</string>
     <string name="are_you_sure_about_remove_question">Вы уверены, что хотите удалить элемент?</string>
-    <string name="one_number_title">1</string>
-    <string name="input_value_for_title">Введите значение для списка покупок для:</string>
-    <string name="equal_sign">=</string>
-    <string name="nothing_wont_be_saved">Иначе ничего не будет сохранено :(</string>
-    <string name="i_dont_know">Я не знаю</string>
     <string name="product_required_field">Необходимо выбрать продукт из списка</string>
     <string name="by_the_taste">по вкусу</string>
     <string name="done_menu_title">Done</string>
@@ -112,5 +107,9 @@
     <string name="sign_in">Sign in</string>
     <string name="anonymnous_auth">Авторизация в анонимном режиме</string>
     <string name="some_data_would_be_lost">Некотоые данные будут потеряны</string>
+    <string name="error_share_title">Неудалось поделиться информацией</string>
+    <string name="share_success_title">Информация расшарена успешно</string>
+    <string name="need_to_auth">Авторизуйтесь, чтобы делиться информацией</string>
+    <string name="cant_share_data">Вы не можете поделиться содержимым этого экрана</string>
 
 </resources>
