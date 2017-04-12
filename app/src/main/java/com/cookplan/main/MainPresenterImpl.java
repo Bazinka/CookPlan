@@ -62,7 +62,7 @@ public class MainPresenterImpl extends FirebaseAuthPresenterImpl implements Main
             Query sharedItems = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
                     .orderByChild(DatabaseConstants.DATABASE_CLIENT_USER_EMAIL_FIELD)
                     .equalTo(userEmail);
-            sharedItems.addValueEventListener(new ValueEventListener() {
+            sharedItems.addListenerForSingleValueEvent(new ValueEventListener() {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     List<ShareUserInfo> shareUserInfos = new ArrayList<>();
                     if (dataSnapshot.getValue() != null) {
