@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Введите email пользователя, с которым вы хотите поделиться"
+        android:lines="2"
+        android:text="Введите email или имя пользователя, с которым вы хотите поделиться"
         android:textColor="@color/primary_text_color"
         android:textSize="@dimen/subheding_text_size"/>
 

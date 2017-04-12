@@ -313,8 +313,13 @@ public class MainActivity extends BaseActivity
                 alert.setTitle(R.string.attention_title)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             String emailText = userEmailInput.getText().toString();
-                            if (!emailText.isEmpty() && presenter != null) {
-                                presenter.shareData(emailText, sharedData);
+                            if (!emailText.isEmpty()) {
+                                if (!emailText.contains(getString(R.string.gmail_ending_title))) {
+                                    emailText = emailText + getString(R.string.gmail_ending_title);
+                                }
+                                if (presenter != null) {
+                                    presenter.shareData(emailText, sharedData);
+                                }
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, null)

@@ -15,8 +15,15 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by DariaEfimova on 10.04.17.
@@ -52,19 +59,48 @@ public class MainPresenterImpl extends FirebaseAuthPresenterImpl implements Main
         if (user != null) {
             String myUid = user.getUid();
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference userShareRef = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE);
-            userShareRef.push().setValue(new ShareUserInfo(myUid, user.getDisplayName(), userEmail, data),
-                                         (databaseError, reference) -> {
-                                             if (databaseError != null) {
-                                                 if (mainView != null) {
-                                                     mainView.showSnackbar(R.string.error_share_title);
-                                                 }
-                                             } else {
-                                                 if (mainView != null) {
-                                                     mainView.showSnackbar(R.string.share_success_title);
-                                                 }
-                                             }
-                                         });
+            Query sharedItems = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
+                    .orderByChild(DatabaseConstants.DATABASE_CLIENT_USER_EMAIL_FIELD)
+                    .equalTo(userEmail);
+            sharedItems.addValueEventListener(new ValueEventListener() {
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<ShareUserInfo> shareUserInfos = new ArrayList<>();
+                    if (dataSnapshot.getValue() != null) {
+                        for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                            ShareUserInfo userInfo = itemSnapshot.getValue(ShareUserInfo.class);
+                            if (userInfo.getSharedData() == data
+                                    && userInfo.getOwnerUserId().equals(myUid)) {
+                                shareUserInfos.add(userInfo);
+                            }
+                        }
+                    }
+                    if (shareUserInfos.isEmpty()) {
+                        DatabaseReference userShareRef = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE);
+                        userShareRef.push().setValue(new ShareUserInfo(myUid, user.getDisplayName(), userEmail, data),
+                                                     (databaseError, reference) -> {
+                                                         if (databaseError != null) {
+                                                             if (mainView != null) {
+                                                                 mainView.showSnackbar(R.string.error_share_title);
+                                                             }
+                                                         } else {
+                                                             if (mainView != null) {
+                                                                 mainView.showSnackbar(R.string.share_success_title);
+                                                             }
+                                                         }
+                                                     });
+                    } else {
+                        if (mainView != null) {
+                            mainView.showSnackbar(R.string.have_already_shared);
+                        }
+                    }
+                }
+
+                public void onCancelled(DatabaseError databaseError) {
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        mainView.showSnackbar(R.string.error_share_title);
+                    }
+                }
+            });
         }
     }
 

@@ -111,5 +111,7 @@
     <string name="share_success_title">Информация расшарена успешно</string>
     <string name="need_to_auth">Авторизуйтесь, чтобы делиться информацией</string>
     <string name="cant_share_data">Вы не можете поделиться содержимым этого экрана</string>
+    <string name="have_already_shared">Вы уже поделились этим раньше</string>
+    <string name="gmail_ending_title">\@gmail.com</string>
 
 </resources>
