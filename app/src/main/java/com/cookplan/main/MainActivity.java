@@ -303,7 +303,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.app_bar_share) {
-            if (sharedData != null && FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+            if (sharedData != null && !FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
                 LayoutInflater inflater = getLayoutInflater();
                 View layout = inflater.inflate(R.layout.share_with_google_dialog, null);
