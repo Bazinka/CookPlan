@@ -5,12 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
+import com.daimajia.swipe.SwipeLayout;
 
 import java.util.List;
 
@@ -21,8 +20,6 @@ import java.util.List;
 public class EditRecipeInrgedientsAdapter extends RecyclerView.Adapter<EditRecipeInrgedientsAdapter.MainViewHolder> {
 
     private List<Ingredient> ingredients;
-    private int removeShownPrevPosition;
-    private int removeShownPosition;
     private IngredientsEventListener listener;
     private Context context;
 
@@ -30,8 +27,6 @@ public class EditRecipeInrgedientsAdapter extends RecyclerView.Adapter<EditRecip
         this.listener = listener;
         this.context = context;
         ingredients = ingredientsList;
-        removeShownPosition = -1;
-        removeShownPrevPosition = -1;
     }
 
     @Override
@@ -58,68 +53,24 @@ public class EditRecipeInrgedientsAdapter extends RecyclerView.Adapter<EditRecip
         }
 
         if (ingredient.getCategory() != null) {
-            holder.removeItemLayout.setBackgroundResource(ingredient.getCategory().getColorId());
+            holder.removeButtonLayout.setBackgroundResource(ingredient.getCategory().getColorId());
             holder.categoryView.setBackgroundResource(ingredient.getCategory().getColorId());
         }
 
-        if (removeShownPosition == position) {
-            Animation animation = AnimationUtils.loadAnimation(context, R.anim.left_to_right_view);
-            holder.removeItemLayout.clearAnimation();
-            holder.removeItemLayout.startAnimation(animation);
-            holder.contentItemLayout.clearAnimation();
-            holder.contentItemLayout.startAnimation(animation);
-            holder.removeItemLayout.setVisibility(View.VISIBLE);
-        } else {
-            if (removeShownPosition == -1 && removeShownPrevPosition == position) {
-                Animation animation = AnimationUtils.loadAnimation(context, R.anim.right_to_left_view);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+        //set show mode.
+        holder.mainView.setShowMode(SwipeLayout.ShowMode.PullOut);
 
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        holder.removeItemLayout.clearAnimation();
-                        holder.contentItemLayout.clearAnimation();
-                        holder.removeItemLayout.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                holder.removeItemLayout.startAnimation(animation);
-                holder.contentItemLayout.startAnimation(animation);
-            } else {
-                holder.removeItemLayout.setVisibility(View.GONE);
-            }
-        }
+        //add drag edge.(If the BottomView has 'layout_gravity' attribute, this line is unnecessary)
+        holder.mainView.addDrag(SwipeLayout.DragEdge.Left, holder.mainRemoveLayout);
+        holder.mainView.addDrag(SwipeLayout.DragEdge.Right, null);
 
 
-        holder.removeItemLayout.setTag(ingredient);
-        holder.removeItemLayout.setOnClickListener(v -> {
+        holder.mainRemoveLayout.setTag(ingredient);
+        holder.mainRemoveLayout.setOnClickListener(v -> {
             Ingredient ingred = (Ingredient) v.getTag();
-            removeShownPrevPosition = -1;
-            removeShownPosition = -1;
             if (listener != null && ingred != null) {
                 listener.onRemoveIngredientEvent(ingred);
             }
-        });
-
-        holder.mainView.setTag(position);
-        holder.mainView.setOnClickListener(v -> {
-            Integer pos = (Integer) v.getTag();
-            if (pos != null) {
-                removeShownPrevPosition = removeShownPosition;
-                if (removeShownPosition == pos) {
-                    removeShownPosition = -1;
-                } else {
-                    removeShownPosition = pos;
-                }
-            }
-            notifyDataSetChanged();
         });
     }
 
@@ -131,19 +82,20 @@ public class EditRecipeInrgedientsAdapter extends RecyclerView.Adapter<EditRecip
     static class MainViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView amountTextView;
-        ViewGroup removeItemLayout;
+        ViewGroup mainRemoveLayout;
+        ViewGroup removeButtonLayout;
         View categoryView;
-        ViewGroup contentItemLayout;
-        View mainView;
+        //        ViewGroup contentItemLayout;
+        SwipeLayout mainView;
 
         MainViewHolder(View v) {
             super(v);
             nameTextView = (TextView) v.findViewById(R.id.ingredient_item_name);
             amountTextView = (TextView) v.findViewById(R.id.ingredient_item_amount);
-            removeItemLayout = (ViewGroup) v.findViewById(R.id.ingredient_remove_layout);
-            contentItemLayout = (ViewGroup) v.findViewById(R.id.ingredient_content_layout);
+            mainRemoveLayout = (ViewGroup) v.findViewById(R.id.ingredient_remove_layout);
+            removeButtonLayout = (ViewGroup) v.findViewById(R.id.ingredient_remove_button_layout);
             categoryView = v.findViewById(R.id.category_view);
-            mainView = v.findViewById(R.id.main_view);
+            mainView = (SwipeLayout) v.findViewById(R.id.main_view);
         }
     }
 
@@ -152,16 +104,10 @@ public class EditRecipeInrgedientsAdapter extends RecyclerView.Adapter<EditRecip
         notifyDataSetChanged();
     }
 
-    //    public void addItemList(List<Ingredient> ingredientList) {
-    //        ingredients.addAll(ingredientList);
-    //        notifyDataSetChanged();
-    //    }
 
     public void updateItems(List<Ingredient> ingredientList) {
         ingredients.clear();
         ingredients.addAll(ingredientList);
-        removeShownPosition = -1;
-        removeShownPrevPosition = -1;
         notifyDataSetChanged();
     }
 

@@ -180,4 +180,5 @@
     <string name="sign_out_impossible">Невозможно выйти из анонимного режима</string>
     <string name="sign_in">Sign in</string>
     <string name="anonymnous_auth">Авторизация в анонимном режиме</string>
+    <string name="some_data_would_be_lost">Некотоые данные будут потеряны</string>
 </resources>
