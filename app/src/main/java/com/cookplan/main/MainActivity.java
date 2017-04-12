@@ -327,7 +327,6 @@ public class MainActivity extends BaseActivity
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             dialog.dismiss();
                         })
-                        .setNegativeButton(android.R.string.cancel, null)
                         .show();
             } else {
                 new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
@@ -336,7 +335,6 @@ public class MainActivity extends BaseActivity
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             dialog.dismiss();
                         })
-                        .setNegativeButton(android.R.string.cancel, null)
                         .show();
             }
             return true;
