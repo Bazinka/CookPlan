@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:lines="2"
+        android:maxLines="4"
         android:text="@string/family_mode_dialog_recipes_title"
         android:textColor="@color/primary_text_color"
         android:textSize="@dimen/subheding_text_size"/>
