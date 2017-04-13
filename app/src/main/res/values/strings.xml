@@ -186,4 +186,5 @@
     <string name="family_mode">Семейный режим</string>
     <string name="family_mode_dialog_recipes_title">Введите email или имя пользователя члена семьи и он будет видеть все ваши рецепты</string>
     <string name="family_mode_dialog_shop_list_title">Введите email или имя пользователя члена семьи для совместного использования вашего списка покупок</string>
+    <string name="step_by_step_recipe_button_title">Открыть в режиме По шагам</string>
 </resources>

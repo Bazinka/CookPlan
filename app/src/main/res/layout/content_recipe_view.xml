@@ -61,7 +61,7 @@
             android:layout_below="@id/description_title"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/recipe_description_title"
-            android:textSize="@dimen/body_text_size" />
+            android:textSize="@dimen/subheding_text_size" />
 
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

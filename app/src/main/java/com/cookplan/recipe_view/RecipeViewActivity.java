@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
 import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
+import com.cookplan.recipe_steps.RecipeStepsViewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +73,19 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
 
             TextView descTextView = (TextView) findViewById(R.id.description_body_textview);
             descTextView.setText(recipe.getDesc());
+
+            ViewGroup stepByStepViewLayout = (ViewGroup) findViewById(R.id.step_by_step_button_layout);
+            stepByStepViewLayout.setOnClickListener(v -> {
+                Intent intent = new Intent(this, RecipeStepsViewActivity.class);
+                //TODO: add extras to send data to activity
+                intent.putExtra(RecipeStepsViewActivity.RECIPE_OBJECT_KEY, recipe);
+                if (adapter != null) {
+                    intent.putParcelableArrayListExtra(RecipeStepsViewActivity.INGREDIENT_LIST_OBJECT_KEY,
+                                                       adapter.getIngredients());
+                }
+                startActivityWithLeftAnimation(intent);
+                finish();
+            });
         }
     }
 
@@ -94,8 +109,8 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
             message = getString(R.string.ingr_removed_from_shopping_list_title);
         }
         Snackbar.make(findViewById(R.id.main_view),
-                ingredient.getName() + message,
-                Snackbar.LENGTH_LONG).show();
+                      ingredient.getName() + message,
+                      Snackbar.LENGTH_LONG).show();
         adapter.notifyDataSetChanged();
     }
 

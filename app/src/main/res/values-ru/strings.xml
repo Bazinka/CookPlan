@@ -116,5 +116,6 @@
     <string name="cant_share_to_myself">Вы не можете делиться сам с собой</string>
     <string name="family_mode">Семейный режим</string>
     <string name="family_mode_dialog_recipes_title">Введите email или имя пользователя члена семьи и он будет видеть все изменения в рецептах</string>
+    <string name="step_by_step_recipe_button_title">Открыть в режиме По шагам</string>
 
 </resources>

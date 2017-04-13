@@ -1,10 +1,12 @@
 package com.cookplan.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * Created by DariaEfimova on 18.03.17.
  */
 
-public class Ingredient implements Serializable {
+public class Ingredient implements Parcelable {
 
     public String id;
     public String userId;
@@ -202,4 +204,54 @@ public class Ingredient implements Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+    // Parcelling part
+    public Ingredient(Parcel in) {
+
+        id = in.readString();
+        userId = in.readString();
+        userName = in.readString();
+        name = in.readString();
+        productId = in.readString();
+        recipeId = in.readString();
+        mainMeasureUnit = (MeasureUnit) in.readSerializable();
+        mainAmount = in.readDouble();
+        //        shopAmountList = in.readArrayList(Double.class.getClassLoader());
+        //        shopMeasureList = in.readArrayList(MeasureUnit.class.getClassLoader());
+        //        amountString = in.readString();
+        //        shopListStatus = (ShopListStatus) in.readSerializable();
+        //        category = (ProductCategory) in.readSerializable();
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(userId);
+        dest.writeString(userName);
+        dest.writeString(name);
+        dest.writeString(productId);
+        dest.writeString(recipeId);
+        dest.writeSerializable(mainMeasureUnit);
+        dest.writeDouble(mainAmount);
+        //        dest.writeDoubleArray(shopAmountList.toArray());
+        //        dest.writeDoubleArray(shopMeasureList);
+        //        amountString = in.readString();
+        //        shopListStatus = (ShopListStatus) in.readSerializable();
+        //        category = (ProductCategory) in.readSerializable();
+
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Ingredient createFromParcel(Parcel in) {
+            return new Ingredient(in);
+        }
+
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
 }
