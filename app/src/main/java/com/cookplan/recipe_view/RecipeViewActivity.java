@@ -21,6 +21,8 @@ import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
 import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
 import com.cookplan.recipe_steps.RecipeStepsViewActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
         } else {
             setTitle(recipe.getName());
 
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.recipe_view_fab);
             fab.setOnClickListener(view -> {
                 Intent intent = new Intent(this, EditRecipeInfoActivity.class);
@@ -53,7 +56,11 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
                 startActivityWithLeftAnimation(intent);
                 finish();
             });
-
+            if (user != null && recipe.getUserId().equals(user.getUid())) {
+                fab.setVisibility(View.VISIBLE);
+            } else {
+                fab.setVisibility(View.GONE);
+            }
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ingredients_recycler_view);
             recyclerView.setHasFixedSize(true);
 
