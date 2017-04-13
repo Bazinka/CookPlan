@@ -56,7 +56,7 @@ public class MainPresenterImpl extends FirebaseAuthPresenterImpl implements Main
     @Override
     public void shareData(String userEmail, SharedData data) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
+        if (user != null && !user.getEmail().equals(userEmail)) {
             String myUid = user.getUid();
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
             Query sharedItems = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
@@ -101,6 +101,8 @@ public class MainPresenterImpl extends FirebaseAuthPresenterImpl implements Main
                     }
                 }
             });
+        } else if (user != null && user.getEmail().equals(userEmail)) {
+            mainView.showSnackbar(R.string.cant_share_to_myself);
         }
     }
 

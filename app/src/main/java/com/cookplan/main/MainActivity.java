@@ -309,8 +309,13 @@ public class MainActivity extends BaseActivity
                 View layout = inflater.inflate(R.layout.share_with_google_dialog, null);
                 alert.setView(layout);
                 final EditText userEmailInput = (EditText) layout.findViewById(R.id.user_email_editText);
-
-                alert.setTitle(R.string.attention_title)
+                final TextView titleTextView = (TextView) layout.findViewById(R.id.user_email_title);
+                if (sharedData == SharedData.RECIPE) {
+                    titleTextView.setText(R.string.family_mode_dialog_recipes_title);
+                } else if (sharedData == SharedData.INGREDIENTS) {
+                    titleTextView.setText(R.string.family_mode_dialog_shop_list_title);
+                }
+                alert.setTitle(R.string.family_mode)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             String emailText = userEmailInput.getText().toString();
                             if (!emailText.isEmpty()) {

@@ -113,5 +113,8 @@
     <string name="cant_share_data">Вы не можете поделиться содержимым этого экрана</string>
     <string name="have_already_shared">Вы уже поделились этим раньше</string>
     <string name="gmail_ending_title">\@gmail.com</string>
+    <string name="cant_share_to_myself">Вы не можете делиться сам с собой</string>
+    <string name="family_mode">Семейный режим</string>
+    <string name="family_mode_dialog_recipes_title">Введите email или имя пользователя члена семьи и он будет видеть все изменения в рецептах</string>
 
 </resources>
