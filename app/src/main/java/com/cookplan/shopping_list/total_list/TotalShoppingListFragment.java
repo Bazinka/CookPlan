@@ -3,11 +3,13 @@ package com.cookplan.shopping_list.total_list;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.cookplan.BaseFragment;
@@ -78,7 +80,35 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
         if (presenter != null) {
             presenter.getShoppingList();
         }
+        setEmptyView();
         progressBar.setVisibility(View.VISIBLE);
+
+        ImageView deleteImageButton = (ImageView) mainView.findViewById(R.id.delete_image_view);
+        deleteImageButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
+                    .setTitle(R.string.delete_shop_list_title)
+                    .setMessage(R.string.choose_right_delete_mode)
+                    .setPositiveButton(R.string.delete_already_bought, (dialog, which) -> {
+                        List<Ingredient> ingredients = new ArrayList<>();
+                        for (Ingredient ingredient : needToBuyAdapter.getIngredients()) {
+                            if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
+                                ingredients.add(ingredient);
+                            }
+                        }
+                        progressBar.setVisibility(View.VISIBLE);
+                        if (presenter != null) {
+                            presenter.deleteIngredients(ingredients);
+                        }
+                    })
+                    .setNeutralButton(android.R.string.cancel, null)
+                    .setNegativeButton(R.string.delete_all_items_title, (dialog, which) -> {
+                        progressBar.setVisibility(View.VISIBLE);
+                        if (presenter != null) {
+                            presenter.deleteIngredients(needToBuyAdapter.getIngredients());
+                        }
+                    })
+                    .show();
+        });
         return mainView;
     }
 
@@ -120,6 +150,7 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
             }
         } else {
             setLayoutVisability(needToBuyLayout, View.GONE);
+            setEmptyView();
         }
     }
 

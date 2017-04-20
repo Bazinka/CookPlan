@@ -106,6 +106,10 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         notifyDataSetChanged();
     }
 
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView amountTextView;

@@ -44,9 +44,7 @@
             <RelativeLayout
                 android:id="@+id/need_to_buy_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/main_margin_left"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <View
                     android:id="@+id/need_to_buy_devider_1"
@@ -54,30 +52,44 @@
                     android:layout_height="1dp"
                     android:background="@color/primary_light"/>
 
-                <TextView
-                    android:id="@+id/need_to_buy_title"
+                <RelativeLayout
+                    android:id="@+id/need_to_buy_title_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/need_to_buy_devider_1"
-                    android:layout_margin="@dimen/small_item_padding"
-                    android:gravity="center"
-                    android:text="@string/need_to_buy_list_title"
-                    android:textColor="@color/primary"
-                    android:textSize="@dimen/title_text_size"
-                    android:textStyle="bold"/>
+                    android:layout_below="@id/need_to_buy_devider_1">
 
-                <View
-                    android:id="@+id/need_to_buy_devider_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/need_to_buy_title"
-                    android:background="@color/primary_light"/>
+                    <ImageView
+                        android:id="@+id/delete_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/need_to_buy_title"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:adjustViewBounds="true"
+                        android:paddingLeft="@dimen/main_margin_left"
+                        android:paddingRight="@dimen/main_margin_left"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_remove_shop_list"/>
+
+                    <TextView
+                        android:id="@+id/need_to_buy_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/small_item_padding"
+                        android:gravity="center"
+                        android:text="@string/need_to_buy_list_title"
+                        android:textColor="@color/primary"
+                        android:textSize="@dimen/title_text_size"
+                        android:textStyle="bold"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"/>
+                </RelativeLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/total_need_to_buy_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/need_to_buy_devider_2"
+                    android:layout_below="@id/need_to_buy_title_layout"
                     android:layout_marginBottom="@dimen/main_margin_left"/>
             </RelativeLayout>
         </RelativeLayout>

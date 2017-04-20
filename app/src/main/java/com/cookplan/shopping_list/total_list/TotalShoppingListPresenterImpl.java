@@ -232,4 +232,32 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             //                    });
         }
     }
+
+    @Override
+    public void deleteIngredients(List<Ingredient> localIngredients) {
+        DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+        for (Ingredient ingred : localIngredients) {
+            List<Ingredient> realIngredients = ProductToIngredientMap.get(ingred.getName());
+            for (Ingredient ingredient : realIngredients) {
+                ingredient.setShopListStatus(ShopListStatus.NONE);
+                DatabaseReference ref = ingredientRef.child(ingredient.getId());
+                if (ingredient.getRecipeId() == null) {
+                    ref.removeValue()
+                            .addOnFailureListener(e -> {
+                                if (mainView != null) {
+                                    mainView.setErrorToast(e.getLocalizedMessage());
+                                }
+                            });
+                } else {
+                    ref.child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
+                            .setValue(ingredient.getShopListStatus())
+                            .addOnFailureListener(e -> {
+                                if (mainView != null) {
+                                    mainView.setErrorToast(e.getLocalizedMessage());
+                                }
+                            });
+                }
+            }
+        }
+    }
 }
