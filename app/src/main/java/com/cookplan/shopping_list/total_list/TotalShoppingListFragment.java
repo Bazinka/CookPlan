@@ -55,7 +55,9 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
 
         RecyclerView needToBuyRecyclerView = (RecyclerView) mainView.findViewById(R.id.total_need_to_buy_recycler);
         needToBuyRecyclerView.setHasFixedSize(true);
+        needToBuyRecyclerView.setNestedScrollingEnabled(false);
         needToBuyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 
         needToBuyAdapter = new TotalShopListRecyclerViewAdapter(new ArrayList<>(), ingredient -> {
             if (presenter != null) {

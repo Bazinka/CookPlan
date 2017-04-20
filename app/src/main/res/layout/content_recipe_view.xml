@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.cookplan.recipe_view.RecipeViewActivity"
     tools:showIn="@layout/activity_recipe_view">
@@ -18,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:indeterminate="true" />
+            android:indeterminate="true"/>
 
         <TextView
             android:id="@+id/ingredients_title_textview"
@@ -27,14 +30,14 @@
             android:layout_below="@id/progress_bar"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/Ingredients"
-            android:textSize="@dimen/title_text_size" />
+            android:textSize="@dimen/title_text_size"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/ingredients_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/ingredients_title_textview"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"/>
 
         <View
             android:id="@+id/separate_view"
@@ -43,7 +46,7 @@
             android:layout_below="@id/ingredients_recycler_view"
             android:layout_marginBottom="@dimen/text_margin"
             android:layout_marginTop="@dimen/text_margin"
-            android:background="@color/primary_the_lightest" />
+            android:background="@color/primary_the_lightest"/>
 
         <TextView
             android:id="@+id/description_title"
@@ -52,7 +55,7 @@
             android:layout_below="@id/separate_view"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/recipe_description_title"
-            android:textSize="@dimen/title_text_size" />
+            android:textSize="@dimen/title_text_size"/>
 
         <TextView
             android:id="@+id/description_body_textview"
@@ -61,7 +64,7 @@
             android:layout_below="@id/description_title"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/recipe_description_title"
-            android:textSize="@dimen/subheding_text_size" />
+            android:textSize="@dimen/subheding_text_size"/>
 
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

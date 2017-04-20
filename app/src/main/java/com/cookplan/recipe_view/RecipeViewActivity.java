@@ -63,6 +63,7 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
             }
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ingredients_recycler_view);
             recyclerView.setHasFixedSize(true);
+            recyclerView.setNestedScrollingEnabled(false);
 
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
