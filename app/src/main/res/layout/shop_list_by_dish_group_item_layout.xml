@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/ripple_ingredient_item_back">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/main_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_ingredient_item_back">
 
     <!---->
     <!--android:clickable="true"-->
@@ -12,11 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="false"
-        android:paddingBottom="@dimen/margin_glutter"
-        android:paddingLeft="@dimen/group_item_margin"
-        android:paddingRight="@dimen/main_margin_left"
-        android:paddingTop="@dimen/margin_top_glutter">
+        android:clickable="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,21 +21,42 @@
             android:layout_alignParentTop="true"
             android:clickable="false">
 
+            <ImageView
+                android:id="@+id/delete_group_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:background="@drawable/action_button_back"
+                android:paddingBottom="@dimen/group_item_margin"
+                android:paddingLeft="@dimen/main_margin_left"
+                android:paddingRight="@dimen/main_margin_left"
+                android:paddingTop="@dimen/group_item_margin"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_remove_shop_list"/>
+
             <TextView
                 android:id="@+id/recipe_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@id/ingredient_item_amount"
+                android:layout_toLeftOf="@+id/delete_group_image_view"
+                android:layout_toStartOf="@+id/delete_group_image_view"
                 android:clickable="false"
                 android:ellipsize="end"
                 android:gravity="left|center_vertical"
                 android:lines="1"
+                android:paddingBottom="@dimen/group_item_margin"
+                android:paddingLeft="@dimen/group_item_left_margin"
+                android:paddingRight="@dimen/main_margin_left"
+                android:paddingTop="@dimen/group_item_margin"
                 android:text="название"
                 android:textColor="@color/primary"
                 android:textSize="@dimen/headline_text_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
         </RelativeLayout>
     </RelativeLayout>

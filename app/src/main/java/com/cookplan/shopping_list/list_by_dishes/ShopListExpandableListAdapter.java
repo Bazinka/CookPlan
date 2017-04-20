@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cookplan.R;
@@ -117,7 +118,7 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
                 Ingredient selectIngredient = (Ingredient) view.getTag();
 
                 if (listener != null) {
-                    listener.onChildClick(selectIngredient);
+                    listener.onIngredientClick(selectIngredient);
                 }
             };
             mainView.setTag(ingredient);
@@ -164,13 +165,13 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
                 ingredients = recipeIdsToIngredientMap.get(selectedRecipe.getId());
             }
             if (listener != null) {
-                listener.onGroupClick(selectedRecipe, ingredients);
+                listener.onDeleteGroupClick(selectedRecipe, ingredients);
             }
         };
 
-        View mainView = convertView.findViewById(R.id.main_view);
-        mainView.setTag(recipe);
-        mainView.setOnClickListener(clickListener);
+        ImageView deleteImageView = (ImageView) convertView.findViewById(R.id.delete_group_image_view);
+        deleteImageView.setTag(recipe);
+        deleteImageView.setOnClickListener(clickListener);
         return convertView;
     }
 
@@ -186,8 +187,8 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
 
 
     public interface OnItemClickListener {
-        public void onChildClick(Ingredient ingredient);
+        public void onIngredientClick(Ingredient ingredient);
 
-        public void onGroupClick(Recipe recipe, List<Ingredient> ingredientList);
+        public void onDeleteGroupClick(Recipe recipe, List<Ingredient> ingredientList);
     }
 }

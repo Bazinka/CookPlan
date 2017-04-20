@@ -91,7 +91,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
             ShopListExpandableListAdapter needToBuyAdapter = new ShopListExpandableListAdapter(getActivity(),
                                                                                                recipeToingredientsMap, new ShopListExpandableListAdapter.OnItemClickListener() {
                 @Override
-                public void onChildClick(Ingredient ingredient) {
+                public void onIngredientClick(Ingredient ingredient) {
                     ShopListStatus newStatus;
                     if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
                         newStatus = ShopListStatus.ALREADY_BOUGHT;
@@ -104,7 +104,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
                 }
 
                 @Override
-                public void onGroupClick(Recipe recipe, List<Ingredient> ingredientList) {
+                public void onDeleteGroupClick(Recipe recipe, List<Ingredient> ingredientList) {
                     new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
                             .setMessage(R.string.delete_recipe_from_shop_list_question)
                             .setPositiveButton(android.R.string.ok, (dialog, which) -> {
