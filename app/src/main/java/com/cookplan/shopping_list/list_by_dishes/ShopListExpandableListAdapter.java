@@ -36,14 +36,16 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
         recipeIdsToIngredientMap = new HashMap<>();
 
         for (Map.Entry<Recipe, List<Ingredient>> entry : recipeToIngredientMap.entrySet()) {
-            if (entry.getKey() == null || entry.getKey().getId() == null) {
-                recipeList.add(new Recipe(context.getString(R.string.without_recipe_title),
-                                          context.getString(R.string.recipe_desc_is_not_needed_title)));
-                recipeIdsToIngredientMap.put(WITHOUT_RECIPE_KEY, entry.getValue());
+            if (entry.getValue() != null) {
+                if (entry.getKey() == null || entry.getKey().getId() == null) {
+                    recipeList.add(new Recipe(context.getString(R.string.without_recipe_title),
+                                              context.getString(R.string.recipe_desc_is_not_needed_title)));
+                    recipeIdsToIngredientMap.put(WITHOUT_RECIPE_KEY, entry.getValue());
 
-            } else {
-                recipeList.add(entry.getKey());
-                recipeIdsToIngredientMap.put(entry.getKey().getId(), entry.getValue());
+                } else {
+                    recipeList.add(entry.getKey());
+                    recipeIdsToIngredientMap.put(entry.getKey().getId(), entry.getValue());
+                }
             }
         }
     }

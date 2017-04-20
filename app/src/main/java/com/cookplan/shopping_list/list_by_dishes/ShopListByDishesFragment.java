@@ -118,9 +118,9 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
                 }
             });
             expandableListView.setAdapter(needToBuyAdapter);
-            int count = recipeToingredientsMap.keySet().size();
-            for (int position = 1; position <= count; position++) {
-                expandableListView.expandGroup(position - 1);
+            int count = needToBuyAdapter.getGroupCount();
+            for (int position = 0; position < count; position++) {
+                expandableListView.expandGroup(position);
             }
         }
     }
