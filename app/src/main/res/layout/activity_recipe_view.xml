@@ -61,13 +61,13 @@
         <include layout="@layout/content_recipe_view"/>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/recipe_view_fab"
+            android:id="@+id/add_ingred_to_shop_list_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
             app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="bottom|end"
-            app:srcCompat="@drawable/ic_edit"/>
+            app:srcCompat="@drawable/ic_add_items_to_shop_list"/>
 
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

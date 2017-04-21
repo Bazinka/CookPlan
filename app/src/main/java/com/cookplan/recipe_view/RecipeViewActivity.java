@@ -3,11 +3,12 @@ package com.cookplan.recipe_view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -18,7 +19,6 @@ import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
-import com.cookplan.models.ShopListStatus;
 import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
 import com.cookplan.recipe_steps.RecipeStepsViewActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,12 +27,16 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cookplan.models.ShopListStatus.NEED_TO_BUY;
+
 public class RecipeViewActivity extends BaseActivity implements RecipeView {
 
     public static final String RECIPE_OBJECT_KEY = "recipe_name";
 
     private RecipeViewPresenter presenter;
     private RecipeViewInrgedientsAdapter adapter;
+    private Recipe recipe;
+    private boolean isAllIngredientsChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,25 +46,12 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
         setSupportActionBar(toolbar);
         setNavigationArrow();
 
-        Recipe recipe = (Recipe) getIntent().getSerializableExtra(RECIPE_OBJECT_KEY);
+        recipe = (Recipe) getIntent().getSerializableExtra(RECIPE_OBJECT_KEY);
         if (recipe == null) {
             finish();
         } else {
             setTitle(recipe.getName());
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.recipe_view_fab);
-            fab.setOnClickListener(view -> {
-                Intent intent = new Intent(this, EditRecipeInfoActivity.class);
-                intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, recipe);
-                startActivityWithLeftAnimation(intent);
-                finish();
-            });
-            if (user != null && recipe.getUserId().equals(user.getUid())) {
-                fab.setVisibility(View.VISIBLE);
-            } else {
-                fab.setVisibility(View.GONE);
-            }
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ingredients_recycler_view);
             recyclerView.setHasFixedSize(true);
             recyclerView.setNestedScrollingEnabled(false);
@@ -71,7 +62,7 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
 
             adapter = new RecipeViewInrgedientsAdapter(new ArrayList<>(), ingredient -> {
                 if (presenter != null) {
-                    presenter.saveSelectIngredientList(ingredient);
+                    presenter.addIngredientToShoppingList(ingredient);
                 }
             });
             recyclerView.setAdapter(adapter);
@@ -94,6 +85,23 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
                 startActivityWithLeftAnimation(intent);
                 finish();
             });
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_ingred_to_shop_list_fab);
+            fab.setOnClickListener(view -> {
+                if (!isAllIngredientsChecked) {
+                    isAllIngredientsChecked = true;
+                    setFabView();
+                    for (Ingredient ingredient : adapter.getIngredients()) {
+                        ingredient.setShopListStatus(NEED_TO_BUY);
+                    }
+                    adapter.notifyDataSetChanged();
+                    if (presenter != null) {
+                        presenter.addAllIngredientToShoppingList(adapter.getIngredients());
+                    }
+                }else{
+
+                }
+            });
         }
     }
 
@@ -102,28 +110,65 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         if (!ingredientList.isEmpty()) {
+            isAllIngredientsChecked = true;
+            for (Ingredient ingredient : ingredientList) {
+                if (ingredient.getShopListStatus() != NEED_TO_BUY) {
+                    isAllIngredientsChecked = false;
+                    break;
+                }
+            }
+
             if (adapter != null) {
                 adapter.updateItems(ingredientList);
             }
+        } else {
+            isAllIngredientsChecked = false;
+        }
+        setFabView();
+    }
+
+    private void setFabView() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_ingred_to_shop_list_fab);
+        if (isAllIngredientsChecked) {
+            fab.setImageResource(R.drawable.ic_shopping_list_white);
+        } else {
+            fab.setImageResource(R.drawable.ic_add_items_to_shop_list);
         }
     }
 
     @Override
     public void setIngredientSuccessfulUpdate(Ingredient ingredient) {
-        String message = null;
-        if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
-            message = getString(R.string.ingr_added_to_shopping_list_title);
-        } else {
-            message = getString(R.string.ingr_removed_from_shopping_list_title);
-        }
-        Snackbar.make(findViewById(R.id.main_view),
-                      ingredient.getName() + message,
-                      Snackbar.LENGTH_LONG).show();
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void setErrorToast(String error) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu _menu) {
+        getMenuInflater().inflate(R.menu.recipe_view_menu, _menu);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null && recipe.getUserId().equals(user.getUid())) {
+            _menu.findItem(R.id.app_bar_edit).setVisible(true);
+        } else {
+            _menu.findItem(R.id.app_bar_edit).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.app_bar_edit) {
+            Intent intent = new Intent(this, EditRecipeInfoActivity.class);
+            intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, recipe);
+            startActivityWithLeftAnimation(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

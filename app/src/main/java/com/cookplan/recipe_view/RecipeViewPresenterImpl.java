@@ -33,13 +33,14 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
     public void getIngredientList() {
         Query items = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE)
                 .orderByChild(DatabaseConstants.DATABASE_RECIPE_ID_FIELD).equalTo(recipe.getId());
-        items.addListenerForSingleValueEvent(new ValueEventListener() {
+        items.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Ingredient> ingredients = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
                     ingredients.add(ingredient);
                 }
+
                 if (mainView != null) {
                     mainView.setIngredientList(ingredients);
                 }
@@ -54,7 +55,7 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
     }
 
     @Override
-    public void saveSelectIngredientList(Ingredient ingredient) {
+    public void addIngredientToShoppingList(Ingredient ingredient) {
         DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
         ingredientRef.child(ingredient.getId())
                 .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
@@ -69,5 +70,13 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
                         mainView.setIngredientSuccessfulUpdate(ingredient);
                     }
                 });
+    }
+
+
+    @Override
+    public void addAllIngredientToShoppingList(List<Ingredient> ingredients) {
+        for (Ingredient ingredient : ingredients) {
+            addIngredientToShoppingList(ingredient);
+        }
     }
 }
