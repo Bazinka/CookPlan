@@ -72,6 +72,7 @@ public class RecipeViewInrgedientsAdapter extends RecyclerView.Adapter<RecipeVie
             if (listener != null) {
                 listener.onIngredientItemSelected(selectIngredient);
             }
+            notifyDataSetChanged();
         };
         holder.mainView.setTag(position);
         holder.checkBox.setTag(position);
