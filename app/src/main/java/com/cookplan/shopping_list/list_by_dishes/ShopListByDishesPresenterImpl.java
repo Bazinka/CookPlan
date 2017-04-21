@@ -86,9 +86,8 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
                                 recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
                             }
                         }
-                        if (recipeToIngredientsMap.keySet().size() == recipeIdToIngredientMap.keySet().size()
-                                && mainView != null) {
-                            mainView.setIngredientListToRecipe(recipeToIngredientsMap);
+                        if (recipeToIngredientsMap.keySet().size() == recipeIdToIngredientMap.keySet().size()) {
+                            makeValidDataForTheView(recipeToIngredientsMap);
                         }
                     }
 
@@ -100,6 +99,118 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
         }
     }
 
+    private void makeValidDataForTheView(Map<Recipe, List<Ingredient>> recipeToIngredientsMap) {
+        if (mainView != null) {
+            Map<String, List<Ingredient>> recipeIdsToIngredientMap = new HashMap<>(mainView.getExistedRecipeIdsToingredientsMap());
+            List<Recipe> recipeList = new ArrayList<>(mainView.getExistedRecipeList());
+
+            // remove deleted elements
+            List<Recipe> needToDeleteRecipeList = new ArrayList<>();
+            for (Recipe recipe : recipeList) {
+                boolean wasFound = false;
+                for (Map.Entry<Recipe, List<Ingredient>> entry : recipeToIngredientsMap.entrySet()) {
+                    if (entry.getValue() != null) {
+                        if (isRecipeIdsEqual(recipe, entry.getKey())) {
+                            wasFound = true;
+                            String recipeId = recipe.getId() == null ? WITHOUT_RECIPE_KEY : recipe.getId();
+                            List<Ingredient> ingredients = updateIngredientsList(
+                                    recipeIdsToIngredientMap.get(recipeId), entry.getValue());
+                            recipeIdsToIngredientMap.put(recipeId, ingredients);
+                            break;
+                        }
+                    }
+                }
+                if (!wasFound) {
+                    needToDeleteRecipeList.add(recipe);
+                }
+            }
+            for (Recipe recipe : needToDeleteRecipeList) {
+                recipeList.remove(recipe);
+                recipeIdsToIngredientMap.remove(recipe.getId() == null ? WITHOUT_RECIPE_KEY : recipe.getId());
+            }
+
+            // add new elements
+            for (Map.Entry<Recipe, List<Ingredient>> entry : recipeToIngredientsMap.entrySet()) {
+                boolean wasFound = false;
+                for (Recipe recipe : recipeList) {
+                    if (entry.getValue() != null) {
+                        if (isRecipeIdsEqual(recipe, entry.getKey())) {
+                            wasFound = true;
+                            break;
+                        }
+                    }
+                }
+                if (!wasFound && entry.getValue() != null) {
+                    if (entry.getKey() == null || entry.getKey().getId() == null) {
+                        recipeList.add(new Recipe(context.getString(R.string.without_recipe_title),
+                                                  context.getString(R.string.recipe_desc_is_not_needed_title)));
+                        recipeIdsToIngredientMap.put(WITHOUT_RECIPE_KEY, entry.getValue());
+
+                    } else {
+                        recipeList.add(entry.getKey());
+                        recipeIdsToIngredientMap.put(entry.getKey().getId(), entry.getValue());
+                    }
+                }
+            }
+
+            mainView.setIngredientListToRecipe(recipeList, recipeIdsToIngredientMap);
+        }
+    }
+
+    private boolean isRecipeIdsEqual(Recipe recipeFromList, Recipe recipeFromMap) {
+        boolean isEqual = false;
+        if (recipeFromMap == null || recipeFromMap.getId() == null) {
+            if (recipeFromList.getName().equals(context.getString(R.string.without_recipe_title))) {
+                isEqual = true;
+            }
+        } else if (recipeFromList.getId() != null && recipeFromList.getId().equals(recipeFromMap.getId())) {
+            isEqual = true;
+        }
+
+        return isEqual;
+    }
+
+    private List<Ingredient> updateIngredientsList(List<Ingredient> oldIngredients,
+                                                   List<Ingredient> newIngredients) {
+        List<Ingredient> ingredients = new ArrayList<>(oldIngredients);
+
+        //remove deleted ingredients
+        List<Ingredient> needToDeleteIngredients = new ArrayList<>();
+        for (Ingredient ingredient : ingredients) {
+            boolean wasFound = false;
+            for (Ingredient newIngredient : newIngredients) {
+                if (ingredient.getName().equals(newIngredient.getName())) {
+                    wasFound = true;
+                    ingredient.setName(newIngredient.getName());
+                    ingredient.setShopListStatus(newIngredient.getShopListStatus());
+                    break;
+                }
+            }
+            if (!wasFound) {
+                needToDeleteIngredients.add(ingredient);
+            }
+        }
+        for (Ingredient ingredient : needToDeleteIngredients) {
+            ingredients.remove(ingredient);
+        }
+
+
+        //add new ingredients
+        for (Ingredient newIngredient : newIngredients) {
+            boolean wasFound = false;
+            for (Ingredient ingredient : ingredients) {
+                if (ingredient.getName().equals(newIngredient.getName())) {
+                    wasFound = true;
+                    break;
+                }
+            }
+            if (!wasFound) {
+                ingredients.add(newIngredient);
+            }
+        }
+
+        return ingredients;
+    }
 
     @Override
     public void setIngredientBought(Ingredient ingredient, ShopListStatus newStatus) {

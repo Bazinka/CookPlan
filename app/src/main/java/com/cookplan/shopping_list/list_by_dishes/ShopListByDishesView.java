@@ -13,5 +13,9 @@ import java.util.Map;
 
 public interface ShopListByDishesView extends ShoppingListView {
 
-    public void setIngredientListToRecipe(Map<Recipe, List<Ingredient>> RecipeToingredientsMap);
+    public List<Recipe> getExistedRecipeList();
+
+    public Map<String, List<Ingredient>> getExistedRecipeIdsToingredientsMap();
+
+    public void setIngredientListToRecipe(List<Recipe> newGroupList, Map<String, List<Ingredient>> newChildMap);
 }

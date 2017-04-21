@@ -29,26 +29,14 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
     private OnItemClickListener listener;
 
     public ShopListExpandableListAdapter(Context context,
-                                         Map<Recipe, List<Ingredient>> recipeToIngredientMap,
+                                         List<Recipe> newGroupList,
+                                         Map<String, List<Ingredient>> newChildMap,
                                          OnItemClickListener listener) {
         this.context = context;
         this.listener = listener;
-        recipeList = new ArrayList<>();
-        recipeIdsToIngredientMap = new HashMap<>();
+        recipeList = new ArrayList<>(newGroupList);
+        recipeIdsToIngredientMap = new HashMap<>(newChildMap);
 
-        for (Map.Entry<Recipe, List<Ingredient>> entry : recipeToIngredientMap.entrySet()) {
-            if (entry.getValue() != null) {
-                if (entry.getKey() == null || entry.getKey().getId() == null) {
-                    recipeList.add(new Recipe(context.getString(R.string.without_recipe_title),
-                                              context.getString(R.string.recipe_desc_is_not_needed_title)));
-                    recipeIdsToIngredientMap.put(WITHOUT_RECIPE_KEY, entry.getValue());
-
-                } else {
-                    recipeList.add(entry.getKey());
-                    recipeIdsToIngredientMap.put(entry.getKey().getId(), entry.getValue());
-                }
-            }
-        }
     }
 
     @Override
@@ -185,6 +173,13 @@ public class ShopListExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    public Map<String, List<Ingredient>> getRecipeIdsToIngredientMap() {
+        return recipeIdsToIngredientMap;
+    }
+
+    public List<Recipe> getRecipeList() {
+        return recipeList;
+    }
 
     public interface OnItemClickListener {
         public void onIngredientClick(Ingredient ingredient);

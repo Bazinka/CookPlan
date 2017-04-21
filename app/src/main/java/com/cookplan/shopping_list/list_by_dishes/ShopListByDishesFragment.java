@@ -15,6 +15,8 @@ import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,42 +83,59 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
     }
 
     @Override
-    public void setIngredientListToRecipe(Map<Recipe, List<Ingredient>> recipeToingredientsMap) {
+    public List<Recipe> getExistedRecipeList() {
+        ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
+        ShopListExpandableListAdapter adapter = (ShopListExpandableListAdapter) expandableListView.getExpandableListAdapter();
+        return adapter != null ? adapter.getRecipeList() : new ArrayList<>();
+    }
+
+    @Override
+    public Map<String, List<Ingredient>> getExistedRecipeIdsToingredientsMap() {
+        ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
+        ShopListExpandableListAdapter adapter = (ShopListExpandableListAdapter) expandableListView.getExpandableListAdapter();
+        return adapter != null ? adapter.getRecipeIdsToIngredientMap() : new HashMap<>();
+    }
+
+    @Override
+    public void setIngredientListToRecipe(List<Recipe> newGroupList, Map<String, List<Ingredient>> newChildMap) {
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setContentVisability(View.VISIBLE);
 
         if (getActivity() != null) {
             ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
-            ShopListExpandableListAdapter needToBuyAdapter = new ShopListExpandableListAdapter(getActivity(),
-                                                                                               recipeToingredientsMap, new ShopListExpandableListAdapter.OnItemClickListener() {
-                @Override
-                public void onIngredientClick(Ingredient ingredient) {
-                    ShopListStatus newStatus;
-                    if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
-                        newStatus = ShopListStatus.ALREADY_BOUGHT;
-                    } else {
-                        newStatus = ShopListStatus.NEED_TO_BUY;
-                    }
-                    if (presenter != null) {
-                        presenter.setIngredientBought(ingredient, newStatus);
-                    }
-                }
+            ShopListExpandableListAdapter needToBuyAdapter = new ShopListExpandableListAdapter(
+                    getActivity(),
+                    newGroupList,
+                    newChildMap,
+                    new ShopListExpandableListAdapter.OnItemClickListener() {
+                        @Override
+                        public void onIngredientClick(Ingredient ingredient) {
+                            ShopListStatus newStatus;
+                            if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
+                                newStatus = ShopListStatus.ALREADY_BOUGHT;
+                            } else {
+                                newStatus = ShopListStatus.NEED_TO_BUY;
+                            }
+                            if (presenter != null) {
+                                presenter.setIngredientBought(ingredient, newStatus);
+                            }
+                        }
 
-                @Override
-                public void onDeleteGroupClick(Recipe recipe, List<Ingredient> ingredientList) {
-                    new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
-                            .setMessage(R.string.delete_recipe_from_shop_list_question)
-                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                                if (presenter != null) {
-                                    presenter.setRecipeIngredBought(recipe, ingredientList);
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
+                        @Override
+                        public void onDeleteGroupClick(Recipe recipe, List<Ingredient> ingredientList) {
+                            new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                                    .setMessage(R.string.delete_recipe_from_shop_list_question)
+                                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                        if (presenter != null) {
+                                            presenter.setRecipeIngredBought(recipe, ingredientList);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null)
+                                    .show();
 
-                }
-            });
+                        }
+                    });
             expandableListView.setAdapter(needToBuyAdapter);
             int count = needToBuyAdapter.getGroupCount();
             for (int position = 0; position < count; position++) {
