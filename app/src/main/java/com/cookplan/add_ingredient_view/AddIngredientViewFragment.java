@@ -208,7 +208,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
         String name = unitNameEditText.getText().toString();
         Spinner spinner = (Spinner) mainView.findViewById(R.id.category_list_spinner);
-        if (spinner != null) {
+        if (spinner != null && getActivity() != null) {
             Product selectedProduct = (Product) unitNameEditText.getTag();
             List<ProductCategory> categoryList = new ArrayList<>();
             if (selectedProduct != null && name.equals(selectedProduct.getName())) {
@@ -227,7 +227,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
         String name = unitNameEditText.getText().toString();
         Spinner spinner = (Spinner) mainView.findViewById(R.id.measure_list_spinner);
-        if (spinner != null) {
+        if (spinner != null && getActivity() != null) {
             Product selectedProduct = (Product) unitNameEditText.getTag();
             List<MeasureUnit> mainMeasureUnits = new ArrayList<>();
             List<MeasureUnit> measureUnits = new ArrayList<>();
