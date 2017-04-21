@@ -15,6 +15,7 @@ import java.util.Map;
 public class Product implements Serializable {
 
     public String id;
+    public String userId;
     public List<MeasureUnit> measureUnitList; //list of units in which product can be measured.
     public List<MeasureUnit> mainMeasureUnitList;
     public String name;
@@ -29,11 +30,14 @@ public class Product implements Serializable {
     public Product(ProductCategory category, String name,
                    List<MeasureUnit> mainMeasureUnitList,
                    List<MeasureUnit> measureUnitList,
-                   Map<MeasureUnit, Double> unitToAmoutMap) {
+                   Map<MeasureUnit, Double> unitToAmoutMap,
+                   String userId) {
+        this();
         this.category = category;
         this.name = name;
         this.mainMeasureUnitList = mainMeasureUnitList;
         this.measureUnitList = measureUnitList;
+        this.userId = userId;
         countUsing = 0;
         fillRatioList(unitToAmoutMap);
     }
@@ -117,6 +121,9 @@ public class Product implements Serializable {
             if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
                 product.name = child.getValue().toString();
             }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_USER_ID_FIELD)) {
+                product.userId = child.getValue().toString();
+            }
             if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_CATEGORY_FIELD)) {
                 product.category = ProductCategory.getProductCategoryByName((String) child.getValue());
             }
@@ -153,5 +160,9 @@ public class Product implements Serializable {
             }
         }
         return product;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

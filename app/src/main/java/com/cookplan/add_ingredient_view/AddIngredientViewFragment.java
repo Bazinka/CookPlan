@@ -1,7 +1,6 @@
 package com.cookplan.add_ingredient_view;
 
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -19,9 +18,11 @@ import android.widget.Toast;
 import com.cookplan.R;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
+import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -106,7 +107,8 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         ImageButton saveProductButton = (ImageButton) mainView.findViewById(R.id.save_product_image_button);
         saveProductButton.setOnClickListener(view -> {
             EditText unitAmoutEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
-            if (checkProductField() && unitAmoutEditText != null) {
+            String name = unitNameEditText.getText().toString();
+            if (!name.isEmpty() && unitAmoutEditText != null) {
                 String text = unitAmoutEditText.getText().toString();
                 if (!text.isEmpty()) {
                     saveInrgedient(text);
@@ -122,33 +124,26 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         return mainView;
     }
 
-    private boolean checkProductField() {
-        TextInputLayout productLayout = (TextInputLayout) mainView.findViewById(R.id.product_name_edit_layout);
-        AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
-        String name = unitNameEditText.getText().toString();
-        Product selectedProduct = (Product) unitNameEditText.getTag();
-        if (selectedProduct == null || !name.equals(selectedProduct.getName())) {
-            productLayout.setError(getString(R.string.product_required_field));
-            productLayout.setErrorEnabled(true);
-            return false;
-        } else {
-            productLayout.setError(null);
-            productLayout.setErrorEnabled(false);
-            return true;
-        }
-    }
-
     void saveInrgedient(String amount) {
-        Spinner spinner = (Spinner) mainView.findViewById(R.id.measure_list_spinner);
+        Spinner measureSpinner = (Spinner) mainView.findViewById(R.id.measure_list_spinner);
+        Spinner categorySpinner = (Spinner) mainView.findViewById(R.id.category_list_spinner);
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
         String name = unitNameEditText.getText().toString();
         Product selectedProduct = (Product) unitNameEditText.getTag();
-        if (!name.isEmpty() && presenter != null) {
+        if (presenter != null) {
             progressBar.setVisibility(View.VISIBLE);
-            presenter.saveIngredient(selectedProduct,
-                                     amount != null ? Double.valueOf(amount) : 0,
-                                     (MeasureUnit) spinner.getSelectedItem());
+            if (selectedProduct != null && name.equals(selectedProduct.getName())) {
+                presenter.saveIngredient(selectedProduct,
+                                         amount != null ? Double.valueOf(amount) : 0,
+                                         (MeasureUnit) measureSpinner.getSelectedItem());
+            } else {
+                presenter.saveProductAndIngredient((ProductCategory) categorySpinner.getSelectedItem(),
+                                                   name,
+                                                   amount != null ? Double.valueOf(amount) : 0,
+                                                   (MeasureUnit) measureSpinner.getSelectedItem());
+            }
             unitNameEditText.setText(null);
+            unitNameEditText.requestFocus();
             EditText unitAmoutEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
             unitAmoutEditText.setText(null);
         }
@@ -171,20 +166,34 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
         ProductListAdapter adapter = new ProductListAdapter(getActivity(), productsList);
         unitNameEditText.setAdapter(adapter);
-
         unitNameEditText.setOnItemClickListener((parent, arg1, pos, id) -> {
             Product product = productsList.get(pos);
             if (product != null) {
                 unitNameEditText.setTag(product);
                 EditText unitAmountEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
                 unitAmountEditText.requestFocus();
-                setSpinnerValues();
+                setMeasureSpinnerValues();
+                setCategorySpinnerValues();
             }
         });
 
         unitNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                setSpinnerValues();
+                String name = unitNameEditText.getText().toString();
+                Product selectedProduct = (Product) unitNameEditText.getTag();
+                if (selectedProduct == null || !name.equals(selectedProduct.getName())) {
+                    adapter.getFilter().filter(name, count -> {
+                        if (count == 1) {
+                            unitNameEditText.setTag(adapter.getItem(0));
+                        }
+                        setMeasureSpinnerValues();
+                        setCategorySpinnerValues();
+                        adapter.getFilter().filter("");
+                    });
+                } else {
+                    setMeasureSpinnerValues();
+                    setCategorySpinnerValues();
+                }
             }
         });
 
@@ -194,13 +203,35 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         mainViewGroup.setVisibility(View.VISIBLE);
     }
 
-    void setSpinnerValues() {
+
+    void setCategorySpinnerValues() {
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
+        String name = unitNameEditText.getText().toString();
+        Spinner spinner = (Spinner) mainView.findViewById(R.id.category_list_spinner);
+        if (spinner != null) {
+            Product selectedProduct = (Product) unitNameEditText.getTag();
+            List<ProductCategory> categoryList = new ArrayList<>();
+            if (selectedProduct != null && name.equals(selectedProduct.getName())) {
+                categoryList.add(selectedProduct.getCategory());
+            } else {
+                categoryList.addAll(Arrays.asList(ProductCategory.values()));
+            }
+            ProductCategoriesSpinnerAdapter adapter = new ProductCategoriesSpinnerAdapter(getActivity(),
+                                                                                          categoryList);
+            spinner.setAdapter(adapter);
+            spinner.setSelection(0);
+        }
+    }
+
+    void setMeasureSpinnerValues() {
+        AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
+        String name = unitNameEditText.getText().toString();
         Spinner spinner = (Spinner) mainView.findViewById(R.id.measure_list_spinner);
         if (spinner != null) {
             Product selectedProduct = (Product) unitNameEditText.getTag();
-            if (selectedProduct != null) {
-                List<MeasureUnit> measureUnits = new ArrayList<>();
+            List<MeasureUnit> mainMeasureUnits = new ArrayList<>();
+            List<MeasureUnit> measureUnits = new ArrayList<>();
+            if (selectedProduct != null && name.equals(selectedProduct.getName())) {
                 measureUnits.addAll(selectedProduct.getMainMeasureUnitList());
                 for (MeasureUnit unit : selectedProduct.getMeasureUnitList()) {
                     boolean isMainUnit = false;
@@ -213,12 +244,15 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
                         measureUnits.add(unit);
                     }
                 }
-                MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),
-                                                                                    measureUnits,
-                                                                                    selectedProduct.getMainMeasureUnitList());
-                spinner.setAdapter(adapter);
-                spinner.setSelection(0);
+                mainMeasureUnits = selectedProduct.getMainMeasureUnitList();
+            } else {
+                measureUnits.addAll(Arrays.asList(MeasureUnit.values()));
             }
+            MeasureUnitsSpinnerAdapter adapter = new MeasureUnitsSpinnerAdapter(getActivity(),
+                                                                                measureUnits,
+                                                                                mainMeasureUnits);
+            spinner.setAdapter(adapter);
+            spinner.setSelection(0);
         }
     }
 

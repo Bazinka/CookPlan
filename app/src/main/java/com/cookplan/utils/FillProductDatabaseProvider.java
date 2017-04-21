@@ -2119,7 +2119,7 @@ public class FillProductDatabaseProvider {
             Product product = new Product(productCategory, name,
                                           mainUnits,
                                           measureUnitList,
-                                          map);
+                                          map, null);
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
             DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
             productRef.push().setValue(product, (databaseError, databaseReference) -> {

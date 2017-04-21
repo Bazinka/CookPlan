@@ -4,6 +4,7 @@ package com.cookplan.product_list;
 import com.cookplan.models.Product;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,9 +36,14 @@ public class ProductListPresenterImpl implements ProductListPresenter {
                 .addValueEventListener(new ValueEventListener() {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<Product> productList = new ArrayList<>();
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                             Product product = Product.parseProductFromDB(itemSnapshot);
-                            productList.add(product);
+                            if (product != null && user != null) {
+                                if (product.getUserId() == null || product.getUserId().equals(user.getUid())) {
+                                    productList.add(product);
+                                }
+                            }
                         }
                         if (mainView != null) {
                             if (productList.size() != 0) {

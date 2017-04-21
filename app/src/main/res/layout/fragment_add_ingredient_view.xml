@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/add_ingred_layout_back"
-    android:elevation="2dp">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/add_ingred_layout_back"
+                android:elevation="2dp">
 
     <RelativeLayout
         android:id="@+id/main_view"
@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
-                    android:lines="1" />
+                    android:lines="1"/>
 
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
@@ -75,7 +75,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
-                            android:lines="1" />
+                            android:lines="1"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <Spinner
@@ -86,7 +86,7 @@
                         android:layout_marginBottom="@dimen/small_item_padding"
                         android:layout_marginLeft="@dimen/small_item_padding"
                         android:layout_marginTop="@dimen/small_item_padding"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
                 <ImageButton
@@ -101,7 +101,17 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/add_ingred_button_background"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_done" />
+                    app:srcCompat="@drawable/ic_done"/>
+
+                <Spinner
+                    android:id="@+id/category_list_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/unit_amount_linear_layout"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/small_item_padding"
+                    android:layout_toLeftOf="@+id/save_product_image_button"
+                    android:layout_toStartOf="@+id/save_product_image_button"/>
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -110,5 +120,5 @@
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"/>
 </RelativeLayout>
