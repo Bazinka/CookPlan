@@ -64,10 +64,13 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
         needToBuyAdapter = new TotalShopListRecyclerViewAdapter(new ArrayList<>(), ingredient -> {
             if (presenter != null) {
                 if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
+                    ingredient.setShopListStatus(ShopListStatus.ALREADY_BOUGHT);
                     presenter.changeShopListStatus(ingredient, ShopListStatus.ALREADY_BOUGHT);
                 } else if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
+                    ingredient.setShopListStatus(ShopListStatus.NEED_TO_BUY);
                     presenter.changeShopListStatus(ingredient, ShopListStatus.NEED_TO_BUY);
                 }
+                needToBuyAdapter.notifyDataSetChanged();
             }
         });
         needToBuyRecyclerView.setAdapter(needToBuyAdapter);

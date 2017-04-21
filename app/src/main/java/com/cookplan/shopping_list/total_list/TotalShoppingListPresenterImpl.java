@@ -227,11 +227,6 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                             mainView.setErrorToast(e.getLocalizedMessage());
                         }
                     });
-            //                    .addOnSuccessListener(aVoid -> {
-            //                        if (mainView != null) {
-            //                            mainView.setIngredientSuccessfulUpdate(ingredient);
-            //                        }
-            //                    });
         }
     }
 
