@@ -45,15 +45,17 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
         //fill the map
         ProductToIngredientMap = new HashMap<>();
         for (Ingredient ingredient : userIngredients) {
-            ArrayList<Ingredient> ingredients;
-            if (ProductToIngredientMap.containsKey(ingredient.getName())
-                    && ProductToIngredientMap.get(ingredient.getName()) != null) {
-                ingredients = (ArrayList<Ingredient>) ProductToIngredientMap.get(ingredient.getName());
-            } else {
-                ingredients = new ArrayList<>();
+            if (ingredient.getShopListStatus() != ShopListStatus.NONE) {
+                ArrayList<Ingredient> ingredients;
+                if (ProductToIngredientMap.containsKey(ingredient.getName())
+                        && ProductToIngredientMap.get(ingredient.getName()) != null) {
+                    ingredients = (ArrayList<Ingredient>) ProductToIngredientMap.get(ingredient.getName());
+                } else {
+                    ingredients = new ArrayList<>();
+                }
+                ingredients.add(ingredient);
+                ProductToIngredientMap.put(ingredient.getName(), ingredients);
             }
-            ingredients.add(ingredient);
-            ProductToIngredientMap.put(ingredient.getName(), ingredients);
         }
 
         //calculate amounts
@@ -237,25 +239,28 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
     public void deleteIngredients(List<Ingredient> localIngredients) {
         DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
         for (Ingredient ingred : localIngredients) {
+            ShopListStatus status = ingred.getShopListStatus();
             List<Ingredient> realIngredients = ProductToIngredientMap.get(ingred.getName());
             for (Ingredient ingredient : realIngredients) {
-                ingredient.setShopListStatus(ShopListStatus.NONE);
-                DatabaseReference ref = ingredientRef.child(ingredient.getId());
-                if (ingredient.getRecipeId() == null) {
-                    ref.removeValue()
-                            .addOnFailureListener(e -> {
-                                if (mainView != null) {
-                                    mainView.setErrorToast(e.getLocalizedMessage());
-                                }
-                            });
-                } else {
-                    ref.child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                            .setValue(ingredient.getShopListStatus())
-                            .addOnFailureListener(e -> {
-                                if (mainView != null) {
-                                    mainView.setErrorToast(e.getLocalizedMessage());
-                                }
-                            });
+                if (status == ingredient.getShopListStatus()) {
+                    ingredient.setShopListStatus(ShopListStatus.NONE);
+                    DatabaseReference ref = ingredientRef.child(ingredient.getId());
+                    if (ingredient.getRecipeId() == null) {
+                        ref.removeValue()
+                                .addOnFailureListener(e -> {
+                                    if (mainView != null) {
+                                        mainView.setErrorToast(e.getLocalizedMessage());
+                                    }
+                                });
+                    } else {
+                        ref.child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
+                                .setValue(ingredient.getShopListStatus())
+                                .addOnFailureListener(e -> {
+                                    if (mainView != null) {
+                                        mainView.setErrorToast(e.getLocalizedMessage());
+                                    }
+                                });
+                    }
                 }
             }
         }
