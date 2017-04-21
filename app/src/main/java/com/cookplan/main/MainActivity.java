@@ -38,6 +38,8 @@ import com.squareup.picasso.Picasso;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
 
+    public static final int OPEN_SHOP_LIST_REQUEST = 10;
+
     private ProgressDialog mProgressDialog;
 
     private int mSelectedNavigationId;
@@ -147,7 +149,14 @@ public class MainActivity extends BaseActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (presenter != null) {
+        if (requestCode == OPEN_SHOP_LIST_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                mSelectedNavigationId = R.id.nav_shopping_list;
+                setShoppingListFragment();
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                navigationView.setCheckedItem(mSelectedNavigationId);
+            }
+        } else if (presenter != null) {
             presenter.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -351,4 +360,6 @@ public class MainActivity extends BaseActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

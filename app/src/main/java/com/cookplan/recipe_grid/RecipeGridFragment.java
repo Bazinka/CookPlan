@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
+import com.cookplan.main.MainActivity;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
 import com.cookplan.recipe_view.RecipeViewActivity;
@@ -71,7 +72,8 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
                 if (activity instanceof BaseActivity) {
                     Intent intent = new Intent(activity, RecipeViewActivity.class);
                     intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
-                    ((BaseActivity) activity).startActivityWithLeftAnimation(intent);
+                    ((BaseActivity) activity).startActivityForResultWithLeftAnimation(intent,
+                                                                                      MainActivity.OPEN_SHOP_LIST_REQUEST);
                 }
             }
 

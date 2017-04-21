@@ -98,8 +98,9 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
                     if (presenter != null) {
                         presenter.addAllIngredientToShoppingList(adapter.getIngredients());
                     }
-                }else{
-
+                } else {
+                    setResult(RESULT_OK);
+                    finish();
                 }
             });
         }
