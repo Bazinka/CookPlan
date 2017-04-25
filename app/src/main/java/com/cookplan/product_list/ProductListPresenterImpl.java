@@ -1,19 +1,17 @@
 package com.cookplan.product_list;
 
 
+import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Product;
-import com.cookplan.utils.DatabaseConstants;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.cookplan.providers.ProductProvider;
+import com.cookplan.providers.impl.ProductProviderImpl;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -22,44 +20,45 @@ import java.util.List;
 public class ProductListPresenterImpl implements ProductListPresenter {
 
     private ProductListView mainView;
-    private DatabaseReference database;
+    private ProductProvider dataProvider;
 
     public ProductListPresenterImpl(ProductListView mainView) {
         this.mainView = mainView;
-        this.database = FirebaseDatabase.getInstance().getReference();
+        this.dataProvider = new ProductProviderImpl();
     }
 
     @Override
     public void getProductList() {
-        Query items = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-        items.orderByChild(DatabaseConstants.DATABASE_PRODUCT_COUNT_USING_FIELD)
-                .addValueEventListener(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<Product> productList = new ArrayList<>();
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                            Product product = Product.parseProductFromDB(itemSnapshot);
-                            if (product != null && user != null) {
-                                if (product.getUserId() == null || product.getUserId().equals(user.getUid())) {
-                                    productList.add(product);
-                                }
-                            }
-                        }
+        dataProvider.getProductList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Product>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Product> products) {
                         if (mainView != null) {
-                            if (productList.size() != 0) {
-                                mainView.setProductList(productList);
+                            if (products.size() != 0) {
+                                mainView.setProductList(products);
                             } else {
                                 mainView.setEmptyView();
                             }
                         }
                     }
 
-                    public void onCancelled(DatabaseError databaseError) {
-                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                            if (mainView != null) {
-                                mainView.setErrorToast(databaseError.getMessage());
-                            }
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null && e instanceof CookPlanError) {
+                            mainView.setErrorToast(e.getMessage());
                         }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
     }

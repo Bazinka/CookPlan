@@ -1,26 +1,32 @@
 package com.cookplan.add_ingredient_view;
 
+import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.providers.ProductProvider;
+import com.cookplan.providers.impl.ProductProviderImpl;
 import com.cookplan.utils.DatabaseConstants;
 import com.cookplan.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -34,52 +40,68 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
     private boolean isNeedToBuy;
     private double lastInputAmount;
 
+    private ProductProvider productDataProvider;
+
     public AddIngredientPresenterImpl(AddIngredientView mainView) {
         this.mainView = mainView;
         this.database = FirebaseDatabase.getInstance().getReference();
+        productDataProvider = new ProductProviderImpl();
         isNeedToBuy = false;
     }
 
     @Override
     public void getAsyncProductList() {
-        Query items = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-        items.addValueEventListener(new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Product> products = new ArrayList<>();
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    Product product = Product.parseProductFromDB(itemSnapshot);
-                    if (product != null && user != null) {
-                        if (product.getUserId() == null || product.getUserId().equals(user.getUid())) {
-                            products.add(product);
+        productDataProvider.getProductList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Product>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Product> products) {
+                        if (mainView != null && mainView.isAddedToActivity()) {
+                            mainView.setProductsList(products);
                         }
                     }
-                }
-                if (mainView != null && mainView.isAddedToActivity()) {
-                    mainView.setProductsList(products);
-                }
-            }
 
-            public void onCancelled(DatabaseError databaseError) {
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    if (mainView != null) {
-                        mainView.setErrorToast(databaseError.getMessage());
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null && e instanceof CookPlanError) {
+                            mainView.setErrorToast(e.getMessage());
+                        }
                     }
-                }
-            }
-        });
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
     public void saveIngredient(Product product, double amount, MeasureUnit newMeasureUnit) {
         if (product != null) {
-            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-            productRef.child(product.getId())
-                    .child(DatabaseConstants.DATABASE_PRODUCT_COUNT_USING_FIELD)
-                    .setValue(product.increasingCount(), (databaseError, reference) -> {
-                        if (databaseError != null) {
+            productDataProvider.increaseCountUsages(product)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
                             if (mainView != null) {
-                                mainView.setErrorToast(databaseError.getMessage());
+                                mainView.setErrorToast(e.getMessage());
                             }
                         }
                     });
@@ -124,17 +146,27 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
             mainMeasureUnitList.add(measureUnit);
             Product product = new Product(category, name, mainMeasureUnitList,
                                           measureUnitList, map, user.getUid());
-            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
-            productRef.push().setValue(product, (databaseError, reference) -> {
-                if (databaseError != null) {
-                    if (mainView != null) {
-                        mainView.setErrorToast(databaseError.getMessage());
-                    }
-                } else {
-                    product.setId(reference.getKey());
-                    saveIngredient(product, amount, measureUnit);
-                }
-            });
+            productDataProvider.createProduct(product)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Product>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Product product) {
+                            saveIngredient(product, amount, measureUnit);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null && e instanceof CookPlanError) {
+                                mainView.setErrorToast(e.getMessage());
+                            }
+                        }
+                    });
         }
     }
 

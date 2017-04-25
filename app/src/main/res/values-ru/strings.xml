@@ -122,5 +122,6 @@
     <string name="delete_already_bought">Удалить купленные</string>
     <string name="delete_all_items_title">Удалить все</string>
     <string name="recipe_doesnt_exist">Рецепта не существует</string>
+    <string name="product_doesnt_exist">Продукт не существует</string>
 
 </resources>
