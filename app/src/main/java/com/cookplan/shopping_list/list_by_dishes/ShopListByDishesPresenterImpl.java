@@ -8,18 +8,18 @@ import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.RecipeProvider;
+import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.RecipeProviderImpl;
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl;
-import com.cookplan.utils.DatabaseConstants;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -33,18 +33,19 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
 
     private static final String WITHOUT_RECIPE_KEY = "without_recipe";
     private ShopListByDishesView mainView;
-    private DatabaseReference database;
-    private RecipeProvider recipeDataProvider;
     private Map<String, List<Ingredient>> recipeIdToIngredientMap;
 
     private Context context;
+
+    private RecipeProvider recipeDataProvider;
+    private IngredientProvider ingredientDataProvider;
 
     public ShopListByDishesPresenterImpl(ShopListByDishesView mainView, Context context) {
         super();
         this.mainView = mainView;
         this.context = context;
         this.recipeDataProvider = new RecipeProviderImpl();
-        this.database = FirebaseDatabase.getInstance().getReference();
+        this.ingredientDataProvider = new IngredientProviderImpl();
     }
 
     @Override
@@ -88,16 +89,12 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
 
                             @Override
                             public void onSuccess(Recipe recipe) {
-                                if (recipe != null) {
-                                    if (!recipeToIngredientsMap.containsKey(recipe)) {
-                                        recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(recipe.getId()));
-                                    }
+                                if (recipe.getId() != null) {
+                                    recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(recipe.getId()));
                                 } else {
                                     recipe = new Recipe(context.getString(R.string.without_recipe_title),
                                                         context.getString(R.string.recipe_desc_is_not_needed_title));
-                                    if (!recipeToIngredientsMap.containsKey(recipe)) {
-                                        recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
-                                    }
+                                    recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
                                 }
                                 if (recipeToIngredientsMap.keySet().size() == recipeIdToIngredientMap.keySet().size()) {
                                     makeValidDataForTheView(recipeToIngredientsMap);
@@ -231,15 +228,26 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
     @Override
     public void setIngredientBought(Ingredient ingredient, ShopListStatus newStatus) {
         if (newStatus != ShopListStatus.NONE) {
-            DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
             ingredient.setShopListStatus(newStatus);
-            ingredientRef
-                    .child(ingredient.getId())
-                    .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                    .setValue(ingredient.getShopListStatus())
-                    .addOnFailureListener(e -> {
-                        if (mainView != null) {
-                            mainView.setErrorToast(e.getLocalizedMessage());
+            ingredientDataProvider.updateShopStatus(ingredient)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null) {
+                                mainView.setErrorToast(e.getMessage());
+                            }
                         }
                     });
         }
@@ -248,23 +256,50 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
     @Override
     public void setRecipeIngredBought(Recipe recipe, List<Ingredient> ingredientList) {
         boolean isNeedToRemove = recipe.getId() == null;
-        DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
         for (Ingredient ingred : ingredientList) {
             ingred.setShopListStatus(ShopListStatus.NONE);
-            DatabaseReference ref = ingredientRef.child(ingred.getId());
             if (isNeedToRemove) {
-                ref.removeValue()
-                        .addOnFailureListener(e -> {
-                            if (mainView != null) {
-                                mainView.setErrorToast(e.getLocalizedMessage());
+                ingredientDataProvider.removeIngredient(ingred)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new CompletableObserver() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                if (mainView != null && e instanceof CookPlanError) {
+                                    mainView.setErrorToast(e.getMessage());
+                                }
                             }
                         });
             } else {
-                ref.child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                        .setValue(ingred.getShopListStatus())
-                        .addOnFailureListener(e -> {
-                            if (mainView != null) {
-                                mainView.setErrorToast(e.getLocalizedMessage());
+                ingredientDataProvider.updateShopStatus(ingred)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new CompletableObserver() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                if (mainView != null) {
+                                    mainView.setErrorToast(e.getMessage());
+                                }
                             }
                         });
             }

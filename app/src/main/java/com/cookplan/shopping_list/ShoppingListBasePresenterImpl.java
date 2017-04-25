@@ -3,9 +3,12 @@ package com.cookplan.shopping_list;
 
 import android.support.annotation.NonNull;
 
+import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.ShareUserInfo;
 import com.cookplan.models.SharedData;
+import com.cookplan.providers.IngredientProvider;
+import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by DariaEfimova on 24.03.17.
  */
@@ -27,9 +35,11 @@ import java.util.Map;
 public abstract class ShoppingListBasePresenterImpl implements ShoppingListBasePresenter, FirebaseAuth.AuthStateListener {
 
     private DatabaseReference database;
+    private IngredientProvider ingredientDataProvider;
 
     public ShoppingListBasePresenterImpl() {
         this.database = FirebaseDatabase.getInstance().getReference();
+        this.ingredientDataProvider = new IngredientProviderImpl();
         FirebaseAuth.getInstance().addAuthStateListener(this);
     }
 
@@ -41,23 +51,33 @@ public abstract class ShoppingListBasePresenterImpl implements ShoppingListBaseP
             uid = auth.getCurrentUser().getUid();
         }
         if (uid != null) {
-            Query items = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-            items.addValueEventListener(new ValueEventListener() {
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<Ingredient> allIngredients = new ArrayList<>();
-                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                        Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
-                        allIngredients.add(ingredient);
-                    }
-                    checkSharedIngredients(allIngredients);
-                }
+            ingredientDataProvider.getAllIngredientList()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<List<Ingredient>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
 
-                public void onCancelled(DatabaseError databaseError) {
-                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                        setError(databaseError.getMessage());
-                    }
-                }
-            });
+                        }
+
+                        @Override
+                        public void onNext(List<Ingredient> ingredients) {
+                            checkSharedIngredients(ingredients);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (FirebaseAuth.getInstance().getCurrentUser() != null
+                                    && e instanceof CookPlanError) {
+                                setError(e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
         }
     }
 

@@ -7,14 +7,13 @@ import com.cookplan.models.Product;
 import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.ProductProvider;
+import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.ProductProviderImpl;
-import com.cookplan.utils.DatabaseConstants;
 import com.cookplan.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,16 +34,17 @@ import io.reactivex.schedulers.Schedulers;
 public class AddIngredientPresenterImpl implements AddIngredientPresenter {
 
     private AddIngredientView mainView;
-    private DatabaseReference database;
+    //    private DatabaseReference database;
     private Recipe recipe;
     private boolean isNeedToBuy;
     private double lastInputAmount;
 
     private ProductProvider productDataProvider;
+    private IngredientProvider ingredientDataProvider;
 
     public AddIngredientPresenterImpl(AddIngredientView mainView) {
         this.mainView = mainView;
-        this.database = FirebaseDatabase.getInstance().getReference();
+        ingredientDataProvider = new IngredientProviderImpl();
         productDataProvider = new ProductProviderImpl();
         isNeedToBuy = false;
     }
@@ -113,18 +113,29 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                                                    newMeasureUnit,
                                                    amount,
                                                    isNeedToBuy ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
-            DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-            ingredRef.push().setValue(ingredient, (databaseError, reference) -> {
-                if (databaseError != null) {
-                    if (mainView != null) {
-                        mainView.setErrorToast(databaseError.getMessage());
-                    }
-                } else {
-                    if (mainView != null) {
-                        mainView.setSuccessSaveIngredient();
-                    }
-                }
-            });
+            ingredientDataProvider.createIngredient(ingredient)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Ingredient>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Ingredient ingredient) {
+                            if (mainView != null) {
+                                mainView.setSuccessSaveIngredient();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null && e instanceof CookPlanError) {
+                                mainView.setErrorToast(e.getMessage());
+                            }
+                        }
+                    });
         }
     }
 

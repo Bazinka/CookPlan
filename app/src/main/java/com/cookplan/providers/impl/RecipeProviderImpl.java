@@ -165,7 +165,7 @@ public class RecipeProviderImpl implements RecipeProvider {
                         }
                     } else {
                         if (emitter != null) {
-                            emitter.onSuccess(null);
+                            emitter.onSuccess(new Recipe());
                         }
                     }
                 }

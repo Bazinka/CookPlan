@@ -193,4 +193,5 @@
     <string name="delete_all_items_title">Удалить все</string>
     <string name="recipe_doesnt_exist">Рецепта не существует</string>
     <string name="product_doesnt_exist">Продукт не существует</string>
+    <string name="ingred_remove_error">Невозможно удалить ингредиент</string>
 </resources>

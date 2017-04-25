@@ -2,19 +2,24 @@ package com.cookplan.shopping_list.total_list;
 
 
 import com.cookplan.RApplication;
+import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.ProductCategory;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.providers.IngredientProvider;
+import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl;
-import com.cookplan.utils.DatabaseConstants;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.CompletableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by DariaEfimova on 24.03.17.
@@ -23,13 +28,13 @@ import java.util.Map;
 public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImpl implements TotalShoppingListPresenter {
 
     private TotalShoppingListView mainView;
-    private DatabaseReference database;
+    private IngredientProvider dataProvider;
     private Map<String, List<Ingredient>> ProductToIngredientMap;
 
     public TotalShoppingListPresenterImpl(TotalShoppingListView mainView) {
         super();
         this.mainView = mainView;
-        this.database = FirebaseDatabase.getInstance().getReference();
+        this.dataProvider = new IngredientProviderImpl();
     }
 
     @Override
@@ -154,77 +159,33 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
         } else {
             return null;
         }
-
-
-        //        if (!ingredients.isEmpty()) {
-        //            Map<MeasureUnit, Double> map = new HashMap<>();
-        //            for (Ingredient ingredient : ingredients) {
-        //                if (ingredient.getShopListStatus() == status) {
-        //                    double localAmount;
-        //                    MeasureUnit unit = ingredient.getMainMeasureUnit();
-        //                    double amount = ingredient.getMainAmount();
-        //                    if (ingredient.getShopListAmount() > 1e-8 && ingredient.getShopListMeasureUnit() != null) {
-        //                        unit = ingredient.getShopListMeasureUnit();
-        //                        amount = ingredient.getShopListAmount();
-        //                    }
-        //                    if (map.containsKey(ingredient.getShopListMeasureUnit())) {
-        //                        localAmount = map.get(ingredient.getShopListMeasureUnit()) + ingredient.getShopListAmount();
-        //                    } else {
-        //                        localAmount = ingredient.getShopListAmount();
-        //                    }
-        //                    map.put(ingredient.getShopListMeasureUnit(), localAmount);
-        //                }
-        //            }
-        //            if (map.isEmpty()) {
-        //                return null;
-        //            }
-        //
-        //            Double amount = 0.;
-        //            String didntCalculated = "";
-        //            MeasureUnit unit = null;
-        //            for (Map.Entry<MeasureUnit, Double> measureEntry : map.entrySet()) {
-        //                if (measureEntry.getValue() > 1e-8) {
-        //                    double multiplier;
-        //                    if (unit == null) {
-        //                        unit = measureEntry.getKey();
-        //                        multiplier = 1;
-        //                    } else {
-        //                        multiplier = MeasureUnit.getMultiplier(measureEntry.getKey(), unit);
-        //                    }
-        //                    if (multiplier < 1e-8) {
-        //                        String string = measureEntry.getKey().toValueString(measureEntry.getValue());
-        //                        didntCalculated = didntCalculated.isEmpty() ? string : " + " + string;
-        //                    } else {
-        //                        amount = amount + multiplier * measureEntry.getValue();
-        //                    }
-        //                }
-        //            }
-        //
-        //            didntCalculated = didntCalculated.isEmpty() ? didntCalculated : " + " + didntCalculated;
-        //            String amountString = null;
-        //            if (amount > 1e-8) {
-        //                amountString = String.valueOf(amount) + " " + unit.toString() + didntCalculated;
-        //            }
-        //            return new Ingredient(productName, amountString, status);
-        //        } else {
-        //            return null;
-        //        }
     }
 
 
     @Override
-    public void changeShopListStatus(Ingredient ingredient, ShopListStatus newStatus) {
-        List<Ingredient> ingredientList = ProductToIngredientMap.get(ingredient.getName());
-        DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-        for (Ingredient ingred : ingredientList) {
-            ingred.setShopListStatus(newStatus);
-            ingredientRef
-                    .child(ingred.getId())
-                    .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                    .setValue(ingred.getShopListStatus())
-                    .addOnFailureListener(e -> {
-                        if (mainView != null) {
-                            mainView.setErrorToast(e.getLocalizedMessage());
+    public void changeShopListStatus(Ingredient totalIngredient, ShopListStatus newStatus) {
+        List<Ingredient> ingredientList = ProductToIngredientMap.get(totalIngredient.getName());
+        for (Ingredient realIngredient : ingredientList) {
+            realIngredient.setShopListStatus(newStatus);
+            dataProvider.updateShopStatus(realIngredient)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null) {
+                                mainView.setErrorToast(e.getMessage());
+                            }
                         }
                     });
         }
@@ -232,27 +193,54 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
 
     @Override
     public void deleteIngredients(List<Ingredient> localIngredients) {
-        DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-        for (Ingredient ingred : localIngredients) {
-            ShopListStatus status = ingred.getShopListStatus();
-            List<Ingredient> realIngredients = ProductToIngredientMap.get(ingred.getName());
-            for (Ingredient ingredient : realIngredients) {
-                if (status == ingredient.getShopListStatus()) {
-                    ingredient.setShopListStatus(ShopListStatus.NONE);
-                    DatabaseReference ref = ingredientRef.child(ingredient.getId());
-                    if (ingredient.getRecipeId() == null) {
-                        ref.removeValue()
-                                .addOnFailureListener(e -> {
-                                    if (mainView != null) {
-                                        mainView.setErrorToast(e.getLocalizedMessage());
+        for (Ingredient totalIngredient : localIngredients) {
+            ShopListStatus status = totalIngredient.getShopListStatus();
+            List<Ingredient> realIngredients = ProductToIngredientMap.get(totalIngredient.getName());
+            for (Ingredient realIngredient : realIngredients) {
+                if (status == realIngredient.getShopListStatus()) {
+                    realIngredient.setShopListStatus(ShopListStatus.NONE);
+                    if (realIngredient.getRecipeId() == null) {
+                        dataProvider.removeIngredient(realIngredient)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new CompletableObserver() {
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        if (mainView != null && e instanceof CookPlanError) {
+                                            mainView.setErrorToast(e.getMessage());
+                                        }
                                     }
                                 });
                     } else {
-                        ref.child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                                .setValue(ingredient.getShopListStatus())
-                                .addOnFailureListener(e -> {
-                                    if (mainView != null) {
-                                        mainView.setErrorToast(e.getLocalizedMessage());
+                        dataProvider.updateShopStatus(realIngredient)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new CompletableObserver() {
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        if (mainView != null) {
+                                            mainView.setErrorToast(e.getMessage());
+                                        }
                                     }
                                 });
                     }
