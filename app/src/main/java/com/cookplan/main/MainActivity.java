@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.RApplication;
@@ -33,7 +34,6 @@ import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity
             }
             if (user.getPhotoUrl() != null) {
                 ImageView photoImageView = (ImageView) headerView.findViewById(R.id.user_photo_imageView);
-                Picasso.with(this)
+                Glide.with(this)
                         .load(user.getPhotoUrl().getPath())
                         .placeholder(R.drawable.main_drawable)
                         .into(photoImageView);
