@@ -139,6 +139,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
 
                             @Override
                             public void onDeleteGroupClick(Recipe recipe, List<Ingredient> ingredientList) {
+                                progressBar.setVisibility(View.VISIBLE);
                                 new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
                                         .setMessage(R.string.delete_recipe_from_shop_list_question)
                                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
