@@ -20,10 +20,6 @@ public interface IngredientProvider {
 
     Single<Ingredient> createIngredient(Ingredient ingredient);
 
-    Single<Ingredient> update(Ingredient ingredient);
-
-    Single<Ingredient> getRecipeById(String ingredientId);
-
     Completable removeIngredient(Ingredient ingredient);
 
     Completable updateShopStatus(Ingredient ingredient);

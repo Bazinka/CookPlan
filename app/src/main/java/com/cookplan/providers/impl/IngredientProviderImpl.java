@@ -97,17 +97,7 @@ public class IngredientProviderImpl implements IngredientProvider {
             });
         });
     }
-
-    @Override
-    public Single<Ingredient> update(Ingredient ingredient) {
-        return null;
-    }
-
-    @Override
-    public Single<Ingredient> getRecipeById(String ingredientId) {
-        return null;
-    }
-
+    
     @Override
     public Completable removeIngredient(Ingredient ingredient) {
         return Completable.create(emitter -> {
