@@ -4,22 +4,26 @@ package com.cookplan.shopping_list.list_by_dishes;
 import android.content.Context;
 
 import com.cookplan.R;
+import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.providers.RecipeProvider;
+import com.cookplan.providers.impl.RecipeProviderImpl;
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl;
 import com.cookplan.utils.DatabaseConstants;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by DariaEfimova on 24.03.17.
@@ -30,6 +34,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
     private static final String WITHOUT_RECIPE_KEY = "without_recipe";
     private ShopListByDishesView mainView;
     private DatabaseReference database;
+    private RecipeProvider recipeDataProvider;
     private Map<String, List<Ingredient>> recipeIdToIngredientMap;
 
     private Context context;
@@ -38,6 +43,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
         super();
         this.mainView = mainView;
         this.context = context;
+        this.recipeDataProvider = new RecipeProviderImpl();
         this.database = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -71,30 +77,40 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
         } else {
             Map<Recipe, List<Ingredient>> recipeToIngredientsMap = new HashMap<>();
             for (Map.Entry<String, List<Ingredient>> entry : recipeIdToIngredientMap.entrySet()) {
-                Query items = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE).child(entry.getKey());
-                items.addListenerForSingleValueEvent(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null) {
-                            Recipe recipe = Recipe.getRecipeFromDBObject(dataSnapshot);
-                            if (!recipeToIngredientsMap.containsKey(recipe)) {
-                                recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(recipe.getId()));
-                            }
-                        } else {
-                            Recipe recipe = new Recipe(context.getString(R.string.without_recipe_title),
-                                                       context.getString(R.string.recipe_desc_is_not_needed_title));
-                            if (!recipeToIngredientsMap.containsKey(recipe)) {
-                                recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
-                            }
-                        }
-                        if (recipeToIngredientsMap.keySet().size() == recipeIdToIngredientMap.keySet().size()) {
-                            makeValidDataForTheView(recipeToIngredientsMap);
-                        }
-                    }
+                recipeDataProvider.getRecipeById(entry.getKey())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new SingleObserver<Recipe>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
 
-                    public void onCancelled(DatabaseError databaseError) {
-                        setError(databaseError.getMessage());
-                    }
-                });
+                            }
+
+                            @Override
+                            public void onSuccess(Recipe recipe) {
+                                if (recipe != null) {
+                                    if (!recipeToIngredientsMap.containsKey(recipe)) {
+                                        recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(recipe.getId()));
+                                    }
+                                } else {
+                                    recipe = new Recipe(context.getString(R.string.without_recipe_title),
+                                                        context.getString(R.string.recipe_desc_is_not_needed_title));
+                                    if (!recipeToIngredientsMap.containsKey(recipe)) {
+                                        recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
+                                    }
+                                }
+                                if (recipeToIngredientsMap.keySet().size() == recipeIdToIngredientMap.keySet().size()) {
+                                    makeValidDataForTheView(recipeToIngredientsMap);
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                if (mainView != null && e instanceof CookPlanError) {
+                                    setError(e.getMessage());
+                                }
+                            }
+                        });
             }
         }
     }

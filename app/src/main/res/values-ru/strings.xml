@@ -121,5 +121,6 @@
     <string name="choose_right_delete_mode">Выберите нужный вариант удаления</string>
     <string name="delete_already_bought">Удалить купленные</string>
     <string name="delete_all_items_title">Удалить все</string>
+    <string name="recipe_doesnt_exist">Рецепта не существует</string>
 
 </resources>

@@ -9,11 +9,11 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 
 import com.cookplan.R;
+import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Recipe;
-import com.cookplan.utils.DatabaseConstants;
+import com.cookplan.providers.RecipeProvider;
+import com.cookplan.providers.impl.RecipeProviderImpl;
 import com.cookplan.utils.Utils;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
@@ -21,8 +21,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by DariaEfimova on 16.03.17.
@@ -37,12 +40,12 @@ public class EditRecipeInfoPresenterImpl implements EditRecipeInfoPresenter {
     private EditRecipeInfoView mainView;
     private Context context;
     private TessBaseAPI tessBaseApi;
-    private DatabaseReference mDatabase;
+    private RecipeProvider dataProvider;
 
     public EditRecipeInfoPresenterImpl(EditRecipeInfoView mainView, Context context) {
         this.mainView = mainView;
         this.context = context;
-        this.mDatabase = FirebaseDatabase.getInstance().getReference();
+        dataProvider = new RecipeProviderImpl();
     }
 
     @Override
@@ -52,8 +55,8 @@ public class EditRecipeInfoPresenterImpl implements EditRecipeInfoPresenter {
             File file = new File(context.getApplicationContext().getExternalFilesDir(
                     android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "ocr.jpg");
             outputFileUri = FileProvider.getUriForFile(context,
-                    context.getApplicationContext().getPackageName() + ".provider",
-                    file);
+                                                       context.getApplicationContext().getPackageName() + ".provider",
+                                                       file);
         } catch (Exception e) {
             e.printStackTrace();
             if (mainView != null) {
@@ -203,42 +206,67 @@ public class EditRecipeInfoPresenterImpl implements EditRecipeInfoPresenter {
 
     @Override
     public void saveRecipe(Recipe recipe, String newName, String newDesc) {
+        if (mainView != null) {
+            mainView.showProgressBar();
+        }
         if (recipe == null) {
             recipe = new Recipe(newName, newDesc);
         } else {
             recipe.setName(newName);
             recipe.setDesc(newDesc);
         }
-        DatabaseReference recipeRef = mDatabase.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
-        Recipe finalRecipe = recipe;
         if (recipe.getId() == null) {
-            recipeRef.push().setValue(recipe.getRecipeDB(), (databaseError, reference) -> {
-                if (databaseError != null) {
-                    if (mainView != null) {
-                        mainView.setErrorToast(databaseError.getMessage());
-                    }
-                } else {
-                    if (mainView != null) {
-                        finalRecipe.setId(reference.getKey());
-                        mainView.setNextActivity(finalRecipe);
-                    }
-                }
-            });
+            dataProvider.createRecipe(recipe)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Recipe>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Recipe recipe) {
+                            if (mainView != null) {
+                                mainView.hideProgressBar();
+                                mainView.setNextActivity(recipe);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null && e instanceof CookPlanError) {
+                                mainView.hideProgressBar();
+                                mainView.setErrorToast(e.getMessage());
+                            }
+                        }
+                    });
         } else {
-            Map<String, Object> values = new HashMap<>();
-            values.put(DatabaseConstants.DATABASE_NAME_FIELD, recipe.getName());
-            values.put(DatabaseConstants.DATABASE_DESCRIPTION_FIELD, recipe.getDesc());
-            recipeRef.child(recipe.getId()).updateChildren(values, (databaseError, databaseReference) -> {
-                if (databaseError != null) {
-                    if (mainView != null) {
-                        mainView.setErrorToast(databaseError.getMessage());
-                    }
-                } else {
-                    if (mainView != null) {
-                        mainView.setNextActivity(finalRecipe);
-                    }
-                }
-            });
+            dataProvider.update(recipe)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Recipe>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Recipe recipe) {
+                            if (mainView != null) {
+                                mainView.hideProgressBar();
+                                mainView.setNextActivity(recipe);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null && e instanceof CookPlanError) {
+                                mainView.hideProgressBar();
+                                mainView.setErrorToast(e.getMessage());
+                            }
+                        }
+                    });
         }
     }
 }

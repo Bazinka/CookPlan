@@ -82,6 +82,8 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
                 new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
                         .setMessage(R.string.are_you_sure_about_remove_question)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                            progressBar.setVisibility(View.VISIBLE);
                             if (presenter != null) {
                                 presenter.removeRecipe(recipe);
                             }

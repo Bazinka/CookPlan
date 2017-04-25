@@ -17,8 +17,10 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
@@ -229,6 +231,19 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
                 mProgressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void showProgressBar() {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

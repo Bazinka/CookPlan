@@ -16,6 +16,9 @@ public interface EditRecipeInfoView {
 
     public void setAsyncTextResult(String result);
 
+    void showProgressBar();
+
+    void hideProgressBar();
 
     public void setNextActivity(Recipe recipe);
 }
