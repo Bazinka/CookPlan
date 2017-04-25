@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -35,12 +35,21 @@ import io.reactivex.schedulers.Schedulers;
 public abstract class ShoppingListBasePresenterImpl implements ShoppingListBasePresenter, FirebaseAuth.AuthStateListener {
 
     private DatabaseReference database;
-    private IngredientProvider ingredientDataProvider;
+
+
+    protected IngredientProvider ingredientDataProvider;
+    private CompositeDisposable disposables;
 
     public ShoppingListBasePresenterImpl() {
         this.database = FirebaseDatabase.getInstance().getReference();
         this.ingredientDataProvider = new IngredientProviderImpl();
         FirebaseAuth.getInstance().addAuthStateListener(this);
+        disposables = new CompositeDisposable();
+    }
+
+    @Override
+    public void onStop() {
+        disposables.clear();
     }
 
     @Override
@@ -51,33 +60,29 @@ public abstract class ShoppingListBasePresenterImpl implements ShoppingListBaseP
             uid = auth.getCurrentUser().getUid();
         }
         if (uid != null) {
-            ingredientDataProvider.getAllIngredientList()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<List<Ingredient>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
+            disposables.add(ingredientDataProvider.getAllIngredientList()
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeWith(new DisposableObserver<List<Ingredient>>() {
 
-                        }
+                                        @Override
+                                        public void onNext(List<Ingredient> ingredients) {
+                                            checkSharedIngredients(ingredients);
+                                        }
 
-                        @Override
-                        public void onNext(List<Ingredient> ingredients) {
-                            checkSharedIngredients(ingredients);
-                        }
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            if (FirebaseAuth.getInstance().getCurrentUser() != null
+                                                    && e instanceof CookPlanError) {
+                                                setError(e.getMessage());
+                                            }
+                                        }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            if (FirebaseAuth.getInstance().getCurrentUser() != null
-                                    && e instanceof CookPlanError) {
-                                setError(e.getMessage());
-                            }
-                        }
+                                        @Override
+                                        public void onComplete() {
 
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
+                                        }
+                                    }));
         }
     }
 

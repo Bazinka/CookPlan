@@ -1,7 +1,6 @@
 package com.cookplan.recipe_view;
 
 import com.cookplan.models.Ingredient;
-import com.cookplan.models.ShopListStatus;
 
 import java.util.List;
 
@@ -16,4 +15,6 @@ public interface RecipeViewPresenter {
     public void addIngredientToShoppingList(Ingredient ingredient);
 
     public void addAllIngredientToShoppingList(List<Ingredient> ingredients);
+
+    public void onStop();
 }

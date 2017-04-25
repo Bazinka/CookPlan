@@ -8,9 +8,7 @@ import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
-import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.RecipeProvider;
-import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.RecipeProviderImpl;
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl;
 
@@ -38,14 +36,12 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
     private Context context;
 
     private RecipeProvider recipeDataProvider;
-    private IngredientProvider ingredientDataProvider;
 
     public ShopListByDishesPresenterImpl(ShopListByDishesView mainView, Context context) {
         super();
         this.mainView = mainView;
         this.context = context;
         this.recipeDataProvider = new RecipeProviderImpl();
-        this.ingredientDataProvider = new IngredientProviderImpl();
     }
 
     @Override

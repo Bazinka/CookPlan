@@ -52,15 +52,25 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
         mainView = (ViewGroup) inflater.inflate(R.layout.fragment_shop_list_by_dish, container, false);
 
         progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        return mainView;
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
         if (presenter != null) {
             presenter.getShoppingList();
         }
-
+        setEmptyView();
         progressBar.setVisibility(View.VISIBLE);
+    }
 
-
-        return mainView;
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
+        }
     }
 
     @Override

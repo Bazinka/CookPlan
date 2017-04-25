@@ -97,7 +97,7 @@ public class IngredientProviderImpl implements IngredientProvider {
             });
         });
     }
-    
+
     @Override
     public Completable removeIngredient(Ingredient ingredient) {
         return Completable.create(emitter -> {

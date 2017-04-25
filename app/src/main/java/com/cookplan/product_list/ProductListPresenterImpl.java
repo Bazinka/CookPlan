@@ -8,9 +8,9 @@ import com.cookplan.providers.impl.ProductProviderImpl;
 
 import java.util.List;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -21,45 +21,49 @@ public class ProductListPresenterImpl implements ProductListPresenter {
 
     private ProductListView mainView;
     private ProductProvider dataProvider;
+    private CompositeDisposable disposables;
 
     public ProductListPresenterImpl(ProductListView mainView) {
         this.mainView = mainView;
         this.dataProvider = new ProductProviderImpl();
+        disposables = new CompositeDisposable();
     }
 
     @Override
     public void getProductList() {
-        dataProvider.getProductList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Product>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        disposables.add(
+                dataProvider.getProductList()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableObserver<List<Product>>() {
 
-                    }
-
-                    @Override
-                    public void onNext(List<Product> products) {
-                        if (mainView != null) {
-                            if (products.size() != 0) {
-                                mainView.setProductList(products);
-                            } else {
-                                mainView.setEmptyView();
+                            @Override
+                            public void onNext(List<Product> products) {
+                                if (mainView != null) {
+                                    if (products.size() != 0) {
+                                        mainView.setProductList(products);
+                                    } else {
+                                        mainView.setEmptyView();
+                                    }
+                                }
                             }
-                        }
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (mainView != null && e instanceof CookPlanError) {
-                            mainView.setErrorToast(e.getMessage());
-                        }
-                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                if (mainView != null && e instanceof CookPlanError) {
+                                    mainView.setErrorToast(e.getMessage());
+                                }
+                            }
 
-                    @Override
-                    public void onComplete() {
+                            @Override
+                            public void onComplete() {
 
-                    }
-                });
+                            }
+                        }));
+    }
+
+    @Override
+    public void onStop() {
+        disposables.clear();
     }
 }

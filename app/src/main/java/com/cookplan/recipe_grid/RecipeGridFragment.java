@@ -50,7 +50,23 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
         }
         setRetainInstance(true);
         presenter = new RecipeGridPresenterImpl(this);
-        presenter.getAsyncRecipeList();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (presenter != null) {
+            presenter.getRecipeList();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
+        }
     }
 
     @Override

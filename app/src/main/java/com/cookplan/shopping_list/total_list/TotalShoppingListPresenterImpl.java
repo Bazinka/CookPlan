@@ -7,8 +7,6 @@ import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.ProductCategory;
 import com.cookplan.models.ShopListStatus;
-import com.cookplan.providers.IngredientProvider;
-import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl;
 
 import java.util.ArrayList;
@@ -28,13 +26,11 @@ import io.reactivex.schedulers.Schedulers;
 public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImpl implements TotalShoppingListPresenter {
 
     private TotalShoppingListView mainView;
-    private IngredientProvider dataProvider;
     private Map<String, List<Ingredient>> ProductToIngredientMap;
 
     public TotalShoppingListPresenterImpl(TotalShoppingListView mainView) {
         super();
         this.mainView = mainView;
-        this.dataProvider = new IngredientProviderImpl();
     }
 
     @Override
@@ -167,7 +163,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
         List<Ingredient> ingredientList = ProductToIngredientMap.get(totalIngredient.getName());
         for (Ingredient realIngredient : ingredientList) {
             realIngredient.setShopListStatus(newStatus);
-            dataProvider.updateShopStatus(realIngredient)
+            ingredientDataProvider.updateShopStatus(realIngredient)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new CompletableObserver() {
@@ -200,7 +196,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                 if (status == realIngredient.getShopListStatus()) {
                     realIngredient.setShopListStatus(ShopListStatus.NONE);
                     if (realIngredient.getRecipeId() == null) {
-                        dataProvider.removeIngredient(realIngredient)
+                        ingredientDataProvider.removeIngredient(realIngredient)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new CompletableObserver() {
@@ -222,7 +218,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
                                     }
                                 });
                     } else {
-                        dataProvider.updateShopStatus(realIngredient)
+                        ingredientDataProvider.updateShopStatus(realIngredient)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new CompletableObserver() {

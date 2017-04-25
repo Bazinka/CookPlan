@@ -14,7 +14,7 @@ import io.reactivex.Single;
 
 public interface RecipeProvider {
 
-    Observable<List<Recipe>> getSharedRecipeList();
+    Observable<List<Recipe>> getAllRecipeList();
 
     Single<Recipe> createRecipe(Recipe recipe);
 

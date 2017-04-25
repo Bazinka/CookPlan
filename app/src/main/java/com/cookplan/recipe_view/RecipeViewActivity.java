@@ -68,7 +68,6 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
             recyclerView.setAdapter(adapter);
 
             presenter = new RecipeViewPresenterImpl(this, recipe);
-            presenter.getIngredientList();
 
             TextView descTextView = (TextView) findViewById(R.id.description_body_textview);
             descTextView.setText(recipe.getDesc());
@@ -103,6 +102,22 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
                     finish();
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (presenter != null) {
+            presenter.getIngredientList();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
         }
     }
 

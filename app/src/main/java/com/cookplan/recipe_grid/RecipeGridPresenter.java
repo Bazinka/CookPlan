@@ -8,7 +8,9 @@ import com.cookplan.models.Recipe;
 
 public interface RecipeGridPresenter {
 
-    public void getAsyncRecipeList();
+    public void getRecipeList();
 
     public void removeRecipe(Recipe recipe);
+
+    void onStop();
 }

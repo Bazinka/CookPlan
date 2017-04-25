@@ -65,13 +65,28 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new AddIngredientPresenterImpl(this);
-        presenter.getAsyncProductList();
         if (getArguments() != null) {
             Recipe recipe = (Recipe) getArguments().getSerializable(RECIPE_OBJECT_KEY);
             if (recipe != null) {
                 presenter.setRecipe(recipe);
             }
             presenter.setIsNeedToBuy(getArguments().getBoolean(RECIPE_NEED_TO_BUY_KEY, false));
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (presenter != null) {
+            presenter.getAsyncProductList();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
         }
     }
 

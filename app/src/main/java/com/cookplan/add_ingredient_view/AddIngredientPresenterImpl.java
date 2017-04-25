@@ -21,10 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.CompletableObserver;
-import io.reactivex.Observer;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -37,48 +38,46 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
     //    private DatabaseReference database;
     private Recipe recipe;
     private boolean isNeedToBuy;
-    private double lastInputAmount;
 
     private ProductProvider productDataProvider;
     private IngredientProvider ingredientDataProvider;
+    private CompositeDisposable disposables;
+
 
     public AddIngredientPresenterImpl(AddIngredientView mainView) {
         this.mainView = mainView;
         ingredientDataProvider = new IngredientProviderImpl();
         productDataProvider = new ProductProviderImpl();
         isNeedToBuy = false;
+        disposables = new CompositeDisposable();
     }
 
     @Override
     public void getAsyncProductList() {
-        productDataProvider.getProductList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Product>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        disposables.add(
+                productDataProvider.getProductList()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableObserver<List<Product>>() {
+                            @Override
+                            public void onNext(List<Product> products) {
+                                if (mainView != null && mainView.isAddedToActivity()) {
+                                    mainView.setProductsList(products);
+                                }
+                            }
 
-                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                if (mainView != null && e instanceof CookPlanError) {
+                                    mainView.setErrorToast(e.getMessage());
+                                }
+                            }
 
-                    @Override
-                    public void onNext(List<Product> products) {
-                        if (mainView != null && mainView.isAddedToActivity()) {
-                            mainView.setProductsList(products);
-                        }
-                    }
+                            @Override
+                            public void onComplete() {
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (mainView != null && e instanceof CookPlanError) {
-                            mainView.setErrorToast(e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                            }
+                        }));
     }
 
     @Override
@@ -179,6 +178,11 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                         }
                     });
         }
+    }
+
+    @Override
+    public void onStop() {
+        disposables.clear();
     }
 
     @Override

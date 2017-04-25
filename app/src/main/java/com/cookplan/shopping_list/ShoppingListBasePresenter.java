@@ -8,4 +8,6 @@ public interface ShoppingListBasePresenter {
 
     public void getShoppingList();
 
+    void onStop();
+
 }

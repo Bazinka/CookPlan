@@ -58,7 +58,23 @@ public class EditRecipeIngredientsActivity extends BaseActivity implements EditR
         recyclerView.setAdapter(adapter);
 
         presenter = new EditRecipeIngredientsPresenterImpl(this, recipe);
-        presenter.getAsyncIngredientList();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (presenter != null) {
+            presenter.getAsyncIngredientList();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
+        }
     }
 
     @Override

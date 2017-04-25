@@ -108,7 +108,7 @@ public class RecipeProviderImpl implements RecipeProvider {
     }
 
     @Override
-    public Observable<List<Recipe>> getSharedRecipeList() {
+    public Observable<List<Recipe>> getAllRecipeList() {
         return subjectRecipeList;
     }
 

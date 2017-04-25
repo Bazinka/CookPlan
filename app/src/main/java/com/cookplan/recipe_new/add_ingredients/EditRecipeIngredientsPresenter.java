@@ -10,4 +10,6 @@ public interface EditRecipeIngredientsPresenter {
     public void getAsyncIngredientList();
 
     public void removeIngredient(Ingredient ingredient);
+
+    void onStop();
 }

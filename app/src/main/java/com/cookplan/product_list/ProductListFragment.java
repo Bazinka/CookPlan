@@ -21,8 +21,6 @@ import com.cookplan.utils.FillProductDatabaseProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-//import android.support.design.widget.FloatingActionButton;
-
 public class ProductListFragment extends BaseFragment implements ProductListView {
 
     private ProductListRecyclerAdapter adapter;
@@ -49,7 +47,22 @@ public class ProductListFragment extends BaseFragment implements ProductListView
         }
         setRetainInstance(true);
         presenter = new ProductListPresenterImpl(this);
-        presenter.getProductList();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (presenter != null) {
+            presenter.getProductList();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
+        }
     }
 
     @Override

@@ -7,4 +7,6 @@ package com.cookplan.product_list;
 public interface ProductListPresenter {
 
     public void getProductList();
+
+    void onStop();
 }

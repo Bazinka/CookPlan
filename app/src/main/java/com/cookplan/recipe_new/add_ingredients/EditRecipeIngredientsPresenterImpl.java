@@ -10,9 +10,10 @@ import com.cookplan.providers.impl.IngredientProviderImpl;
 import java.util.List;
 
 import io.reactivex.CompletableObserver;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -22,45 +23,44 @@ import io.reactivex.schedulers.Schedulers;
 public class EditRecipeIngredientsPresenterImpl implements EditRecipeIngredientsPresenter {
 
     private EditRecipeIngredientsView mainView;
-    private IngredientProvider dataProvider;
     private Recipe recipe;
+
+    private IngredientProvider dataProvider;
+    private CompositeDisposable disposables;
 
     EditRecipeIngredientsPresenterImpl(EditRecipeIngredientsView mainView, Recipe recipe) {
         this.mainView = mainView;
         this.recipe = recipe;
         this.dataProvider = new IngredientProviderImpl();
+        disposables = new CompositeDisposable();
     }
 
     @Override
     public void getAsyncIngredientList() {
-        dataProvider.getIngredientListByRecipeId(recipe.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Ingredient>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        disposables.add(dataProvider.getIngredientListByRecipeId(recipe.getId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeWith(new DisposableObserver<List<Ingredient>>() {
 
-                    }
+                                    @Override
+                                    public void onNext(List<Ingredient> ingredients) {
+                                        if (mainView != null) {
+                                            mainView.setIngredientList(ingredients);
+                                        }
+                                    }
 
-                    @Override
-                    public void onNext(List<Ingredient> ingredients) {
-                        if (mainView != null) {
-                            mainView.setIngredientList(ingredients);
-                        }
-                    }
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        if (mainView != null && e instanceof CookPlanError) {
+                                            mainView.setErrorToast(e.getMessage());
+                                        }
+                                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (mainView != null && e instanceof CookPlanError) {
-                            mainView.setErrorToast(e.getMessage());
-                        }
-                    }
+                                    @Override
+                                    public void onComplete() {
 
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                                    }
+                                }));
     }
 
     @Override
@@ -86,5 +86,10 @@ public class EditRecipeIngredientsPresenterImpl implements EditRecipeIngredients
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onStop() {
+        disposables.clear();
     }
 }

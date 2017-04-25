@@ -23,4 +23,6 @@ public interface AddIngredientPresenter {
 
     public void saveProductAndIngredient(ProductCategory category, String name,
                                          double amount, MeasureUnit measureUnit);
+
+    void onStop();
 }

@@ -80,12 +80,6 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
 
-        if (presenter != null) {
-            presenter.getShoppingList();
-        }
-        setEmptyView();
-        progressBar.setVisibility(View.VISIBLE);
-
         ImageView deleteImageButton = (ImageView) mainView.findViewById(R.id.delete_image_view);
         deleteImageButton.setOnClickListener(v -> {
             new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
@@ -115,6 +109,23 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
         return mainView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (presenter != null) {
+            presenter.getShoppingList();
+        }
+        setEmptyView();
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
+        }
+    }
 
     @Override
     public void onResume() {

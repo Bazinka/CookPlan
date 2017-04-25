@@ -12,9 +12,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.List;
 
 import io.reactivex.CompletableObserver;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -26,46 +27,44 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter, FirebaseAut
 
     private RecipeGridView mainView;
     private RecipeProvider dataProvider;
+    private CompositeDisposable disposables;
 
     public RecipeGridPresenterImpl(RecipeGridView mainView) {
         this.mainView = mainView;
         FirebaseAuth.getInstance().addAuthStateListener(this);
         dataProvider = new RecipeProviderImpl();
+        disposables = new CompositeDisposable();
     }
 
     @Override
-    public void getAsyncRecipeList() {
-        dataProvider.getSharedRecipeList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Recipe>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+    public void getRecipeList() {
+        disposables.add(dataProvider.getAllRecipeList()
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeWith(new DisposableObserver<List<Recipe>>() {
 
-                    }
+                                    @Override
+                                    public void onNext(List<Recipe> recipeList) {
+                                        if (mainView != null) {
+                                            if (recipeList.isEmpty()) {
+                                                mainView.setEmptyView();
+                                            } else {
+                                                mainView.setRecipeList(recipeList);
+                                            }
+                                        }
+                                    }
 
-                    @Override
-                    public void onNext(List<Recipe> recipeList) {
-                        if (mainView != null) {
-                            if (recipeList.isEmpty()) {
-                                mainView.setEmptyView();
-                            } else {
-                                mainView.setRecipeList(recipeList);
-                            }
-                        }
-                    }
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        if (mainView != null && e instanceof CookPlanError) {
+                                            mainView.setErrorToast(e.getMessage());
+                                        }
+                                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (mainView != null && e instanceof CookPlanError) {
-                            mainView.setErrorToast(e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                });
+                                    @Override
+                                    public void onComplete() {
+                                    }
+                                }));
     }
 
     @Override
@@ -96,7 +95,12 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter, FirebaseAut
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         if (firebaseAuth.getCurrentUser() != null) {
-            getAsyncRecipeList();
+            getRecipeList();
         }
+    }
+
+    @Override
+    public void onStop() {
+        disposables.clear();
     }
 }
