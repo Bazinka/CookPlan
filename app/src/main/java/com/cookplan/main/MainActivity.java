@@ -27,7 +27,6 @@ import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
-import com.cookplan.models.SharedData;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
@@ -47,8 +46,6 @@ public class MainActivity extends BaseActivity
 
     private MainPresenter presenter;
 
-    private SharedData sharedData;
-    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,10 +223,6 @@ public class MainActivity extends BaseActivity
     }
 
     void setRecipeListFragment() {
-        sharedData = SharedData.RECIPE;
-        if (menu != null) {
-            menu.findItem(R.id.app_bar_share).setVisible(true);
-        }
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -250,10 +243,7 @@ public class MainActivity extends BaseActivity
     }
 
     void setShoppingListFragment() {
-        sharedData = SharedData.INGREDIENTS;
-        if (menu != null) {
-            menu.findItem(R.id.app_bar_share).setVisible(true);
-        }
+
         //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
         //        mainConteinerView.setVisibility(View.INVISIBLE);
 
@@ -275,11 +265,6 @@ public class MainActivity extends BaseActivity
     }
 
     void setProductListFragment() {
-        sharedData = null;
-
-        if (menu != null) {
-            menu.findItem(R.id.app_bar_share).setVisible(false);
-        }
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -298,67 +283,6 @@ public class MainActivity extends BaseActivity
             transaction.replace(R.id.fragment_container, pointListFragment);
         }
         transaction.commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu _menu) {
-        getMenuInflater().inflate(R.menu.main_menu, _menu);
-        menu = _menu;
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.app_bar_share) {
-            if (sharedData != null && !FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.share_with_google_dialog, null);
-                alert.setView(layout);
-                final EditText userEmailInput = (EditText) layout.findViewById(R.id.user_email_editText);
-                final TextView titleTextView = (TextView) layout.findViewById(R.id.user_email_title);
-                if (sharedData == SharedData.RECIPE) {
-                    titleTextView.setText(R.string.family_mode_dialog_recipes_title);
-                } else if (sharedData == SharedData.INGREDIENTS) {
-                    titleTextView.setText(R.string.family_mode_dialog_shop_list_title);
-                }
-                alert.setTitle(R.string.family_mode)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            String emailText = userEmailInput.getText().toString();
-                            if (!emailText.isEmpty()) {
-                                if (!emailText.contains(getString(R.string.gmail_ending_title))) {
-                                    emailText = emailText + getString(R.string.gmail_ending_title);
-                                }
-                                if (presenter != null) {
-                                    presenter.shareData(emailText, sharedData);
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-            } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
-                    FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle(R.string.attention_title)
-                        .setMessage(R.string.need_to_auth)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
-            } else {
-                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle(R.string.attention_title)
-                        .setMessage(R.string.cant_share_data)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 

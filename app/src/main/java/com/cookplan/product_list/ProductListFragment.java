@@ -16,12 +16,13 @@ import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Product;
+import com.cookplan.share.BaseShareFragment;
 import com.cookplan.utils.FillProductDatabaseProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductListFragment extends BaseFragment implements ProductListView {
+public class ProductListFragment extends BaseShareFragment implements ProductListView {
 
     private ProductListRecyclerAdapter adapter;
     private ProductListPresenter presenter;

@@ -12,17 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.add_ingredient_view.AddIngredientViewFragment;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.share.BaseShareFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TotalShoppingListFragment extends BaseFragment implements TotalShoppingListView {
+public class TotalShoppingListFragment extends BaseShareFragment implements TotalShoppingListView {
 
     private TotalShoppingListPresenter presenter;
     private TotalShopListRecyclerViewAdapter needToBuyAdapter;

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.ShareUserInfo;
-import com.cookplan.models.SharedData;
 import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.utils.DatabaseConstants;
@@ -100,10 +99,8 @@ public abstract class ShoppingListBasePresenterImpl implements ShoppingListBaseP
                 if (dataSnapshot.getValue() != null) {
                     for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                         ShareUserInfo userInfo = itemSnapshot.getValue(ShareUserInfo.class);
-                        if (userInfo.getSharedData() == SharedData.INGREDIENTS) {
-                            userIdList.add(userInfo.getOwnerUserId());
-                            userIdToInfo.put(userInfo.getOwnerUserId(), userInfo);
-                        }
+                        userIdList.add(userInfo.getOwnerUserId());
+                        userIdToInfo.put(userInfo.getOwnerUserId(), userInfo);
                     }
                 }
                 List<Ingredient> resultIngredients = new ArrayList<>();

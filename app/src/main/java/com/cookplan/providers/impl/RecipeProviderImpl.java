@@ -5,7 +5,6 @@ import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShareUserInfo;
-import com.cookplan.models.SharedData;
 import com.cookplan.providers.RecipeProvider;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,10 +64,8 @@ public class RecipeProviderImpl implements RecipeProvider {
                         if (dataSnapshot.getValue() != null) {
                             for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                                 ShareUserInfo userInfo = itemSnapshot.getValue(ShareUserInfo.class);
-                                if (userInfo.getSharedData() == SharedData.RECIPE) {
                                     userIdToInfo.put(userInfo.getOwnerUserId(), userInfo);
                                     userIdList.add(userInfo.getOwnerUserId());
-                                }
                             }
                         }
                         List<Recipe> resultRecipes = new ArrayList<>();

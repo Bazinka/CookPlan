@@ -21,13 +21,14 @@ import com.cookplan.main.MainActivity;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
 import com.cookplan.recipe_view.RecipeViewActivity;
+import com.cookplan.share.BaseShareFragment;
 import com.cookplan.utils.GridSpacingItemDecoration;
 import com.cookplan.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
+public class RecipeGridFragment extends BaseShareFragment implements RecipeGridView {
 
     private RecipeGridRecyclerViewAdapter adapter;
     private RecipeGridPresenter presenter;

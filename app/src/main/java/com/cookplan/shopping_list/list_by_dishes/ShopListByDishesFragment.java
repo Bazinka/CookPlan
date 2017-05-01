@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 
-import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.share.BaseShareFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ShopListByDishesFragment extends BaseFragment implements ShopListByDishesView {
+public class ShopListByDishesFragment extends BaseShareFragment implements ShopListByDishesView {
 
     private ShopListByDishPresenter presenter;
     private ProgressBar progressBar;
