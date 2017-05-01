@@ -14,7 +14,7 @@ import io.reactivex.Single;
 
 public interface IngredientProvider {
 
-    Observable<List<Ingredient>> getAllIngredientList();
+    Observable<List<Ingredient>> getAllIngredientsForUser();
 
     Observable<List<Ingredient>> getIngredientListByRecipeId(String recipeId);
 

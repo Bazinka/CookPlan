@@ -4,6 +4,7 @@ import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShareUserInfo;
 import com.cookplan.providers.IngredientProvider;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,7 +16,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -31,15 +34,16 @@ public class IngredientProviderImpl implements IngredientProvider {
 
     private DatabaseReference database;
 
-    private BehaviorSubject<List<Ingredient>> subjectAllIngredientList;
+    private BehaviorSubject<List<Ingredient>> subjectAllMineIngredients;
 
     public IngredientProviderImpl() {
         this.database = FirebaseDatabase.getInstance().getReference();
-        subjectAllIngredientList = BehaviorSubject.create();
+        subjectAllMineIngredients = BehaviorSubject.create();
         getFirebaseAllIngredientList();
     }
 
     private void getFirebaseAllIngredientList() {
+
         Query items = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
         items.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -48,15 +52,51 @@ public class IngredientProviderImpl implements IngredientProvider {
                     Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
                     allIngredients.add(ingredient);
                 }
-                if (subjectAllIngredientList != null) {
-                    subjectAllIngredientList.onNext(allIngredients);
-                }
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                Query sharedItems = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
+                        .orderByChild(DatabaseConstants.DATABASE_CLIENT_USER_EMAIL_FIELD)
+                        .equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                sharedItems.addValueEventListener(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<String> userIdList = new ArrayList<>();
+                        Map<String, ShareUserInfo> userIdToInfo = new HashMap<>();
+                        userIdList.add(uid);
+                        if (dataSnapshot.getValue() != null) {
+                            for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                                ShareUserInfo userInfo = itemSnapshot.getValue(ShareUserInfo.class);
+                                userIdList.add(userInfo.getOwnerUserId());
+                                userIdToInfo.put(userInfo.getOwnerUserId(), userInfo);
+                            }
+                        }
+                        List<Ingredient> resultIngredients = new ArrayList<>();
+                        for (String userId : userIdList) {
+                            for (Ingredient ingredient : allIngredients) {
+                                if (ingredient.getUserId().equals(userId)) {
+                                    if (!userId.equals(uid)) {
+                                        ingredient.setUserName(userIdToInfo.get(userId).getOwnerUserName());
+                                    }
+                                    resultIngredients.add(ingredient);
+                                }
+                            }
+                        }
+                        if (subjectAllMineIngredients != null) {
+                            subjectAllMineIngredients.onNext(allIngredients);
+                        }
+                    }
+
+                    public void onCancelled(DatabaseError databaseError) {
+                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                            subjectAllMineIngredients.onError(new CookPlanError(databaseError.getMessage()));
+                        }
+                    }
+                });
             }
 
             public void onCancelled(DatabaseError databaseError) {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    if (subjectAllIngredientList != null) {
-                        subjectAllIngredientList.onError(new CookPlanError(databaseError));
+                    if (subjectAllMineIngredients != null) {
+                        subjectAllMineIngredients.onError(new CookPlanError(databaseError));
                     }
                 }
             }
@@ -64,13 +104,13 @@ public class IngredientProviderImpl implements IngredientProvider {
     }
 
     @Override
-    public Observable<List<Ingredient>> getAllIngredientList() {
-        return subjectAllIngredientList;
+    public Observable<List<Ingredient>> getAllIngredientsForUser() {
+        return subjectAllMineIngredients;
     }
 
     @Override
     public Observable<List<Ingredient>> getIngredientListByRecipeId(String recipeId) {
-        return subjectAllIngredientList.map(allIngredients -> {
+        return subjectAllMineIngredients.map(allIngredients -> {
             List<Ingredient> recipeIngredients = new ArrayList<>();
             for (Ingredient ingredient : allIngredients) {
                 String ingredRecipeId = ingredient.getRecipeId();
