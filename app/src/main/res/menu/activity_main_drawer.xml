@@ -7,13 +7,14 @@
         <!--android:icon="@drawable/ic_map_points"-->
         <!--android:title="@string/map" />-->
         <item
-            android:id="@+id/nav_recipe_list"
-            android:icon="@drawable/ic_recipe_list"
-            android:title="@string/recipe_list_menu_title"/>
-        <item
             android:id="@+id/nav_shopping_list"
             android:icon="@drawable/ic_shopping_list"
             android:title="@string/shopping_list_title"/>
+
+        <item
+            android:id="@+id/nav_recipe_list"
+            android:icon="@drawable/ic_recipe_list"
+            android:title="@string/recipe_list_menu_title"/>
 
         <item
             android:id="@+id/nav_whats_cooking"
@@ -23,7 +24,8 @@
         <item
             android:id="@+id/nav_vocabulary"
             android:icon="@drawable/ic_product_list"
-            android:title="@string/product_vocabulary_title"/>
+            android:title="@string/product_vocabulary_title"
+            android:visible="false"/>
 
     </group>
 

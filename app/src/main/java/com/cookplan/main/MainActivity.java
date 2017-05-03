@@ -77,9 +77,9 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         fillNavHeader();
         navigationView.setNavigationItemSelectedListener(this);
-        mSelectedNavigationId = R.id.nav_recipe_list;
+        mSelectedNavigationId = R.id.nav_shopping_list;
         navigationView.setCheckedItem(mSelectedNavigationId);
-        setRecipeListFragment();
+        setShoppingListFragment();
     }
 
     private void fillNavHeader() {
