@@ -23,5 +23,5 @@ public interface FamilyModeProvider {
 
     Single<ShareUserInfo> updateDataSharedItem(ShareUserInfo dataSharedItem);
 
-    Completable removeDataSharedItem(ShareUserInfo dataSharedItem);
+    Completable removeAllSharedData();
 }

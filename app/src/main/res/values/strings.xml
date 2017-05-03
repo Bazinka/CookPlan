@@ -195,4 +195,6 @@
     <string name="product_doesnt_exist">Продукт не существует</string>
     <string name="ingred_remove_error">Невозможно удалить ингредиент</string>
     <string name="shared_data_error">Произошла ошибка при работе над общими данными</string>
+    <string name="error_share_data_loading">Error in loading data which was shared to me</string>
+    <string name="turn_off_family_mode_question">Вы действительно хотите выключить семейный режим?</string>
 </resources>

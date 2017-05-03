@@ -117,6 +117,14 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    @Override
+    protected void onStart() {
+        if (sharePresenter != null) {
+            sharePresenter.isFamilyModeTurnOnRequest();
+        }
+        super.onStart();
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -301,7 +309,7 @@ public class MainActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.app_bar_share) {
+        if (id == R.id.app_bar_share_off) {
             if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
                 LayoutInflater inflater = getLayoutInflater();
@@ -344,13 +352,54 @@ public class MainActivity extends BaseActivity
             }
             return true;
         }
+        if (id == R.id.app_bar_share_on) {
+            if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.attention_title)
+                        .setMessage(R.string.turn_off_family_mode_question)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            if (sharePresenter != null) {
+                                sharePresenter.turnOffFamilyMode();
+                            }
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
+                    FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.attention_title)
+                        .setMessage(R.string.need_to_auth)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            } else {
+                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.attention_title)
+                        .setMessage(R.string.cant_share_data)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            }
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void setShareIcon() {
+    public void setShareIcon(boolean isFamilyModeTurnOn) {
         if (menu != null) {
-            menu.findItem(R.id.app_bar_share).setVisible(true);
+            if (isFamilyModeTurnOn) {
+                menu.findItem(R.id.app_bar_share_on).setVisible(true);
+                menu.findItem(R.id.app_bar_share_off).setVisible(false);
+            } else {
+                menu.findItem(R.id.app_bar_share_on).setVisible(false);
+                menu.findItem(R.id.app_bar_share_off).setVisible(true);
+            }
         }
         Toast.makeText(this, R.string.share_success_title, Toast.LENGTH_LONG).show();
     }

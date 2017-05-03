@@ -5,5 +5,10 @@ package com.cookplan.share;
  */
 
 public interface SharePresenter {
-    public void shareData(String userEmail);
+
+    void shareData(String userEmail);
+
+    void turnOffFamilyMode();
+
+    void isFamilyModeTurnOnRequest();
 }

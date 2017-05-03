@@ -73,16 +73,15 @@ public class RecipeProviderImpl implements RecipeProvider {
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             List<Recipe> resultRecipes = new ArrayList<>();
             for (Recipe recipe : allRecipes) {
-                if (!sharedInfoList.isEmpty()) {
+                if (recipe.getUserId().equals(uid)) {
+                    resultRecipes.add(recipe);
+                } else {
                     for (ShareUserInfo sharedInfo : sharedInfoList) {
-                        if (recipe.getUserId().equals(uid)
-                                || sharedInfo.getOwnerUserId().contains(recipe.getUserId())) {
+                        if (sharedInfo.getOwnerUserId().contains(recipe.getUserId())) {
                             recipe.setUserName(sharedInfo.getOwnerUserName());
                             resultRecipes.add(recipe);
                         }
                     }
-                } else {
-                    resultRecipes.add(recipe);
                 }
             }
             return resultRecipes;

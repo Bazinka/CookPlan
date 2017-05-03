@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Collections;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.MaybeObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -70,7 +71,7 @@ public class SharePresenterImpl implements SharePresenter {
                                         @Override
                                         public void onSuccess(ShareUserInfo shareUserInfo) {
                                             if (mainView != null) {
-                                                mainView.setShareIcon();
+                                                mainView.setShareIcon(true);
                                             }
                                         }
 
@@ -102,7 +103,7 @@ public class SharePresenterImpl implements SharePresenter {
                                         @Override
                                         public void onSuccess(ShareUserInfo shareUserInfo) {
                                             if (mainView != null) {
-                                                mainView.setShareIcon();
+                                                mainView.setShareIcon(true);
                                             }
                                         }
 
@@ -127,5 +128,67 @@ public class SharePresenterImpl implements SharePresenter {
         } else if (user != null && user.getEmail().equals(userEmail)) {
             mainView.setShareError(R.string.cant_share_to_myself);
         }
+    }
+
+    @Override
+    public void turnOffFamilyMode() {
+        familyModeProvider.removeAllSharedData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (mainView != null) {
+                            mainView.setShareIcon(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null) {
+                            mainView.setShareError(R.string.error_share_title);
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void isFamilyModeTurnOnRequest() {
+        familyModeProvider.getDataSharedByMe()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new MaybeObserver<ShareUserInfo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(ShareUserInfo shareUserInfo) {
+                        if (mainView != null) {
+                            mainView.setShareIcon(true);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null && e instanceof CookPlanError) {
+                            mainView.setShareError(R.string.error_share_data_loading);
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (mainView != null) {
+                            mainView.setShareIcon(false);
+                        }
+                    }
+                });
+
     }
 }

@@ -22,8 +22,12 @@ import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.MaybeObserver;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 /**
@@ -89,8 +93,7 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null && !user.isAnonymous()) {
                 String myUid = user.getUid();
-                DatabaseReference database1 = FirebaseDatabase.getInstance().getReference();
-                Query sharedItems = database1.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
+                Query sharedItems = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
                         .orderByChild(DatabaseConstants.DATABASE_OWNER_USER_ID_FIELD)
                         .equalTo(myUid);
                 sharedItems.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -160,7 +163,40 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
     }
 
     @Override
-    public Completable removeDataSharedItem(ShareUserInfo dataSharedItem) {
-        return null;
+    public Completable removeAllSharedData() {
+        return Completable.create(emitter -> {
+            getDataSharedByMe()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new MaybeObserver<ShareUserInfo>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(ShareUserInfo shareUserInfo) {
+                            DatabaseReference userShareRef = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE);
+                            DatabaseReference ref = userShareRef.child(shareUserInfo.getId());
+                            ref.removeValue()
+                                    .addOnFailureListener(exeption -> emitter.onError(new CookPlanError(exeption.getMessage())))
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isComplete()) {
+                                            emitter.onComplete();
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        });
     }
 }
