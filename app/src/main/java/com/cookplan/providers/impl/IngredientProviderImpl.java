@@ -71,16 +71,15 @@ public class IngredientProviderImpl implements IngredientProvider {
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             List<Ingredient> resultIngredient = new ArrayList<>();
             for (Ingredient ingredient : ingredientList) {
-                if (!shareUserInfos.isEmpty()) {
+                if (ingredient.getUserId().equals(uid)) {
+                    resultIngredient.add(ingredient);
+                } else if (!shareUserInfos.isEmpty()) {
                     for (ShareUserInfo sharedInfo : shareUserInfos) {
-                        if (ingredient.getUserId().equals(uid)
-                                || sharedInfo.getOwnerUserId().contains(ingredient.getUserId())) {
+                        if (sharedInfo.getOwnerUserId().contains(ingredient.getUserId())) {
                             ingredient.setUserName(sharedInfo.getOwnerUserName());
                             resultIngredient.add(ingredient);
                         }
                     }
-                } else {
-                    resultIngredient.add(ingredient);
                 }
             }
             return resultIngredient;

@@ -49,51 +49,52 @@ public abstract class ShoppingListBasePresenterImpl implements ShoppingListBaseP
             uid = auth.getCurrentUser().getUid();
         }
         if (uid != null) {
-            familyModeProvider.getInfoSharedToMe()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableObserver<List<ShareUserInfo>>() {
-                        @Override
-                        public void onNext(List<ShareUserInfo> shareUserInfos) {
-                            disposables.add(
-                                    ingredientDataProvider.getAllIngredientsSharedToUser(shareUserInfos)
-                                            .subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribeWith(new DisposableObserver<List<Ingredient>>() {
+            disposables.add(
+                    familyModeProvider.getInfoSharedToMe()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeWith(new DisposableObserver<List<ShareUserInfo>>() {
+                                @Override
+                                public void onNext(List<ShareUserInfo> shareUserInfos) {
+                                    disposables.add(
+                                            ingredientDataProvider.getAllIngredientsSharedToUser(shareUserInfos)
+                                                    .subscribeOn(Schedulers.io())
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribeWith(new DisposableObserver<List<Ingredient>>() {
 
-                                                @Override
-                                                public void onNext(List<Ingredient> ingredients) {
-                                                    sortIngredientList(ingredients);
-                                                }
+                                                        @Override
+                                                        public void onNext(List<Ingredient> ingredients) {
+                                                            sortIngredientList(ingredients);
+                                                        }
 
-                                                @Override
-                                                public void onError(Throwable e) {
-                                                    if (FirebaseAuth.getInstance().getCurrentUser() != null
-                                                            && e instanceof CookPlanError) {
-                                                        setError(e.getMessage());
-                                                    }
-                                                }
+                                                        @Override
+                                                        public void onError(Throwable e) {
+                                                            if (FirebaseAuth.getInstance().getCurrentUser() != null
+                                                                    && e instanceof CookPlanError) {
+                                                                setError(e.getMessage());
+                                                            }
+                                                        }
 
-                                                @Override
-                                                public void onComplete() {
+                                                        @Override
+                                                        public void onComplete() {
 
-                                                }
-                                            }));
-                        }
+                                                        }
+                                                    }));
+                                }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            if (FirebaseAuth.getInstance().getCurrentUser() != null
-                                    && e instanceof CookPlanError) {
-                                setError(e.getMessage());
-                            }
-                        }
+                                @Override
+                                public void onError(Throwable e) {
+                                    if (FirebaseAuth.getInstance().getCurrentUser() != null
+                                            && e instanceof CookPlanError) {
+                                        setError(e.getMessage());
+                                    }
+                                }
 
-                        @Override
-                        public void onComplete() {
+                                @Override
+                                public void onComplete() {
 
-                        }
-                    });
+                                }
+                            }));
         }
     }
 
