@@ -8,13 +8,12 @@ import com.cookplan.providers.impl.FamilyModeProviderImpl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.List;
+import java.util.Collections;
 
+import io.reactivex.MaybeObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DefaultObserver;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -39,44 +38,81 @@ public class SharePresenterImpl implements SharePresenter {
             familyModeProvider.getDataSharedByMe()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new DefaultObserver<List<ShareUserInfo>>() {
+                    .subscribe(new MaybeObserver<ShareUserInfo>() {
+
 
                         @Override
-                        public void onNext(List<ShareUserInfo> shareUserInfoList) {
-                            if (shareUserInfoList.isEmpty()) {
-                                String myUid = user.getUid();
-                                ShareUserInfo shareInfoItem =
-                                        new ShareUserInfo(myUid, user.getDisplayName(), userEmail);
-                                familyModeProvider.createDataSharedItem(shareInfoItem)
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(new SingleObserver<ShareUserInfo>() {
+                        public void onSubscribe(Disposable d) {
+                        }
 
-                                            @Override
-                                            public void onSubscribe(Disposable d) {
-                                                d.dispose();
-                                            }
-
-                                            @Override
-                                            public void onSuccess(ShareUserInfo shareUserInfo) {
-                                                if (mainView != null) {
-                                                    mainView.setShareIcon();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onError(Throwable e) {
-                                                if (mainView != null) {
-                                                    mainView.setShareError(R.string.error_share_title);
-                                                }
-                                            }
-                                        });
-                            } else {
-                                if (mainView != null) {
-                                    mainView.setShareError(R.string.have_already_shared);
+                        @Override
+                        public void onSuccess(ShareUserInfo shareUserInfo) {
+                            //item was found and we need to update it
+                            boolean emailExist = false;
+                            for (String clientEmail : shareUserInfo.getClientUserEmailList()) {
+                                if (clientEmail.equals(userEmail)) {
+                                    emailExist = true;
+                                    break;
                                 }
                             }
+                            if (!emailExist) {
+                                shareUserInfo.getClientUserEmailList().add(userEmail);
+                            }
+                            familyModeProvider.updateDataSharedItem(shareUserInfo)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new SingleObserver<ShareUserInfo>() {
 
+                                        @Override
+                                        public void onSubscribe(Disposable d) {
+                                        }
+
+                                        @Override
+                                        public void onSuccess(ShareUserInfo shareUserInfo) {
+                                            if (mainView != null) {
+                                                mainView.setShareIcon();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            if (mainView != null) {
+                                                mainView.setShareError(R.string.error_share_title);
+                                            }
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            //item wasn't found and we need to create a new one
+                            String myUid = user.getUid();
+                            ShareUserInfo shareInfoItem =
+                                    new ShareUserInfo(myUid, user.getDisplayName(),
+                                                      Collections.singletonList(userEmail));
+                            familyModeProvider.createDataSharedItem(shareInfoItem)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new SingleObserver<ShareUserInfo>() {
+
+                                        @Override
+                                        public void onSubscribe(Disposable d) {
+                                        }
+
+                                        @Override
+                                        public void onSuccess(ShareUserInfo shareUserInfo) {
+                                            if (mainView != null) {
+                                                mainView.setShareIcon();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            if (mainView != null) {
+                                                mainView.setShareError(R.string.error_share_title);
+                                            }
+                                        }
+                                    });
                         }
 
                         @Override
@@ -86,10 +122,6 @@ public class SharePresenterImpl implements SharePresenter {
                                     mainView.setShareError(R.string.shared_data_error);
                                 }
                             }
-                        }
-
-                        @Override
-                        public void onComplete() {
                         }
                     });
         } else if (user != null && user.getEmail().equals(userEmail)) {

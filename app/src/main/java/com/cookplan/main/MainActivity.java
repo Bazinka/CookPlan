@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cookplan.BaseActivity;
@@ -29,13 +30,16 @@ import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
+import com.cookplan.share.SharePresenter;
+import com.cookplan.share.SharePresenterImpl;
+import com.cookplan.share.ShareView;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainView {
+        implements NavigationView.OnNavigationItemSelectedListener, MainView, ShareView {
 
     public static final int OPEN_SHOP_LIST_REQUEST = 10;
 
@@ -46,6 +50,9 @@ public class MainActivity extends BaseActivity
 
     private MainPresenter presenter;
 
+    protected SharePresenter sharePresenter;
+
+    protected Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,7 @@ public class MainActivity extends BaseActivity
 
         rootView = findViewById(R.id.main_snackbar_layout);
 
+        sharePresenter = new SharePresenterImpl(this);
         presenter = new MainPresenterImpl(this, this);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         fillNavHeader();
@@ -134,6 +142,66 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    void setRecipeListFragment() {
+        View tabsLayout = findViewById(R.id.main_tabs_layout);
+        tabsLayout.setVisibility(View.GONE);
+        View viewPager = findViewById(R.id.main_tabs_viewpager);
+        viewPager.setVisibility(View.GONE);
+
+        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        //        mainConteinerView.setVisibility(View.VISIBLE);
+
+        setTitle(getString(R.string.recipe_list_menu_title));
+        RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
+            transaction.add(R.id.fragment_container, pointListFragment);
+        } else {
+            transaction.replace(R.id.fragment_container, pointListFragment);
+        }
+        transaction.commit();
+    }
+
+    void setShoppingListFragment() {
+
+        View tabsLayout = findViewById(R.id.main_tabs_layout);
+        tabsLayout.setVisibility(View.VISIBLE);
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.main_tabs_viewpager);
+        viewPager.setVisibility(View.VISIBLE);
+
+        ViewPagerTabsAdapter adapter = new ViewPagerTabsAdapter(getSupportFragmentManager());
+        adapter.addFragment(TotalShoppingListFragment.newInstance(), getString(R.string.tab_all_ingredients_title));
+        adapter.addFragment(ShopListByDishesFragment.newInstance(), getString(R.string.tab_ingredients_by_dish_title));
+        //        adapter.addFragment(new ThreeFragment(), "THREE");
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.main_tabs_layout);
+        tabLayout.setupWithViewPager(viewPager);
+        setTitle(getString(R.string.shopping_list_title));
+    }
+
+    void setProductListFragment() {
+        View tabsLayout = findViewById(R.id.main_tabs_layout);
+        tabsLayout.setVisibility(View.GONE);
+        View viewPager = findViewById(R.id.main_tabs_viewpager);
+        viewPager.setVisibility(View.GONE);
+
+        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        //        mainConteinerView.setVisibility(View.VISIBLE);
+
+        setTitle(getString(R.string.product_vocabulary_title));
+
+        ProductListFragment pointListFragment = ProductListFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
+            transaction.add(R.id.fragment_container, pointListFragment);
+        } else {
+            transaction.replace(R.id.fragment_container, pointListFragment);
+        }
+        transaction.commit();
     }
 
     @Override
@@ -222,68 +290,73 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    void setRecipeListFragment() {
-        View tabsLayout = findViewById(R.id.main_tabs_layout);
-        tabsLayout.setVisibility(View.GONE);
-        View viewPager = findViewById(R.id.main_tabs_viewpager);
-        viewPager.setVisibility(View.GONE);
+    @Override
+    public boolean onCreateOptionsMenu(Menu _menu) {
+        getMenuInflater().inflate(R.menu.main_menu, _menu);
+        menu = _menu;
+        return true;
+    }
 
-        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-        //        mainConteinerView.setVisibility(View.VISIBLE);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
-        setTitle(getString(R.string.recipe_list_menu_title));
-        RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            transaction.add(R.id.fragment_container, pointListFragment);
-        } else {
-            transaction.replace(R.id.fragment_container, pointListFragment);
+        if (id == R.id.app_bar_share) {
+            if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.share_with_google_dialog, null);
+                alert.setView(layout);
+                final EditText userEmailInput = (EditText) layout.findViewById(R.id.user_email_editText);
+                final TextView titleTextView = (TextView) layout.findViewById(R.id.user_email_title);
+                titleTextView.setText(R.string.family_mode_dialog_recipes_title);
+                alert.setTitle(R.string.family_mode)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            String emailText = userEmailInput.getText().toString();
+                            if (!emailText.isEmpty()) {
+                                if (!emailText.contains(getString(R.string.gmail_ending_title))) {
+                                    emailText = emailText + getString(R.string.gmail_ending_title);
+                                }
+                                if (sharePresenter != null) {
+                                    sharePresenter.shareData(emailText);
+                                }
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
+                    FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.attention_title)
+                        .setMessage(R.string.need_to_auth)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            } else {
+                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.attention_title)
+                        .setMessage(R.string.cant_share_data)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            }
+            return true;
         }
-        transaction.commit();
+        return super.onOptionsItemSelected(item);
     }
 
-    void setShoppingListFragment() {
-
-        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-        //        mainConteinerView.setVisibility(View.INVISIBLE);
-
-        View tabsLayout = findViewById(R.id.main_tabs_layout);
-        tabsLayout.setVisibility(View.VISIBLE);
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.main_tabs_viewpager);
-        viewPager.setVisibility(View.VISIBLE);
-
-        ViewPagerTabsAdapter adapter = new ViewPagerTabsAdapter(getSupportFragmentManager());
-        adapter.addFragment(TotalShoppingListFragment.newInstance(), getString(R.string.tab_all_ingredients_title));
-        adapter.addFragment(ShopListByDishesFragment.newInstance(), getString(R.string.tab_ingredients_by_dish_title));
-        //        adapter.addFragment(new ThreeFragment(), "THREE");
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.main_tabs_layout);
-        tabLayout.setupWithViewPager(viewPager);
-        setTitle(getString(R.string.shopping_list_title));
-    }
-
-    void setProductListFragment() {
-        View tabsLayout = findViewById(R.id.main_tabs_layout);
-        tabsLayout.setVisibility(View.GONE);
-        View viewPager = findViewById(R.id.main_tabs_viewpager);
-        viewPager.setVisibility(View.GONE);
-
-        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-        //        mainConteinerView.setVisibility(View.VISIBLE);
-
-        setTitle(getString(R.string.product_vocabulary_title));
-
-        ProductListFragment pointListFragment = ProductListFragment.newInstance();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            transaction.add(R.id.fragment_container, pointListFragment);
-        } else {
-            transaction.replace(R.id.fragment_container, pointListFragment);
+    @Override
+    public void setShareIcon() {
+        if (menu != null) {
+            menu.findItem(R.id.app_bar_share).setVisible(true);
         }
-        transaction.commit();
+        Toast.makeText(this, R.string.share_success_title, Toast.LENGTH_LONG).show();
     }
 
-
+    @Override
+    public void setShareError(int errorResourceId) {
+        Toast.makeText(this, errorResourceId, Toast.LENGTH_LONG).show();
+    }
 }

@@ -15,11 +15,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 /**
@@ -35,8 +35,8 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
     }
 
     @Override
-    public Observable<List<ShareUserInfo>> getDataSharedByMe() {
-        return Observable.create(emitter -> {
+    public Maybe<ShareUserInfo> getDataSharedByMe() {
+        return Maybe.create(emitter -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null && !user.isAnonymous()) {
                 String myUid = user.getUid();
@@ -46,14 +46,16 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
                         .equalTo(myUid);
                 sharedItems.addListenerForSingleValueEvent(new ValueEventListener() {
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<ShareUserInfo> shareUserInfos = new ArrayList<>();
-                        if (dataSnapshot.getValue() != null) {
+                        ShareUserInfo shareUserInfo = null;
+                        if (dataSnapshot.getChildrenCount() == 1) {
                             for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                                ShareUserInfo userInfo = itemSnapshot.getValue(ShareUserInfo.class);
-                                shareUserInfos.add(userInfo);
+                                shareUserInfo = itemSnapshot.getValue(ShareUserInfo.class);
+                                shareUserInfo.setId(itemSnapshot.getKey());
                             }
+                            emitter.onSuccess(shareUserInfo);
+                        } else {
+                            emitter.onComplete();
                         }
-                        emitter.onNext(shareUserInfos);
                     }
 
                     public void onCancelled(DatabaseError databaseError) {
@@ -63,7 +65,7 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
                     }
                 });
             } else {
-                emitter.onNext(new ArrayList<>());
+                emitter.onComplete();
             }
         });
     }
@@ -78,9 +80,33 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
                                                  emitter.onError(new CookPlanError(
                                                          RApplication.getAppContext().getString(R.string.error_share_title)));
                                              } else {
+                                                 dataSharedItem.setId(reference.getKey());
                                                  emitter.onSuccess(dataSharedItem);
                                              }
                                          });
+        });
+    }
+
+    @Override
+    public Single<ShareUserInfo> updateDataSharedItem(ShareUserInfo dataSharedItem) {
+        return Single.create(emitter -> {
+            DatabaseReference userShareRef = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE);
+            Map<String, Object> values = new HashMap<>();
+            values.put(DatabaseConstants.DATABASE_SHARED_OWNER_ID_FIELD, dataSharedItem.getOwnerUserId());
+            values.put(DatabaseConstants.DATABASE_SHARED_OWNER_NAME_FIELD, dataSharedItem.getOwnerUserName());
+            values.put(DatabaseConstants.DATABASE_SHARED_CLIENT_EMAILS_FIELD, dataSharedItem.getClientUserEmailList());
+
+            userShareRef
+                    .child(dataSharedItem.getId())
+                    .updateChildren(values,
+                                    (databaseError, reference) -> {
+                                        if (databaseError != null) {
+                                            emitter.onError(new CookPlanError(
+                                                    RApplication.getAppContext().getString(R.string.error_share_title)));
+                                        } else {
+                                            emitter.onSuccess(dataSharedItem);
+                                        }
+                                    });
         });
     }
 

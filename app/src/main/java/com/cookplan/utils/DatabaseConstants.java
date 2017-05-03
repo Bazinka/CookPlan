@@ -14,10 +14,11 @@ public class DatabaseConstants {
 
 
     public static final String DATABASE_OWNER_USER_ID_FIELD = "ownerUserId";
-    public static final String DATABASE_CLIENT_USER_EMAIL_FIELD = "clientUserEmail";
+    public static final String DATABASE_CLIENT_USER_EMAIL_FIELD = "clientUserEmailList";
     public static final String DATABASE_SHARED_DATA_FIELD = "sharedData";
 
     public static final String DATABASE_USER_ID_FIELD = "userId";
+    public static final String DATABASE_ITEM_ID_FIELD = "id";
     public static final String DATABASE_NAME_FIELD = "name";
 
     public static final String DATABASE_RATIO_MEASURE_LIST_FIELD = "ratioMeasureList";
@@ -37,5 +38,9 @@ public class DatabaseConstants {
     public static final String DATABASE_SHOP_MEASURE_LIST_FIELD = "shopMeasureList";
 
     public static final String DATABASE_PRODUCT_CATEGORY_FIELD = "category";
+
+    public static final String DATABASE_SHARED_OWNER_ID_FIELD = "ownerUserId";
+    public static final String DATABASE_SHARED_OWNER_NAME_FIELD = "ownerUserName";
+    public static final String DATABASE_SHARED_CLIENT_EMAILS_FIELD = "clientUserEmailList";
 
 }
