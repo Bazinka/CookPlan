@@ -233,9 +233,11 @@ public class MainActivity extends BaseActivity
                 navigationView.setCheckedItem(mSelectedNavigationId);
             }
         } else if (requestCode == SHARE_USER_LIST_REQUEST) {
-            ArrayList<String> emailList = data.getStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY);
-            if (sharePresenter != null && emailList != null && !emailList.isEmpty()) {
-                sharePresenter.shareData(emailList);
+            if (resultCode == RESULT_OK) {
+                ArrayList<String> emailList = data.getStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY);
+                if (sharePresenter != null && emailList != null && !emailList.isEmpty()) {
+                    sharePresenter.shareData(emailList);
+                }
             }
         } else if (presenter != null) {
             presenter.onActivityResult(requestCode, resultCode, data);
