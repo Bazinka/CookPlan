@@ -56,6 +56,26 @@ public enum MeasureUnit {
         return valueString;
     }
 
+    public String toStringForShopList(double value) {
+        String valueString;
+        if (value < 1e-8 && value > -1e-8) {//value==0.0
+            return "";
+        }
+
+        if (this == KILOGRAMM && value < 1.) {
+            valueString = getIntOrDoubleValueString(value * 1000) + " " + GRAMM.toString();
+        } else if (this == GRAMM && value > 1000.) {
+            valueString = getIntOrDoubleValueString(value / 1000) + " " + KILOGRAMM.toString();
+        } else if (this == LITRE && value < 1.) {
+            valueString = getIntOrDoubleValueString(value * 1000) + " " + MILILITRE.toString();
+        } else if (this == MILILITRE && value > 1000.) {
+            valueString = getIntOrDoubleValueString(value / 1000) + " " + LITRE.toString();
+        } else {
+            valueString = getIntOrDoubleValueString(value) + " " + toString();
+        }
+        return valueString;
+    }
+
     private String getIntOrDoubleValueString(double value) {
         String valueString;
         if (isItIntValue(value)) {

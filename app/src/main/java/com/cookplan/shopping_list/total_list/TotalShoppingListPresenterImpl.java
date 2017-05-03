@@ -136,7 +136,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             }
             String shopAmountString = "";
             for (Map.Entry<MeasureUnit, Double> shopEntry : shopMap.entrySet()) {
-                String string = shopEntry.getKey().toValueString(shopEntry.getValue());
+                String string = shopEntry.getKey().toStringForShopList(shopEntry.getValue());
                 if (shopAmountString.isEmpty()) {
                     shopAmountString = string;
                 } else {
@@ -145,7 +145,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             }
             String restAmountString = "";
             for (Map.Entry<MeasureUnit, Double> measureEntry : restMap.entrySet()) {
-                String string = measureEntry.getKey().toValueString(measureEntry.getValue());
+                String string = measureEntry.getKey().toStringForShopList(measureEntry.getValue());
                 restAmountString = restAmountString.isEmpty() ? string : restAmountString + " + " + string;
             }
             if (!restAmountString.isEmpty()) {
