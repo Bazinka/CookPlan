@@ -16,6 +16,7 @@ import com.cookplan.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -97,8 +98,8 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            ArrayList<Product> filteredList = (ArrayList<Product>) results.values;
-            if (results.count > 0) {
+            if (results.values != null && results.count > 0) {
+                CopyOnWriteArrayList<Product> filteredList = new CopyOnWriteArrayList<>((ArrayList) results.values);
                 clear();
                 for (Product c : filteredList) {
                     add(c);
