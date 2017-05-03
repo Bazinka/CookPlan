@@ -67,6 +67,8 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.Fullscreen">
         </activity>
+        <activity android:name=".share.add_users.AddUserForSharingActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -14,11 +14,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,15 +31,20 @@ import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.share.SharePresenter;
 import com.cookplan.share.SharePresenterImpl;
 import com.cookplan.share.ShareView;
+import com.cookplan.share.add_users.AddUserForSharingActivity;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView, ShareView {
 
     public static final int OPEN_SHOP_LIST_REQUEST = 10;
+    public static final int SHARE_USER_LIST_REQUEST = 11;
+    public static final String SHARE_USER_EMAIL_LIST_KEY = "SHARE_USER_EMAIL_LIST_KEY";
 
     private ProgressDialog mProgressDialog;
 
@@ -229,6 +232,11 @@ public class MainActivity extends BaseActivity
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                 navigationView.setCheckedItem(mSelectedNavigationId);
             }
+        } else if (requestCode == SHARE_USER_LIST_REQUEST) {
+            ArrayList<String> emailList = data.getStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY);
+            if (sharePresenter != null && emailList != null && !emailList.isEmpty()) {
+                sharePresenter.shareData(emailList);
+            }
         } else if (presenter != null) {
             presenter.onActivityResult(requestCode, resultCode, data);
         }
@@ -310,28 +318,12 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.app_bar_share_off) {
+
             if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.share_with_google_dialog, null);
-                alert.setView(layout);
-                final EditText userEmailInput = (EditText) layout.findViewById(R.id.user_email_editText);
-                final TextView titleTextView = (TextView) layout.findViewById(R.id.user_email_title);
-                titleTextView.setText(R.string.family_mode_dialog_recipes_title);
-                alert.setTitle(R.string.family_mode)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            String emailText = userEmailInput.getText().toString();
-                            if (!emailText.isEmpty()) {
-                                if (!emailText.contains(getString(R.string.gmail_ending_title))) {
-                                    emailText = emailText + getString(R.string.gmail_ending_title);
-                                }
-                                if (sharePresenter != null) {
-                                    sharePresenter.shareData(emailText);
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
+
+                Intent intent = new Intent(this, AddUserForSharingActivity.class);
+                startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
+
             } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
                     FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
                 new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
@@ -401,7 +393,6 @@ public class MainActivity extends BaseActivity
                 menu.findItem(R.id.app_bar_share_off).setVisible(true);
             }
         }
-        Toast.makeText(this, R.string.share_success_title, Toast.LENGTH_LONG).show();
     }
 
     @Override

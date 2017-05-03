@@ -8,7 +8,7 @@ import com.cookplan.providers.impl.FamilyModeProviderImpl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Collections;
+import java.util.List;
 
 import io.reactivex.CompletableObserver;
 import io.reactivex.MaybeObserver;
@@ -33,9 +33,9 @@ public class SharePresenterImpl implements SharePresenter {
     }
 
     @Override
-    public void shareData(String userEmail) {
+    public void shareData(List<String> emailsList) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null && !user.getEmail().equals(userEmail)) {
+        if (user != null) {
             familyModeProvider.getDataSharedByMe()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -49,16 +49,8 @@ public class SharePresenterImpl implements SharePresenter {
                         @Override
                         public void onSuccess(ShareUserInfo shareUserInfo) {
                             //item was found and we need to update it
-                            boolean emailExist = false;
-                            for (String clientEmail : shareUserInfo.getClientUserEmailList()) {
-                                if (clientEmail.equals(userEmail)) {
-                                    emailExist = true;
-                                    break;
-                                }
-                            }
-                            if (!emailExist) {
-                                shareUserInfo.getClientUserEmailList().add(userEmail);
-                            }
+                            shareUserInfo.getClientUserEmailList().clear();
+                            shareUserInfo.getClientUserEmailList().addAll(emailsList);
                             familyModeProvider.updateDataSharedItem(shareUserInfo)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
@@ -90,7 +82,7 @@ public class SharePresenterImpl implements SharePresenter {
                             String myUid = user.getUid();
                             ShareUserInfo shareInfoItem =
                                     new ShareUserInfo(myUid, user.getDisplayName(),
-                                                      Collections.singletonList(userEmail));
+                                                      emailsList);
                             familyModeProvider.createDataSharedItem(shareInfoItem)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
@@ -125,8 +117,6 @@ public class SharePresenterImpl implements SharePresenter {
                             }
                         }
                     });
-        } else if (user != null && user.getEmail().equals(userEmail)) {
-            mainView.setShareError(R.string.cant_share_to_myself);
         }
     }
 
