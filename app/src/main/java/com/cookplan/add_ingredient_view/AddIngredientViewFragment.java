@@ -136,6 +136,8 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
                 }
             }
         });
+        setCategorySpinnerValues();
+        setMeasureSpinnerValues();
         return mainView;
     }
 
@@ -145,15 +147,14 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
         String name = unitNameEditText.getText().toString();
         Product selectedProduct = (Product) unitNameEditText.getTag();
-        ProductCategory category = (ProductCategory) categorySpinner.getSelectedItem();
-        if (presenter != null && category != null) {
+        if (presenter != null) {
             progressBar.setVisibility(View.VISIBLE);
             if (selectedProduct != null && name.equals(selectedProduct.getName())) {
                 presenter.saveIngredient(selectedProduct,
                                          amount != null ? Double.valueOf(amount) : 0,
                                          (MeasureUnit) measureSpinner.getSelectedItem());
             } else {
-                presenter.saveProductAndIngredient(category,
+                presenter.saveProductAndIngredient((ProductCategory) categorySpinner.getSelectedItem(),
                                                    name,
                                                    amount != null ? Double.valueOf(amount) : 0,
                                                    (MeasureUnit) measureSpinner.getSelectedItem());
