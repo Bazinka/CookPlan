@@ -5,11 +5,12 @@ import android.support.annotation.NonNull;
 
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShareUserInfo;
+import com.cookplan.providers.FamilyModeProvider;
 import com.cookplan.providers.IngredientProvider;
+import com.cookplan.providers.impl.FamilyModeProviderImpl;
 import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -24,16 +25,14 @@ import io.reactivex.schedulers.Schedulers;
 
 public abstract class ShoppingListBasePresenterImpl implements ShoppingListBasePresenter, FirebaseAuth.AuthStateListener {
 
-    private DatabaseReference database;
-
-
     protected IngredientProvider ingredientDataProvider;
+    private FamilyModeProvider familyModeProvider;
     private CompositeDisposable disposables;
 
     public ShoppingListBasePresenterImpl() {
-        this.database = FirebaseDatabase.getInstance().getReference();
         this.ingredientDataProvider = new IngredientProviderImpl();
         FirebaseAuth.getInstance().addAuthStateListener(this);
+        familyModeProvider = new FamilyModeProviderImpl();
         disposables = new CompositeDisposable();
     }
 
@@ -50,29 +49,51 @@ public abstract class ShoppingListBasePresenterImpl implements ShoppingListBaseP
             uid = auth.getCurrentUser().getUid();
         }
         if (uid != null) {
-            disposables.add(ingredientDataProvider.getAllIngredientsForUser()
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeWith(new DisposableObserver<List<Ingredient>>() {
+            familyModeProvider.getInfoSharedToMe()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(new DisposableObserver<List<ShareUserInfo>>() {
+                        @Override
+                        public void onNext(List<ShareUserInfo> shareUserInfos) {
+                            disposables.add(
+                                    ingredientDataProvider.getAllIngredientsSharedToUser(shareUserInfos)
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribeWith(new DisposableObserver<List<Ingredient>>() {
 
-                                        @Override
-                                        public void onNext(List<Ingredient> ingredients) {
-                                            sortIngredientList(ingredients);
-                                        }
+                                                @Override
+                                                public void onNext(List<Ingredient> ingredients) {
+                                                    sortIngredientList(ingredients);
+                                                }
 
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            if (FirebaseAuth.getInstance().getCurrentUser() != null
-                                                    && e instanceof CookPlanError) {
-                                                setError(e.getMessage());
-                                            }
-                                        }
+                                                @Override
+                                                public void onError(Throwable e) {
+                                                    if (FirebaseAuth.getInstance().getCurrentUser() != null
+                                                            && e instanceof CookPlanError) {
+                                                        setError(e.getMessage());
+                                                    }
+                                                }
 
-                                        @Override
-                                        public void onComplete() {
+                                                @Override
+                                                public void onComplete() {
 
-                                        }
-                                    }));
+                                                }
+                                            }));
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (FirebaseAuth.getInstance().getCurrentUser() != null
+                                    && e instanceof CookPlanError) {
+                                setError(e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
         }
     }
 

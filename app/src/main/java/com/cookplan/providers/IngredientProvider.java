@@ -1,6 +1,7 @@
 package com.cookplan.providers;
 
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShareUserInfo;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import io.reactivex.Single;
 
 public interface IngredientProvider {
 
-    Observable<List<Ingredient>> getAllIngredientsForUser();
+    Observable<List<Ingredient>> getAllIngredientsSharedToUser(List<ShareUserInfo> shareUserInfos);
 
     Observable<List<Ingredient>> getIngredientListByRecipeId(String recipeId);
 

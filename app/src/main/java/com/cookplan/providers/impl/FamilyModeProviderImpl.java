@@ -15,12 +15,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Created by DariaEfimova on 01.05.17.
@@ -30,8 +34,53 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
 
     private DatabaseReference database;
 
+
+    private BehaviorSubject<List<ShareUserInfo>> subjectShareUserList;
+
     public FamilyModeProviderImpl() {
         this.database = FirebaseDatabase.getInstance().getReference();
+        subjectShareUserList = BehaviorSubject.create();
+        getFirebaseAllSharedInfo();
+    }
+
+    private void getFirebaseAllSharedInfo() {
+        Query sharedItems = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE);
+        sharedItems.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<ShareUserInfo> sharedInfoList = new ArrayList<>();
+                if (dataSnapshot.getValue() != null) {
+                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                        ShareUserInfo userInfo = itemSnapshot.getValue(ShareUserInfo.class);
+                        userInfo.setId(itemSnapshot.getKey());
+                        sharedInfoList.add(userInfo);
+                    }
+                }
+                if (subjectShareUserList != null) {
+                    subjectShareUserList.onNext(sharedInfoList);
+                }
+            }
+
+            public void onCancelled(DatabaseError databaseError) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    if (subjectShareUserList != null) {
+                        subjectShareUserList.onError(new CookPlanError(databaseError));
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public Observable<List<ShareUserInfo>> getInfoSharedToMe() {
+        return subjectShareUserList.map(allSharedInfoList -> {
+            String mineEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            List<ShareUserInfo> sharedInfoList = new ArrayList<>();
+            for (ShareUserInfo userInfo : allSharedInfoList) {
+                if (userInfo.getClientUserEmailList().contains(mineEmail))
+                    sharedInfoList.add(userInfo);
+            }
+            return sharedInfoList;
+        });
     }
 
     @Override

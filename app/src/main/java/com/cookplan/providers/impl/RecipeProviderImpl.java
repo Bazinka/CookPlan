@@ -39,10 +39,10 @@ public class RecipeProviderImpl implements RecipeProvider {
     public RecipeProviderImpl() {
         this.database = FirebaseDatabase.getInstance().getReference();
         subjectRecipeList = BehaviorSubject.create();
-        getFirebaseSharedRecipeList();
+        getFirebaseAllRecipeList();
     }
 
-    private void getFirebaseSharedRecipeList() {
+    private void getFirebaseAllRecipeList() {
         DatabaseReference items = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
         items.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -51,47 +51,10 @@ public class RecipeProviderImpl implements RecipeProvider {
                     Recipe recipe = Recipe.getRecipeFromDBObject(itemSnapshot);
                     recipes.add(recipe);
                 }
-                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                Query sharedItems = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
-                        .orderByChild(DatabaseConstants.DATABASE_CLIENT_USER_EMAIL_FIELD)
-                        .equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                sharedItems.addValueEventListener(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<String> userIdList = new ArrayList<>();
-                        Map<String, ShareUserInfo> userIdToInfo = new HashMap<>();
-                        userIdList.add(uid);
-                        if (dataSnapshot.getValue() != null) {
-                            for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                                ShareUserInfo userInfo = itemSnapshot.getValue(ShareUserInfo.class);
-                                    userIdToInfo.put(userInfo.getOwnerUserId(), userInfo);
-                                    userIdList.add(userInfo.getOwnerUserId());
-                            }
-                        }
-                        List<Recipe> resultRecipes = new ArrayList<>();
-                        for (String userId : userIdList) {
-                            for (Recipe recipe : recipes) {
-                                if (recipe.getUserId().equals(userId)) {
-                                    if (!userId.equals(uid)) {
-                                        recipe.setUserName(userIdToInfo.get(userId).getOwnerUserName());
-                                    }
-                                    resultRecipes.add(recipe);
-                                }
-                            }
-                        }
-                        if (subjectRecipeList != null) {
-                            subjectRecipeList.onNext(resultRecipes);
-                        }
-                    }
-
-                    public void onCancelled(DatabaseError databaseError) {
-                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                            if (subjectRecipeList != null) {
-                                subjectRecipeList.onError(new CookPlanError(databaseError));
-                            }
-                        }
-                    }
-                });
+                if (subjectRecipeList != null) {
+                    subjectRecipeList.onNext(recipes);
+                }
             }
 
             public void onCancelled(DatabaseError databaseError) {
@@ -105,9 +68,27 @@ public class RecipeProviderImpl implements RecipeProvider {
     }
 
     @Override
-    public Observable<List<Recipe>> getAllRecipeList() {
-        return subjectRecipeList;
+    public Observable<List<Recipe>> getSharedToMeRecipeList(List<ShareUserInfo> sharedInfoList) {
+        return subjectRecipeList.map(allRecipes -> {
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            List<Recipe> resultRecipes = new ArrayList<>();
+            for (Recipe recipe : allRecipes) {
+                if (!sharedInfoList.isEmpty()) {
+                    for (ShareUserInfo sharedInfo : sharedInfoList) {
+                        if (recipe.getUserId().equals(uid)
+                                || sharedInfo.getOwnerUserId().contains(recipe.getUserId())) {
+                            recipe.setUserName(sharedInfo.getOwnerUserName());
+                            resultRecipes.add(recipe);
+                        }
+                    }
+                } else {
+                    resultRecipes.add(recipe);
+                }
+            }
+            return resultRecipes;
+        });
     }
+
 
     @Override
     public Single<Recipe> createRecipe(Recipe recipe) {

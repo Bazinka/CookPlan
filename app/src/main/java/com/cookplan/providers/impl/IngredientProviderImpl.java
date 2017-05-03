@@ -16,9 +16,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -31,14 +29,13 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class IngredientProviderImpl implements IngredientProvider {
 
-
     private DatabaseReference database;
 
-    private BehaviorSubject<List<Ingredient>> subjectAllMineIngredients;
+    private BehaviorSubject<List<Ingredient>> subjectAllIngredients;
 
     public IngredientProviderImpl() {
         this.database = FirebaseDatabase.getInstance().getReference();
-        subjectAllMineIngredients = BehaviorSubject.create();
+        subjectAllIngredients = BehaviorSubject.create();
         getFirebaseAllIngredientList();
     }
 
@@ -52,65 +49,47 @@ public class IngredientProviderImpl implements IngredientProvider {
                     Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
                     allIngredients.add(ingredient);
                 }
-                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                Query sharedItems = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
-                        .orderByChild(DatabaseConstants.DATABASE_CLIENT_USER_EMAIL_FIELD)
-                        .equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                sharedItems.addValueEventListener(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<String> userIdList = new ArrayList<>();
-                        Map<String, ShareUserInfo> userIdToInfo = new HashMap<>();
-                        userIdList.add(uid);
-                        if (dataSnapshot.getValue() != null) {
-                            for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                                ShareUserInfo userInfo = itemSnapshot.getValue(ShareUserInfo.class);
-                                userIdList.add(userInfo.getOwnerUserId());
-                                userIdToInfo.put(userInfo.getOwnerUserId(), userInfo);
-                            }
-                        }
-                        List<Ingredient> resultIngredients = new ArrayList<>();
-                        for (String userId : userIdList) {
-                            for (Ingredient ingredient : allIngredients) {
-                                if (ingredient.getUserId().equals(userId)) {
-                                    if (!userId.equals(uid)) {
-                                        ingredient.setUserName(userIdToInfo.get(userId).getOwnerUserName());
-                                    }
-                                    resultIngredients.add(ingredient);
-                                }
-                            }
-                        }
-                        if (subjectAllMineIngredients != null) {
-                            subjectAllMineIngredients.onNext(allIngredients);
-                        }
-                    }
-
-                    public void onCancelled(DatabaseError databaseError) {
-                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                            subjectAllMineIngredients.onError(new CookPlanError(databaseError.getMessage()));
-                        }
-                    }
-                });
+                if (subjectAllIngredients != null) {
+                    subjectAllIngredients.onNext(allIngredients);
+                }
             }
 
             public void onCancelled(DatabaseError databaseError) {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    if (subjectAllMineIngredients != null) {
-                        subjectAllMineIngredients.onError(new CookPlanError(databaseError));
+                    if (subjectAllIngredients != null) {
+                        subjectAllIngredients.onError(new CookPlanError(databaseError));
                     }
                 }
             }
         });
     }
 
+
     @Override
-    public Observable<List<Ingredient>> getAllIngredientsForUser() {
-        return subjectAllMineIngredients;
+    public Observable<List<Ingredient>> getAllIngredientsSharedToUser(List<ShareUserInfo> shareUserInfos) {
+        return subjectAllIngredients.map(ingredientList -> {
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            List<Ingredient> resultIngredient = new ArrayList<>();
+            for (Ingredient ingredient : ingredientList) {
+                if (!shareUserInfos.isEmpty()) {
+                    for (ShareUserInfo sharedInfo : shareUserInfos) {
+                        if (ingredient.getUserId().equals(uid)
+                                || sharedInfo.getOwnerUserId().contains(ingredient.getUserId())) {
+                            ingredient.setUserName(sharedInfo.getOwnerUserName());
+                            resultIngredient.add(ingredient);
+                        }
+                    }
+                } else {
+                    resultIngredient.add(ingredient);
+                }
+            }
+            return resultIngredient;
+        });
     }
 
     @Override
     public Observable<List<Ingredient>> getIngredientListByRecipeId(String recipeId) {
-        return subjectAllMineIngredients.map(allIngredients -> {
+        return subjectAllIngredients.map(allIngredients -> {
             List<Ingredient> recipeIngredients = new ArrayList<>();
             for (Ingredient ingredient : allIngredients) {
                 String ingredRecipeId = ingredient.getRecipeId();
