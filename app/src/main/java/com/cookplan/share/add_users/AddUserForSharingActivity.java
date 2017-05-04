@@ -2,11 +2,13 @@ package com.cookplan.share.add_users;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
@@ -19,9 +21,10 @@ import java.util.List;
 
 import static com.cookplan.main.MainActivity.SHARE_USER_EMAIL_LIST_KEY;
 
-public class AddUserForSharingActivity extends BaseActivity {
+public class AddUserForSharingActivity extends BaseActivity implements AddUserForSharingView {
 
     private ContactListAdapter adapter;
+    private AddUserForSharingPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +75,8 @@ public class AddUserForSharingActivity extends BaseActivity {
             }
             return false;
         });
-
+        presenter = new AddUserForSharingPresenterImpl(this);
+        presenter.getSharedUsers();
     }
 
     @Override
@@ -100,4 +104,18 @@ public class AddUserForSharingActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void setContactList(List<Contact> contactList) {
+        if (adapter != null) {
+            adapter.updateList(contactList);
+        }
+    }
+
+    @Override
+    public void setError(String error) {
+        View mainView = findViewById(R.id.main_view);
+        if (mainView != null) {
+            Snackbar.make(mainView, error, Snackbar.LENGTH_LONG).show();
+        }
+    }
 }

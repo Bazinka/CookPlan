@@ -318,68 +318,47 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.app_bar_share_off) {
-
-            if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-
+        if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()
+                && (id == R.id.app_bar_share_off || id == R.id.app_bar_share_on)) {
+            if (id == R.id.app_bar_share_off) {
                 Intent intent = new Intent(this, AddUserForSharingActivity.class);
                 startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
-
-            } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
-                    FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle(R.string.attention_title)
-                        .setMessage(R.string.need_to_auth)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
+                return true;
             } else {
                 new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
                         .setTitle(R.string.attention_title)
-                        .setMessage(R.string.cant_share_data)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
-            }
-            return true;
-        }
-        if (id == R.id.app_bar_share_on) {
-            if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle(R.string.attention_title)
                         .setMessage(R.string.turn_off_family_mode_question)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        .setPositiveButton(R.string.turn_off_faminy_mode, (dialog, which) -> {
                             if (sharePresenter != null) {
                                 sharePresenter.turnOffFamilyMode();
                             }
                             dialog.dismiss();
                         })
-                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                        .setNegativeButton(R.string.change_users_faminy_mode_title, (dialog, which) -> {
                             dialog.dismiss();
+                            Intent intent = new Intent(this, AddUserForSharingActivity.class);
+                            startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
                         })
                         .show();
-            } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
-                    FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle(R.string.attention_title)
-                        .setMessage(R.string.need_to_auth)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
-            } else {
-                new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle(R.string.attention_title)
-                        .setMessage(R.string.cant_share_data)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
+                return true;
             }
-            return true;
+        } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
+                FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+            new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                    .setTitle(R.string.attention_title)
+                    .setMessage(R.string.need_to_auth)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+        } else {
+            new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                    .setTitle(R.string.attention_title)
+                    .setMessage(R.string.cant_share_data)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         }
         return super.onOptionsItemSelected(item);
     }

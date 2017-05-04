@@ -5,4 +5,6 @@ package com.cookplan.share.add_users;
  */
 
 public interface AddUserForSharingPresenter {
+
+    void getSharedUsers();
 }

@@ -86,6 +86,12 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         notifyDataSetChanged();
     }
 
+    public void updateList(List<Contact> contacts) {
+        contactList.clear();
+        contactList.addAll(contacts);
+        notifyDataSetChanged();
+    }
+
     public List<Contact> getContactList() {
         return contactList;
     }
