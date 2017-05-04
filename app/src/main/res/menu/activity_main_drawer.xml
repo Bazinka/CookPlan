@@ -19,7 +19,8 @@
         <item
             android:id="@+id/nav_whats_cooking"
             android:icon="@drawable/ic_cooking_plan"
-            android:title="@string/whats_cooking_title"/>
+            android:title="@string/whats_cooking_title"
+            android:visible="false"/>
 
         <item
             android:id="@+id/nav_vocabulary"
