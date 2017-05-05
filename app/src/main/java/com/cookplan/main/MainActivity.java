@@ -235,8 +235,12 @@ public class MainActivity extends BaseActivity
         } else if (requestCode == SHARE_USER_LIST_REQUEST) {
             if (resultCode == RESULT_OK) {
                 ArrayList<String> emailList = data.getStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY);
-                if (sharePresenter != null && emailList != null && !emailList.isEmpty()) {
-                    sharePresenter.shareData(emailList);
+                if (sharePresenter != null && emailList != null) {
+                    if (emailList.isEmpty()) {
+                        sharePresenter.turnOffFamilyMode();
+                    } else {
+                        sharePresenter.shareData(emailList);
+                    }
                 }
             }
         } else if (presenter != null) {
@@ -328,16 +332,16 @@ public class MainActivity extends BaseActivity
                 new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
                         .setTitle(R.string.attention_title)
                         .setMessage(R.string.turn_off_family_mode_question)
-                        .setPositiveButton(R.string.turn_off_faminy_mode, (dialog, which) -> {
+                        .setPositiveButton(R.string.change_users_faminy_mode_title, (dialog, which) -> {
+                            dialog.dismiss();
+                            Intent intent = new Intent(this, AddUserForSharingActivity.class);
+                            startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
+                        })
+                        .setNegativeButton(R.string.turn_off_faminy_mode, (dialog, which) -> {
                             if (sharePresenter != null) {
                                 sharePresenter.turnOffFamilyMode();
                             }
                             dialog.dismiss();
-                        })
-                        .setNegativeButton(R.string.change_users_faminy_mode_title, (dialog, which) -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(this, AddUserForSharingActivity.class);
-                            startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
                         })
                         .show();
                 return true;

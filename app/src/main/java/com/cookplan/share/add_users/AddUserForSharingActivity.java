@@ -28,7 +28,7 @@ public class AddUserForSharingActivity extends BaseActivity implements AddUserFo
     public static final int GET_USER_LIST_FROM_CONTACT_REQUEST = 12;
     public static final String GET_USER_LIST_FROM_CONTACT_KEY = "GET_USER_LIST_FROM_CONTACT_KEY";
 
-    private ContactListAdapter adapter;
+    private UserListForSharingAdapter adapter;
     private AddUserForSharingPresenter presenter;
 
     @Override
@@ -42,7 +42,7 @@ public class AddUserForSharingActivity extends BaseActivity implements AddUserFo
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ContactListAdapter(new ArrayList<>(), true);
+        adapter = new UserListForSharingAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
         EditText emailEditText = (EditText) findViewById(R.id.user_email_editText);

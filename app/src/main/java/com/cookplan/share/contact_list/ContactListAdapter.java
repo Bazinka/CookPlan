@@ -1,10 +1,9 @@
-package com.cookplan.share.add_users;
+package com.cookplan.share.contact_list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cookplan.R;
@@ -20,11 +19,11 @@ import java.util.List;
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.MainViewHolder> {
 
     private ArrayList<Contact> contactList;
-    private boolean isRemovalApprove;
+    private ArrayList<Contact> selectedContactList;
 
-    public ContactListAdapter(ArrayList<Contact> contactList, boolean isRemovalApprove) {
+    public ContactListAdapter(ArrayList<Contact> contactList) {
         this.contactList = contactList;
-        this.isRemovalApprove = isRemovalApprove;
+        selectedContactList = new ArrayList<>();
     }
 
     @Override
@@ -42,19 +41,22 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         Contact contact = contactList.get(position);
         holder.nameTextView.setText(contact.getName());
         holder.emailTextView.setText(contact.getEmail());
-        if (isRemovalApprove) {
-            holder.removeItemImageView.setVisibility(View.VISIBLE);
-            holder.removeItemImageView.setTag(contact);
-            holder.removeItemImageView.setOnClickListener(v -> {
-                Contact selectedContact = (Contact) v.getTag();
-                if (selectedContact != null) {
-                    contactList.remove(selectedContact);
-                    notifyDataSetChanged();
-                }
-            });
+
+        if (selectedContactList.contains(contact)) {
+            holder.mainView.setSelected(true);
         } else {
-            holder.removeItemImageView.setVisibility(View.GONE);
+            holder.mainView.setSelected(false);
         }
+
+        holder.mainView.setTag(contact);
+        holder.mainView.setOnClickListener(v -> {
+            if (selectedContactList.contains(contact)) {
+                selectedContactList.remove(contact);
+            } else {
+                selectedContactList.add(contact);
+            }
+            notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -65,15 +67,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     static class MainViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView emailTextView;
-        ImageView removeItemImageView;
         ViewGroup mainView;
 
         MainViewHolder(View v) {
             super(v);
             nameTextView = (TextView) v.findViewById(R.id.contact_item_name);
             emailTextView = (TextView) v.findViewById(R.id.contact_item_email);
-            removeItemImageView = (ImageView) v.findViewById(R.id.contact_remove_image_view);
-            mainView = (ViewGroup) v.findViewById(R.id.main_view);
+            mainView = (ViewGroup) v.findViewById(R.id.main_contact_list_item_view);
         }
     }
 
@@ -93,8 +93,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         notifyDataSetChanged();
     }
 
-    public ArrayList<Contact> getContactList() {
-        return contactList;
+    public ArrayList<Contact> getSelectedContactList() {
+        return selectedContactList;
     }
-
 }

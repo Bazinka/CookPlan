@@ -16,7 +16,6 @@ import android.view.View;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Contact;
-import com.cookplan.share.add_users.ContactListAdapter;
 import com.cookplan.utils.PermissionUtils;
 
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class ContactListActivity extends BaseActivity implements ContactListView
         int id = item.getItemId();
 
         if (id == R.id.app_bar_done) {
-            ArrayList<Contact> contactList = adapter.getContactList();
+            ArrayList<Contact> contactList = adapter.getSelectedContactList();
             Intent intent = new Intent();
             intent.putParcelableArrayListExtra(GET_USER_LIST_FROM_CONTACT_KEY, contactList);
             setResult(RESULT_OK, intent);
@@ -75,7 +74,7 @@ public class ContactListActivity extends BaseActivity implements ContactListView
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ContactListAdapter(contactList, true);
+        adapter = new ContactListAdapter(contactList);
         recyclerView.setAdapter(adapter);
     }
 
