@@ -3,6 +3,7 @@ package com.cookplan;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.bettervectordrawable.VectorDrawableCompat;
 import com.cookplan.models.ProductCategory;
@@ -15,6 +16,7 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -51,6 +53,25 @@ public class RApplication extends Application {
         }
         if (!isAnonymousPossibleSaved()) {
             saveAnonymousPossibility(true);
+        }
+    }
+
+    private static Locale getCurrentLocale() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return getAppContext().getResources().getConfiguration().getLocales().get(0);
+        } else {
+            //noinspection deprecation
+            return getAppContext().getResources().getConfiguration().locale;
+        }
+    }
+
+    public static boolean isCurrentLocaleRus() {
+        String currentLanguage = RApplication.getCurrentLocale().getDisplayLanguage();
+        String russianLanguage = RApplication.getAppContext().getString(R.string.russian_language);
+        if (currentLanguage.equals(russianLanguage)) {
+            return true;
+        } else {
+            return false;
         }
     }
 

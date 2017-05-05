@@ -1,6 +1,7 @@
 package com.cookplan.product_list;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,7 @@ import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Product;
+import com.cookplan.product_list.update_database.UpdateProductDatabaseActivity;
 import com.cookplan.utils.FillProductDatabaseProvider;
 
 import java.util.ArrayList;
@@ -90,11 +92,15 @@ public class ProductListFragment extends BaseFragment implements ProductListView
         fab.setOnClickListener(view -> {
 
             new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
-                    .setMessage("Заполнить базу данных или создать новый элемент?")
-                    .setPositiveButton("База данных", (dialog, which) -> FillProductDatabaseProvider.fillDatabase())
-                    .setNegativeButton("Новый продукт", null)
+                    .setMessage("Вы уверены, что хотите обновить базу продуктов?")
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        if (getActivity() instanceof BaseActivity) {
+                            Intent intent = new Intent(getActivity(), UpdateProductDatabaseActivity.class);
+                            ((BaseActivity) getActivity()).startActivityWithLeftAnimation(intent);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
                     .show();
-            //            startNewRecipeActivity();
         });
 
 

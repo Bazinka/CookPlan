@@ -45,8 +45,8 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         if (product != null) {
             TextView productNameTextView = (TextView) v.findViewById(R.id.product_item_name);
             if (productNameTextView != null) {
-                //              Log.i(MY_DEBUG_TAG, "getView Customer Name:"+customer.getName());
-                productNameTextView.setText(product.getName());
+                //              Log.i(MY_DEBUG_TAG, "getView Customer Name:"+customer.getStringName());
+                productNameTextView.setText(product.toStringName());
             }
             if (product.getCategory() != null) {
                 TextView categoryNameTextView = (TextView) v.findViewById(R.id.category_product_item_name);
@@ -74,7 +74,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
     private Filter nameFilter = new Filter() {
         @Override
         public String convertResultToString(Object resultValue) {
-            String str = ((Product) (resultValue)).getName();
+            String str = ((Product) (resultValue)).toStringName();
             return str;
         }
 
@@ -83,7 +83,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             if (constraint != null) {
                 suggestions.clear();
                 for (Product product : itemsAll) {
-                    if (product.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                    if (product.toStringName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         suggestions.add(product);
                     }
                 }

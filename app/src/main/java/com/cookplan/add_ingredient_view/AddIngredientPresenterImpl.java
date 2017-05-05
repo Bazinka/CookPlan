@@ -1,5 +1,6 @@
 package com.cookplan.add_ingredient_view;
 
+import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
@@ -106,7 +107,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                     });
             //save ingredient
             Ingredient ingredient = new Ingredient(null,
-                                                   product.getName(),
+                                                   product.toStringName(),
                                                    product,
                                                    recipe != null ? recipe.getId() : null,
                                                    newMeasureUnit,
@@ -154,7 +155,14 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
             }
             List<MeasureUnit> mainMeasureUnitList = new ArrayList<>();
             mainMeasureUnitList.add(measureUnit);
-            Product product = new Product(category, name, mainMeasureUnitList,
+            String rusName = null;
+            String engName = null;
+            if (RApplication.isCurrentLocaleRus()) {
+                rusName = name;
+            } else {
+                engName = name;
+            }
+            Product product = new Product(category, rusName, engName, mainMeasureUnitList,
                                           measureUnitList, map, user.getUid());
             productDataProvider.createProduct(product)
                     .subscribeOn(Schedulers.io())

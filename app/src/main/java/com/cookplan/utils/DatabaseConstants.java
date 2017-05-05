@@ -38,6 +38,8 @@ public class DatabaseConstants {
     public static final String DATABASE_SHOP_MEASURE_LIST_FIELD = "shopMeasureList";
 
     public static final String DATABASE_PRODUCT_CATEGORY_FIELD = "category";
+    public static final String DATABASE_PRODUCT_RUS_NAME_FIELD = "rusName";
+    public static final String DATABASE_PRODUCT_ENG_NAME_FIELD = "engName";
 
     public static final String DATABASE_SHARED_OWNER_ID_FIELD = "ownerUserId";
     public static final String DATABASE_SHARED_OWNER_NAME_FIELD = "ownerUserName";

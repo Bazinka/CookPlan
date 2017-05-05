@@ -16,7 +16,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -86,6 +88,28 @@ public class ProductProviderImpl implements ProductProvider {
                 } else {
                     product.setId(reference.getKey());
                     emitter.onSuccess(product);
+                }
+            });
+        });
+    }
+
+    @Override
+    public Single<Product> updateProductNames(Product newProduct) {
+        return Single.create(emitter -> {
+            Map<String, Object> values = new HashMap<>();
+            values.put(DatabaseConstants.DATABASE_PRODUCT_RUS_NAME_FIELD, newProduct.getRusName());
+            values.put(DatabaseConstants.DATABASE_PRODUCT_ENG_NAME_FIELD, newProduct.getEngName());
+            values.put(DatabaseConstants.DATABASE_NAME_FIELD, null);
+            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+            productRef.child(newProduct.getId()).updateChildren(values, (databaseError, databaseReference) -> {
+                if (databaseError != null) {
+                    if (emitter != null) {
+                        emitter.onError(new CookPlanError(databaseError));
+                    }
+                } else {
+                    if (emitter != null) {
+                        emitter.onSuccess(newProduct);
+                    }
                 }
             });
         });

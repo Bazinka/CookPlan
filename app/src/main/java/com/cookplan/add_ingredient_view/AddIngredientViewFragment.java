@@ -149,7 +149,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         Product selectedProduct = (Product) unitNameEditText.getTag();
         if (presenter != null) {
             progressBar.setVisibility(View.VISIBLE);
-            if (selectedProduct != null && name.equals(selectedProduct.getName())) {
+            if (selectedProduct != null && name.equals(selectedProduct.toStringName())) {
                 presenter.saveIngredient(selectedProduct,
                                          amount != null ? Double.valueOf(amount) : 0,
                                          (MeasureUnit) measureSpinner.getSelectedItem());
@@ -198,7 +198,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
             if (!hasFocus) {
                 String name = unitNameEditText.getText().toString();
                 Product selectedProduct = (Product) unitNameEditText.getTag();
-                if (selectedProduct == null || !name.equals(selectedProduct.getName())) {
+                if (selectedProduct == null || !name.equals(selectedProduct.toStringName())) {
                     adapter.getFilter().filter(name, count -> {
                         if (count == 1) {
                             unitNameEditText.setTag(adapter.getItem(0));
@@ -228,7 +228,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         if (spinner != null && getActivity() != null) {
             Product selectedProduct = (Product) unitNameEditText.getTag();
             List<ProductCategory> categoryList = new ArrayList<>();
-            if (selectedProduct != null && name.equals(selectedProduct.getName())) {
+            if (selectedProduct != null && name.equals(selectedProduct.toStringName())) {
                 categoryList.add(selectedProduct.getCategory());
             } else {
                 categoryList.addAll(Arrays.asList(ProductCategory.values()));
@@ -248,7 +248,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
             Product selectedProduct = (Product) unitNameEditText.getTag();
             List<MeasureUnit> mainMeasureUnits = new ArrayList<>();
             List<MeasureUnit> measureUnits = new ArrayList<>();
-            if (selectedProduct != null && name.equals(selectedProduct.getName())) {
+            if (selectedProduct != null && name.equals(selectedProduct.toStringName())) {
                 measureUnits.addAll(selectedProduct.getMainMeasureUnitList());
                 for (MeasureUnit unit : selectedProduct.getMeasureUnitList()) {
                     boolean isMainUnit = false;

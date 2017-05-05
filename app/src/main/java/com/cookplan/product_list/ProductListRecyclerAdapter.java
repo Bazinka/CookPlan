@@ -33,7 +33,7 @@ public class ProductListRecyclerAdapter extends RecyclerView.Adapter<ProductList
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Product product = mValues.get(position);
-        holder.nameView.setText(product.getName());
+        holder.nameView.setText(product.toStringName());
 
         holder.mainView.setTag(product);
         holder.mainView.setOnClickListener(v -> {

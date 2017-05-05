@@ -171,7 +171,7 @@ public class IngredientProviderImpl implements IngredientProvider {
     //    public Single<Recipe> update(Recipe recipe) {
     //        return Single.create(emitter -> {
     //            Map<String, Object> values = new HashMap<>();
-    //            values.put(DatabaseConstants.DATABASE_NAME_FIELD, recipe.getName());
+    //            values.put(DatabaseConstants.DATABASE_NAME_FIELD, recipe.getStringName());
     //            values.put(DatabaseConstants.DATABASE_DESCRIPTION_FIELD, recipe.getDesc());
     //            DatabaseReference recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
     //            recipeRef.child(recipe.getId()).updateChildren(values, (databaseError, databaseReference) -> {

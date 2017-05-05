@@ -18,5 +18,7 @@ public interface ProductProvider {
 
     Single<Product> createProduct(Product product);
 
+    Single<Product> updateProductNames(Product product);
+
     Completable increaseCountUsages(Product product);
 }

@@ -1,5 +1,6 @@
 package com.cookplan.models;
 
+import com.cookplan.RApplication;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DataSnapshot;
 
@@ -18,7 +19,8 @@ public class Product implements Serializable {
     public String userId;
     public List<MeasureUnit> measureUnitList; //list of units in which product can be measured.
     public List<MeasureUnit> mainMeasureUnitList;
-    public String name;
+    public String rusName;
+    public String engName;
     public int countUsing;
     public ProductCategory category;
 
@@ -27,14 +29,15 @@ public class Product implements Serializable {
     private Product() {
     }
 
-    public Product(ProductCategory category, String name,
+    public Product(ProductCategory category, String rusName, String engName,
                    List<MeasureUnit> mainMeasureUnitList,
                    List<MeasureUnit> measureUnitList,
                    Map<MeasureUnit, Double> unitToAmoutMap,
                    String userId) {
         this();
         this.category = category;
-        this.name = name;
+        this.rusName = rusName;
+        this.engName = engName;
         this.mainMeasureUnitList = mainMeasureUnitList;
         this.measureUnitList = measureUnitList;
         this.userId = userId;
@@ -86,12 +89,28 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String toStringName() {
+        if (RApplication.isCurrentLocaleRus()) {
+            return rusName != null ? rusName : "";
+        } else {
+            return engName != null ? engName : "";
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getRusName() {
+        return rusName;
+    }
+
+    public void setRusName(String rusName) {
+        this.rusName = rusName;
+    }
+
+    public String getEngName() {
+        return engName;
+    }
+
+    public void setEngName(String engName) {
+        this.engName = engName;
     }
 
     public List<MeasureUnit> getMainMeasureUnitList() {
@@ -118,8 +137,11 @@ public class Product implements Serializable {
         Product product = new Product();
         product.id = dataSnapshot.getKey();
         for (DataSnapshot child : dataSnapshot.getChildren()) {
-            if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
-                product.name = child.getValue().toString();
+            if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_RUS_NAME_FIELD)) {
+                product.rusName = child.getValue().toString();
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_PRODUCT_ENG_NAME_FIELD)) {
+                product.engName = child.getValue().toString();
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_USER_ID_FIELD)) {
                 product.userId = child.getValue().toString();

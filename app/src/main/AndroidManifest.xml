@@ -7,7 +7,6 @@
     <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
-
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="25"/>
@@ -72,6 +71,8 @@
         <activity android:name=".share.add_users.AddUserForSharingActivity">
         </activity>
         <activity android:name=".share.contact_list.ContactListActivity">
+        </activity>
+        <activity android:name=".product_list.update_database.UpdateProductDatabaseActivity">
         </activity>
     </application>
 
