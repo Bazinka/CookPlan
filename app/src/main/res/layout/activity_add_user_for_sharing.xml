@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/main_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/main_view"
                 android:layout_margin="@dimen/card_view_margin">
 
     <android.support.design.widget.TextInputLayout
@@ -27,18 +27,49 @@
             android:scrollbars="vertical"/>
     </android.support.design.widget.TextInputLayout>
 
+    <TextView
+        android:id="@+id/or_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/enter_email_edittext_layout"
+        android:gravity="center"
+        android:padding="@dimen/main_item_padding"
+        android:text="или"/>
+
+    <Button
+        android:id="@+id/get_from_contact_button"
+        style="@style/CookplanButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/or_textview"
+        android:layout_centerHorizontal="true"
+        android:text="@string/get_from_contact_list_button_title"/>
+
+
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/enter_email_edittext_layout"
+        android:layout_below="@id/get_from_contact_button"
+        android:layout_marginTop="@dimen/main_item_padding"
         android:background="@color/primary_light"/>
+
+    <TextView
+        android:id="@+id/choosen_contacts_title_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view"
+        android:gravity="left|center_vertical"
+        android:paddingBottom="@dimen/main_item_padding"
+        android:paddingRight="@dimen/main_item_padding"
+        android:paddingTop="@dimen/main_item_padding"
+        android:text="Вы выбрали контакты:"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/users_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/view"
+        android:layout_below="@+id/choosen_contacts_title_textview"
         android:scrollbars="vertical"/>
 
 </RelativeLayout>

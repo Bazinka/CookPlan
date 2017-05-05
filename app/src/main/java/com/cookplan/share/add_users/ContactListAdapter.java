@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.cookplan.R;
 import com.cookplan.models.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,10 +19,10 @@ import java.util.List;
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.MainViewHolder> {
 
-    private List<Contact> contactList;
+    private ArrayList<Contact> contactList;
     private boolean isRemovalApprove;
 
-    public ContactListAdapter(List<Contact> contactList, boolean isRemovalApprove) {
+    public ContactListAdapter(ArrayList<Contact> contactList, boolean isRemovalApprove) {
         this.contactList = contactList;
         this.isRemovalApprove = isRemovalApprove;
     }
@@ -92,7 +93,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         notifyDataSetChanged();
     }
 
-    public List<Contact> getContactList() {
+    public ArrayList<Contact> getContactList() {
         return contactList;
     }
 

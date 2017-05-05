@@ -199,4 +199,5 @@
     <string name="turn_off_family_mode_question">Выберите необходимое действие</string>
     <string name="turn_off_faminy_mode">Выключить</string>
     <string name="change_users_faminy_mode_title">Изменить</string>
+    <string name="get_from_contact_list_button_title">Выбрать из списка контактов</string>
 </resources>

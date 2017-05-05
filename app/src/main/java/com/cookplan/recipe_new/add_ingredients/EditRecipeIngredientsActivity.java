@@ -87,7 +87,7 @@ public class EditRecipeIngredientsActivity extends BaseActivity implements EditR
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.app_bar_next) {
+        if (id == R.id.app_bar_done) {
             //TODO: saving data
             //            Intent intent = new Intent(this, MainActivity.class);
             //            startActivityWithLeftAnimation(intent);

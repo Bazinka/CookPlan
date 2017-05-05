@@ -1,5 +1,7 @@
 package com.cookplan.share.add_users;
 
+import android.content.Context;
+
 import com.cookplan.models.Contact;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.ShareUserInfo;
@@ -23,9 +25,11 @@ public class AddUserForSharingPresenterImpl implements AddUserForSharingPresente
 
     private FamilyModeProvider familyModeProvider;
     private AddUserForSharingView mainView;
+    private Context context;
 
-    public AddUserForSharingPresenterImpl(AddUserForSharingView mainView) {
+    public AddUserForSharingPresenterImpl(AddUserForSharingView mainView, Context context) {
         this.mainView = mainView;
+        this.context = context;
         familyModeProvider = new FamilyModeProviderImpl();
     }
 
@@ -45,7 +49,7 @@ public class AddUserForSharingPresenterImpl implements AddUserForSharingPresente
                     public void onSuccess(ShareUserInfo shareUserInfo) {
                         List<Contact> contactList = new ArrayList<Contact>();
                         for (String email : shareUserInfo.getClientUserEmailList()) {
-                            contactList.add(new Contact(null, email));
+                            contactList.add(new Contact(email));
                         }
                         if (mainView != null) {
                             mainView.setContactList(contactList);

@@ -10,11 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Contact;
+import com.cookplan.share.contact_list.ContactListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,9 @@ import java.util.List;
 import static com.cookplan.main.MainActivity.SHARE_USER_EMAIL_LIST_KEY;
 
 public class AddUserForSharingActivity extends BaseActivity implements AddUserForSharingView {
+
+    public static final int GET_USER_LIST_FROM_CONTACT_REQUEST = 12;
+    public static final String GET_USER_LIST_FROM_CONTACT_KEY = "GET_USER_LIST_FROM_CONTACT_KEY";
 
     private ContactListAdapter adapter;
     private AddUserForSharingPresenter presenter;
@@ -49,7 +54,7 @@ public class AddUserForSharingActivity extends BaseActivity implements AddUserFo
                     if (!emailText.contains(getString(R.string.gmail_ending_title))) {
                         emailText = emailText + getString(R.string.gmail_ending_title);
                     }
-                    Contact newContact = new Contact(null, emailText);
+                    Contact newContact = new Contact(emailText);
 
                     boolean isContractExist = false;
                     for (Contact contact : adapter.getContactList()) {
@@ -75,7 +80,14 @@ public class AddUserForSharingActivity extends BaseActivity implements AddUserFo
             }
             return false;
         });
-        presenter = new AddUserForSharingPresenterImpl(this);
+
+        Button getFromContactListButton = (Button) findViewById(R.id.get_from_contact_button);
+        getFromContactListButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ContactListActivity.class);
+            startActivityForResultWithLeftAnimation(intent, GET_USER_LIST_FROM_CONTACT_REQUEST);
+
+        });
+        presenter = new AddUserForSharingPresenterImpl(this, this);
         presenter.getSharedUsers();
     }
 
@@ -89,7 +101,7 @@ public class AddUserForSharingActivity extends BaseActivity implements AddUserFo
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.app_bar_next) {
+        if (id == R.id.app_bar_done) {
             List<Contact> contactList = adapter.getContactList();
             ArrayList<String> emails = new ArrayList<>();
             for (Contact contact : contactList) {
@@ -111,11 +123,28 @@ public class AddUserForSharingActivity extends BaseActivity implements AddUserFo
         }
     }
 
+    public void addContactList(List<Contact> contactList) {
+        if (adapter != null) {
+            adapter.addItemList(contactList);
+        }
+    }
+
     @Override
     public void setError(String error) {
         View mainView = findViewById(R.id.main_view);
         if (mainView != null) {
             Snackbar.make(mainView, error, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GET_USER_LIST_FROM_CONTACT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                ArrayList<Contact> contacts = data.getParcelableArrayListExtra(GET_USER_LIST_FROM_CONTACT_KEY);
+                addContactList(contacts);
+            }
         }
     }
 }
