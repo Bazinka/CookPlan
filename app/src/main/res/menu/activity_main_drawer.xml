@@ -25,8 +25,13 @@
         <item
             android:id="@+id/nav_vocabulary"
             android:icon="@drawable/ic_product_list"
-            android:visible="false"
-            android:title="@string/product_vocabulary_title"/>
+            android:title="@string/product_vocabulary_title"
+            android:visible="false"/>
+
+        <item
+            android:id="@+id/nav_todo_list"
+            android:icon=""
+            android:title="@string/todo_list_title"/>
 
     </group>
 
