@@ -21,9 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
+
+import static com.cookplan.utils.DatabaseConstants.DATABASE_PRODUCT_RUS_NAME_FIELD;
 
 /**
  * Created by DariaEfimova on 24.04.17.
@@ -112,6 +115,20 @@ public class ProductProviderImpl implements ProductProvider {
                     }
                 }
             });
+        });
+    }
+
+    @Override
+    public Observable<Product> getProductByName(String name) {
+        return subjectProductList.map(productList -> {
+            Product productRes = null;
+            for (Product product : productList) {
+                if (product.toStringName().toLowerCase().equals(name)) {
+                    productRes = product;
+                    break;
+                }
+            }
+            return productRes;
         });
     }
 
