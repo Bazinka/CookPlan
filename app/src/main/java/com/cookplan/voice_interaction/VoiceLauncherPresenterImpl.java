@@ -57,20 +57,20 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
                     .subscribe(new DisposableObserver<Product>() {
                         @Override
                         public void onNext(Product product) {
-                            if (product != null) {
-                                addIngredientToShopList(product);
-                                //                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                //                                    startVoiceTrigger(product);
-                                //                                }
-                            } else {
-                                mainView.setErrorString(RApplication.getAppContext().getString(R.string.didnt_find_product_error));
-                            }
+                            addIngredientToShopList(product);
+                            //                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            //                                    startVoiceTrigger(product);
+                            //                                }
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            if (mainView != null && e instanceof CookPlanError) {
-                                mainView.setErrorString(RApplication.getAppContext().getString(R.string.saving_ingredient_error));
+                            if (mainView != null) {
+                                if (e instanceof CookPlanError) {
+                                    mainView.setErrorString(RApplication.getAppContext().getString(R.string.saving_ingredient_error));
+                                } else {
+                                    mainView.setErrorString(RApplication.getAppContext().getString(R.string.didnt_find_product_error));
+                                }
                             }
                         }
 
