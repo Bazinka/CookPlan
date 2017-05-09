@@ -132,5 +132,11 @@
     <string name="get_from_contact_list_button_title">Выбрать из списка контактов</string>
     <string name="russian_language">русский</string>
     <string name="todo_list_title">Список дел</string>
+    <string name="buy_pattern">купить</string>
+    <string name="amount_ingredient_voice_question">Распознан продукт ingredientName. Добавить его в список?</string>
+    <string name="remind_me_pattern">Напомни мне</string>
+    <string name="saving_ingredient_error">Ошибка при сохранении ингредиента</string>
+    <string name="cant_recognize_command_error">Извините, не смогли распознать команду</string>
+    <string name="didnt_find_product_error">Не смогли определить продукт для добавления</string>
 
 </resources>

@@ -5,6 +5,7 @@ import com.cookplan.models.Product;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -19,6 +20,8 @@ public interface ProductProvider {
     Single<Product> createProduct(Product product);
 
     Single<Product> updateProductNames(Product product);
+
+    Observable<Product> getProductByName(String name);
 
     Completable increaseCountUsages(Product product);
 }
