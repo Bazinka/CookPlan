@@ -55,11 +55,12 @@
             android:id="@+id/choose_category_color_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:visibility="invisible">
 
             <com.cookplan.views.ChooseColorView
                 android:id="@+id/choose_category_color_view"
                 android:layout_width="match_parent"
+                android:clickable="true"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
     </RelativeLayout>
