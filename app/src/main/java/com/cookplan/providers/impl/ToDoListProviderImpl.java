@@ -43,6 +43,7 @@ public class ToDoListProviderImpl implements ToDoListProvider {
         subjectToDoList = BehaviorSubject.create();
         subjectToDoCategoriesList = BehaviorSubject.create();
         getFirebaseUsersToDoList();
+        getFirebaseUsersToDoCategoriesList();
     }
 
     private void getFirebaseUsersToDoList() {
@@ -58,37 +59,45 @@ public class ToDoListProviderImpl implements ToDoListProvider {
                             for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                                 ToDoCategory toDoCategory = itemSnapshot.getValue(ToDoCategory.class);
                                 if (toDoCategory != null) {
+                                    toDoCategory.setId(itemSnapshot.getKey());
                                     toDoItemCategoriesList.add(toDoCategory);
                                 }
                             }
                             if (subjectToDoCategoriesList != null) {
                                 subjectToDoCategoriesList.onNext(toDoItemCategoriesList);
                             }
-                            Query items = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
-                            items.orderByChild(DatabaseConstants.DATABASE_USER_ID_FIELD)
-                                    .equalTo(myUid)
-                                    .addValueEventListener(new ValueEventListener() {
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            List<ToDoItem> todoList = new ArrayList<>();
-                                            for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                                                ToDoItem toDoItem = itemSnapshot.getValue(ToDoItem.class);
-                                                if (toDoItem != null) {
-                                                    todoList.add(toDoItem);
-                                                }
-                                            }
-                                            if (subjectToDoList != null) {
-                                                subjectToDoList.onNext(todoList);
-                                            }
-                                        }
+                        }
 
-                                        public void onCancelled(DatabaseError databaseError) {
-                                            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                                                if (subjectToDoList != null) {
-                                                    subjectToDoList.onError(new CookPlanError(databaseError));
-                                                }
-                                            }
-                                        }
-                                    });
+                        public void onCancelled(DatabaseError databaseError) {
+                            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                                if (subjectToDoCategoriesList != null) {
+                                    subjectToDoCategoriesList.onError(new CookPlanError(databaseError));
+                                }
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void getFirebaseUsersToDoCategoriesList() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String myUid = user.getUid();
+            Query items = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
+            items.orderByChild(DatabaseConstants.DATABASE_USER_ID_FIELD)
+                    .equalTo(myUid)
+                    .addValueEventListener(new ValueEventListener() {
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            List<ToDoItem> todoList = new ArrayList<>();
+                            for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                                ToDoItem toDoItem = itemSnapshot.getValue(ToDoItem.class);
+                                if (toDoItem != null) {
+                                    todoList.add(toDoItem);
+                                }
+                            }
+                            if (subjectToDoList != null) {
+                                subjectToDoList.onNext(todoList);
+                            }
                         }
 
                         public void onCancelled(DatabaseError databaseError) {

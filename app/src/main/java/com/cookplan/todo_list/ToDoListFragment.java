@@ -13,10 +13,10 @@ import android.widget.ProgressBar;
 import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
+import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 import com.cookplan.todo_list.edit_item.EditToDoItemActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoListFragment extends BaseFragment implements ToDoListView {
@@ -63,7 +63,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
 
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.todo_list_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ToDoListRecyclerViewAdapter(new ArrayList<>());
+        adapter = new ToDoListRecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.add_todo_item_fab);
@@ -86,7 +86,14 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
-        adapter.update(todoList);
+        adapter.updateToDoList(todoList);
+    }
+
+    @Override
+    public void setToDoCategoryList(List<ToDoCategory> toDoCategoryList) {
+        setEmptyViewVisability(View.GONE);
+        setRecyclerViewVisability(View.VISIBLE);
+        adapter.updateCategories(toDoCategoryList);
     }
 
     @Override

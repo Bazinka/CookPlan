@@ -1,5 +1,6 @@
 package com.cookplan.todo_list;
 
+import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface ToDoListView {
     void setErrorToast(String error);
 
     void setToDoList(List<ToDoItem> todoList);
+
+    void setToDoCategoryList(List<ToDoCategory> toDoCategoryList);
 
     void setEmptyView();
 }

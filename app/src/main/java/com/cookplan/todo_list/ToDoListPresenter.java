@@ -5,6 +5,7 @@ package com.cookplan.todo_list;
  */
 
 public interface ToDoListPresenter {
+
     void getToDoList();
 
     void onStop();

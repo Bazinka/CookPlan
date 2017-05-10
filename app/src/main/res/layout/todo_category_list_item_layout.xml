@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="false"
+        android:paddingLeft="@dimen/main_margin_left"
+        android:paddingRight="@dimen/main_margin_left"
+        android:paddingTop="@dimen/margin_top_glutter">
+
+        <TextView
+            android:id="@+id/todo_category_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:gravity="left|center_vertical"
+            android:paddingBottom="@dimen/todo_list_category_size"
+            android:text="название"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/body_text_size"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/category_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/todo_list_category_size"
+        android:layout_alignBottom="@+id/relativeLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/accent_color"/>
+
+</RelativeLayout>

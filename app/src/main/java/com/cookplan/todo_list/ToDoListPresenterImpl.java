@@ -1,6 +1,7 @@
 package com.cookplan.todo_list;
 
 import com.cookplan.models.CookPlanError;
+import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 import com.cookplan.providers.ToDoListProvider;
 import com.cookplan.providers.impl.ToDoListProviderImpl;
@@ -29,6 +30,35 @@ public class ToDoListPresenterImpl implements ToDoListPresenter {
 
     @Override
     public void getToDoList() {
+        disposables.add(
+                provider.getUserToDoCategoriesList()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableObserver<List<ToDoCategory>>() {
+                            @Override
+                            public void onNext(List<ToDoCategory> categories) {
+                                if (mainView != null) {
+                                    mainView.setToDoCategoryList(categories);
+                                }
+                                loadToDoList();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                if (mainView != null && e instanceof CookPlanError) {
+                                    mainView.setErrorToast(e.getMessage());
+                                }
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        }));
+
+    }
+
+    private void loadToDoList() {
         disposables.add(
                 provider.getUserToDoList()
                         .subscribeOn(Schedulers.io())
