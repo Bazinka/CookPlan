@@ -71,7 +71,7 @@ public class EditToDoItemActivity extends BaseActivity implements EditToDoItemVi
             String errorNameText = null;
             String errorCategoryText = null;
             ToDoCategory category = getCategoryItem();
-            if (!name.isEmpty() && category != null) {
+            if (!name.isEmpty() && isCategoryValid()) {
                 String comment = commentEditText.getText().toString();
                 presenter.saveToDoItem(selectedItem, name, comment, category);
             } else {
@@ -156,5 +156,19 @@ public class EditToDoItemActivity extends BaseActivity implements EditToDoItemVi
             }
         }
         return categoryItem;
+    }
+
+    public boolean isCategoryValid() {
+        boolean valid = true;
+        AutoCompleteTextView categoryEditText = (AutoCompleteTextView) findViewById(R.id.category_edit_text);
+        ToDoCategory categoryItem = (ToDoCategory) categoryEditText.getTag();
+        String categoryName = categoryEditText.getText().toString();
+        if (categoryItem == null || !categoryItem.getName().equals(categoryName)) {
+            ChooseColorView colorView = (ChooseColorView) findViewById(R.id.choose_category_color_view);
+            if (!categoryName.isEmpty() && colorView.getSelectedColor() == null) {
+                valid = false;
+            }
+        }
+        return valid;
     }
 }
