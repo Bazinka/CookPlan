@@ -9,10 +9,15 @@ import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Product;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.models.ToDoItem;
 import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.ProductProvider;
+import com.cookplan.providers.ToDoListProvider;
 import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.ProductProviderImpl;
+import com.cookplan.providers.impl.ToDoListProviderImpl;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +36,7 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
 
     private VoiceLauncherView mainView;
     private ProductProvider productDataProvider;
+    private ToDoListProvider toDoListDataProvider;
     private IngredientProvider ingredientDataProvider;
 
 
@@ -38,6 +44,7 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
         this.mainView = mainView;
         ingredientDataProvider = new IngredientProviderImpl();
         productDataProvider = new ProductProviderImpl();
+        toDoListDataProvider = new ToDoListProviderImpl();
     }
 
     @Override
@@ -80,8 +87,35 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
                         }
                     });
         } else {
-            mainView.setErrorString(RApplication.getAppContext().getString(R.string.cant_recognize_command_error));
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                toDoListDataProvider.createToDoItem(new ToDoItem(user.getUid(), text, null))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new SingleObserver<ToDoItem>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onSuccess(ToDoItem toDoItem) {
+                                if (mainView != null) {
+                                    mainView.setSuccessOperationResult();
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                if (mainView != null && e instanceof CookPlanError) {
+                                    mainView.setErrorString(e.getMessage());
+                                }
+                            }
+                        });
+                ;
+            }
         }
+        //            mainView.setErrorString(RApplication.getAppContext().getString(R.string.cant_recognize_command_error));
     }
 
     private void addIngredientToShopList(Product product) {
@@ -105,7 +139,7 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
                     @Override
                     public void onSuccess(Ingredient ingredient) {
                         if (mainView != null) {
-                            mainView.setSuccessSaveIngredient();
+                            mainView.setSuccessOperationResult();
                         }
                     }
 

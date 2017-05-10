@@ -10,7 +10,7 @@ public interface VoiceLauncherView {
 
     void startVoiceTrigger(VoiceInteractor.PickOptionRequest request);
 
-    void setSuccessSaveIngredient();
+    void setSuccessOperationResult();
 
     void setErrorString(String string);
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.models.ToDoItem;
 
 import static com.google.android.gms.actions.NoteIntents.ACTION_CREATE_NOTE;
 
@@ -49,7 +50,7 @@ public class VoiceLaunchActivity extends BaseActivity implements VoiceLauncherVi
     }
 
     @Override
-    public void setSuccessSaveIngredient() {
+    public void setSuccessOperationResult() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_MAIN);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
