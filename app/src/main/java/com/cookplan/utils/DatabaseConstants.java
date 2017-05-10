@@ -11,6 +11,7 @@ public class DatabaseConstants {
     public static String DATABASE_PRODUCT_TABLE = "product";
     public static String DATABASE_SHARE_TO_GOOGLE_USER_TABLE = "share_google";
     public static String DATABASE_TO_DO_ITEMS_TABLE = "to_do_item";
+    public static String DATABASE_TO_DO_CATEGORY_ITEMS_TABLE = "to_do_category_item";
     public static String DATABASE_PHOTO_TABLE = "photo";
 
 

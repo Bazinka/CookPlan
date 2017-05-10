@@ -59,7 +59,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_todo_list_item, container, false);
+        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_todo_list, container, false);
 
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.todo_list_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

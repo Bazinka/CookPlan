@@ -24,10 +24,51 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/todo_item_comment_edit_layout"
+        android:id="@+id/category_edit_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/todo_item_name_edit_layout"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:hint="@string/category_todo_item_title"
+        android:theme="@style/CookPlanTextInputLayoutStyle"
+        app:hintTextAppearance="@style/CookPlanHitInputStyle">
+
+        <AutoCompleteTextView
+            android:id="@+id/category_edit_text"
+            style="@style/CookPlanEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
+            android:lines="1"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:id="@+id/choose_category_color_main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/category_edit_layout">
+
+        <RelativeLayout
+            android:id="@+id/choose_category_color_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <com.cookplan.views.ChooseColorView
+                android:id="@+id/choose_category_color_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/todo_item_comment_edit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_category_color_main_layout"
         android:hint="@string/comment_title"
         android:scrollbars="vertical"
         android:theme="@style/CookPlanTextInputLayoutStyle"
@@ -44,21 +85,5 @@
             android:scrollbars="vertical"/>
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/category_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/todo_item_comment_edit_layout"
-        android:paddingTop="@dimen/subheding_text_size"
-        android:text="Категория заметки"
-        android:textSize="@dimen/subheding_text_size"/>
-
-    <Spinner
-        android:id="@+id/category_list_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/category_textview"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/main_margin_left"/>
 
 </RelativeLayout>

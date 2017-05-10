@@ -22,7 +22,7 @@ public class ToDoListRecyclerViewAdapter extends RecyclerView.Adapter<ToDoListRe
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_todo_list, parent, false);
+                .inflate(R.layout.fragment_todo_list_item, parent, false);
         return new ViewHolder(view);
     }
 

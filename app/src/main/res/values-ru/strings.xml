@@ -142,5 +142,7 @@
     <string name="comment_title">Комментарий</string>
     <string name="error_remove_todo_item">Невозможно удалить заметку</string>
     <string name="empty_todo_list_title">Списол дел пуст</string>
+    <string name="category_todo_item_title">Категория заметки</string>
+    <string name="category_required_error">Введите текст и выберите цвет категории</string>
 
 </resources>

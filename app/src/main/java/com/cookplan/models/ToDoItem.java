@@ -9,22 +9,25 @@ import java.io.Serializable;
 public class ToDoItem implements Serializable {
 
     private String id;
-    private String userId;
-    private String name;
-    private String comment;
+    public String userId;
+    public String name;
+    public String comment;
+    public String categoryId;
 
     public ToDoItem() {
     }
 
-    public ToDoItem(String userId, String name, String comment) {
+    public ToDoItem(String userId, String name, String comment, String categoryId) {
         this.userId = userId;
         this.name = name;
         this.comment = comment;
+        this.categoryId = categoryId;
     }
 
-    public ToDoItem(String userId, String name) {
+    public ToDoItem(String userId, String name, String categoryId) {
         this.userId = userId;
         this.name = name;
+        this.categoryId = categoryId;
     }
 
     public String getId() {
@@ -57,5 +60,13 @@ public class ToDoItem implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 }

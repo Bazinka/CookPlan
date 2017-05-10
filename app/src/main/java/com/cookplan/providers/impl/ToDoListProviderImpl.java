@@ -3,6 +3,7 @@ package com.cookplan.providers.impl;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
+import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 import com.cookplan.providers.ToDoListProvider;
 import com.cookplan.utils.DatabaseConstants;
@@ -35,40 +36,75 @@ public class ToDoListProviderImpl implements ToDoListProvider {
     private DatabaseReference database;
 
     private BehaviorSubject<List<ToDoItem>> subjectToDoList;
+    private BehaviorSubject<List<ToDoCategory>> subjectToDoCategoriesList;
 
     public ToDoListProviderImpl() {
         this.database = FirebaseDatabase.getInstance().getReference();
         subjectToDoList = BehaviorSubject.create();
+        subjectToDoCategoriesList = BehaviorSubject.create();
         getFirebaseUsersToDoList();
     }
 
     private void getFirebaseUsersToDoList() {
-        Query items = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
-        items.addValueEventListener(new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<ToDoItem> todoList = new ArrayList<>();
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    ToDoItem toDoItem = itemSnapshot.getValue(ToDoItem.class);
-                    if (toDoItem != null && user != null) {
-                        if (toDoItem.getUserId() != null && toDoItem.getUserId().equals(user.getUid())) {
-                            todoList.add(toDoItem);
-                        }
-                    }
-                }
-                if (subjectToDoList != null) {
-                    subjectToDoList.onNext(todoList);
-                }
-            }
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String myUid = user.getUid();
+            Query items = database.child(DatabaseConstants.DATABASE_TO_DO_CATEGORY_ITEMS_TABLE);
+            items.orderByChild(DatabaseConstants.DATABASE_USER_ID_FIELD)
+                    .equalTo(myUid)
+                    .addValueEventListener(new ValueEventListener() {
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            List<ToDoCategory> toDoItemCategoriesList = new ArrayList<>();
+                            for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                                ToDoCategory toDoCategory = itemSnapshot.getValue(ToDoCategory.class);
+                                if (toDoCategory != null) {
+                                    toDoItemCategoriesList.add(toDoCategory);
+                                }
+                            }
+                            if (subjectToDoCategoriesList != null) {
+                                subjectToDoCategoriesList.onNext(toDoItemCategoriesList);
+                            }
+                            Query items = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
+                            items.orderByChild(DatabaseConstants.DATABASE_USER_ID_FIELD)
+                                    .equalTo(myUid)
+                                    .addValueEventListener(new ValueEventListener() {
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            List<ToDoItem> todoList = new ArrayList<>();
+                                            for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                                                ToDoItem toDoItem = itemSnapshot.getValue(ToDoItem.class);
+                                                if (toDoItem != null) {
+                                                    todoList.add(toDoItem);
+                                                }
+                                            }
+                                            if (subjectToDoList != null) {
+                                                subjectToDoList.onNext(todoList);
+                                            }
+                                        }
 
-            public void onCancelled(DatabaseError databaseError) {
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    if (subjectToDoList != null) {
-                        subjectToDoList.onError(new CookPlanError(databaseError));
-                    }
-                }
-            }
-        });
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                                                if (subjectToDoList != null) {
+                                                    subjectToDoList.onError(new CookPlanError(databaseError));
+                                                }
+                                            }
+                                        }
+                                    });
+                        }
+
+                        public void onCancelled(DatabaseError databaseError) {
+                            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                                if (subjectToDoList != null) {
+                                    subjectToDoList.onError(new CookPlanError(databaseError));
+                                }
+                            }
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public Observable<List<ToDoCategory>> getUserToDoCategoriesList() {
+        return subjectToDoCategoriesList;
     }
 
     @Override
@@ -79,13 +115,28 @@ public class ToDoListProviderImpl implements ToDoListProvider {
     @Override
     public Single<ToDoItem> createToDoItem(ToDoItem item) {
         return Single.create(emitter -> {
-            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
-            productRef.push().setValue(item, (databaseError, reference) -> {
+            DatabaseReference todoRef = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
+            todoRef.push().setValue(item, (databaseError, reference) -> {
                 if (databaseError != null) {
                     emitter.onError(new CookPlanError(databaseError));
                 } else {
                     item.setId(reference.getKey());
                     emitter.onSuccess(item);
+                }
+            });
+        });
+    }
+
+    @Override
+    public Single<ToDoCategory> createToDoCategory(ToDoCategory category) {
+        return Single.create(emitter -> {
+            DatabaseReference categoryRef = database.child(DatabaseConstants.DATABASE_TO_DO_CATEGORY_ITEMS_TABLE);
+            categoryRef.push().setValue(category, (databaseError, reference) -> {
+                if (databaseError != null) {
+                    emitter.onError(new CookPlanError(databaseError));
+                } else {
+                    category.setId(reference.getKey());
+                    emitter.onSuccess(category);
                 }
             });
         });
