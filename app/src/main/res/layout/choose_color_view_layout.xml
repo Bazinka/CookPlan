@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/main_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/main_view_area1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_view_area2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/main_view_area3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_view_area4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/main_view_area5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_view_area6"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/main_view_area7"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_view_area8"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area8"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/main_view_area9"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_view_area10"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/main_view_area11"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area11"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_view_area12"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/choose_color_item_height"
+                android:background="@drawable/choose_color_item_back"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_area12"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:background="@color/accent_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
