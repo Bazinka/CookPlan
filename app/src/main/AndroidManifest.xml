@@ -74,7 +74,6 @@
         </activity>
         <activity android:name=".product_list.update_database.UpdateProductDatabaseActivity">
         </activity>
-
         <activity android:name=".voice_interaction.VoiceLaunchActivity">
             <intent-filter>
                 <action android:name="com.google.android.gms.actions.CREATE_NOTE"/>
@@ -82,11 +81,11 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.VOICE"/>
 
-                <data android:mimeType='*/*'/>
+                <data android:mimeType="*/*"/>
             </intent-filter>
-
         </activity>
-
+        <activity android:name=".todo_list.edit_item.EditToDoItemActivity">
+        </activity>
     </application>
 
 </manifest>

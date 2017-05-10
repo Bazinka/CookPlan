@@ -34,6 +34,7 @@ import com.cookplan.share.ShareView;
 import com.cookplan.share.add_users.AddUserForSharingActivity;
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
+import com.cookplan.todo_list.ToDoListFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -140,6 +141,8 @@ public class MainActivity extends BaseActivity
             setShoppingListFragment();
         } else if (mSelectedNavigationId == R.id.nav_vocabulary) {
             setProductListFragment();
+        } else if (mSelectedNavigationId == R.id.nav_todo_list) {
+            setTODOListFragment();
         } else if (mSelectedNavigationId == R.id.nav_sign_out) {
             if (presenter != null) {
                 presenter.signOut();
@@ -211,6 +214,27 @@ public class MainActivity extends BaseActivity
             transaction.add(R.id.fragment_container, pointListFragment);
         } else {
             transaction.replace(R.id.fragment_container, pointListFragment);
+        }
+        transaction.commit();
+    }
+
+    void setTODOListFragment() {
+        View tabsLayout = findViewById(R.id.main_tabs_layout);
+        tabsLayout.setVisibility(View.GONE);
+        View viewPager = findViewById(R.id.main_tabs_viewpager);
+        viewPager.setVisibility(View.GONE);
+
+        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        //        mainConteinerView.setVisibility(View.VISIBLE);
+
+        setTitle(getString(R.string.todo_list_title));
+
+        ToDoListFragment fragment = ToDoListFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
+            transaction.add(R.id.fragment_container, fragment);
+        } else {
+            transaction.replace(R.id.fragment_container, fragment);
         }
         transaction.commit();
     }

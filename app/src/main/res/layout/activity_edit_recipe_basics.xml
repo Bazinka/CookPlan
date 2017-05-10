@@ -69,12 +69,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Recipe name"
-                    android:theme="@style/RecipeNameTextInputLayoutStyle"
-                    app:hintTextAppearance="@style/RecipeNameHitInputStyle">
+                    android:theme="@style/NameTextInputLayoutStyle"
+                    app:hintTextAppearance="@style/NameHitInputStyle">
 
                     <EditText
                         android:id="@+id/recipe_name_edit_text"
-                        style="@style/RecipeNameEditTextStyle"
+                        style="@style/NameEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences"/>

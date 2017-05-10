@@ -10,6 +10,7 @@ public class DatabaseConstants {
     public static String DATABASE_INRGEDIENT_TABLE = "ingredient";
     public static String DATABASE_PRODUCT_TABLE = "product";
     public static String DATABASE_SHARE_TO_GOOGLE_USER_TABLE = "share_google";
+    public static String DATABASE_TO_DO_ITEMS_TABLE = "to_do_item";
     public static String DATABASE_PHOTO_TABLE = "photo";
 
 
@@ -20,6 +21,7 @@ public class DatabaseConstants {
     public static final String DATABASE_USER_ID_FIELD = "userId";
     public static final String DATABASE_ITEM_ID_FIELD = "id";
     public static final String DATABASE_NAME_FIELD = "name";
+    public static final String DATABASE_COMMENT_FIELD = "comment";
 
     public static final String DATABASE_RATIO_MEASURE_LIST_FIELD = "ratioMeasureList";
     public static final String DATABASE_MEASURE_UNIT_LIST_FIELD = "measureUnitList";
@@ -44,5 +46,4 @@ public class DatabaseConstants {
     public static final String DATABASE_SHARED_OWNER_ID_FIELD = "ownerUserId";
     public static final String DATABASE_SHARED_OWNER_NAME_FIELD = "ownerUserName";
     public static final String DATABASE_SHARED_CLIENT_EMAILS_FIELD = "clientUserEmailList";
-
 }

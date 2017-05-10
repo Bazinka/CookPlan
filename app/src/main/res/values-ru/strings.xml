@@ -138,5 +138,9 @@
     <string name="saving_ingredient_error">Ошибка при сохранении ингредиента</string>
     <string name="cant_recognize_command_error">Извините, не смогли распознать команду</string>
     <string name="didnt_find_product_error">Не смогли определить продукт для добавления</string>
+    <string name="name_note_hint">Название заметки</string>
+    <string name="comment_title">Комментарий</string>
+    <string name="error_remove_todo_item">Невозможно удалить заметку</string>
+    <string name="empty_todo_list_title">Списол дел пуст</string>
 
 </resources>
