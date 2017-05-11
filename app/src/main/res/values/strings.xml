@@ -237,4 +237,7 @@
     <string name="save_point_error">Saving error. Try to save this point again.</string>
     <string name="companies_list_title">Список компаний</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

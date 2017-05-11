@@ -14,7 +14,6 @@ import com.cookplan.utils.DatabaseConstants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -75,35 +74,32 @@ public class EditCompanyPresenterImpl implements EditCompanyPresenter {
                 && !name.isEmpty()) {
             String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
             Company company = new Company(id, name, comments, latitude, longitude);
-            List<String> photoUrlsList = new ArrayList<>();
-            for (StorageReference pref : photoListPreferences) {
-                pref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
+            if (photoListPreferences != null && !photoListPreferences.isEmpty()) {
+                List<String> photoUrlsList = new ArrayList<>();
+                for (StorageReference pref : photoListPreferences) {
+                    pref.getDownloadUrl().addOnSuccessListener(uri -> {
                         photoUrlsList.add(uri.toString());
                         if (photoUrlsList.size() == photoListPreferences.size()) {
                             company.setPhotoList(photoUrlsList);
-                            mNewPointRef.push().setValue(company, new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(DatabaseError databaseError, DatabaseReference reference) {
-                                    if (databaseError != null) {
-                                        Log.e("AddPointPresenterImpl", "Failed to write message", databaseError.toException());
-                                    } else {
-                                        mainView.setSuccessSavePoint();
-                                    }
-                                }
-                            });
+                            saveCompany(company);
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(context, R.string.save_point_error, Toast.LENGTH_LONG).show();
-                    }
-                });
+                    }).addOnFailureListener(exception -> Toast.makeText(context, R.string.save_point_error, Toast.LENGTH_LONG).show());
 
+                }
+            } else {
+                saveCompany(company);
             }
         }
+    }
+
+    private void saveCompany(Company company) {
+        mNewPointRef.push().setValue(company, (databaseError, reference) -> {
+            if (databaseError != null) {
+                Log.e("AddPointPresenterImpl", "Failed to write message", databaseError.toException());
+            } else {
+                mainView.setSuccessSavePoint();
+            }
+        });
     }
 
     @Override

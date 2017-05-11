@@ -26,7 +26,7 @@ import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
-import com.cookplan.companies.MainCompaniesActivity;
+import com.cookplan.companies.MainCompaniesFragment;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.share.SharePresenter;
@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity
         } else if (itemId == R.id.nav_todo_list) {
             setTODOListFragment();
         } else if (itemId == R.id.nav_map) {
-            startMainCompaniesActivity();
+            setCompaniesListFragment();
         } else if (itemId == R.id.nav_sign_out) {
             if (presenter != null) {
                 presenter.signOut();
@@ -240,9 +240,22 @@ public class MainActivity extends BaseActivity
         transaction.commit();
     }
 
-    void startMainCompaniesActivity() {
-        Intent intent = new Intent(this, MainCompaniesActivity.class);
-        startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
+    void setCompaniesListFragment() {
+        View tabsLayout = findViewById(R.id.main_tabs_layout);
+        tabsLayout.setVisibility(View.GONE);
+        View viewPager = findViewById(R.id.main_tabs_viewpager);
+        viewPager.setVisibility(View.GONE);
+
+        setTitle(getString(R.string.list_points_title));
+
+        MainCompaniesFragment fragment = MainCompaniesFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
+            transaction.add(R.id.fragment_container, fragment);
+        } else {
+            transaction.replace(R.id.fragment_container, fragment);
+        }
+        transaction.commit();
     }
 
     @Override
