@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity
 
     private ProgressDialog mProgressDialog;
 
-    private int mSelectedNavigationId;
     private View rootView;
 
     private MainPresenter presenter;
@@ -79,8 +78,7 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         fillNavHeader();
         navigationView.setNavigationItemSelectedListener(this);
-        mSelectedNavigationId = R.id.nav_shopping_list;
-        navigationView.setCheckedItem(mSelectedNavigationId);
+        navigationView.setCheckedItem(R.id.nav_shopping_list);
         setShoppingListFragment();
     }
 
@@ -137,24 +135,20 @@ public class MainActivity extends BaseActivity
         int itemId = item.getItemId();
 
         if (itemId == R.id.nav_recipe_list) {
-            mSelectedNavigationId = itemId;
             setRecipeListFragment();
-        } else if (mSelectedNavigationId == R.id.nav_shopping_list) {
-            mSelectedNavigationId = itemId;
+        } else if (itemId == R.id.nav_shopping_list) {
             setShoppingListFragment();
-        } else if (mSelectedNavigationId == R.id.nav_vocabulary) {
-            mSelectedNavigationId = itemId;
+        } else if (itemId == R.id.nav_vocabulary) {
             setProductListFragment();
-        } else if (mSelectedNavigationId == R.id.nav_todo_list) {
-            mSelectedNavigationId = itemId;
+        } else if (itemId == R.id.nav_todo_list) {
             setTODOListFragment();
-        } else if (mSelectedNavigationId == R.id.nav_map) {
+        } else if (itemId == R.id.nav_map) {
             startMainCompaniesActivity();
-        } else if (mSelectedNavigationId == R.id.nav_sign_out) {
+        } else if (itemId == R.id.nav_sign_out) {
             if (presenter != null) {
                 presenter.signOut();
             }
-        } else if (mSelectedNavigationId == R.id.nav_sign_in) {
+        } else if (itemId == R.id.nav_sign_in) {
             if (presenter != null) {
                 presenter.signIn();
             }
@@ -263,10 +257,9 @@ public class MainActivity extends BaseActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OPEN_SHOP_LIST_REQUEST) {
             if (resultCode == RESULT_OK) {
-                mSelectedNavigationId = R.id.nav_shopping_list;
                 setShoppingListFragment();
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                navigationView.setCheckedItem(mSelectedNavigationId);
+                navigationView.setCheckedItem(R.id.nav_shopping_list);
             }
         } else if (requestCode == SHARE_USER_LIST_REQUEST) {
             if (resultCode == RESULT_OK) {
