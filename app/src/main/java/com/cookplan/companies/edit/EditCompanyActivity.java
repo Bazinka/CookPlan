@@ -82,7 +82,7 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
         if (requestCode == RC_CHOOSE_PHOTO) {
             if (resultCode == RESULT_OK) {
                 Uri selectedImage = data.getData();
-//                presenter.uploadPhoto(selectedImage);
+                //                presenter.uploadPhoto(selectedImage);
             } else {
                 Toast.makeText(this, "No image chosen", Toast.LENGTH_SHORT).show();
             }
@@ -166,7 +166,7 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
     public void onBackPressed() {
         super.onBackPressed();
         if (presenter != null) {
-//            presenter.removePhotos();
+            //            presenter.removePhotos();
         }
     }
 }

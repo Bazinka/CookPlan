@@ -57,7 +57,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:ems="10"
-                android:hint="@string/comments"
+                android:hint="@string/comment"
                 android:inputType="textMultiLine" />
         </android.support.design.widget.TextInputLayout>
 

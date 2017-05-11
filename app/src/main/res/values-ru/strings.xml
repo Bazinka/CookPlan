@@ -163,5 +163,6 @@
     <string name="points_dont_exist">Нет точек</string>
     <string name="save_point_error">Saving error. Try to save this point again.</string>
     <string name="companies_list_title">Список компаний</string>
+    <string name="empty_company_list_title">Список компаний пуст</string>
 
 </resources>

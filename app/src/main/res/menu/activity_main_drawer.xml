@@ -34,8 +34,8 @@
             android:title="@string/todo_list_title"/>
 
         <item
-            android:id="@+id/nav_map"
-            android:icon="@drawable/ic_map"
+            android:id="@+id/nav_companies"
+            android:icon="@drawable/ic_company"
             android:title="@string/companies_list_title"/>
 
     </group>

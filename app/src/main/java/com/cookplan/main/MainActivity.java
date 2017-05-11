@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity
             setProductListFragment();
         } else if (itemId == R.id.nav_todo_list) {
             setTODOListFragment();
-        } else if (itemId == R.id.nav_map) {
+        } else if (itemId == R.id.nav_companies) {
             setCompaniesListFragment();
         } else if (itemId == R.id.nav_sign_out) {
             if (presenter != null) {

@@ -6,21 +6,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Company;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class CompanyListFragment extends BaseFragment implements CompanyListView {
 
+    private static final String MULTISELECT_LIST_KEY = "MULTISELECT_KEY";
+
+
     private CompanyListPresenter presenter;
 
     private OnPointsListClickListener listener;
-
-    private CompanyListRecyclerViewAdapter adapter;
+    private CompanyListRecyclerAdapter adapter;
+    private boolean isMultiselect;
     private View mainView;
 
     public CompanyListFragment() {
@@ -33,10 +38,22 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
         return fragment;
     }
 
+    public static CompanyListFragment newInstance(boolean isMultiselect) {
+        CompanyListFragment fragment = new CompanyListFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(MULTISELECT_LIST_KEY, isMultiselect);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        isMultiselect = false;
+        if (getArguments() != null) {
+            isMultiselect = getArguments().getBoolean(MULTISELECT_LIST_KEY);
+        }
         presenter = new CompanyListPresenterImpl(this);
     }
 
@@ -59,41 +76,25 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = inflater.inflate(R.layout.fragment_point_list, container, false);
+        mainView = inflater.inflate(R.layout.fragment_company_list, container, false);
 
-        RecyclerView pointListRecyclerView = (RecyclerView) mainView.findViewById(R.id.points_list_recyclerview);
-        pointListRecyclerView.setHasFixedSize(false);
+        RecyclerView companyListRecyclerView = (RecyclerView) mainView.findViewById(R.id.company_list_recycler);
+        companyListRecyclerView.setHasFixedSize(false);
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        pointListRecyclerView.setLayoutManager(manager);
+        companyListRecyclerView.setLayoutManager(manager);
 
-        attachRecyclerViewAdapter();
+        if (!isMultiselect) {
+            adapter = new CompanyListRecyclerAdapter(new ArrayList<>(), company -> {
+                if (listener != null) {
+                    listener.onClick(company);
+                }
+            });
+        }
+        companyListRecyclerView.setAdapter(adapter);
+
         return mainView;
     }
-
-    private void attachRecyclerViewAdapter() {
-
-        //        adapter = new CompanyListRecyclerViewAdapter(presenter != null ? presenter.getUsersCompanyList() : null,
-        //                                                     new CompanyListRecyclerViewAdapter.OnPointsListEventListener() {
-        //                                                         @Override
-        //                                                         public void onItemClick(Company item) {
-        //                                                             if (listener != null) {
-        //                                                                 listener.onClick(item);
-        //                                                             }
-        //                                                         }
-        //
-        //                                                         @Override
-        //                                                         public void onDataChanged() {
-        //                                                             View emptyListView = mainView.findViewById(R.id.emptyTextView);
-        //                                                             emptyListView.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
-        //                                                         }
-        //                                                     });
-
-        //        RecyclerView pointListRecyclerView = (RecyclerView) mainView.findViewById(R.id.points_list_recyclerview);
-
-        //        pointListRecyclerView.setAdapter(adapter);
-    }
-
 
     public void setOnCompanyClickListener(OnPointsListClickListener _listener) {
         listener = _listener;
@@ -101,12 +102,28 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
 
     @Override
     public void setCompanyList(List<Company> companyList) {
-
+        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+        setEmptyViewVisability(View.GONE);
+        setRecyclerViewVisability(View.VISIBLE);
+        if (adapter != null) {
+            adapter.updateItems(companyList);
+        }
     }
 
     @Override
     public void setEmptyView() {
+        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+        setEmptyViewVisability(View.VISIBLE);
+        setRecyclerViewVisability(View.GONE);
+    }
 
+    private void setRecyclerViewVisability(int visability) {
+        View recyclerView = mainView.findViewById(R.id.product_list_recycler);
+        if (recyclerView != null) {
+            recyclerView.setVisibility(visability);
+        }
     }
 
     public interface OnPointsListClickListener {
