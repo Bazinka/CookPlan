@@ -134,15 +134,19 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        mSelectedNavigationId = item.getItemId();
+        int itemId = item.getItemId();
 
-        if (mSelectedNavigationId == R.id.nav_recipe_list) {
+        if (itemId == R.id.nav_recipe_list) {
+            mSelectedNavigationId = itemId;
             setRecipeListFragment();
         } else if (mSelectedNavigationId == R.id.nav_shopping_list) {
+            mSelectedNavigationId = itemId;
             setShoppingListFragment();
         } else if (mSelectedNavigationId == R.id.nav_vocabulary) {
+            mSelectedNavigationId = itemId;
             setProductListFragment();
         } else if (mSelectedNavigationId == R.id.nav_todo_list) {
+            mSelectedNavigationId = itemId;
             setTODOListFragment();
         } else if (mSelectedNavigationId == R.id.nav_map) {
             startMainCompaniesActivity();
