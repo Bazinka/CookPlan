@@ -164,5 +164,26 @@
     <string name="save_point_error">Saving error. Try to save this point again.</string>
     <string name="companies_list_title">Список компаний</string>
     <string name="empty_company_list_title">Список компаний пуст</string>
+    <string name="geofence_error_not_connected">GoogleApiClient no yet connected. Try again.</string>
+    <string name="geofence_error_permission_error">Invalid location permission. You need to use ACCESS_FINE_LOCATION with geofences</string>
+    <!-- GeoFence Error strings -->
+    <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
+    <string name="geofence_not_available">Geofence service is not available now</string>
+    <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
+    <string name="geofence_too_many_pending_intents">
+        You have provided too many PendingIntents to the addGeofences() call
+    </string>
+    <string name="unknown_geofence_error">
+        Unknown error: the Geofence service is not available now
+    </string>
+    <string name="geofence_transition_invalid_type">
+        Geofence transition error: invalid transition type %1$d
+    </string>
+    <!-- Transition type strings -->
+    <string name="geofence_transition_entered">Entered</string>
+    <string name="geofence_transition_exited">Exited</string>
+    <string name="unknown_geofence_transition">Unknown Transition</string>
+    <string name="error_update_object_to_database">Ошибка обновления элемента в базе данных</string>
+
 
 </resources>

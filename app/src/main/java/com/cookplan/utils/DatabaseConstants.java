@@ -52,4 +52,6 @@ public class DatabaseConstants {
 
     public static final String DATABASE_COMPANY_LATITUDE_FIELD = "latitude";
     public static final String DATABASE_COMPANY_LONGITUDE_FIELD = "longitude";
+    public static final String DATABASE_ADDED_TO_GEOFENCE_FIELD = "addedToGeoFence";
+
 }

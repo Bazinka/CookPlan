@@ -57,7 +57,7 @@ public class EditCompanyPresenterImpl implements EditCompanyPresenter {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && name != null && !name.isEmpty()) {
             String userId = user.getUid();
-            Company company = new Company(userId, name, comments, latitude, longitude);
+            Company company = new Company(userId, name, comments, latitude, longitude, false);
             dataProvider.createCompany(company)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

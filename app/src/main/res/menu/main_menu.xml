@@ -15,4 +15,17 @@
         android:visible="false"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/app_bar_geofence_on"
+        android:icon="@drawable/ic_geofence_off"
+        android:title="Geofence"
+        android:visible="false"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/app_bar_geofence_off"
+        android:icon="@drawable/ic_geofence_on"
+        android:title="Geofence"
+        android:visible="false"
+        app:showAsAction="always"/>
+
 </menu>

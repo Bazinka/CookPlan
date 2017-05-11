@@ -24,6 +24,8 @@ public class Company implements Serializable {
     public double latitude;
     public double longitude;
 
+    public boolean addedToGeoFence;
+
     private List<String> photoList;
 
     public Company() {
@@ -31,13 +33,14 @@ public class Company implements Serializable {
         dateCreatedMillisek = jodaDateCreated.getMillisOfSecond();
     }
 
-    public Company(String userId, String name, String comment, double latitude, double longitude) {
+    public Company(String userId, String name, String comment, double latitude, double longitude, boolean addedToGeoFence) {
         super();
         this.userId = userId;
         this.name = name;
         this.comment = comment;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.addedToGeoFence = addedToGeoFence;
     }
 
     @NonNull
@@ -80,5 +83,13 @@ public class Company implements Serializable {
 
     public String getUserId() {
         return userId;
+    }
+
+    public boolean isAddedToGeoFence() {
+        return addedToGeoFence;
+    }
+
+    public void setAddedToGeoFence(boolean addedToGeoFence) {
+        this.addedToGeoFence = addedToGeoFence;
     }
 }

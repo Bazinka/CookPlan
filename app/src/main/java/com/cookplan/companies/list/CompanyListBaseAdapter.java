@@ -16,11 +16,11 @@ import java.util.List;
  */
 
 public abstract class CompanyListBaseAdapter extends RecyclerView.Adapter<CompanyListBaseAdapter.ViewHolder> {
-    private final List<Company> mValues;
+    private final List<Company> values;
     private CompanyListRecyclerAdapter.CompanyListEventListener listener;
 
     public CompanyListBaseAdapter(List<Company> items, CompanyListRecyclerAdapter.CompanyListEventListener listener) {
-        mValues = items;
+        values = items;
         this.listener = listener;
     }
 
@@ -33,7 +33,7 @@ public abstract class CompanyListBaseAdapter extends RecyclerView.Adapter<Compan
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Company company = mValues.get(position);
+        Company company = values.get(position);
         holder.nameView.setText(company.getName());
         holder.commentView.setText(company.getComment());
 
@@ -54,14 +54,18 @@ public abstract class CompanyListBaseAdapter extends RecyclerView.Adapter<Compan
     protected abstract void setCustomFields(Company company, ViewHolder holder);
 
     public void updateItems(List<Company> companies) {
-        mValues.clear();
-        mValues.addAll(companies);
+        values.clear();
+        values.addAll(companies);
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return values.size();
+    }
+
+    public List<Company> getValues() {
+        return values;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,7 +77,7 @@ public abstract class CompanyListBaseAdapter extends RecyclerView.Adapter<Compan
             super(view);
             mainView = view.findViewById(R.id.main_view);
             nameView = (TextView) view.findViewById(R.id.company_item_name);
-            commentView = (TextView) view.findViewById(R.id.company_item_name);
+            commentView = (TextView) view.findViewById(R.id.company_item_comment);
         }
 
         @Override

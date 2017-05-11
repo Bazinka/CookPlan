@@ -106,6 +106,18 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
         listener = _listener;
     }
 
+    public List<Company> getValues() {
+        return adapter != null ? adapter.getValues() : new ArrayList<>();
+    }
+
+    public List<Company> getSelectedValues() {
+        if (adapter instanceof CompanyMultiselectRecyclerAdapter) {
+            return ((CompanyMultiselectRecyclerAdapter) adapter).getSelectedValues();
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public void setCompanyList(List<Company> companyList) {
         ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);

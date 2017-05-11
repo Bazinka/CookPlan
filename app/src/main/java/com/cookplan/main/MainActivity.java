@@ -27,6 +27,7 @@ import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
 import com.cookplan.companies.MainCompaniesFragment;
+import com.cookplan.geofence.GeoFenceActivity;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.share.SharePresenter;
@@ -46,6 +47,7 @@ public class MainActivity extends BaseActivity
 
     public static final int OPEN_SHOP_LIST_REQUEST = 10;
     public static final int SHARE_USER_LIST_REQUEST = 11;
+    public static final int SET_GEOFENCE_REQUEST = 13;
     public static final String SHARE_USER_EMAIL_LIST_KEY = "SHARE_USER_EMAIL_LIST_KEY";
 
     private ProgressDialog mProgressDialog;
@@ -286,6 +288,10 @@ public class MainActivity extends BaseActivity
                     }
                 }
             }
+        } else if (requestCode == SET_GEOFENCE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                setGeoFenceModeMenuOptions();
+            }
         } else if (presenter != null) {
             presenter.onActivityResult(requestCode, resultCode, data);
         }
@@ -360,6 +366,7 @@ public class MainActivity extends BaseActivity
         getMenuInflater().inflate(R.menu.main_menu, _menu);
         menu = _menu;
         setFamilyModeMenuOptions();
+        setGeoFenceModeMenuOptions();
         return super.onCreateOptionsMenu(_menu);
     }
 
@@ -399,6 +406,9 @@ public class MainActivity extends BaseActivity
                         dialog.dismiss();
                     })
                     .show();
+        } else if (id == R.id.app_bar_geofence_on || id == R.id.app_bar_geofence_off) {
+            Intent intent = new Intent(this, GeoFenceActivity.class);
+            startActivityForResultWithLeftAnimation(intent, SET_GEOFENCE_REQUEST);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -418,6 +428,16 @@ public class MainActivity extends BaseActivity
         } else {
             menu.findItem(R.id.app_bar_share_on).setVisible(false);
             menu.findItem(R.id.app_bar_share_off).setVisible(true);
+        }
+    }
+
+    private void setGeoFenceModeMenuOptions() {
+        if (RApplication.isGeofenceModeTurnedOn()) {
+            menu.findItem(R.id.app_bar_geofence_off).setVisible(true);
+            menu.findItem(R.id.app_bar_geofence_on).setVisible(false);
+        } else {
+            menu.findItem(R.id.app_bar_geofence_off).setVisible(false);
+            menu.findItem(R.id.app_bar_geofence_on).setVisible(true);
         }
     }
 

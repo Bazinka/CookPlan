@@ -12,6 +12,25 @@ public class CompanyMultiselectRecyclerAdapter extends CompanyListBaseAdapter {
     public CompanyMultiselectRecyclerAdapter(List<Company> items, CompanyListEventListener listener) {
         super(items, listener);
         selectedValues = new ArrayList<>();
+        getSelectedItems(items);
+    }
+
+    private void getSelectedItems(List<Company> companies) {
+        for (Company company : companies) {
+            if (company.isAddedToGeoFence()) {
+                selectedValues.add(company);
+            }
+        }
+    }
+
+    public void updateItems(List<Company> companies) {
+        super.updateItems(companies);
+        selectedValues.clear();
+        getSelectedItems(companies);
+    }
+
+    public List<Company> getSelectedValues() {
+        return selectedValues;
     }
 
     @Override
@@ -21,6 +40,7 @@ public class CompanyMultiselectRecyclerAdapter extends CompanyListBaseAdapter {
         } else {
             selectedValues.add(company);
         }
+        notifyDataSetChanged();
     }
 
     @Override

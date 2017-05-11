@@ -54,6 +54,7 @@ public class CompanyProviderImpl implements CompanyProvider {
                             for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                                 Company company = itemSnapshot.getValue(Company.class);
                                 if (company != null) {
+                                    company.setId(itemSnapshot.getKey());
                                     companies.add(company);
                                 }
                             }
@@ -111,7 +112,8 @@ public class CompanyProviderImpl implements CompanyProvider {
             values.put(DatabaseConstants.DATABASE_COMMENT_FIELD, company.getComment());
             values.put(DatabaseConstants.DATABASE_COMPANY_LATITUDE_FIELD, company.getLatitude());
             values.put(DatabaseConstants.DATABASE_COMPANY_LONGITUDE_FIELD, company.getLongitude());
-            DatabaseReference todoItemRef = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
+            values.put(DatabaseConstants.DATABASE_ADDED_TO_GEOFENCE_FIELD, company.isAddedToGeoFence());
+            DatabaseReference todoItemRef = database.child(DatabaseConstants.DATABASE_COMPANY_TABLE);
             todoItemRef.child(company.getId()).updateChildren(values, (databaseError, databaseReference) -> {
                 if (databaseError != null) {
                     if (emitter != null) {
