@@ -170,7 +170,7 @@ public class PointsMapView extends Fragment implements OnMapReadyCallback,
             mMap.clear();
 
             for (Company company : companies) {
-                LatLng latLng = new LatLng(company.getLatityde(), company.getLongitude());
+                LatLng latLng = new LatLng(company.getLatitude(), company.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions()
                         .position(latLng)
                         .title(company.getName())

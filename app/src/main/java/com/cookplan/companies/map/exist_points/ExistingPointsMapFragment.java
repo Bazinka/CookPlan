@@ -13,16 +13,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.cookplan.BaseFragment;
 import com.cookplan.R;
+import com.cookplan.companies.list.CompanyListPresenter;
+import com.cookplan.companies.list.CompanyListPresenterImpl;
+import com.cookplan.companies.list.CompanyListView;
 import com.cookplan.companies.map.MapEventListener;
 import com.cookplan.models.Company;
 
 import java.util.List;
 
-public class ExistingPointsMapFragment extends Fragment implements ExistingPointsMapView, MapEventListener {
+public class ExistingPointsMapFragment extends BaseFragment implements CompanyListView, MapEventListener {
 
     private static final String SELECTED_POINT_KEY = "SELECTED_POINT_KEY";
-    private ExistingPointsMapPresenter presenter;
+    private CompanyListPresenter presenter;
 
     private BottomSheetBehavior behavior;
     private ViewGroup mainView;
@@ -56,15 +60,14 @@ public class ExistingPointsMapFragment extends Fragment implements ExistingPoint
         if (getArguments() != null) {
             selectedCompany = (Company) getArguments().getSerializable(SELECTED_POINT_KEY);
         }
-        presenter = new ExistingPointsMapPresenterImpl(getActivity(), this);
-        presenter.onCreate();
+        presenter = new CompanyListPresenterImpl(this);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         if (presenter != null) {
-            presenter.onDestroy();
+            presenter.onStop();
         }
     }
 
@@ -114,18 +117,9 @@ public class ExistingPointsMapFragment extends Fragment implements ExistingPoint
         return mainView;
     }
 
-    @Override
-    public void setListPointsToMap(List<Company> pointsList) {
-        PointsMapView pointsMapView = (PointsMapView) getChildFragmentManager()
-                .findFragmentById(R.id.points_map_view);
-        if (pointsMapView != null) {
-            pointsMapView.showPointsToMap(pointsList);
-        }
-    }
-
     public void loadPointsList() {
         if (presenter != null) {
-            presenter.getPoints();
+            presenter.getUsersCompanyList();
         }
     }
 
@@ -141,18 +135,26 @@ public class ExistingPointsMapFragment extends Fragment implements ExistingPoint
             nameTextView.setText(company.getName());
 
             TextView descTextView = (TextView) bottomSheet.findViewById(R.id.desc_place_text_view);
-            descTextView.setText(company.getComments());
+            descTextView.setText(company.getComment());
 
             RecyclerView photosRecyclerView = (RecyclerView) bottomSheet.findViewById(R.id.photos_recycler_view);
-            //            if (point.getPhotoList() != null && point.getPhotoList().size() > 0) {
-            //                photosRecyclerView.setVisibility(View.VISIBLE);
-            //                PhotoListRecyclerAdapter adapter = new PhotoListRecyclerAdapter(getActivity(), point.getPhotoList());
-            //                photosRecyclerView.setAdapter(adapter);
-            //            } else {
             photosRecyclerView.setVisibility(View.GONE);
-            //            }
 
             selectedCompany = null;
         }
+    }
+
+    @Override
+    public void setCompanyList(List<Company> companyList) {
+        PointsMapView pointsMapView = (PointsMapView) getChildFragmentManager()
+                .findFragmentById(R.id.points_map_view);
+        if (pointsMapView != null) {
+            pointsMapView.showPointsToMap(companyList);
+        }
+    }
+
+    @Override
+    public void setEmptyView() {
+
     }
 }

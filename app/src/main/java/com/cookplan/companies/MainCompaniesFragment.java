@@ -90,7 +90,7 @@ public class MainCompaniesFragment extends BaseFragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, companyListFragment);
         transaction.commit();
-        companyListFragment.setOnPointClickListener(item -> {
+        companyListFragment.setOnCompanyClickListener(item -> {
             if (mMenu != null) {
                 MenuItem menuItem = mMenu.findItem(R.id.action_points_list);
                 if (menuItem != null) {

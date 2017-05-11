@@ -90,7 +90,7 @@ public class SearchNewPointMapFragment extends Fragment implements SearchNewPoin
             nameTextView.setText(company.getName());
 
             TextView descTextView = (TextView) bottomSheet.findViewById(R.id.new_point_desc_place_text_view);
-            descTextView.setText(company.getComments());
+            descTextView.setText(company.getComment());
         }
     }
 }

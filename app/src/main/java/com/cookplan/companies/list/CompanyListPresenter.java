@@ -8,9 +8,7 @@ import com.google.firebase.database.Query;
 
 public interface CompanyListPresenter {
 
-    public void onCreate();
+    public void onStop();
 
-    public void onDestroy();
-
-    public Query getItems();
+    public void getUsersCompanyList();
 }

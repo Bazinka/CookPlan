@@ -29,7 +29,7 @@ public class CompanyListRecyclerViewAdapter extends FirebaseRecyclerAdapter<Comp
     protected void populateViewHolder(PointListViewHolder holder, Company company, int position) {
         holder.company = company;
         holder.nameTextView.setText(company.getName());
-        holder.contentTextView.setText(company.getComments());
+        holder.contentTextView.setText(company.getComment());
 
         holder.mainView.setOnClickListener(v -> {
             if (listener != null) {

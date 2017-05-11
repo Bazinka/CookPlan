@@ -1,11 +1,16 @@
 package com.cookplan.companies.list;
 
-import android.content.Context;
+import com.cookplan.models.Company;
+import com.cookplan.models.CookPlanError;
+import com.cookplan.providers.CompanyProvider;
+import com.cookplan.providers.impl.CompanyProviderImpl;
 
-import com.cookplan.utils.DatabaseConstants;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by DariaEfimova on 19.10.16.
@@ -14,29 +19,51 @@ import com.google.firebase.database.Query;
 public class CompanyListPresenterImpl implements CompanyListPresenter {
 
     private CompanyListView mainView;
-    private Context context;
+    private CompanyProvider dataProvider;
+    private CompositeDisposable disposables;
 
-    private DatabaseReference pointListRef;
-
-    public CompanyListPresenterImpl(Context contex, CompanyListView mainView) {
-        this.context = contex;
+    public CompanyListPresenterImpl(CompanyListView mainView) {
         this.mainView = mainView;
+        this.dataProvider = new CompanyProviderImpl();
+        disposables = new CompositeDisposable();
+    }
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        pointListRef = ref.child(DatabaseConstants.DATABASE_POINT_TABLE);
+
+    @Override
+    public void onStop() {
+        disposables.clear();
     }
 
     @Override
-    public void onCreate() {
-    }
+    public void getUsersCompanyList() {
+        disposables.add(
+                dataProvider.getUsersCompanyList()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableObserver<List<Company>>() {
 
-    @Override
-    public void onDestroy() {
-    }
+                            @Override
+                            public void onNext(List<Company> companies) {
+                                if (mainView != null) {
+                                    if (companies.size() != 0) {
+                                        mainView.setCompanyList(companies);
+                                    } else {
+                                        mainView.setEmptyView();
+                                    }
+                                }
+                            }
 
-    @Override
-    public Query getItems() {
-        Query lastFifty = pointListRef.limitToLast(50);
-        return lastFifty;
+                            @Override
+                            public void onError(Throwable e) {
+                                if (mainView != null && e instanceof CookPlanError) {
+                                    mainView.setErrorToast(e.getMessage());
+                                }
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        }));
     }
 }

@@ -14,14 +14,15 @@ import java.util.List;
 public class Company implements Serializable {
 
     private String id;
-    private String name;
-    private String comments;
+    public String userId;
+    public String name;
+    public String comment;
 
     private LocalDateTime jodaDateCreated;
-    private long dateCreatedMillisek;
+    public long dateCreatedMillisek;
 
-    private double latityde;
-    private double longitude;
+    public double latitude;
+    public double longitude;
 
     private List<String> photoList;
 
@@ -30,12 +31,12 @@ public class Company implements Serializable {
         dateCreatedMillisek = jodaDateCreated.getMillisOfSecond();
     }
 
-    public Company(String id, String name, String comments, double latityde, double longitude) {
+    public Company(String userId, String name, String comment, double latitude, double longitude) {
         super();
-        this.id = id;
+        this.userId = userId;
         this.name = name;
-        this.comments = comments;
-        this.latityde = latityde;
+        this.comment = comment;
+        this.latitude = latitude;
         this.longitude = longitude;
     }
 
@@ -44,17 +45,21 @@ public class Company implements Serializable {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @NonNull
     public String getName() {
         return name;
     }
 
-    public String getComments() {
-        return comments;
+    public String getComment() {
+        return comment;
     }
 
-    public double getLatityde() {
-        return latityde;
+    public double getLatitude() {
+        return latitude;
     }
 
     public double getLongitude() {
@@ -71,5 +76,9 @@ public class Company implements Serializable {
 
     public void setPhotoList(List<String> photoList) {
         this.photoList = photoList;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

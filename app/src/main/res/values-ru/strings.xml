@@ -148,7 +148,7 @@
     <!--    Map Point Strings    -->
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
     <string name="name_of_place">Название точки</string>
-    <string name="comments">Комментарии</string>
+    <string name="comment">Комментарии</string>
     <string name="default_place_name">Здесь я был в</string>
     <string name="list_of_places">Список сохраненных точек</string>
     <string name="save_place_title">Сохранить точку</string>

@@ -13,7 +13,7 @@ public class DatabaseConstants {
     public static String DATABASE_TO_DO_ITEMS_TABLE = "to_do_item";
     public static String DATABASE_TO_DO_CATEGORY_ITEMS_TABLE = "to_do_category_item";
     public static String DATABASE_PHOTO_TABLE = "photo";
-    public static String DATABASE_POINT_TABLE = "company";
+    public static String DATABASE_COMPANY_TABLE = "company";
 
 
     public static final String DATABASE_OWNER_USER_ID_FIELD = "ownerUserId";
@@ -48,4 +48,8 @@ public class DatabaseConstants {
     public static final String DATABASE_SHARED_OWNER_ID_FIELD = "ownerUserId";
     public static final String DATABASE_SHARED_OWNER_NAME_FIELD = "ownerUserName";
     public static final String DATABASE_SHARED_CLIENT_EMAILS_FIELD = "clientUserEmailList";
+
+
+    public static final String DATABASE_COMPANY_LATITUDE_FIELD = "latitude";
+    public static final String DATABASE_COMPANY_LONGITUDE_FIELD = "longitude";
 }
