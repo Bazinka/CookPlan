@@ -33,6 +33,11 @@
             android:icon="@drawable/ic_todo_list"
             android:title="@string/todo_list_title"/>
 
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_map"
+            android:title="@string/companies_list_title"/>
+
     </group>
 
     <group

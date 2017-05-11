@@ -26,11 +26,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class PermissionUtils {
 
@@ -46,16 +42,32 @@ public abstract class PermissionUtils {
 
                     ConfirmationDialog.newInstance(requestCode, permission).
                             show(activity.getFragmentManager(), CONFIRMATION_DIALOG);
-                }
-                else {
+                } else {
                     ActivityCompat.requestPermissions(activity, permissions,
-                            requestCode);
+                                                      requestCode);
                 }
             }
         }
     }
 
-   public static boolean isPermissionsGranted(Context context, String[] permissions) {
+    /**
+     * Requests the fine location permission. If a rationale with an additional explanation should
+     * be shown to the user, displays a dialog that triggers the request.
+     */
+    public static void requestPermissionFromFragment(Fragment fragment, int requestCode,
+                                                     String permission, boolean finishActivity) {
+        if (fragment.shouldShowRequestPermissionRationale(permission)) {
+            // Display a dialog with rationale.
+            ConfirmationDialog.newInstance(requestCode, permission)
+                    .show(fragment.getActivity().getFragmentManager(), CONFIRMATION_DIALOG);
+        } else {
+            // Location permission has not been granted yet, request it.
+            fragment.requestPermissions(new String[]{permission}, requestCode);
+
+        }
+    }
+
+    public static boolean isPermissionsGranted(Context context, String[] permissions) {
 
         for (String permission : permissions) {
             if (!isPermissionGranted(context, permission)) {
@@ -66,10 +78,25 @@ public abstract class PermissionUtils {
     }
 
 
-    private static boolean isPermissionGranted(Context context, String permission) {
+    public static boolean isPermissionGranted(Context context, String permission) {
         return ActivityCompat.checkSelfPermission(context,
-                permission)
+                                                  permission)
                 == PackageManager.PERMISSION_GRANTED;
+    }
+    /**
+     * Checks if the result contains a {@link PackageManager#PERMISSION_GRANTED} result for a
+     * permission from a runtime permissions request.
+     *
+     * @see android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback
+     */
+    public static boolean isPermissionGranted(String[] grantPermissions, int[] grantResults,
+                                              String permission) {
+        for (int i = 0; i < grantPermissions.length; i++) {
+            if (permission.equals(grantPermissions[i])) {
+                return grantResults[i] == PackageManager.PERMISSION_GRANTED;
+            }
+        }
+        return false;
     }
 
 
@@ -100,17 +127,17 @@ public abstract class PermissionUtils {
                         public void onClick(DialogInterface dialog, int which) {
 
                             ActivityCompat.requestPermissions(getActivity(),
-                                    new String[]{getArguments().getString(ARG_PERMISSION)},
-                                    getArguments().getInt(ARG_REQUEST_CODE));
+                                                              new String[]{getArguments().getString(ARG_PERMISSION)},
+                                                              getArguments().getInt(ARG_REQUEST_CODE));
                         }
                     })
                     .setNegativeButton(android.R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getActivity(), "Not available", Toast.LENGTH_SHORT).show();
-                                }
-                            })
+                                       new DialogInterface.OnClickListener() {
+                                           @Override
+                                           public void onClick(DialogInterface dialog, int which) {
+                                               Toast.makeText(getActivity(), "Not available", Toast.LENGTH_SHORT).show();
+                                           }
+                                       })
                     .create();
         }
     }
@@ -138,7 +165,7 @@ public abstract class PermissionUtils {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-//nothing
+                            //nothing
                         }
                     })
                     .create();

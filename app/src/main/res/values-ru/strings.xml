@@ -145,4 +145,23 @@
     <string name="category_todo_item_title">Категория заметки</string>
     <string name="category_required_error">Введите текст и выберите цвет категории</string>
 
+    <!--    Map Point Strings    -->
+    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
+    <string name="name_of_place">Название точки</string>
+    <string name="comments">Комментарии</string>
+    <string name="default_place_name">Здесь я был в</string>
+    <string name="list_of_places">Список сохраненных точек</string>
+    <string name="save_place_title">Сохранить точку</string>
+    <string name="points_list">points list</string>
+    <string name="map">Карта</string>
+    <string name="points_on_map_title">Карта</string>
+    <string name="list_points_title">Список точек</string>
+    <string name="search_new_place_title">Поиск нового места</string>
+    <string name="add_point_photo_title">Фотографии</string>
+    <string name="add_point_add_photo_button">+ Добавить фото</string>
+    <string name="rational_image_perm">This sample will read an image from local storage to upload to Firebase Storage.</string>
+    <string name="points_dont_exist">Нет точек</string>
+    <string name="save_point_error">Saving error. Try to save this point again.</string>
+    <string name="companies_list_title">Список компаний</string>
+
 </resources>

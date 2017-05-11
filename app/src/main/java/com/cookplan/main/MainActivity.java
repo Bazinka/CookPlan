@@ -26,6 +26,7 @@ import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
+import com.cookplan.companies.MainCompaniesActivity;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe_grid.RecipeGridFragment;
 import com.cookplan.share.SharePresenter;
@@ -143,6 +144,8 @@ public class MainActivity extends BaseActivity
             setProductListFragment();
         } else if (mSelectedNavigationId == R.id.nav_todo_list) {
             setTODOListFragment();
+        } else if (mSelectedNavigationId == R.id.nav_map) {
+            startMainCompaniesActivity();
         } else if (mSelectedNavigationId == R.id.nav_sign_out) {
             if (presenter != null) {
                 presenter.signOut();
@@ -237,6 +240,11 @@ public class MainActivity extends BaseActivity
             transaction.replace(R.id.fragment_container, fragment);
         }
         transaction.commit();
+    }
+
+    void startMainCompaniesActivity() {
+        Intent intent = new Intent(this, MainCompaniesActivity.class);
+        startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
     }
 
     @Override

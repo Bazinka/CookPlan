@@ -13,6 +13,7 @@ public class DatabaseConstants {
     public static String DATABASE_TO_DO_ITEMS_TABLE = "to_do_item";
     public static String DATABASE_TO_DO_CATEGORY_ITEMS_TABLE = "to_do_category_item";
     public static String DATABASE_PHOTO_TABLE = "photo";
+    public static String DATABASE_POINT_TABLE = "company";
 
 
     public static final String DATABASE_OWNER_USER_ID_FIELD = "ownerUserId";
