@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
-import com.cookplan.models.ToDoItem;
 
 import static com.google.android.gms.actions.NoteIntents.ACTION_CREATE_NOTE;
 
@@ -33,6 +32,14 @@ public class VoiceLaunchActivity extends BaseActivity implements VoiceLauncherVi
         if (action.equals(ACTION_CREATE_NOTE)) {
             String text = intent.getStringExtra(Intent.EXTRA_TEXT);
             handleVoiceQuery(text);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
         }
     }
 

@@ -9,6 +9,7 @@ import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Product;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.ProductProvider;
@@ -19,11 +20,13 @@ import com.cookplan.providers.impl.ToDoListProviderImpl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -40,11 +43,15 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
     private IngredientProvider ingredientDataProvider;
 
 
+    private CompositeDisposable disposables;
+
+
     public VoiceLauncherPresenterImpl(VoiceLauncherView mainView) {
         this.mainView = mainView;
         ingredientDataProvider = new IngredientProviderImpl();
         productDataProvider = new ProductProviderImpl();
         toDoListDataProvider = new ToDoListProviderImpl();
+        disposables = new CompositeDisposable();
     }
 
     @Override
@@ -87,21 +94,53 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
                         }
                     });
         } else {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                toDoListDataProvider.createToDoItem(new ToDoItem(user.getUid(), text, null))
+            saveToDoItem(text);
+        }
+        //            mainView.setErrorString(RApplication.getAppContext().getString(R.string.cant_recognize_command_error));
+    }
+
+    private void saveToDoItem(final String text) {
+        disposables.add(
+                toDoListDataProvider.getUserToDoCategoriesList()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new SingleObserver<ToDoItem>() {
+                        .subscribeWith(new DisposableObserver<List<ToDoCategory>>() {
                             @Override
-                            public void onSubscribe(Disposable d) {
+                            public void onNext(List<ToDoCategory> categories) {
+                                ToDoCategory category = null;
+                                for (ToDoCategory toDoCategory : categories) {
+                                    if (text.contains(toDoCategory.getName().toLowerCase())) {
+                                        category = toDoCategory;
+                                    }
+                                }
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                if (user != null) {
+                                    ToDoItem item = new ToDoItem(user.getUid(),
+                                                                 text.replace(category.getName().toLowerCase(), ""), category.getId());
+                                    toDoListDataProvider.createToDoItem(item)
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(new SingleObserver<ToDoItem>() {
+                                                @Override
+                                                public void onSubscribe(Disposable d) {
 
-                            }
+                                                }
 
-                            @Override
-                            public void onSuccess(ToDoItem toDoItem) {
-                                if (mainView != null) {
-                                    mainView.setSuccessOperationResult();
+                                                @Override
+                                                public void onSuccess(ToDoItem toDoItem) {
+                                                    if (mainView != null) {
+                                                        mainView.setSuccessOperationResult();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onError(Throwable e) {
+                                                    if (mainView != null && e instanceof CookPlanError) {
+                                                        mainView.setErrorString(e.getMessage());
+                                                    }
+                                                }
+                                            });
+                                    ;
                                 }
                             }
 
@@ -111,11 +150,12 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
                                     mainView.setErrorString(e.getMessage());
                                 }
                             }
-                        });
-                ;
-            }
-        }
-        //            mainView.setErrorString(RApplication.getAppContext().getString(R.string.cant_recognize_command_error));
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        }));
     }
 
     private void addIngredientToShopList(Product product) {
@@ -178,5 +218,12 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
         //                mainView.setErrorString();
         //            }
         //        });
+    }
+
+    @Override
+    public void onStop() {
+        if (disposables != null) {
+            disposables.clear();
+        }
     }
 }

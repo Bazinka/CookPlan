@@ -7,4 +7,6 @@ package com.cookplan.voice_interaction;
 public interface VoiceLauncherPresenter {
 
     void handleText(String text);
+
+    void onStop();
 }
