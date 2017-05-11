@@ -24,7 +24,7 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
     private CompanyListPresenter presenter;
 
     private OnPointsListClickListener listener;
-    private CompanyListRecyclerAdapter adapter;
+    private CompanyListBaseAdapter adapter;
     private boolean isMultiselect;
     private View mainView;
 
@@ -86,6 +86,12 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
 
         if (!isMultiselect) {
             adapter = new CompanyListRecyclerAdapter(new ArrayList<>(), company -> {
+                if (listener != null) {
+                    listener.onClick(company);
+                }
+            });
+        } else {
+            adapter = new CompanyMultiselectRecyclerAdapter(new ArrayList<>(), company -> {
                 if (listener != null) {
                     listener.onClick(company);
                 }
