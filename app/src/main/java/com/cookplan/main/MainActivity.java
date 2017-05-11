@@ -51,6 +51,7 @@ public class MainActivity extends BaseActivity
     private ProgressDialog mProgressDialog;
 
     private View rootView;
+    private boolean isFamilyModeTurnOn = false;
 
     private MainPresenter presenter;
 
@@ -358,7 +359,8 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu _menu) {
         getMenuInflater().inflate(R.menu.main_menu, _menu);
         menu = _menu;
-        return true;
+        setFamilyModeMenuOptions();
+        return super.onCreateOptionsMenu(_menu);
     }
 
     @Override
@@ -397,28 +399,25 @@ public class MainActivity extends BaseActivity
                         dialog.dismiss();
                     })
                     .show();
-        } else {
-            new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                    .setTitle(R.string.attention_title)
-                    .setMessage(R.string.cant_share_data)
-                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        dialog.dismiss();
-                    })
-                    .show();
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void setShareIcon(boolean isFamilyModeTurnOn) {
+    public void setShareIcon(boolean _isFamilyModeTurnOn) {
         if (menu != null) {
-            if (isFamilyModeTurnOn) {
-                menu.findItem(R.id.app_bar_share_on).setVisible(true);
-                menu.findItem(R.id.app_bar_share_off).setVisible(false);
-            } else {
-                menu.findItem(R.id.app_bar_share_on).setVisible(false);
-                menu.findItem(R.id.app_bar_share_off).setVisible(true);
-            }
+            isFamilyModeTurnOn = _isFamilyModeTurnOn;
+            setFamilyModeMenuOptions();
+        }
+    }
+
+    private void setFamilyModeMenuOptions() {
+        if (isFamilyModeTurnOn) {
+            menu.findItem(R.id.app_bar_share_on).setVisible(true);
+            menu.findItem(R.id.app_bar_share_off).setVisible(false);
+        } else {
+            menu.findItem(R.id.app_bar_share_on).setVisible(false);
+            menu.findItem(R.id.app_bar_share_off).setVisible(true);
         }
     }
 
