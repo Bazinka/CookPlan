@@ -115,9 +115,6 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
         adapter.updateToDoList(todoList);
-        if (todoList.isEmpty()) {
-            hideMenu();
-        }
     }
 
     @Override
@@ -125,9 +122,6 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
         adapter.updateCategories(toDoCategoryList);
-        if (toDoCategoryList.isEmpty()) {
-            hideMenu();
-        }
     }
 
     @Override
@@ -136,6 +130,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.VISIBLE);
         setRecyclerViewVisability(View.GONE);
+        hideMenu();
     }
 
     private void setRecyclerViewVisability(int visability) {
@@ -156,7 +151,6 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_remove) {
             new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(R.string.delete_todo_list_title)
