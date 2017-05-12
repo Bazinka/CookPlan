@@ -128,4 +128,26 @@ public class MainCompaniesFragment extends BaseFragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mMenu != null) {
+            MenuItem menuItem = mMenu.findItem(R.id.action_points_list);
+            if (menuItem != null) {
+                menuItem.setVisible(true);
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mMenu != null) {
+            MenuItem menuItem = mMenu.findItem(R.id.action_points_list);
+            if (menuItem != null) {
+                menuItem.setVisible(false);
+            }
+        }
+    }
 }
