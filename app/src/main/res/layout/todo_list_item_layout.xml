@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:background="@color/accent_color"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +29,10 @@
                 android:id="@+id/todo_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
                 android:gravity="left|center_vertical"
+                android:lines="1"
                 android:text="название"
                 android:textColor="@color/primary_text_color"
                 android:textSize="@dimen/subheding_text_size"/>
@@ -38,11 +41,15 @@
                 android:id="@+id/todo_item_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/todo_item_name"
+                android:ellipsize="end"
                 android:gravity="left|center_vertical"
+                android:lines="1"
+                android:paddingTop="@dimen/main_item_padding"
                 android:textColor="@color/hint_or_disabled_text_color"
                 android:textSize="@dimen/body_text_size"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </LinearLayout>

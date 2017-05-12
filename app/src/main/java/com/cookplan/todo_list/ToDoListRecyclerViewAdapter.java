@@ -1,5 +1,6 @@
 package com.cookplan.todo_list;
 
+import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import com.cookplan.models.ToDoItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cookplan.models.ToDoItemStatus.HAVE_DONE;
+import static com.cookplan.models.ToDoItemStatus.NEED_TO_DO;
 import static com.cookplan.todo_list.ToDoListRecyclerViewAdapter.ItemType.CATEGORY;
 import static com.cookplan.todo_list.ToDoListRecyclerViewAdapter.ItemType.TODO_ITEM;
 
@@ -22,8 +25,10 @@ public class ToDoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private final List<Object> objectsList;
     private final List<ToDoCategory> toDoCategoriesList;
+    private OnToDoItemClickListener listener;
 
-    public ToDoListRecyclerViewAdapter() {
+    public ToDoListRecyclerViewAdapter(OnToDoItemClickListener listener) {
+        this.listener = listener;
         this.objectsList = new ArrayList<>();
         toDoCategoriesList = new ArrayList<>();
     }
@@ -82,9 +87,46 @@ public class ToDoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                             itemHolder.categoryView.setBackgroundResource(android.R.color.transparent);
                         }
 
-                        itemHolder.mainView.setOnClickListener(v -> {
+                        if (toDoItem.getToDoStatus() == HAVE_DONE) {
+                            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                                                                                        R.color.white));
+                            itemHolder.nameTextView.setPaintFlags(
+                                    itemHolder.nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        });
+                            // holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                            // R.color.white));
+                            // holder.amountTextView.setPaintFlags(holder.amountTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                            if (toDoCategory != null) {
+                                itemHolder.mainView.setBackgroundResource(toDoCategory.getColor().getColorId());
+                            } else {
+                                itemHolder.mainView.setBackgroundResource(R.color.primary_light);
+                            }
+                        } else {
+                            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                                                                                        R.color.primary_text_color));
+                            itemHolder.nameTextView.setPaintFlags(itemHolder.nameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                            itemHolder.mainView.setBackgroundResource(R.color.white);
+
+                            //itemHolder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                            //R.color.primary_text_color));
+                            //itemHolder.amountTextView.setPaintFlags(holder.amountTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        }
+
+                        View.OnClickListener clickListener = view -> {
+                            ToDoItem item = (ToDoItem) view.getTag();
+                            if (item.getToDoStatus() == HAVE_DONE) {
+                                item.setToDoStatus(NEED_TO_DO);
+                            } else {
+                                item.setToDoStatus(HAVE_DONE);
+                            }
+                            notifyDataSetChanged();
+                            if (listener != null) {
+                                listener.OnToDoItemClick(item);
+                            }
+                        };
+                        itemHolder.mainView.setTag(toDoItem);
+                        itemHolder.mainView.setOnClickListener(clickListener);
                     }
                 }
                 break;
@@ -196,5 +238,9 @@ public class ToDoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             }
             return null;
         }
+    }
+
+    public interface OnToDoItemClickListener {
+        void OnToDoItemClick(ToDoItem toDoItem);
     }
 }

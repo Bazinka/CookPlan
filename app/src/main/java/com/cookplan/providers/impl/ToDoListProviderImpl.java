@@ -46,7 +46,7 @@ public class ToDoListProviderImpl implements ToDoListProvider {
         getFirebaseUsersToDoCategoriesList();
     }
 
-    private void getFirebaseUsersToDoList() {
+    private void getFirebaseUsersToDoCategoriesList() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String myUid = user.getUid();
@@ -79,7 +79,7 @@ public class ToDoListProviderImpl implements ToDoListProvider {
         }
     }
 
-    private void getFirebaseUsersToDoCategoriesList() {
+    private void getFirebaseUsersToDoList() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String myUid = user.getUid();
@@ -92,6 +92,7 @@ public class ToDoListProviderImpl implements ToDoListProvider {
                             for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                                 ToDoItem toDoItem = itemSnapshot.getValue(ToDoItem.class);
                                 if (toDoItem != null) {
+                                    toDoItem.setId(itemSnapshot.getKey());
                                     todoList.add(toDoItem);
                                 }
                             }
@@ -155,9 +156,10 @@ public class ToDoListProviderImpl implements ToDoListProvider {
     public Single<ToDoItem> updateToDoItem(ToDoItem item) {
         return Single.create(emitter -> {
             Map<String, Object> values = new HashMap<>();
-            values.put(DatabaseConstants.DATABASE_USER_ID_FIELD, item.getUserId());
             values.put(DatabaseConstants.DATABASE_NAME_FIELD, item.getName());
             values.put(DatabaseConstants.DATABASE_COMMENT_FIELD, item.getComment());
+            values.put(DatabaseConstants.DATABASE_CATEGORY_ID_FIELD, item.getCategoryId());
+            values.put(DatabaseConstants.DATABASE_TO_DO_STATUS_FIELD, item.getToDoStatus());
             DatabaseReference todoItemRef = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
             todoItemRef.child(item.getId()).updateChildren(values, (databaseError, databaseReference) -> {
                 if (databaseError != null) {

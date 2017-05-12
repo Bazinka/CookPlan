@@ -8,8 +8,10 @@ import com.cookplan.providers.impl.ToDoListProviderImpl;
 
 import java.util.List;
 
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -19,19 +21,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ToDoListPresenterImpl implements ToDoListPresenter {
     private ToDoListView mainView;
-    private ToDoListProvider provider;
+    private ToDoListProvider dataProvider;
     private CompositeDisposable disposables;
 
     public ToDoListPresenterImpl(ToDoListView mainView) {
         this.mainView = mainView;
-        provider = new ToDoListProviderImpl();
+        dataProvider = new ToDoListProviderImpl();
         disposables = new CompositeDisposable();
     }
 
     @Override
     public void getToDoList() {
         disposables.add(
-                provider.getUserToDoCategoriesList()
+                dataProvider.getUserToDoCategoriesList()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(new DisposableObserver<List<ToDoCategory>>() {
@@ -58,9 +60,36 @@ public class ToDoListPresenterImpl implements ToDoListPresenter {
 
     }
 
+    @Override
+    public void updateToDoItem(ToDoItem item) {
+        dataProvider.updateToDoItem(item)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ToDoItem>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(ToDoItem toDoItem) {
+                        //                        if (mainView != null) {
+                        //                            mainView.setSuccessfullSaving();
+                        //                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null && e instanceof CookPlanError) {
+                            mainView.setErrorToast(e.getMessage());
+                        }
+                    }
+                });
+    }
+
     private void loadToDoList() {
         disposables.add(
-                provider.getUserToDoList()
+                dataProvider.getUserToDoList()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(new DisposableObserver<List<ToDoItem>>() {

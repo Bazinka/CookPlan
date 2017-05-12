@@ -63,7 +63,14 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
 
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.todo_list_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ToDoListRecyclerViewAdapter();
+        adapter = new ToDoListRecyclerViewAdapter(new ToDoListRecyclerViewAdapter.OnToDoItemClickListener() {
+            @Override
+            public void OnToDoItemClick(ToDoItem toDoItem) {
+                if (presenter != null) {
+                    presenter.updateToDoItem(toDoItem);
+                }
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.add_todo_item_fab);

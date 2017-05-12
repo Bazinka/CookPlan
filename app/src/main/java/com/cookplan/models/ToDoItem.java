@@ -13,6 +13,7 @@ public class ToDoItem implements Serializable {
     public String name;
     public String comment;
     public String categoryId;
+    private ToDoItemStatus toDoStatus;
 
     public ToDoItem() {
     }
@@ -22,12 +23,14 @@ public class ToDoItem implements Serializable {
         this.name = name;
         this.comment = comment;
         this.categoryId = categoryId;
+        toDoStatus = ToDoItemStatus.NEED_TO_DO;
     }
 
     public ToDoItem(String userId, String name, String categoryId) {
         this.userId = userId;
         this.name = name;
         this.categoryId = categoryId;
+        toDoStatus = ToDoItemStatus.NEED_TO_DO;
     }
 
     public String getId() {
@@ -68,5 +71,13 @@ public class ToDoItem implements Serializable {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public ToDoItemStatus getToDoStatus() {
+        return toDoStatus;
+    }
+
+    public void setToDoStatus(ToDoItemStatus toDoStatus) {
+        this.toDoStatus = toDoStatus;
     }
 }
