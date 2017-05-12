@@ -51,6 +51,10 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         if (presenter != null) {
             presenter.getToDoList();
         }
+        showMenu();
+    }
+
+    private void showMenu() {
         if (mMenu != null) {
             MenuItem menuItem = mMenu.findItem(R.id.action_remove);
             if (menuItem != null) {
@@ -115,6 +119,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
         adapter.updateToDoList(todoList);
+        showMenu();
     }
 
     @Override
@@ -122,6 +127,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
         adapter.updateCategories(toDoCategoryList);
+        showMenu();
     }
 
     @Override
