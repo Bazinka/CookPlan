@@ -163,6 +163,8 @@ public class MainActivity extends BaseActivity
     }
 
     void setRecipeListFragment() {
+        setFamilyModeMenuOptions();
+
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -183,6 +185,7 @@ public class MainActivity extends BaseActivity
     }
 
     void setShoppingListFragment() {
+        setFamilyModeMenuOptions();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.VISIBLE);
@@ -202,6 +205,8 @@ public class MainActivity extends BaseActivity
     }
 
     void setProductListFragment() {
+        setFamilyModeMenuOptions();
+
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -223,6 +228,10 @@ public class MainActivity extends BaseActivity
     }
 
     void setTODOListFragment() {
+        if (menu != null) {
+            menu.findItem(R.id.app_bar_share_on).setVisible(false);
+            menu.findItem(R.id.app_bar_share_off).setVisible(false);
+        }
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -244,6 +253,10 @@ public class MainActivity extends BaseActivity
     }
 
     void setCompaniesListFragment() {
+        if (menu != null) {
+            menu.findItem(R.id.app_bar_share_on).setVisible(false);
+            menu.findItem(R.id.app_bar_share_off).setVisible(false);
+        }
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -422,12 +435,14 @@ public class MainActivity extends BaseActivity
     }
 
     private void setFamilyModeMenuOptions() {
-        if (isFamilyModeTurnOn) {
-            menu.findItem(R.id.app_bar_share_on).setVisible(true);
-            menu.findItem(R.id.app_bar_share_off).setVisible(false);
-        } else {
-            menu.findItem(R.id.app_bar_share_on).setVisible(false);
-            menu.findItem(R.id.app_bar_share_off).setVisible(true);
+        if (menu != null) {
+            if (isFamilyModeTurnOn) {
+                menu.findItem(R.id.app_bar_share_on).setVisible(true);
+                menu.findItem(R.id.app_bar_share_off).setVisible(false);
+            } else {
+                menu.findItem(R.id.app_bar_share_on).setVisible(false);
+                menu.findItem(R.id.app_bar_share_off).setVisible(true);
+            }
         }
     }
 

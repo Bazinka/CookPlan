@@ -193,4 +193,23 @@ public class ToDoListProviderImpl implements ToDoListProvider {
             }
         });
     }
+
+    @Override
+    public Completable removeToDoCategory(ToDoCategory category) {
+        return Completable.create(emitter -> {
+            if (category != null && category.getId() != null) {
+                DatabaseReference todoItemRef = database.child(DatabaseConstants.DATABASE_TO_DO_CATEGORY_ITEMS_TABLE);
+                DatabaseReference ref = todoItemRef.child(category.getId());
+                ref.removeValue()
+                        .addOnFailureListener(exeption -> emitter.onError(new CookPlanError(exeption.getMessage())))
+                        .addOnCompleteListener(task -> {
+                            if (task.isComplete()) {
+                                emitter.onComplete();
+                            }
+                        });
+            } else {
+                emitter.onError(new CookPlanError(RApplication.getAppContext().getString(R.string.error_remove_todo_item)));
+            }
+        });
+    }
 }

@@ -1,7 +1,7 @@
 package com.cookplan.providers;
 
-import com.cookplan.models.ToDoItem;
 import com.cookplan.models.ToDoCategory;
+import com.cookplan.models.ToDoItem;
 
 import java.util.List;
 
@@ -26,4 +26,6 @@ public interface ToDoListProvider {
     Single<ToDoItem> updateToDoItem(ToDoItem item);
 
     Completable removeToDoItem(ToDoItem item);
+
+    Completable removeToDoCategory(ToDoCategory category);
 }

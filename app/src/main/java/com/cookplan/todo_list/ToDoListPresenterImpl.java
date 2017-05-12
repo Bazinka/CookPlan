@@ -8,6 +8,7 @@ import com.cookplan.providers.impl.ToDoListProviderImpl;
 
 import java.util.List;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -121,5 +122,57 @@ public class ToDoListPresenterImpl implements ToDoListPresenter {
     @Override
     public void onStop() {
         disposables.clear();
+    }
+
+    @Override
+    public void deleteToDoItems(List<ToDoItem> items) {
+        for (ToDoItem item : items) {
+            dataProvider.removeToDoItem(item)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null && e instanceof CookPlanError) {
+                                mainView.setErrorToast(e.getMessage());
+                            }
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void deleteToDoCategories(List<ToDoCategory> categories) {
+        for (ToDoCategory category : categories) {
+            dataProvider.removeToDoCategory(category)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null && e instanceof CookPlanError) {
+                                mainView.setErrorToast(e.getMessage());
+                            }
+                        }
+                    });
+        }
     }
 }

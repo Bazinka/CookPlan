@@ -3,9 +3,13 @@ package com.cookplan.todo_list;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -23,6 +27,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
 
     private ToDoListPresenter presenter;
     private ToDoListRecyclerViewAdapter adapter;
+    private Menu mMenu;
 
     public static ToDoListFragment newInstance() {
         ToDoListFragment fragment = new ToDoListFragment();
@@ -34,7 +39,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
         }
         presenter = new ToDoListPresenterImpl(this);
@@ -46,6 +51,12 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         if (presenter != null) {
             presenter.getToDoList();
         }
+        if (mMenu != null) {
+            MenuItem menuItem = mMenu.findItem(R.id.action_remove);
+            if (menuItem != null) {
+                menuItem.setVisible(true);
+            }
+        }
     }
 
     @Override
@@ -53,6 +64,16 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         super.onStop();
         if (presenter != null) {
             presenter.onStop();
+        }
+        hideMenu();
+    }
+
+    private void hideMenu() {
+        if (mMenu != null) {
+            MenuItem menuItem = mMenu.findItem(R.id.action_remove);
+            if (menuItem != null) {
+                menuItem.setVisible(false);
+            }
         }
     }
 
@@ -94,6 +115,9 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
         adapter.updateToDoList(todoList);
+        if (todoList.isEmpty()) {
+            hideMenu();
+        }
     }
 
     @Override
@@ -101,6 +125,9 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
         adapter.updateCategories(toDoCategoryList);
+        if (toDoCategoryList.isEmpty()) {
+            hideMenu();
+        }
     }
 
     @Override
@@ -116,5 +143,43 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         if (recyclerView != null) {
             recyclerView.setVisibility(visability);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu _menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.remove_menu, _menu);
+        mMenu = _menu;
+        super.onCreateOptionsMenu(_menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_remove) {
+            new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
+                    .setTitle(R.string.delete_todo_list_title)
+                    .setMessage(R.string.choose_right_delete_mode)
+                    .setPositiveButton(R.string.delete_have_done_items, (dialog, which) -> {
+                        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                        progressBar.setVisibility(View.VISIBLE);
+                        if (presenter != null) {
+                            presenter.deleteToDoItems(adapter.getHaveDoneItems());
+                        }
+                    })
+                    .setNeutralButton(android.R.string.cancel, null)
+                    .setNegativeButton(R.string.delete_all_items_title, (dialog, which) -> {
+                        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                        progressBar.setVisibility(View.VISIBLE);
+                        if (presenter != null) {
+                            presenter.deleteToDoCategories(adapter.getAllToDoCategory());
+                            presenter.deleteToDoItems(adapter.getAllToDoItems());
+                        }
+                    })
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

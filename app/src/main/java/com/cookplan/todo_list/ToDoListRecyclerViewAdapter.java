@@ -184,6 +184,41 @@ public class ToDoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
+    public List<ToDoItem> getHaveDoneItems() {
+        List<ToDoItem> items = new ArrayList<>();
+        for (Object object : objectsList) {
+            if (object instanceof ToDoItem) {
+                ToDoItem item = (ToDoItem) object;
+                if (item.getToDoStatus() == HAVE_DONE) {
+                    items.add(item);
+                }
+            }
+        }
+        return items;
+    }
+
+    public List<ToDoItem> getAllToDoItems() {
+        List<ToDoItem> items = new ArrayList<>();
+        for (Object object : objectsList) {
+            if (object instanceof ToDoItem) {
+                ToDoItem item = (ToDoItem) object;
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+    public List<ToDoCategory> getAllToDoCategory() {
+        List<ToDoCategory> categories = new ArrayList<>();
+        for (Object object : objectsList) {
+            if (object instanceof ToDoCategory) {
+                ToDoCategory category = (ToDoCategory) object;
+                categories.add(category);
+            }
+        }
+        return categories;
+    }
+
     public class TodoItemViewHolder extends RecyclerView.ViewHolder {
         public final View mainView;
         public final TextView commentTextView;

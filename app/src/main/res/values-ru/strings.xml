@@ -184,6 +184,8 @@
     <string name="geofence_transition_exited">Exited</string>
     <string name="unknown_geofence_transition">Unknown Transition</string>
     <string name="error_update_object_to_database">Ошибка обновления элемента в базе данных</string>
+    <string name="delete_todo_list_title">Удаление из списка дел</string>
+    <string name="delete_have_done_items">Удалить только сделанные</string>
 
 
 </resources>
