@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.cookplan.R;
 import com.cookplan.RApplication;
+import com.cookplan.geofence.responce.GeofenceTransitionsIntentService;
 import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.providers.CompanyProvider;
@@ -212,7 +213,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
             mGeofenceList.add(new Geofence.Builder()
                                       // Set the request ID of the geofence. This is a string to identify this
                                       // geofence.
-                                      .setRequestId(company.getName())
+                                      .setRequestId(company.getId())
                                       .setCircularRegion(
                                               company.getLatitude(),
                                               company.getLongitude(),

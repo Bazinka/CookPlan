@@ -98,11 +98,11 @@
         <activity android:name=".geofence.GeoFenceActivity">
         </activity>
 
-        <service android:name=".geofence.GeofenceTransitionsIntentService"/>
-
         <activity android:name=".companies.review.CompanyReviewActivity"/>
-        <activity android:name=".companies.list.CompanyListActivity">
-        </activity>
+        <activity android:name=".companies.list.CompanyListActivity"/>
+
+
+        <service android:name=".geofence.responce.GeofenceTransitionsIntentService"/>
     </application>
 
 </manifest>

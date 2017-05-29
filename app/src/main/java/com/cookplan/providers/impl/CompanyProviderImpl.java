@@ -89,6 +89,35 @@ public class CompanyProviderImpl implements CompanyProvider {
     }
 
     @Override
+    public Single<Company> getCompanyById(String companyId) {
+        return Single.create(emitter -> {
+            Query items = database.child(DatabaseConstants.DATABASE_COMPANY_TABLE).child(companyId);
+            items.addListenerForSingleValueEvent(new ValueEventListener() {
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Company company = null;
+                    if (dataSnapshot.getValue() != null) {
+                        company = dataSnapshot.getValue(Company.class);
+                    }
+                    if (company != null) {
+                        company.setId(dataSnapshot.getKey());
+                    } else {
+                        company = new Company();
+                    }
+                    if (emitter != null) {
+                        emitter.onSuccess(company);
+                    }
+                }
+
+                public void onCancelled(DatabaseError databaseError) {
+                    if (emitter != null) {
+                        emitter.onError(new CookPlanError(databaseError));
+                    }
+                }
+            });
+        });
+    }
+
+    @Override
     public Single<Company> createCompany(Company company) {
         return Single.create(emitter -> {
             DatabaseReference companyRef = database.child(DatabaseConstants.DATABASE_COMPANY_TABLE);

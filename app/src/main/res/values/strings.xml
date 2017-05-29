@@ -267,6 +267,8 @@
     <string name="todo_list_relate_company_title">Мои дела, связанные с company_name:</string>
     <string name="choose_company_title">Организация:</string>
     <string name="choose_default_company_name_title">Выберите компанию</string>
+    <string name="open_from_notification_title">Кликните, чтобы узнать ваши планы относительно этого места</string>
+    <string name="you_entered_title">Вы вошли:</string>
 
 
 </resources>

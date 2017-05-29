@@ -16,6 +16,8 @@ public interface CompanyProvider {
 
     Observable<List<Company>> getUsersCompanyList();
 
+    Single<Company> getCompanyById(String companyId);
+
     Single<Company> createCompany(Company company);
 
     Single<Company> updateCompany(Company company);
