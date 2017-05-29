@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/main_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -26,7 +27,8 @@
             android:gravity="left|center_vertical"
             android:text="название"
             android:textColor="@color/primary_text_color"
-            android:textSize="@dimen/subheding_text_size"/>
+            android:textSize="@dimen/title_text_size"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/company_item_comment"
@@ -37,5 +39,14 @@
             android:textColor="@color/hint_or_disabled_text_color"
             android:textSize="@dimen/body_text_size"/>
 
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/company_map_preview"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:clickable="false"
+            map:liteMode="true"
+            map:mapType="none"/>
     </LinearLayout>
+
+
 </RelativeLayout>

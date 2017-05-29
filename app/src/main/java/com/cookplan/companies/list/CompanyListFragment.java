@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Company;
+import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,17 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
             });
         }
         companyListRecyclerView.setAdapter(adapter);
+        // Set a RecyclerListener to clean up MapView from ListView
+        companyListRecyclerView.setRecyclerListener(viewHolder -> {
+            if (viewHolder instanceof CompanyListBaseAdapter.ViewHolder) {
+                CompanyListBaseAdapter.ViewHolder holder = (CompanyListBaseAdapter.ViewHolder) viewHolder;
+                if (holder.map != null) {
+                    // Clear the map and free up resources by changing the map type to none
+                    holder.map.clear();
+                    holder.map.setMapType(GoogleMap.MAP_TYPE_NONE);
+                }
+            }
+        });
 
         return mainView;
     }
