@@ -7,8 +7,10 @@ import com.cookplan.providers.impl.CompanyProviderImpl;
 
 import java.util.List;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -65,5 +67,30 @@ public class CompanyListPresenterImpl implements CompanyListPresenter {
 
                             }
                         }));
+    }
+
+    @Override
+    public void removeCompany(Company company) {
+        dataProvider.removeCompany(company)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null && e instanceof CookPlanError) {
+                            mainView.setErrorToast(e.getMessage());
+                        }
+                    }
+                });
     }
 }

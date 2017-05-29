@@ -113,8 +113,8 @@ public class CompanyProviderImpl implements CompanyProvider {
             values.put(DatabaseConstants.DATABASE_COMPANY_LATITUDE_FIELD, company.getLatitude());
             values.put(DatabaseConstants.DATABASE_COMPANY_LONGITUDE_FIELD, company.getLongitude());
             values.put(DatabaseConstants.DATABASE_ADDED_TO_GEOFENCE_FIELD, company.isAddedToGeoFence());
-            DatabaseReference todoItemRef = database.child(DatabaseConstants.DATABASE_COMPANY_TABLE);
-            todoItemRef.child(company.getId()).updateChildren(values, (databaseError, databaseReference) -> {
+            DatabaseReference companyItemRef = database.child(DatabaseConstants.DATABASE_COMPANY_TABLE);
+            companyItemRef.child(company.getId()).updateChildren(values, (databaseError, databaseReference) -> {
                 if (databaseError != null) {
                     if (emitter != null) {
                         emitter.onError(new CookPlanError(databaseError));
@@ -132,8 +132,8 @@ public class CompanyProviderImpl implements CompanyProvider {
     public Completable removeCompany(Company company) {
         return Completable.create(emitter -> {
             if (company != null && company.getId() != null) {
-                DatabaseReference todoItemRef = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);
-                DatabaseReference ref = todoItemRef.child(company.getId());
+                DatabaseReference companyItemRef = database.child(DatabaseConstants.DATABASE_COMPANY_TABLE);
+                DatabaseReference ref = companyItemRef.child(company.getId());
                 ref.removeValue()
                         .addOnFailureListener(exeption -> emitter.onError(new CookPlanError(exeption.getMessage())))
                         .addOnCompleteListener(task -> {

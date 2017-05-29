@@ -1,6 +1,6 @@
 package com.cookplan.companies.list;
 
-import com.google.firebase.database.Query;
+import com.cookplan.models.Company;
 
 /**
  * Created by DariaEfimova on 19.10.16.
@@ -8,7 +8,9 @@ import com.google.firebase.database.Query;
 
 public interface CompanyListPresenter {
 
-    public void onStop();
+    void onStop();
 
-    public void getUsersCompanyList();
+    void getUsersCompanyList();
+
+    void removeCompany(Company company);
 }

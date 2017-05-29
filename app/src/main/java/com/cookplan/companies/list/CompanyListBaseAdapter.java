@@ -54,16 +54,19 @@ public abstract class CompanyListBaseAdapter extends RecyclerView.Adapter<Compan
             onCompanyClick(company);
         });
 
+        holder.mainView.setOnLongClickListener(view -> {
+            Company localCompany = (Company) view.getTag();
+            if (listener != null && localCompany != null) {
+                listener.onCompanyLongClick(localCompany);
+            }
+            return false;
+        });
+
         holder.mapView.setTag(company);
 
-        // Ensure the map has been initialised by the on map ready callback in ViewHolder.
-        // If it is not ready yet, it will be initialised with the NamedLocation set as its tag
-        // when the callback is received.
         if (holder.map != null) {
-            // The map is already ready to be used
             holder.setMapLocation(holder.map, company);
         }
-
 
         setCustomFields(company, holder);
     }
@@ -137,5 +140,7 @@ public abstract class CompanyListBaseAdapter extends RecyclerView.Adapter<Compan
 
     public interface CompanyListEventListener {
         void onCompanyClick(Company company);
+
+        void onCompanyLongClick(Company company);
     }
 }

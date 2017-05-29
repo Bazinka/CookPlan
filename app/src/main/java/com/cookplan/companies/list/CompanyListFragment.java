@@ -1,6 +1,7 @@
 package com.cookplan.companies.list;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ProgressBar;
 
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
+import com.cookplan.companies.list.CompanyListBaseAdapter.CompanyListEventListener;
 import com.cookplan.models.Company;
 import com.google.android.gms.maps.GoogleMap;
 
@@ -24,7 +26,7 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
 
     private CompanyListPresenter presenter;
 
-    private OnPointsListClickListener listener;
+    private OnPointsListClickListener clickListener;
     private CompanyListBaseAdapter adapter;
     private boolean isMultiselect;
     private View mainView;
@@ -85,21 +87,38 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         companyListRecyclerView.setLayoutManager(manager);
 
+
+        CompanyListEventListener eventListener = new CompanyListEventListener() {
+            @Override
+            public void onCompanyClick(Company company) {
+                if (clickListener != null) {
+                    clickListener.onClick(company);
+                }
+            }
+
+            @Override
+            public void onCompanyLongClick(Company company) {
+                new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.attention_title)
+                        .setMessage(R.string.are_you_sure_remove_company)
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            dialog.dismiss();
+                            if (presenter != null) {
+                                presenter.removeCompany(company);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            }
+        };
+
         if (!isMultiselect) {
-            adapter = new CompanyListRecyclerAdapter(new ArrayList<>(), company -> {
-                if (listener != null) {
-                    listener.onClick(company);
-                }
-            });
+            adapter = new CompanyListRecyclerAdapter(new ArrayList<>(), eventListener);
         } else {
-            adapter = new CompanyMultiselectRecyclerAdapter(new ArrayList<>(), company -> {
-                if (listener != null) {
-                    listener.onClick(company);
-                }
-            });
+            adapter = new CompanyMultiselectRecyclerAdapter(new ArrayList<>(), eventListener);
         }
         companyListRecyclerView.setAdapter(adapter);
-        // Set a RecyclerListener to clean up MapView from ListView
+
         companyListRecyclerView.setRecyclerListener(viewHolder -> {
             if (viewHolder instanceof CompanyListBaseAdapter.ViewHolder) {
                 CompanyListBaseAdapter.ViewHolder holder = (CompanyListBaseAdapter.ViewHolder) viewHolder;
@@ -115,7 +134,7 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
     }
 
     public void setOnCompanyClickListener(OnPointsListClickListener _listener) {
-        listener = _listener;
+        clickListener = _listener;
     }
 
     public List<Company> getValues() {
