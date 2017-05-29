@@ -1,6 +1,7 @@
 package com.cookplan.companies.review;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.cookplan.BaseActivity;
@@ -34,7 +35,12 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
             setTitle(company.getName());
 
             TextView commentText = (TextView) findViewById(R.id.company_review_comment);
-            commentText.setText(company.getComment());
+            if (company.getComment() != null && !company.getComment().isEmpty()) {
+                commentText.setVisibility(View.VISIBLE);
+                commentText.setText(company.getComment());
+            } else {
+                commentText.setVisibility(View.GONE);
+            }
 
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.company_review_map);
