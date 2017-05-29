@@ -55,21 +55,50 @@
             android:id="@+id/choose_category_color_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible">
+            android:visibility="gone">
 
             <com.cookplan.views.ChooseColorView
                 android:id="@+id/choose_category_color_view"
                 android:layout_width="match_parent"
-                android:clickable="true"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:clickable="true"/>
         </RelativeLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/company_main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_category_color_main_layout"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/todo_item_company_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/main_item_padding"
+            android:text="@string/choose_company_title"
+            android:textColor="@color/accent_color"
+            android:textSize="@dimen/title_text_size"/>
+
+        <TextView
+            android:id="@+id/todo_item_choose_company_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_company_accent_color"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/main_item_padding"
+            android:paddingTop="@dimen/main_item_padding"
+            android:text="@string/choose_default_company_name_title"
+            android:textSize="@dimen/title_text_size"/>
+
+    </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/todo_item_comment_edit_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/choose_category_color_main_layout"
+        android:layout_below="@id/company_main_layout"
         android:hint="@string/comment_title"
         android:scrollbars="vertical"
         android:theme="@style/CookPlanTextInputLayoutStyle"

@@ -1,6 +1,7 @@
 package com.cookplan.todo_list.edit_item;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -11,9 +12,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.companies.list.CompanyListActivity;
+import com.cookplan.models.Company;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 import com.cookplan.views.ChooseColorView;
@@ -24,6 +28,8 @@ import java.util.List;
 
 public class EditToDoItemActivity extends BaseActivity implements EditToDoItemView {
 
+    public static final int CHOOSE_COMPANY_REQUEST = 14;
+    public static final String COMPANY_KEY = "COMPANY_KEY";
     public static final String TODO_ITEM_KEY = "TODO_ITEM_KEY";
 
     private EditToDoItemPresenter presenter;
@@ -36,6 +42,12 @@ public class EditToDoItemActivity extends BaseActivity implements EditToDoItemVi
         setNavigationArrow();
         presenter = new EditToDoItemPresenterImpl(this);
         selectedItem = (ToDoItem) getIntent().getSerializableExtra(TODO_ITEM_KEY);
+
+        View chooseCompanyView = findViewById(R.id.todo_item_choose_company_text);
+        chooseCompanyView.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CompanyListActivity.class);
+            startActivityForResultWithLeftAnimation(intent, CHOOSE_COMPANY_REQUEST);
+        });
     }
 
     @Override
@@ -51,6 +63,25 @@ public class EditToDoItemActivity extends BaseActivity implements EditToDoItemVi
         super.onStop();
         if (presenter != null) {
             presenter.onStop();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CHOOSE_COMPANY_REQUEST) {
+            Company company = null;
+            if (resultCode == RESULT_OK) {
+                company = (Company) data.getSerializableExtra(COMPANY_KEY);
+            }
+            TextView chooseCompanyTextView = (TextView) findViewById(R.id.todo_item_choose_company_text);
+            if (company != null) {
+                chooseCompanyTextView.setTag(company);
+                chooseCompanyTextView.setText(company.getName());
+            } else {
+                chooseCompanyTextView.setTag(null);
+                chooseCompanyTextView.setText(R.string.choose_default_company_name_title);
+            }
         }
     }
 
@@ -73,7 +104,9 @@ public class EditToDoItemActivity extends BaseActivity implements EditToDoItemVi
             ToDoCategory category = getCategoryItem();
             if (!name.isEmpty() && isCategoryValid()) {
                 String comment = commentEditText.getText().toString();
-                presenter.saveToDoItem(selectedItem, name, comment, category);
+                View chooseCompanyView = findViewById(R.id.todo_item_choose_company_text);
+                Company company = (Company) chooseCompanyView.getTag();
+                presenter.saveToDoItem(selectedItem, name, comment, company, category);
             } else {
                 if (name.isEmpty()) {
                     errorNameText = getString(R.string.required_field);

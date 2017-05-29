@@ -100,8 +100,9 @@
 
         <service android:name=".geofence.GeofenceTransitionsIntentService"/>
 
-        <activity
-            android:name=".companies.review.CompanyReviewActivity"/>
+        <activity android:name=".companies.review.CompanyReviewActivity"/>
+        <activity android:name=".companies.list.CompanyListActivity">
+        </activity>
     </application>
 
 </manifest>

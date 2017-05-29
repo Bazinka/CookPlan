@@ -127,7 +127,7 @@ public class ToDoListProviderImpl implements ToDoListProvider {
         return subjectToDoList.map(toDoItems -> {
             List<ToDoItem> toDoItemList = new ArrayList<>();
             for (ToDoItem item : toDoItems) {
-                if (item.getCompanyId().equals(companyId)) {
+                if (item.getCompanyId()!= null && item.getCompanyId().equals(companyId)) {
                     toDoItemList.add(item);
                 }
             }

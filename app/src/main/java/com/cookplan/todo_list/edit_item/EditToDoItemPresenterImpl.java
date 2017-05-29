@@ -1,5 +1,6 @@
 package com.cookplan.todo_list.edit_item;
 
+import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
@@ -67,7 +68,7 @@ public class EditToDoItemPresenterImpl implements EditToDoItemPresenter {
     }
 
     @Override
-    public void saveToDoItem(ToDoItem item, String name, String comment, ToDoCategory category) {
+    public void saveToDoItem(ToDoItem item, String name, String comment, Company company, ToDoCategory category) {
         if (category != null && category.getId() == null) {
             ToDoItem finalItem = item;
             dataProvider.createToDoCategory(category)
@@ -81,7 +82,7 @@ public class EditToDoItemPresenterImpl implements EditToDoItemPresenter {
 
                         @Override
                         public void onSuccess(ToDoCategory toDoCategory) {
-                            saveToDoItem(finalItem, name, comment, toDoCategory);
+                            saveToDoItem(finalItem, name, comment, company, toDoCategory);
                         }
 
                         @Override
@@ -97,7 +98,8 @@ public class EditToDoItemPresenterImpl implements EditToDoItemPresenter {
                 item.setName(name);
                 item.setComment(comment);
             } else {
-                item = new ToDoItem(user.getUid(), name, comment);
+                String companyId = company == null ? null : company.getId();
+                item = new ToDoItem(user.getUid(), name, companyId, comment);
             }
             item.setCategoryId(category != null ? category.getId() : null);
             if (item.getId() == null) {

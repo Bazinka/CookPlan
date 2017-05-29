@@ -116,7 +116,7 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                 if (user != null) {
                                     ToDoItem item = new ToDoItem(user.getUid(),
-                                                                 text.replace(category.getName().toLowerCase(), ""), category.getId());
+                                                                 text.replace(category.getName().toLowerCase(), ""), null, category.getId());
                                     toDoListDataProvider.createToDoItem(item)
                                             .subscribeOn(Schedulers.io())
                                             .observeOn(AndroidSchedulers.mainThread())

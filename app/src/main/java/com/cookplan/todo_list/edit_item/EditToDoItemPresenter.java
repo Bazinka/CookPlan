@@ -1,5 +1,6 @@
 package com.cookplan.todo_list.edit_item;
 
+import com.cookplan.models.Company;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 
@@ -12,5 +13,5 @@ public interface EditToDoItemPresenter {
 
     void onStop();
 
-    void saveToDoItem(ToDoItem item, String name, String comment, ToDoCategory category);
+    void saveToDoItem(ToDoItem item, String name, String comment, Company company, ToDoCategory category);
 }
