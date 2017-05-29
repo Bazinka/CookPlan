@@ -12,23 +12,27 @@ public class ToDoItem implements Serializable {
     public String userId;
     public String name;
     public String comment;
+    public String companyId;
     public String categoryId;
+    private ToDoCategory category;
     private ToDoItemStatus toDoStatus;
 
     public ToDoItem() {
     }
 
-    public ToDoItem(String userId, String name, String comment, String categoryId) {
+    public ToDoItem(String userId, String name, String comment, String companyId, String categoryId) {
         this.userId = userId;
         this.name = name;
         this.comment = comment;
+        this.companyId = companyId;
         this.categoryId = categoryId;
         toDoStatus = ToDoItemStatus.NEED_TO_DO;
     }
 
-    public ToDoItem(String userId, String name, String categoryId) {
+    public ToDoItem(String userId, String name, String companyId, String categoryId) {
         this.userId = userId;
         this.name = name;
+        this.companyId = companyId;
         this.categoryId = categoryId;
         toDoStatus = ToDoItemStatus.NEED_TO_DO;
     }
@@ -79,5 +83,17 @@ public class ToDoItem implements Serializable {
 
     public void setToDoStatus(ToDoItemStatus toDoStatus) {
         this.toDoStatus = toDoStatus;
+    }
+
+    public ToDoCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ToDoCategory category) {
+        this.category = category;
+    }
+
+    public String getCompanyId() {
+        return companyId;
     }
 }

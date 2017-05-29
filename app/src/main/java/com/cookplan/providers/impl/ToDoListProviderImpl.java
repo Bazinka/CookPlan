@@ -123,6 +123,19 @@ public class ToDoListProviderImpl implements ToDoListProvider {
     }
 
     @Override
+    public Observable<List<ToDoItem>> getCompanyToDoList(String companyId) {
+        return subjectToDoList.map(toDoItems -> {
+            List<ToDoItem> toDoItemList = new ArrayList<>();
+            for (ToDoItem item : toDoItems) {
+                if (item.getCompanyId().equals(companyId)) {
+                    toDoItemList.add(item);
+                }
+            }
+            return toDoItemList;
+        });
+    }
+
+    @Override
     public Single<ToDoItem> createToDoItem(ToDoItem item) {
         return Single.create(emitter -> {
             DatabaseReference todoRef = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE);

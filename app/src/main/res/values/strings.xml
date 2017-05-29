@@ -264,6 +264,7 @@
     <string name="error_update_object_to_database">Ошибка обновления элемента в базе данных</string>
     <string name="delete_todo_list_title">Удаление из списка дел</string>
     <string name="delete_have_done_items">Удалить только сделанные</string>
+    <string name="todo_list_relate_company_title">Мои дела, связанные с company_name:</string>
 
 
 </resources>

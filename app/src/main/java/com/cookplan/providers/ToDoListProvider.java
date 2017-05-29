@@ -19,6 +19,8 @@ public interface ToDoListProvider {
 
     Observable<List<ToDoItem>> getUserToDoList();
 
+    Observable<List<ToDoItem>> getCompanyToDoList(String companyId);
+
     Single<ToDoItem> createToDoItem(ToDoItem item);
 
     Single<ToDoCategory> createToDoCategory(ToDoCategory category);
