@@ -91,14 +91,17 @@
         <activity android:name=".companies.edit.EditCompanyActivity"/>
         <activity android:name=".companies.map.search_new_point.SearchNewPointActivity"/>
 
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
 
         <activity android:name=".geofence.GeoFenceActivity">
         </activity>
+
         <service android:name=".geofence.GeofenceTransitionsIntentService"/>
+
+        <activity
+            android:name=".companies.review.CompanyReviewActivity"/>
     </application>
 
 </manifest>

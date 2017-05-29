@@ -14,6 +14,7 @@ import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.companies.list.CompanyListFragment;
 import com.cookplan.companies.map.search_new_point.SearchNewPointActivity;
+import com.cookplan.companies.review.CompanyReviewActivity;
 
 public class MainCompaniesFragment extends BaseFragment {
 
@@ -62,8 +63,13 @@ public class MainCompaniesFragment extends BaseFragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, companyListFragment);
         transaction.commit();
-        companyListFragment.setOnCompanyClickListener(item -> {
-            //            setPointsMapFragment(item);
+        companyListFragment.setOnCompanyClickListener(company -> {
+            Activity activity = getActivity();
+            if (activity instanceof BaseActivity) {
+                Intent intent = new Intent(activity, CompanyReviewActivity.class);
+                intent.putExtra(CompanyReviewActivity.COMPANY_OBJECT_KEY, company);
+                ((BaseActivity) activity).startActivityWithLeftAnimation(intent);
+            }
         });
     }
 }
