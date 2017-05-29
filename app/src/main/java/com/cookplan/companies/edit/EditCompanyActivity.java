@@ -19,8 +19,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.RApplication;
 import com.cookplan.utils.FirebaseImageLoader;
 import com.cookplan.utils.PermissionUtils;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
@@ -38,6 +45,8 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
 
     private ProgressBar progressView;
 
+    private double latitude;
+    private double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +56,10 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
 
         progressView = (ProgressBar) findViewById(R.id.add_point_progress);
         presenter = new EditCompanyPresenterImpl(this, this);
+
+        latitude = getIntent().getDoubleExtra(PLACE_LATITUDE_KEY, -1);
+        longitude = getIntent().getDoubleExtra(PLACE_LONGITUDE_KEY, -1);
+
 
         String defaultName = presenter.getDefaultName();
         EditText nameEditText = (EditText) findViewById(R.id.name_place_edit_view);
@@ -64,8 +77,6 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
             if (nameEditText != null) {
                 name = nameEditText.getText().toString();
             }
-            double latitude = getIntent().getDoubleExtra(PLACE_LATITUDE_KEY, -1);
-            double longitude = getIntent().getDoubleExtra(PLACE_LONGITUDE_KEY, -1);
             EditText commentsEditText = (EditText) findViewById(R.id.comments_edit_text);
             String comments = commentsEditText.getText().toString();
 
@@ -73,6 +84,23 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
                 presenter.savePoint(name, comments, latitude, longitude);
             }
         });
+
+        initializeMapView();
+    }
+
+    private void initializeMapView() {
+        MapView mapView = (MapView) findViewById(R.id.company_location_map);
+        if (mapView != null) {
+            mapView.onCreate(null);
+            mapView.setClickable(false);
+            mapView.getMapAsync(googleMap -> {
+                MapsInitializer.initialize(RApplication.getAppContext());
+                LatLng location = new LatLng(latitude, longitude);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f));
+                googleMap.addMarker(new MarkerOptions().position(location));
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            });
+        }
     }
 
     @Override

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_add_place"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/activity_add_place"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/add_point_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_marginTop="-4dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_centerHorizontal="true"
-        android:indeterminate="true" />
+        android:layout_marginTop="-4dp"
+        android:indeterminate="true"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name_of_place"
-                android:maxLines="2" />
+                android:maxLines="2"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -58,14 +59,25 @@
                 android:layout_centerVertical="true"
                 android:ems="10"
                 android:hint="@string/comment"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"/>
         </android.support.design.widget.TextInputLayout>
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/company_location_map"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@id/comments_text_input_layout"
+            android:layout_marginBottom="@dimen/main_margin_left"
+            android:layout_marginTop="@dimen/main_margin_left"
+            android:clickable="false"
+            map:liteMode="true"
+            map:mapType="none"/>
 
         <LinearLayout
             android:id="@+id/save_point_photo_main_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/comments_text_input_layout"
+            android:layout_below="@+id/company_location_map"
             android:orientation="vertical">
 
             <TextView
@@ -77,7 +89,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/accent_color"
                 android:textStyle="bold"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/save_point_photo_layout"
@@ -98,7 +110,7 @@
                 android:textAllCaps="true"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <Button
@@ -116,6 +128,6 @@
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/primary_text_color"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
     </RelativeLayout>
 </RelativeLayout>
