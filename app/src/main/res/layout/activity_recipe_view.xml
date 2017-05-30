@@ -29,9 +29,11 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/step_by_step_button_layout"
         android:fitsSystemWindows="true"
-        tools:context="com.cookplan.recipe_view.RecipeViewActivity">
+        tools:context="com.cookplan.recipe_view.RecipeViewActivity"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"

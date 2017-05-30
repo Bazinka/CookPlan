@@ -98,7 +98,9 @@
         <activity android:name=".geofence.GeoFenceActivity">
         </activity>
 
-        <activity android:name=".companies.review.CompanyReviewActivity"/>
+        <activity
+            android:name=".companies.review.CompanyReviewActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".companies.list.CompanyListActivity"/>
 
 

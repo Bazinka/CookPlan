@@ -1,8 +1,15 @@
 package com.cookplan.companies.review;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,9 +17,12 @@ import android.widget.Toast;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.RApplication;
+import com.cookplan.main.ViewPagerTabsAdapter;
 import com.cookplan.models.Company;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
+import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment;
+import com.cookplan.shopping_list.total_list.TotalShoppingListFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -34,37 +44,71 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_review);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setNavigationArrow();
+
 
         company = (Company) getIntent().getSerializableExtra(COMPANY_OBJECT_KEY);
         if (company == null) {
             finish();
         } else {
+            AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+            appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                @Override
+                public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                    setToolbarChanged(appBarLayout, verticalOffset);
+                }
+            });
+
+            ViewPager viewPager = (ViewPager) findViewById(R.id.company_tabs_viewpager);
+            viewPager.setVisibility(View.VISIBLE);
+
+            ViewPagerTabsAdapter adapter = new ViewPagerTabsAdapter(getSupportFragmentManager());
+            adapter.addFragment(CompanyToDoListFragment.newInstance(),
+                                getString(R.string.company_todo_list_title));
+//            adapter.addFragment(ShopListByDishesFragment.newInstance(),
+//                                getString(R.string.company_product_list_title));
+            viewPager.setAdapter(adapter);
+
+            TabLayout tabsLayout = (TabLayout) findViewById(R.id.company_tabs_layout);
+            tabsLayout.setVisibility(View.VISIBLE);
+            tabsLayout.setupWithViewPager(viewPager);
+
+
+            CollapsingToolbarLayout collapsingToolbarLayout =
+                    (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+            collapsingToolbarLayout.setTitle(company.getName());
+
             presenter = new CompanyReviewPresenterImpl(this);
-            setTitle(company.getName());
 
             TextView commentText = (TextView) findViewById(R.id.company_review_comment);
-            if (company.getComment() != null && !company.getComment().isEmpty()) {
-                commentText.setVisibility(View.VISIBLE);
-                commentText.setText(company.getComment());
-            } else {
-                commentText.setVisibility(View.GONE);
-            }
-
-            TextView todoLitTitleTextView = (TextView) findViewById(R.id.company_review_todo_list_title);
-            String todoListTitle = getString(R.string.todo_list_relate_company_title);
-            todoListTitle = todoListTitle.replace("company_name", company.getName());
-            todoLitTitleTextView.setText(todoListTitle);
+            commentText.setText(company.getComment());
 
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.company_review_map);
             mapFragment.getMapAsync(this);
 
-            RecyclerView needToBuyRecyclerView = (RecyclerView) findViewById(R.id.company_review_todo_list_recycler);
-            needToBuyRecyclerView.setHasFixedSize(true);
-            needToBuyRecyclerView.setNestedScrollingEnabled(false);
-            needToBuyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            //            RecyclerView needToBuyRecyclerView = (RecyclerView) findViewById(R.id.company_review_todo_list_recycler);
+            //            needToBuyRecyclerView.setHasFixedSize(true);
+            //            needToBuyRecyclerView.setNestedScrollingEnabled(false);
+            //            needToBuyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        }
+    }
+
+    private void setToolbarChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.abc_ic_ab_back_material, null);
+        TextView commentText = (TextView) findViewById(R.id.company_review_comment);
+        if (verticalOffset < -200) {
+            commentText.setVisibility(View.GONE);
+            upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        } else {
+            commentText.setVisibility(View.VISIBLE);
+            upArrow.setColorFilter(ContextCompat.getColor(this, R.color.primary), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
@@ -102,14 +146,12 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
 
     @Override
     public void setToDoList(List<ToDoItem> todoList) {
-        TextView todoLitTitleTextView = (TextView) findViewById(R.id.company_review_todo_list_title);
-        todoLitTitleTextView.setVisibility(View.VISIBLE);
-        for (ToDoItem item : todoList) {
-            item.setCategory(presenter.getToDoCategoryById(item.getCategoryId()));
-        }
-        CompanyToDoRecyclerViewAdapter adapter = new CompanyToDoRecyclerViewAdapter(todoList);
-        RecyclerView needToBuyRecyclerView = (RecyclerView) findViewById(R.id.company_review_todo_list_recycler);
-        needToBuyRecyclerView.setAdapter(adapter);
+        //        for (ToDoItem item : todoList) {
+        //            item.setCategory(presenter.getToDoCategoryById(item.getCategoryId()));
+        //        }
+        //        CompanyToDoRecyclerViewAdapter adapter = new CompanyToDoRecyclerViewAdapter(todoList);
+        //        RecyclerView needToBuyRecyclerView = (RecyclerView) findViewById(R.id.company_review_todo_list_recycler);
+        //        needToBuyRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -121,7 +163,5 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
 
     @Override
     public void setEmptyView() {
-        TextView todoLitTitleTextView = (TextView) findViewById(R.id.company_review_todo_list_title);
-        todoLitTitleTextView.setVisibility(View.GONE);
     }
 }
