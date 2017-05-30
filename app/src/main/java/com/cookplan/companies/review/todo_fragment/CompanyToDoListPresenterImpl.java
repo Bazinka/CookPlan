@@ -1,4 +1,4 @@
-package com.cookplan.companies.review;
+package com.cookplan.companies.review.todo_fragment;
 
 import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
@@ -19,15 +19,15 @@ import io.reactivex.schedulers.Schedulers;
  * Created by DariaEfimova on 29.05.17.
  */
 
-public class CompanyReviewPresenterImpl implements CompanyReviewPresenter {
+public class CompanyToDoListPresenterImpl implements CompanyToDoListPresenter {
 
-    private CompanyReviewView mainView;
+    private CompanyToDoListView mainView;
 
     private ToDoListProvider dataProvider;
     private CompositeDisposable disposables;
     private List<ToDoCategory> categoryToDoList;
 
-    public CompanyReviewPresenterImpl(CompanyReviewView mainView) {
+    public CompanyToDoListPresenterImpl(CompanyToDoListView mainView) {
         this.mainView = mainView;
         dataProvider = new ToDoListProviderImpl();
         disposables = new CompositeDisposable();

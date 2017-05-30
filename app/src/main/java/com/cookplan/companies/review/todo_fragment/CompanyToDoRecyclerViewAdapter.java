@@ -1,4 +1,4 @@
-package com.cookplan.companies.review;
+package com.cookplan.companies.review.todo_fragment;
 
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
