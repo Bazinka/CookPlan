@@ -21,19 +21,15 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
-
-import static com.cookplan.utils.DatabaseConstants.DATABASE_PRODUCT_RUS_NAME_FIELD;
 
 /**
  * Created by DariaEfimova on 24.04.17.
  */
 
 public class ProductProviderImpl implements ProductProvider {
-
 
     private DatabaseReference database;
 
@@ -78,6 +74,20 @@ public class ProductProviderImpl implements ProductProvider {
     @Override
     public Observable<List<Product>> getProductList() {
         return subjectProductList;
+    }
+
+    @Override
+    public Observable<List<Product>> getCompanyProductList(String companyId) {
+        return subjectProductList.map(productList -> {
+            List<Product> products = new ArrayList<>();
+            for (Product product : productList) {
+                //                if (product.getCompanyId().toLowerCase().equals(name)) {
+                //                    productRes = product;
+                //                    break;
+                //                }
+            }
+            return products;
+        });
     }
 
     //emitter.onError(new CookPlanError(RApplication.getAppContext().getString(R.string.recipe_doesnt_exist)));

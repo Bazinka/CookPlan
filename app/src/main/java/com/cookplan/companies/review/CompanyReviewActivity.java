@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.RApplication;
+import com.cookplan.companies.review.product_list.CompanyProductsFragment;
 import com.cookplan.companies.review.todo_fragment.CompanyToDoListFragment;
 import com.cookplan.main.ViewPagerTabsAdapter;
 import com.cookplan.models.Company;
@@ -55,8 +56,8 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
             ViewPagerTabsAdapter adapter = new ViewPagerTabsAdapter(getSupportFragmentManager());
             adapter.addFragment(CompanyToDoListFragment.newInstance(company),
                                 getString(R.string.company_todo_list_title));
-            //            adapter.addFragment(ShopListByDishesFragment.newInstance(),
-            //                                getString(R.string.company_product_list_title));
+            adapter.addFragment(CompanyProductsFragment.newInstance(company),
+                                getString(R.string.company_product_list_title));
             viewPager.setAdapter(adapter);
 
             TabLayout tabsLayout = (TabLayout) findViewById(R.id.company_tabs_layout);

@@ -17,6 +17,8 @@ public interface ProductProvider {
 
     Observable<List<Product>> getProductList();
 
+    Observable<List<Product>> getCompanyProductList(String companyId);
+
     Single<Product> createProduct(Product product);
 
     Single<Product> updateProductNames(Product product);

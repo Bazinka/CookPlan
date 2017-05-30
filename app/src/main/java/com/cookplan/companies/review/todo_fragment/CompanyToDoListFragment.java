@@ -41,6 +41,7 @@ public class CompanyToDoListFragment extends BaseFragment implements CompanyToDo
         if (getArguments() != null) {
             company = (Company) getArguments().getSerializable(COMPANY_OBJECT_KEY);
         }
+        setRetainInstance(true);
         presenter = new CompanyToDoListPresenterImpl(this);
     }
 
