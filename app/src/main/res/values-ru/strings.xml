@@ -100,7 +100,7 @@
     <string name="books_and_printed_matter_title">Книги и печатная продукция</string>
     <string name="products_for_garden_title">Всё для сада и огорода</string>
     <string name="are_you_sure_remove_recipe">Вы уверены, что хотите удалить рецепт?</string>
-    <string name="are_you_sure_remove_company">Вы уверены, что хотите удалить компанию навсегда?</string>
+    <string name="are_you_sure_remove_company">Вы уверены, что хотите удалить место навсегда?</string>
     <string name="product_required_field">Необходимо выбрать продукт из списка</string>
     <string name="by_the_taste">по вкусу</string>
     <string name="done_menu_title">Done</string>
@@ -163,8 +163,8 @@
     <string name="rational_image_perm">This sample will read an image from local storage to upload to Firebase Storage.</string>
     <string name="points_dont_exist">Нет точек</string>
     <string name="save_point_error">Saving error. Try to save this point again.</string>
-    <string name="companies_list_title">Список компаний</string>
-    <string name="empty_company_list_title">Список компаний пуст</string>
+    <string name="companies_list_title">Список мест</string>
+    <string name="empty_company_list_title">Список мест пуст</string>
     <string name="geofence_error_not_connected">GoogleApiClient no yet connected. Try again.</string>
     <string name="geofence_error_permission_error">Invalid location permission. You need to use ACCESS_FINE_LOCATION with geofences</string>
     <!-- GeoFence Error strings -->
@@ -188,8 +188,8 @@
     <string name="delete_todo_list_title">Удаление из списка дел</string>
     <string name="delete_have_done_items">Удалить только сделанные</string>
     <string name="todo_list_relate_company_title">Мои дела, связанные с company_name:</string>
-    <string name="choose_company_title">Организация:</string>
-    <string name="choose_default_company_name_title">Выберите компанию</string>
+    <string name="choose_company_title">Где нужно это сделать (место):</string>
+    <string name="choose_default_company_name_title">Выберите место</string>
     <string name="open_from_notification_title">Кликните, чтобы узнать ваши планы относительно этого места</string>
     <string name="you_entered_title">Вы вошли:</string>
 
