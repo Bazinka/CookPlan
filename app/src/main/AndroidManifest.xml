@@ -97,14 +97,15 @@
 
         <activity android:name=".geofence.GeoFenceActivity">
         </activity>
-
         <activity
             android:name=".companies.review.CompanyReviewActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".companies.list.CompanyListActivity"/>
 
-
         <service android:name=".geofence.responce.GeofenceTransitionsIntentService"/>
+
+        <activity android:name=".product_list.multiselect.MultiselectProductListActivity">
+        </activity>
     </application>
 
 </manifest>

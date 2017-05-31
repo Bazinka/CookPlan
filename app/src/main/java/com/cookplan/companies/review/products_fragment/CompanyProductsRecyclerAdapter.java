@@ -1,4 +1,4 @@
-package com.cookplan.companies.review.product_list;
+package com.cookplan.companies.review.products_fragment;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +11,15 @@ import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompanyProductsRecyclerAdapter extends RecyclerView.Adapter<CompanyProductsRecyclerAdapter.ViewHolder> {
 
-    private final List<Product> mValues;
+    private final List<Product> productList;
 
     public CompanyProductsRecyclerAdapter(List<Product> items) {
-        mValues = items;
+        productList = items;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class CompanyProductsRecyclerAdapter extends RecyclerView.Adapter<Company
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Product product = mValues.get(position);
+        Product product = productList.get(position);
         holder.nameView.setText(product.toStringName());
 
         if (product.getCategory() != null) {
@@ -49,7 +50,11 @@ public class CompanyProductsRecyclerAdapter extends RecyclerView.Adapter<Company
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return productList.size();
+    }
+
+    public ArrayList<Product> getProductList() {
+        return new ArrayList<>(productList);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -3,13 +3,14 @@ package com.cookplan.models;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
  * Created by DariaEfimova on 20.03.17.
  */
 
-public enum MeasureUnit {
+public enum MeasureUnit implements Serializable {
     UNITS(0, R.string.unit_title, false),
     GRAMM(1, R.string.gramm_title, true),
     KILOGRAMM(2, R.string.kilogramm_title, false),

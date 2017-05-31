@@ -5,18 +5,21 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.RApplication;
-import com.cookplan.companies.review.product_list.CompanyProductsFragment;
+import com.cookplan.companies.review.products_fragment.CompanyProductsFragment;
 import com.cookplan.companies.review.todo_fragment.CompanyToDoListFragment;
 import com.cookplan.main.ViewPagerTabsAdapter;
 import com.cookplan.models.Company;
@@ -76,6 +79,18 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.company_review_map);
             mapFragment.getMapAsync(this);
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_company_product_fab);
+            fab.setOnClickListener(view -> {
+                if (adapter.getCount() >= 1) {
+                    Fragment fragment = adapter.getItem(viewPager.getCurrentItem());
+                    if (fragment instanceof CompanyProductsFragment) {
+                        ((CompanyProductsFragment) fragment).startAddProductActivity();
+                    } else {
+                        Toast.makeText(this, "Пока на этом экране можно добавлять только продукты", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         }
     }
 

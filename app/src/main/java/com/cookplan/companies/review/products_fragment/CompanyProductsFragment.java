@@ -1,5 +1,7 @@
-package com.cookplan.companies.review.product_list;
+package com.cookplan.companies.review.products_fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,19 +11,28 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Company;
 import com.cookplan.models.Product;
+import com.cookplan.product_list.multiselect.MultiselectProductListActivity;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
+import static com.cookplan.product_list.multiselect.MultiselectProductListActivity.SELECTED_PRODUCTS_LIST_KEY;
 
 public class CompanyProductsFragment extends BaseFragment implements CompanyProductsView {
 
+    public static final int GET_PRODUCTS_TO_COMPANY_REQUEST = 15;
+    public static final String GET_PRODUCTS_TO_COMPANY_KEY = "GET_PRODUCTS_TO_COMPANY_KEY";
     private static final String COMPANY_OBJECT_KEY = "COMPANY_OBJECT_KEY";
 
     private CompanyProductsPresenter presenter;
     private Company company;
+    private CompanyProductsRecyclerAdapter adapter;
 
     public CompanyProductsFragment() {
     }
@@ -43,14 +54,14 @@ public class CompanyProductsFragment extends BaseFragment implements CompanyProd
             company = (Company) getArguments().getSerializable(COMPANY_OBJECT_KEY);
         }
         setRetainInstance(true);
-        presenter = new CompanyProductsPresenterImpl(this);
+        presenter = new CompanyProductsPresenterImpl(this, company);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         if (presenter != null) {
-            presenter.getCompanyProductList(company);
+            presenter.getCompanyProductList();
         }
     }
 
@@ -74,6 +85,7 @@ public class CompanyProductsFragment extends BaseFragment implements CompanyProd
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 
         return mainView;
     }
@@ -101,12 +113,55 @@ public class CompanyProductsFragment extends BaseFragment implements CompanyProd
         setRecyclerViewVisability(View.VISIBLE);
 
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.product_list_recycler);
-        CompanyProductsRecyclerAdapter adapter = new CompanyProductsRecyclerAdapter(productList);
+        adapter = new CompanyProductsRecyclerAdapter(productList);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void setErrorToast(String error) {
         Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GET_PRODUCTS_TO_COMPANY_REQUEST) {
+            if (resultCode == getActivity().RESULT_OK) {
+                ArrayList<Product> productArrayList = data.getParcelableArrayListExtra(GET_PRODUCTS_TO_COMPANY_KEY);
+                ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                progressBar.setVisibility(View.VISIBLE);
+                changedProductList(productArrayList);
+            }
+        }
+    }
+
+    private void changedProductList(List<Product> newProducts) {
+        if (presenter != null) {
+            List<Product> oldProducts = adapter != null ? adapter.getProductList() : new ArrayList<>();
+            List<Product> productsToDelete = new LinkedList<>(oldProducts);
+            for (Product oldProduct : oldProducts) {
+                for (Product newProduct : newProducts) {
+                    if (oldProduct.getId().equals(newProduct.getId())) {
+                        productsToDelete.remove(oldProduct);
+                    }
+                }
+            }
+            if (!productsToDelete.isEmpty()) {
+                presenter.deleteProductsFromCompany(productsToDelete);
+            }
+            presenter.updateProducts(newProducts);
+        }
+    }
+
+    public void startAddProductActivity() {
+        Activity activity = getActivity();
+        if (activity instanceof BaseActivity) {
+            Intent intent = new Intent(getActivity(), MultiselectProductListActivity.class);
+            if (adapter != null) {
+                intent.putParcelableArrayListExtra(SELECTED_PRODUCTS_LIST_KEY, adapter.getProductList());
+            }
+            startActivityForResult(
+                    intent, GET_PRODUCTS_TO_COMPANY_REQUEST);
+        }
     }
 }

@@ -41,18 +41,5 @@
 
         </RelativeLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_product_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:clickable="true"
-            android:visibility="gone"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/ic_add_plus"/>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -81,10 +81,11 @@ public class ProductProviderImpl implements ProductProvider {
         return subjectProductList.map(productList -> {
             List<Product> products = new ArrayList<>();
             for (Product product : productList) {
-                //                if (product.getCompanyId().toLowerCase().equals(name)) {
-                //                    productRes = product;
-                //                    break;
-                //                }
+                if (product.getCompanyIdList() != null) {
+                    if (product.getCompanyIdList().contains(companyId)) {
+                        products.add(product);
+                    }
+                }
             }
             return products;
         });
@@ -122,6 +123,26 @@ public class ProductProviderImpl implements ProductProvider {
                 } else {
                     if (emitter != null) {
                         emitter.onSuccess(newProduct);
+                    }
+                }
+            });
+        });
+    }
+
+    @Override
+    public Completable updateProductCompanies(Product newProduct) {
+        return Completable.create(emitter -> {
+            Map<String, Object> values = new HashMap<>();
+            values.put(DatabaseConstants.DATABASE_COMPANY_ID_LIST_FIELD, newProduct.getCompanyIdList());
+            DatabaseReference productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE);
+            productRef.child(newProduct.getId()).updateChildren(values, (databaseError, databaseReference) -> {
+                if (databaseError != null) {
+                    if (emitter != null) {
+                        emitter.onError(new CookPlanError(databaseError));
+                    }
+                } else {
+                    if (emitter != null) {
+                        emitter.onComplete();
                     }
                 }
             });

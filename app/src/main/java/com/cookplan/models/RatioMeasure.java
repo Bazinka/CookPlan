@@ -4,13 +4,16 @@ package com.cookplan.models;
  * Created by DariaEfimova on 06.04.17.
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Class for saving the ratio between 2 measure units
  * <p>
  * rightUnit = ratio * leftUnit
  */
 
-public class RatioMeasure {
+public class RatioMeasure implements Parcelable {
 
     public Double ratio;
     public MeasureUnit rightUnit;
@@ -59,4 +62,32 @@ public class RatioMeasure {
         }
         return -1.;
     }
+
+    // Parcelling part
+    public RatioMeasure(Parcel in) {
+        ratio = in.readDouble();
+        rightUnit = (MeasureUnit) in.readSerializable();
+        leftUnit = (MeasureUnit) in.readSerializable();
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(ratio);
+        dest.writeSerializable(rightUnit);
+        dest.writeSerializable(leftUnit);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public RatioMeasure createFromParcel(Parcel in) {
+            return new RatioMeasure(in);
+        }
+
+        public RatioMeasure[] newArray(int size) {
+            return new RatioMeasure[size];
+        }
+    };
 }

@@ -1,4 +1,4 @@
-package com.cookplan.companies.review.product_list;
+package com.cookplan.companies.review.products_fragment;
 
 import com.cookplan.models.Product;
 

@@ -28,6 +28,7 @@ public class DatabaseConstants {
     public static final String DATABASE_RATIO_MEASURE_LIST_FIELD = "ratioMeasureList";
     public static final String DATABASE_MEASURE_UNIT_LIST_FIELD = "measureUnitList";
     public static final String DATABASE_MAIN_MEASURE_UNIT_LIST_FIELD = "mainMeasureUnitList";
+    public static final String DATABASE_COMPANY_ID_LIST_FIELD = "companyIdList";
     public static final String DATABASE_MAIN_MEASURE_UNIT_FIELD = "mainMeasureUnit";
     public static final String DATABASE_PRODUCT_COUNT_USING_FIELD = "countUsing";
     public static final String DATABASE_DESCRIPTION_FIELD = "desc";

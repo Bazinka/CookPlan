@@ -1,10 +1,12 @@
 package com.cookplan.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.cookplan.RApplication;
 import com.cookplan.utils.DatabaseConstants;
 import com.google.firebase.database.DataSnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,7 @@ import java.util.Map;
  * Created by DariaEfimova on 20.03.17.
  */
 
-public class Product implements Serializable {
+public class Product implements Parcelable {
 
     public String id;
     public String userId;
@@ -23,6 +25,7 @@ public class Product implements Serializable {
     public String engName;
     public int countUsing;
     public ProductCategory category;
+    public List<String> companyIdList;
 
     public List<RatioMeasure> ratioMeasureList;
 
@@ -43,6 +46,7 @@ public class Product implements Serializable {
         this.userId = userId;
         countUsing = 0;
         fillRatioList(unitToAmoutMap);
+        companyIdList = new ArrayList<>();
     }
 
     private void fillRatioList(Map<MeasureUnit, Double> unitToAmoutMap) {
@@ -133,6 +137,19 @@ public class Product implements Serializable {
         return ratioMeasureList;
     }
 
+    public List<String> getCompanyIdList() {
+        return companyIdList;
+    }
+
+    public void addCompanyId(String companyId) {
+        if (companyIdList != null) {
+            companyIdList.add(companyId);
+        } else {
+            companyIdList = new ArrayList<>();
+            companyIdList.add(companyId);
+        }
+    }
+
     public static Product parseProductFromDB(DataSnapshot dataSnapshot) {
         Product product = new Product();
         product.id = dataSnapshot.getKey();
@@ -169,6 +186,14 @@ public class Product implements Serializable {
                     }
                 }
             }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_COMPANY_ID_LIST_FIELD)) {
+                product.companyIdList = new ArrayList<>();
+                for (DataSnapshot childUnit : child.getChildren()) {
+                    if (childUnit.getValue() instanceof String) {
+                        product.companyIdList.add(childUnit.getValue(String.class));
+                    }
+                }
+            }
             if (child.getKey().equals(DatabaseConstants.DATABASE_MEASURE_UNIT_LIST_FIELD)) {
                 product.measureUnitList = new ArrayList<>();
                 for (DataSnapshot childUnit : child.getChildren()) {
@@ -187,4 +212,57 @@ public class Product implements Serializable {
     public String getUserId() {
         return userId;
     }
+
+    // Parcelling part
+    public Product(Parcel in) {
+        id = in.readString();
+        userId = in.readString();
+        //        public List<MeasureUnit> measureUnitList = in.readSerializable();
+        //        public List<MeasureUnit> mainMeasureUnitList;
+        rusName = in.readString();
+        engName = in.readString();
+        countUsing = in.readInt();
+        category = (ProductCategory) in.readSerializable();
+        companyIdList = new ArrayList<>();
+        in.readStringList(companyIdList);
+
+        ratioMeasureList = new ArrayList<>();
+        in.readTypedList(ratioMeasureList, RatioMeasure.CREATOR);
+
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(userId);
+        //        public List<MeasureUnit> measureUnitList = in.readSerializable();
+        //        public List<MeasureUnit> mainMeasureUnitList;
+        dest.writeString(rusName);
+        dest.writeString(engName);
+        dest.writeInt(countUsing);
+        dest.writeSerializable(category);
+        if (companyIdList == null) {
+            companyIdList = new ArrayList<>();
+        }
+        dest.writeStringList(companyIdList);
+
+        if (ratioMeasureList == null) {
+            ratioMeasureList = new ArrayList<>();
+        }
+        dest.writeTypedList(ratioMeasureList);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }

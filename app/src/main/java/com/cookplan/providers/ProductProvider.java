@@ -23,6 +23,8 @@ public interface ProductProvider {
 
     Single<Product> updateProductNames(Product product);
 
+    Completable updateProductCompanies(Product product);
+
     Observable<Product> getProductByName(String name);
 
     Completable increaseCountUsages(Product product);

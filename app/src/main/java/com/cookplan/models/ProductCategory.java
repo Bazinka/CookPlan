@@ -3,11 +3,13 @@ package com.cookplan.models;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 
+import java.io.Serializable;
+
 /**
  * Created by DariaEfimova on 29.03.17.
  */
 
-public enum ProductCategory {
+public enum ProductCategory implements Serializable {
     WITHOUT_CATEGORY(R.string.without_category_title, R.color.black, 0),
     ALCOHOL_DRINKS(R.string.alcohol_drinks_title, R.color.category_red, 1),
     MILK_PRODUCT(R.string.milk_product_title, R.color.category_pink, 2),
@@ -76,92 +78,95 @@ public enum ProductCategory {
         if (name.equals(ALCOHOL_DRINKS.name())) {
             return ALCOHOL_DRINKS;
         }
-        if (name.equals(ANIMALS_PRODUCTS.name())) {
-            return ANIMALS_PRODUCTS;
-        }
-        if (name.equals(BAKERY_PRODUCTS.name())) {
-            return BAKERY_PRODUCTS;
-        }
-        if (name.equals(BOOKS_PRINTED_PRODUCTS.name())) {
-            return BOOKS_PRINTED_PRODUCTS;
-        }
-        if (name.equals(CAR_PRODUCTS.name())) {
-            return CAR_PRODUCTS;
+        if (name.equals(MILK_PRODUCT.name())) {
+            return MILK_PRODUCT;
         }
         if (name.equals(CHEESE.name())) {
             return CHEESE;
         }
-        if (name.equals(CHILD_PRODUCTS.name())) {
-            return CHILD_PRODUCTS;
+        if (name.equals(EGGS.name())) {
+            return EGGS;
         }
         if (name.equals(CONFECTIONERY.name())) {
             return CONFECTIONERY;
         }
-        if (name.equals(CONSERVATION.name())) {
-            return CONSERVATION;
-        }
-        if (name.equals(COOKED_FOOD.name())) {
-            return COOKED_FOOD;
-        }
-        if (name.equals(COSMETICS_HYGIENE.name())) {
-            return COSMETICS_HYGIENE;
+        if (name.equals(CHILD_PRODUCTS.name())) {
+            return CHILD_PRODUCTS;
         }
         if (name.equals(DRINKS_JUICE.name())) {
             return DRINKS_JUICE;
         }
-        if (name.equals(DIABETIC_NUTRITION.name())) {
-            return DIABETIC_NUTRITION;
-        }
-        if (name.equals(EGGS.name())) {
-            return EGGS;
-        }
-        if (name.equals(ELECTRIC_AND_HOUSEHOLD_APPLIANCES.name())) {
-            return ELECTRIC_AND_HOUSEHOLD_APPLIANCES;
-        }
-        if (name.equals(FISH_SEAFOOD_CAVIAR.name())) {
-            return FISH_SEAFOOD_CAVIAR;
-        }
-        if (name.equals(FROZEN_FOOD.name())) {
-            return FROZEN_FOOD;
+        if (name.equals(BAKERY_PRODUCTS.name())) {
+            return BAKERY_PRODUCTS;
         }
         if (name.equals(FRUITS_VEGETABLES.name())) {
             return FRUITS_VEGETABLES;
         }
-        if (name.equals(GADREN_PRODUCTS.name())) {
-            return GADREN_PRODUCTS;
-        }
-        if (name.equals(GAMES_AND_TOYS.name())) {
-            return GAMES_AND_TOYS;
-        }
         if (name.equals(GROCERY.name())) {
             return GROCERY;
-        }
-        if (name.equals(HOUSEHOLD_CHEMICALS.name())) {
-            return HOUSEHOLD_CHEMICALS;
-        }
-        if (name.equals(MEAT_BIRDS.name())) {
-            return MEAT_BIRDS;
         }
         if (name.equals(MEAT_GARSTRONOMY.name())) {
             return MEAT_GARSTRONOMY;
         }
-        if (name.equals(MILK_PRODUCT.name())) {
-            return MILK_PRODUCT;
+        if (name.equals(MEAT_BIRDS.name())) {
+            return MEAT_BIRDS;
         }
-        if (name.equals(STATIONERY.name())) {
-            return STATIONERY;
+        if (name.equals(FROZEN_FOOD.name())) {
+            return FROZEN_FOOD;
         }
-        if (name.equals(TEA_COFFEE_CACAO.name())) {
-            return TEA_COFFEE_CACAO;
+        if (name.equals(FISH_SEAFOOD_CAVIAR.name())) {
+            return FISH_SEAFOOD_CAVIAR;
         }
         if (name.equals(VEGETABLE_OIL_SAUCE_CONDIMENTS.name())) {
             return VEGETABLE_OIL_SAUCE_CONDIMENTS;
         }
-        if (name.equals(WITHOUT_CATEGORY.name())) {
-            return WITHOUT_CATEGORY;
+        if (name.equals(TEA_COFFEE_CACAO.name())) {
+            return TEA_COFFEE_CACAO;
+        }
+        if (name.equals(ANIMALS_PRODUCTS.name())) {
+            return ANIMALS_PRODUCTS;
+        }
+        if (name.equals(CONSERVATION.name())) {
+            return CONSERVATION;
+        }
+        if (name.equals(ICE_CREAM.name())) {
+            return ICE_CREAM;
+        }
+        if (name.equals(DIABETIC_NUTRITION.name())) {
+            return DIABETIC_NUTRITION;
+        }
+        if (name.equals(COOKED_FOOD.name())) {
+            return COOKED_FOOD;
+        }
+        if (name.equals(HOUSEHOLD_CHEMICALS.name())) {
+            return HOUSEHOLD_CHEMICALS;
+        }
+        if (name.equals(COSMETICS_HYGIENE.name())) {
+            return COSMETICS_HYGIENE;
+        }
+        if (name.equals(GAMES_AND_TOYS.name())) {
+            return GAMES_AND_TOYS;
+        }
+        if (name.equals(ELECTRIC_AND_HOUSEHOLD_APPLIANCES.name())) {
+            return ELECTRIC_AND_HOUSEHOLD_APPLIANCES;
+        }
+        if (name.equals(REPAIR_COTTAGE_REST_PRODUCTS.name())) {
+            return REPAIR_COTTAGE_REST_PRODUCTS;
+        }
+        if (name.equals(CAR_PRODUCTS.name())) {
+            return CAR_PRODUCTS;
         }
         if (name.equals(WARDROBE.name())) {
             return WARDROBE;
+        }
+        if (name.equals(STATIONERY.name())) {
+            return STATIONERY;
+        }
+        if (name.equals(BOOKS_PRINTED_PRODUCTS.name())) {
+            return BOOKS_PRINTED_PRODUCTS;
+        }
+        if (name.equals(GADREN_PRODUCTS.name())) {
+            return GADREN_PRODUCTS;
         }
         return null;
     }
