@@ -1,5 +1,6 @@
 package com.cookplan.companies.review;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +24,7 @@ import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.companies.review.products_fragment.CompanyProductsFragment;
 import com.cookplan.companies.review.todo_fragment.CompanyToDoListFragment;
+import com.cookplan.geofence.GeoFenceActivity;
 import com.cookplan.main.ViewPagerTabsAdapter;
 import com.cookplan.models.Company;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,8 +38,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCallback {
 
     public static final String COMPANY_OBJECT_KEY = "COMPANY_OBJECT_KEY";
+    private static final int SET_GEOFENCE_REQUEST = 13;
 
     private Company company;
+
+    protected Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +104,29 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
     private void setToolbarChanged(AppBarLayout appBarLayout, int verticalOffset) {
         Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.abc_ic_ab_back_material, null);
         TextView commentText = (TextView) findViewById(R.id.company_review_comment);
+        MenuItem geofenceOn = menu.findItem(R.id.app_bar_geofence_on);
+        MenuItem geofenceOff = menu.findItem(R.id.app_bar_geofence_off);
         if (verticalOffset < -200) {
             commentText.setVisibility(View.GONE);
             upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            if (geofenceOn != null) {
+                geofenceOn.setIcon(R.drawable.ic_geofence_on_white);
+            }
+            if (geofenceOff != null) {
+                geofenceOff.setIcon(R.drawable.ic_geofence_off_white);
+            }
         } else {
             commentText.setVisibility(View.VISIBLE);
             upArrow.setColorFilter(ContextCompat.getColor(this, R.color.primary), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (geofenceOn != null) {
+                geofenceOn.setIcon(R.drawable.ic_geofence_on_primary);
+            }
+            if (geofenceOff != null) {
+                geofenceOff.setIcon(R.drawable.ic_geofence_off_primary);
+            }
         }
     }
 
@@ -118,5 +139,43 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
         googleMap.addMarker(new MarkerOptions().position(location)
                                     .title(company.getName()));
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SET_GEOFENCE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                setGeoFenceModeMenuOptions();
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu _menu) {
+        getMenuInflater().inflate(R.menu.company_review_menu, _menu);
+        menu = _menu;
+        setGeoFenceModeMenuOptions();
+        return super.onCreateOptionsMenu(_menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.app_bar_geofence_on || id == R.id.app_bar_geofence_off) {
+            Intent intent = new Intent(this, GeoFenceActivity.class);
+            startActivityForResultWithLeftAnimation(intent, SET_GEOFENCE_REQUEST);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setGeoFenceModeMenuOptions() {
+        if (RApplication.isGeofenceModeTurnedOn()) {
+            menu.findItem(R.id.app_bar_geofence_off).setVisible(true);
+            menu.findItem(R.id.app_bar_geofence_on).setVisible(false);
+        } else {
+            menu.findItem(R.id.app_bar_geofence_off).setVisible(false);
+            menu.findItem(R.id.app_bar_geofence_on).setVisible(true);
+        }
     }
 }
