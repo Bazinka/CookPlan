@@ -25,6 +25,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.cookplan.utils.Constants.DAYS_TO_MILLISECONDS;
+
 /**
  * Created by DariaEfimova on 11.05.17.
  */
@@ -89,13 +91,13 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
             return;
         }
         try {
-            addGeoFence(company, radius, days);
+            addGeoFence(company, radius, days*DAYS_TO_MILLISECONDS);
         } catch (SecurityException securityException) {
             logSecurityException(securityException);
         }
     }
 
-    private void addGeoFence(Company company, float radius, long days) {
+    private void addGeoFence(Company company, float radius, long millisec) {
         if (!mGoogleApiClient.isConnected()) {
             if (mainView != null) {
                 mainView.setGeoFenceError(R.string.geofence_error_not_connected);
@@ -105,7 +107,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
         try {
             LocationServices.GeofencingApi.addGeofences(
                     mGoogleApiClient,
-                    getGeofencingRequest(getGeoFence(company, radius, days)),
+                    getGeofencingRequest(getGeoFence(company, radius, millisec)),
                     getGeofencePendingIntent()
             ).setResultCallback(status -> {
                 if (status.isSuccess()) {
@@ -171,7 +173,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
                 });
     }
 
-    private Geofence getGeoFence(Company company, float radius, long days) {
+    private Geofence getGeoFence(Company company, float radius, long millisec) {
         Geofence geofence = new Geofence.Builder()
                 .setRequestId(company.getId())
                 .setCircularRegion(
@@ -179,7 +181,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
                         company.getLongitude(),
                         radius
                 )
-                .setExpirationDuration(days)
+                .setExpirationDuration(millisec)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                                             Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
