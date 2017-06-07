@@ -6,6 +6,8 @@ package com.cookplan.utils;
 
 public class Constants {
 
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
     //    public static final float GEOFENCE_RADIUS_IN_METERS = 50;
     public static final long DAYS_TO_MILLISECONDS = 24 * 60 * 60 * 1000;
 }

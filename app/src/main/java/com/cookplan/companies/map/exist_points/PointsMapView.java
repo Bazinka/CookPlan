@@ -32,11 +32,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cookplan.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE;
+
 
 public class PointsMapView extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener {
-
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private boolean mPermissionDenied = false;
     private GoogleMap mMap;

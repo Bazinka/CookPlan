@@ -36,10 +36,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static com.cookplan.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE;
+
 public class NewPointMapView extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener,
         GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener {
-
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private boolean mPermissionDenied = false;
     private GoogleMap mMap;

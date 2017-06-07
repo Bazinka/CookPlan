@@ -1,6 +1,9 @@
 package com.cookplan.companies.list;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +16,13 @@ import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.companies.list.CompanyListBaseAdapter.CompanyListEventListener;
 import com.cookplan.models.Company;
+import com.cookplan.utils.PermissionUtils;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.cookplan.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE;
 
 
 public class CompanyListFragment extends BaseFragment implements CompanyListView {
@@ -24,6 +30,7 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
     private static final String MULTISELECT_LIST_KEY = "MULTISELECT_KEY";
 
 
+    private boolean mPermissionDenied = false;
     private CompanyListPresenter presenter;
 
     private OnPointsListClickListener clickListener;
@@ -60,12 +67,52 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
         presenter = new CompanyListPresenterImpl(this);
     }
 
+    private void requestPermissions() {
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            PermissionUtils.requestPermissionFromFragment(this, LOCATION_PERMISSION_REQUEST_CODE,
+                                                          android.Manifest.permission.ACCESS_FINE_LOCATION, true);
+        } else {
+            if (presenter != null) {
+                presenter.getUsersCompanyList();
+            }
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
+            return;
+        }
+
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
+                                                android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            requestPermissions();
+        } else {
+            mPermissionDenied = true;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mPermissionDenied) {
+            showMissingPermissionError();
+            mPermissionDenied = false;
+        }
+    }
+
+    private void showMissingPermissionError() {
+        PermissionUtils.ErrorDialog
+                .newInstance("showMissingPermissionError").show(getActivity().getFragmentManager(), "dialog");
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        if (presenter != null) {
-            presenter.getUsersCompanyList();
-        }
+        requestPermissions();
     }
 
     @Override
