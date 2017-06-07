@@ -12,4 +12,10 @@ public interface GeoFencePresenter {
 
     void onStop();
 
+    void isCompanyAddedToGeoFence(Company company);
+
+    void removeGeoFence(Company company);
+
+    void onStart();
+
 }

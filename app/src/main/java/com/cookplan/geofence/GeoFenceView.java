@@ -9,4 +9,6 @@ public interface GeoFenceView {
     void setGeofenceAddedSuccessfull();
 
     void setGeoFenceError(int errorResourceId);
+
+    void setGeofenceRemovedSuccessfull();
 }

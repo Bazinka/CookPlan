@@ -26,6 +26,9 @@ import com.cookplan.RApplication;
 import com.cookplan.companies.review.products_fragment.CompanyProductsFragment;
 import com.cookplan.companies.review.todo_fragment.CompanyToDoListFragment;
 import com.cookplan.geofence.GeoFenceActivity;
+import com.cookplan.geofence.GeoFencePresenter;
+import com.cookplan.geofence.GeoFencePresenterImpl;
+import com.cookplan.geofence.GeoFenceView;
 import com.cookplan.main.ViewPagerTabsAdapter;
 import com.cookplan.models.Company;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,12 +41,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import static com.cookplan.geofence.GeoFenceActivity.IS_COMPANY_ADDED_TO_GEOFENCE_KEY;
 
-public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCallback, CompanyReviewView {
+public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCallback, GeoFenceView {
 
     public static final String COMPANY_OBJECT_KEY = "COMPANY_OBJECT_KEY";
     private static final int SET_GEOFENCE_REQUEST = 13;
 
-    private CompanyReviewPresenter presenter;
+    private GeoFencePresenter presenter;
     private Company company;
 
     protected Menu menu;
@@ -61,7 +64,7 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
         if (company == null) {
             finish();
         } else {
-            presenter = new CompanyReviewPresenterImpl(this, company, this);
+            presenter = new GeoFencePresenterImpl(this, this);
             AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
             appBarLayout.addOnOffsetChangedListener(this::setToolbarChanged);
 
@@ -179,7 +182,7 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
         getMenuInflater().inflate(R.menu.company_review_menu, _menu);
         menu = _menu;
         if (presenter != null) {
-            presenter.isCompanyAddedToGeoFence();
+            presenter.isCompanyAddedToGeoFence(company);
         }
         return super.onCreateOptionsMenu(_menu);
     }
@@ -199,8 +202,7 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void setAddedToGeoFence(boolean isAdded) {
+    private void setAddedToGeoFence(boolean isAdded) {
         if (isAdded) {
             menu.findItem(R.id.app_bar_geofence_off).setVisible(true);
             menu.findItem(R.id.app_bar_geofence_on).setVisible(false);
@@ -211,10 +213,16 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
     }
 
     @Override
-    public void setError(int errorString) {
+    public void setGeofenceAddedSuccessfull() {
+        company.setAddedToGeoFence(true);
+        setAddedToGeoFence(true);
+    }
+
+    @Override
+    public void setGeoFenceError(int errorResourceId) {
         View mainView = findViewById(R.id.main_view);
         if (mainView != null) {
-            Snackbar.make(mainView, getString(errorString), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mainView, getString(errorResourceId), Snackbar.LENGTH_LONG).show();
         }
     }
 

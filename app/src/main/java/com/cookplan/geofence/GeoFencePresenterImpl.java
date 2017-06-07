@@ -68,6 +68,88 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
     }
 
     @Override
+    public void onStart() {
+        buildGoogleApiClient();
+    }
+
+    @Override
+    public void isCompanyAddedToGeoFence(Company company) {
+        if (company != null) {
+            dataProvider.getCompanyById(company.getId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Company>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Company company) {
+                            if (mainView != null && company.getId() != null) {
+                                mainView.setGeofenceAddedSuccessfull();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void removeGeoFence(Company company) {
+        if (!mGoogleApiClient.isConnected()) {
+            if (mainView != null) {
+                mainView.setGeoFenceError(R.string.geofence_error_not_connected);
+            }
+            return;
+        }
+        try {
+            LocationServices.GeofencingApi.removeGeofences(
+                    mGoogleApiClient,
+                    getGeofencePendingIntent()
+            ).setResultCallback(status -> {
+                if (status.isSuccess()) {
+                    company.setAddedToGeoFence(false);
+                    dataProvider.updateCompany(company)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new SingleObserver<Company>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
+
+                                }
+
+                                @Override
+                                public void onSuccess(Company company) {
+                                    if (mainView != null) {
+                                        mainView.setGeofenceRemovedSuccessfull();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    if (mainView != null && e instanceof CookPlanError) {
+                                        mainView.setGeoFenceError(R.string.error_update_object_to_database);
+                                    }
+                                }
+                            });
+                } else {
+                    if (mainView != null) {
+                        mainView.setGeoFenceError(GeofenceErrorMessages.getErrorString(status.getStatusCode()));
+                    }
+                }
+            });
+        } catch (SecurityException securityException) {
+            if (mainView != null) {
+                mainView.setGeoFenceError(R.string.geofence_error_permission_error);
+            }
+        }
+    }
+
+    @Override
     public void onConnected(Bundle connectionHint) {
         Log.i("GeoFencePresenterImpl", "Connected to GoogleApiClient");
     }
@@ -91,7 +173,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
             return;
         }
         try {
-            addGeoFence(company, radius, days*DAYS_TO_MILLISECONDS);
+            addGeoFence(company, radius, days * DAYS_TO_MILLISECONDS);
         } catch (SecurityException securityException) {
             logSecurityException(securityException);
         }
@@ -182,8 +264,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
                         radius
                 )
                 .setExpirationDuration(millisec)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                                            Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build();
         return geofence;
     }

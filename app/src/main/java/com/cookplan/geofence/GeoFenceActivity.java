@@ -164,4 +164,9 @@ public class GeoFenceActivity extends BaseActivity implements GeoFenceView {
         }
         finish();
     }
+
+    @Override
+    public void setGeofenceRemovedSuccessfull() {
+
+    }
 }
