@@ -104,8 +104,8 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
     private void setToolbarChanged(AppBarLayout appBarLayout, int verticalOffset) {
         Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.abc_ic_ab_back_material, null);
         TextView commentText = (TextView) findViewById(R.id.company_review_comment);
-        MenuItem geofenceOn = menu.findItem(R.id.app_bar_geofence_on);
-        MenuItem geofenceOff = menu.findItem(R.id.app_bar_geofence_off);
+        MenuItem geofenceOn = menu != null ? menu.findItem(R.id.app_bar_geofence_on) : null;
+        MenuItem geofenceOff = menu != null ? menu.findItem(R.id.app_bar_geofence_off) : null;
         if (verticalOffset < -200) {
             commentText.setVisibility(View.GONE);
             upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
