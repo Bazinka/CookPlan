@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -35,11 +36,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCallback {
+import static com.cookplan.geofence.GeoFenceActivity.IS_COMPANY_ADDED_TO_GEOFENCE_KEY;
+
+public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCallback, CompanyReviewView {
 
     public static final String COMPANY_OBJECT_KEY = "COMPANY_OBJECT_KEY";
     private static final int SET_GEOFENCE_REQUEST = 13;
 
+    private CompanyReviewPresenter presenter;
     private Company company;
 
     protected Menu menu;
@@ -57,6 +61,7 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
         if (company == null) {
             finish();
         } else {
+            presenter = new CompanyReviewPresenterImpl(this, company, this);
             AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
             appBarLayout.addOnOffsetChangedListener(this::setToolbarChanged);
 
@@ -98,6 +103,22 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
                     }
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (presenter != null) {
+            presenter.onStop();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (presenter != null) {
+            presenter.onStart();
         }
     }
 
@@ -146,7 +167,9 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SET_GEOFENCE_REQUEST) {
             if (resultCode == RESULT_OK) {
-                setGeoFenceModeMenuOptions();
+                boolean isCompantAdded = data.getBooleanExtra(IS_COMPANY_ADDED_TO_GEOFENCE_KEY, false);
+                company.setAddedToGeoFence(isCompantAdded);
+                setAddedToGeoFence(isCompantAdded);
             }
         }
     }
@@ -155,7 +178,9 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
     public boolean onCreateOptionsMenu(Menu _menu) {
         getMenuInflater().inflate(R.menu.company_review_menu, _menu);
         menu = _menu;
-        setGeoFenceModeMenuOptions();
+        if (presenter != null) {
+            presenter.isCompanyAddedToGeoFence();
+        }
         return super.onCreateOptionsMenu(_menu);
     }
 
@@ -163,19 +188,39 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.app_bar_geofence_on || id == R.id.app_bar_geofence_off) {
-            Intent intent = new Intent(this, GeoFenceActivity.class);
-            startActivityForResultWithLeftAnimation(intent, SET_GEOFENCE_REQUEST);
+            if (company.isAddedToGeoFence()) {
+                presenter.removeGeoFence(company);
+            } else {
+                Intent intent = new Intent(this, GeoFenceActivity.class);
+                intent.putExtra(GeoFenceActivity.COMPANY_OBJECT_KEY, company);
+                startActivityForResultWithLeftAnimation(intent, SET_GEOFENCE_REQUEST);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setGeoFenceModeMenuOptions() {
-        if (RApplication.isGeofenceModeTurnedOn()) {
+    @Override
+    public void setAddedToGeoFence(boolean isAdded) {
+        if (isAdded) {
             menu.findItem(R.id.app_bar_geofence_off).setVisible(true);
             menu.findItem(R.id.app_bar_geofence_on).setVisible(false);
         } else {
             menu.findItem(R.id.app_bar_geofence_off).setVisible(false);
             menu.findItem(R.id.app_bar_geofence_on).setVisible(true);
         }
+    }
+
+    @Override
+    public void setError(int errorString) {
+        View mainView = findViewById(R.id.main_view);
+        if (mainView != null) {
+            Snackbar.make(mainView, getString(errorString), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void setGeofenceRemovedSuccessfull() {
+        company.setAddedToGeoFence(false);
+        setAddedToGeoFence(false);
     }
 }

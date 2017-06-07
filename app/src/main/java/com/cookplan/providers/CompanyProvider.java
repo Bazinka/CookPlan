@@ -15,7 +15,7 @@ import io.reactivex.Single;
 public interface CompanyProvider {
 
     Observable<List<Company>> getUsersCompanyList();
-
+    
     Single<Company> getCompanyById(String companyId);
 
     Single<Company> createCompany(Company company);

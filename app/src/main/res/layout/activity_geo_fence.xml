@@ -1,14 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/tools"
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/company_review_map"
+            android:layout_margin="@dimen/main_margin_left">
+
+            <RelativeLayout
+                android:id="@+id/enter_radius_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/enter_radius_edittext_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/textView2"
+                    android:layout_toStartOf="@+id/textView2"
+                    android:hint="Введите радиус"
+                    android:nextFocusForward="@+id/enter_days_edittext_layout"
+                    android:scrollbars="vertical"
+                    android:theme="@style/CookPlanTextInputLayoutStyle"
+                    app:hintTextAppearance="@style/CookPlanHitInputStyle">
+
+                    <EditText
+                        android:id="@+id/radius_editText"
+                        style="@style/CookPlanEditTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:scrollbars="vertical"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/enter_radius_edittext_layout"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:text="@string/meters_title"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/enter_days_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/enter_radius_layout"
+                android:orientation="horizontal">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/enter_days_edittext_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/textView3"
+                    android:layout_toStartOf="@+id/textView3"
+                    android:hint="Введите срок действия уведомлений"
+                    android:scrollbars="vertical"
+                    android:theme="@style/CookPlanTextInputLayoutStyle"
+                    app:hintTextAppearance="@style/CookPlanHitInputStyle">
+
+                    <EditText
+                        android:id="@+id/days_editText"
+                        style="@style/CookPlanEditTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:scrollbars="vertical"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/enter_days_edittext_layout"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/main_item_padding"
+                    android:text="@string/days_title"/>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <fragment
+            android:id="@+id/company_review_map"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_alignParentBottom="true"
+            android:fitsSystemWindows="true"
+            map:liteMode="true"/>
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"

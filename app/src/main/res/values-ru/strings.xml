@@ -194,6 +194,9 @@
     <string name="you_entered_title">Вы вошли:</string>
     <string name="company_todo_list_title">Дела</string>
     <string name="company_product_list_title">Продукты</string>
+    <string name="alerts_for_title">Уведомления для</string>
+    <string name="meters_title">м.</string>
+    <string name="days_title">дней</string>
 
 
 </resources>

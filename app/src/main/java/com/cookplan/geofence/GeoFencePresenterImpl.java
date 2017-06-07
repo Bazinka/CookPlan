@@ -7,13 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.geofence.responce.GeofenceTransitionsIntentService;
 import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.providers.CompanyProvider;
 import com.cookplan.providers.impl.CompanyProviderImpl;
-import com.cookplan.utils.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -21,9 +19,6 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -86,7 +81,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
     }
 
     @Override
-    public void setGeoFence(List<Company> allCompanyList, List<Company> selectedCompanyList) {
+    public void setGeoFence(Company company, float radius, long days) {
         if (!mGoogleApiClient.isConnected()) {
             if (mainView != null) {
                 mainView.setGeoFenceError(R.string.geofence_error_not_connected);
@@ -94,23 +89,28 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
             return;
         }
         try {
-            LocationServices.GeofencingApi.removeGeofences(
+            addGeoFence(company, radius, days);
+        } catch (SecurityException securityException) {
+            logSecurityException(securityException);
+        }
+    }
+
+    private void addGeoFence(Company company, float radius, long days) {
+        if (!mGoogleApiClient.isConnected()) {
+            if (mainView != null) {
+                mainView.setGeoFenceError(R.string.geofence_error_not_connected);
+            }
+            return;
+        }
+        try {
+            LocationServices.GeofencingApi.addGeofences(
                     mGoogleApiClient,
+                    getGeofencingRequest(getGeoFence(company, radius, days)),
                     getGeofencePendingIntent()
             ).setResultCallback(status -> {
                 if (status.isSuccess()) {
-                    for (Company allCompany : allCompanyList) {
-                        boolean selected = false;
-                        for (Company selectCompany : selectedCompanyList) {
-                            if (allCompany.getId().equals(selectCompany.getId())) {
-                                selected = true;
-                                break;
-                            }
-                        }
-                        allCompany.setAddedToGeoFence(selected);
-                    }
-                    updateCompanies(allCompanyList);
-                    addGeoFence(selectedCompanyList);
+                    company.setAddedToGeoFence(true);
+                    updateCompany(company);
                 } else {
                     if (mainView != null) {
                         mainView.setGeoFenceError(GeofenceErrorMessages.getErrorString(status.getStatusCode()));
@@ -122,44 +122,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
         }
     }
 
-    private void addGeoFence(List<Company> selectedCompanyList) {
-        if (!selectedCompanyList.isEmpty()) {
-            if (!mGoogleApiClient.isConnected()) {
-                if (mainView != null) {
-                    mainView.setGeoFenceError(R.string.geofence_error_not_connected);
-                }
-                return;
-            }
-            try {
-                LocationServices.GeofencingApi.addGeofences(
-                        mGoogleApiClient,
-                        getGeofencingRequest(getGeoFenceList(selectedCompanyList)),
-                        getGeofencePendingIntent()
-                ).setResultCallback(status -> {
-                    if (status.isSuccess()) {
-                        RApplication.saveGeofenceModeTurnedOn(!selectedCompanyList.isEmpty());
-
-                        if (mainView != null) {
-                            mainView.setGeofenceAddedSuccessfull();
-                        }
-                    } else {
-                        if (mainView != null) {
-                            mainView.setGeoFenceError(GeofenceErrorMessages.getErrorString(status.getStatusCode()));
-                        }
-                    }
-                });
-            } catch (SecurityException securityException) {
-                logSecurityException(securityException);
-            }
-        } else {
-            RApplication.saveGeofenceModeTurnedOn(false);
-            if (mainView != null) {
-                mainView.setGeofenceAddedSuccessfull();
-            }
-        }
-    }
-
-    private GeofencingRequest getGeofencingRequest(List<Geofence> geoFenceList) {
+    private GeofencingRequest getGeofencingRequest(Geofence geoFence) {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
 
         // The INITIAL_TRIGGER_ENTER flag indicates that geofencing service should trigger a
@@ -168,7 +131,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
 
         // Add the geofences to be monitored by geofencing service.
-        builder.addGeofences(geoFenceList);
+        builder.addGeofence(geoFence);
 
         // Return a GeofencingRequest.
         return builder.build();
@@ -180,51 +143,47 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
         }
     }
 
-    public void updateCompanies(List<Company> companies) {
-        for (Company company : companies) {
-            dataProvider.updateCompany(company)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SingleObserver<Company>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
+    private void updateCompany(Company company) {
+        dataProvider.updateCompany(company)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Company>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onSuccess(Company company) {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            if (mainView != null && e instanceof CookPlanError) {
-                                mainView.setGeoFenceError(R.string.error_update_object_to_database);
+                    @Override
+                    public void onSuccess(Company company) {
+                        if (mainView != null) {
+                            if (company.isAddedToGeoFence()) {
+                                mainView.setGeofenceAddedSuccessfull();
                             }
                         }
-                    });
-        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null && e instanceof CookPlanError) {
+                            mainView.setGeoFenceError(R.string.error_update_object_to_database);
+                        }
+                    }
+                });
     }
 
-    private List<Geofence> getGeoFenceList(List<Company> companies) {
-        ArrayList<Geofence> mGeofenceList = new ArrayList<>();
-        for (Company company : companies) {
-
-            mGeofenceList.add(new Geofence.Builder()
-                                      // Set the request ID of the geofence. This is a string to identify this
-                                      // geofence.
-                                      .setRequestId(company.getId())
-                                      .setCircularRegion(
-                                              company.getLatitude(),
-                                              company.getLongitude(),
-                                              Constants.GEOFENCE_RADIUS_IN_METERS
-                                      )
-                                      .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
-                                      .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                                                                  Geofence.GEOFENCE_TRANSITION_EXIT)
-                                      .build());
-        }
-        return mGeofenceList;
+    private Geofence getGeoFence(Company company, float radius, long days) {
+        Geofence geofence = new Geofence.Builder()
+                .setRequestId(company.getId())
+                .setCircularRegion(
+                        company.getLatitude(),
+                        company.getLongitude(),
+                        radius
+                )
+                .setExpirationDuration(days)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                                            Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+        return geofence;
     }
 
     /**

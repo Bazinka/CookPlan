@@ -34,7 +34,6 @@ public class RApplication extends Application {
     public static final String PREFS_NAME = "COOK_PLAN_APP";
     private static final String CATEGORY_PRIORITY_PREFS_NAME = "CATEGORY_PRIORITY_PREFS_NAME";
     private static final String IS_ANONYMOUS_POSSIBLE_PREFS_NAME = "IS_ANONYMOUS_POSSIBLE_PREFS_NAME";
-    private static final String IS_GEOFENCE_MODE_TURN_ON_PREFS_NAME = "IS_GEOFENCE_MODE_TURN_ON_PREFS_NAME";
 
     private static Context context;
 
@@ -74,26 +73,6 @@ public class RApplication extends Application {
         } else {
             return false;
         }
-    }
-
-    public static void saveGeofenceModeTurnedOn(boolean geofencesAdded) {
-        SharedPreferences settings;
-        SharedPreferences.Editor editor;
-
-        settings = context.getSharedPreferences(PREFS_NAME,
-                                                Context.MODE_PRIVATE);
-        editor = settings.edit();
-
-        editor.putBoolean(IS_GEOFENCE_MODE_TURN_ON_PREFS_NAME, geofencesAdded);
-        editor.commit();
-    }
-
-    public static boolean isGeofenceModeTurnedOn() {
-        SharedPreferences settings;
-        settings = context.getSharedPreferences(PREFS_NAME,
-                                                Context.MODE_PRIVATE);
-
-        return settings.getBoolean(IS_GEOFENCE_MODE_TURN_ON_PREFS_NAME, false);
     }
 
     public static void saveAnonymousPossibility(boolean isPossible) {
