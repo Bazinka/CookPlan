@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:background="@drawable/select_item_background"
         card_view:cardCornerRadius="4dp"
-        card_view:cardElevatioqn="@dimen/main_item_padding"
+        card_view:cardElevation="@dimen/main_item_padding"
         card_view:cardUseCompatPadding="true">
 
         <LinearLayout

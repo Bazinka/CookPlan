@@ -197,6 +197,8 @@
     <string name="alerts_for_title">Уведомления для</string>
     <string name="meters_title">м.</string>
     <string name="days_title">дней</string>
+    <string name="company_added_to_geofence_for_10_days_message">Уведомления будут работать в течении 10 дней</string>
+    <string name="geofence_notification_turned_off">Уведомления отключены</string>
 
 
 </resources>

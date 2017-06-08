@@ -65,9 +65,18 @@ public class CompanyListRecyclerAdapter extends RecyclerView.Adapter<CompanyList
         }
 
 
+        if (company.isAddedToGeoFence()) {
+            holder.geoFenceImageView.setImageResource(R.drawable.ic_geofence_off_primary);
+        } else {
+            holder.geoFenceImageView.setImageResource(R.drawable.ic_geofence_on_primary);
+        }
+
         holder.geoFenceImageView.setTag(company);
         holder.geoFenceImageView.setOnClickListener(view -> {
-            //TODO:доделать
+            Company localCompany = (Company) view.getTag();
+            if (listener != null && localCompany != null) {
+                listener.onCompanyGeoFenceIconClick(localCompany);
+            }
         });
     }
 
@@ -138,6 +147,8 @@ public class CompanyListRecyclerAdapter extends RecyclerView.Adapter<CompanyList
 
     public interface CompanyListEventListener {
         void onCompanyClick(Company company);
+
+        void onCompanyGeoFenceIconClick(Company company);
 
         void onCompanyLongClick(Company company);
     }

@@ -3,6 +3,7 @@ package com.cookplan.companies.list;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,9 @@ import android.widget.ProgressBar;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.companies.list.CompanyListRecyclerAdapter.CompanyListEventListener;
+import com.cookplan.geofence.GeoFencePresenter;
+import com.cookplan.geofence.GeoFencePresenterImpl;
+import com.cookplan.geofence.GeoFenceView;
 import com.cookplan.models.Company;
 import com.cookplan.utils.PermissionUtils;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,14 +26,17 @@ import com.google.android.gms.maps.GoogleMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cookplan.utils.Constants.GEOFENCE_DEFAULT_PERIOD_MILLISECONDS;
+import static com.cookplan.utils.Constants.GEOFENCE_DEFAULT_RADIUS_IN_METERS;
 import static com.cookplan.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE;
 
 
-public class CompanyListFragment extends BaseFragment implements CompanyListView {
+public class CompanyListFragment extends BaseFragment implements CompanyListView, GeoFenceView {
 
 
     private boolean mPermissionDenied = false;
     private CompanyListPresenter presenter;
+    private GeoFencePresenter geoFencePresenter;
 
     private OnPointsListClickListener clickListener;
     private CompanyListRecyclerAdapter adapter;
@@ -51,6 +58,7 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         presenter = new CompanyListPresenterImpl(this);
+        geoFencePresenter = new GeoFencePresenterImpl(getActivity(), this);
     }
 
     private void requestPermissions() {
@@ -130,6 +138,17 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
             }
 
             @Override
+            public void onCompanyGeoFenceIconClick(Company company) {
+                if (geoFencePresenter != null) {
+                    if (company.isAddedToGeoFence()) {
+                        geoFencePresenter.removeGeoFence(company);
+                    } else {
+                        geoFencePresenter.setGeoFence(company, GEOFENCE_DEFAULT_RADIUS_IN_METERS, GEOFENCE_DEFAULT_PERIOD_MILLISECONDS);
+                    }
+                }
+            }
+
+            @Override
             public void onCompanyLongClick(Company company) {
                 new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
                         .setTitle(R.string.attention_title)
@@ -193,6 +212,30 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
         View recyclerView = mainView.findViewById(R.id.product_list_recycler);
         if (recyclerView != null) {
             recyclerView.setVisibility(visability);
+        }
+    }
+
+    @Override
+    public void setGeofenceAddedSuccessfull() {
+        View view = mainView.findViewById(R.id.main_view);
+        if (view != null) {
+            Snackbar.make(view, R.string.company_added_to_geofence_for_10_days_message, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void setGeoFenceError(int errorResourceId) {
+        View view = mainView.findViewById(R.id.main_view);
+        if (view != null) {
+            Snackbar.make(view, getString(errorResourceId), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void setGeofenceRemovedSuccessfull() {
+        View view = mainView.findViewById(R.id.main_view);
+        if (view != null) {
+            Snackbar.make(view, R.string.geofence_notification_turned_off, Snackbar.LENGTH_LONG).show();
         }
     }
 
