@@ -113,6 +113,8 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:+'
+    
+    compile 'com.github.clans:fab:1.6.4'
 }
 
 

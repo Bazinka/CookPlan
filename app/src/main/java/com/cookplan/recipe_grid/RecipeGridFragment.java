@@ -3,7 +3,6 @@ package com.cookplan.recipe_grid;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,6 +22,7 @@ import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
 import com.cookplan.recipe_view.RecipeViewActivity;
 import com.cookplan.utils.GridSpacingItemDecoration;
 import com.cookplan.utils.Utils;
+import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,8 +110,13 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
         });
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.add_recipe_fab);
-        fab.setOnClickListener(view -> {
+        FloatingActionButton addRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.add_recipe_fab);
+        addRecipeFab.setOnClickListener(view -> {
+            startNewRecipeActivity();
+        });
+
+        FloatingActionButton importRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.import_recipe_fab);
+        importRecipeFab.setOnClickListener(view -> {
             startNewRecipeActivity();
         });
 

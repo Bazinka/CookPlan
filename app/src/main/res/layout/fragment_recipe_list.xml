@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,13 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:indeterminate="true" />
+            android:indeterminate="true"/>
 
         <include
             layout="@layout/empty_recipe_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/progress_bar" />
+            android:layout_below="@id/progress_bar"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recipe_list_recycler"
@@ -33,11 +34,11 @@
             android:layout_below="@id/progress_bar"
             app:layoutManager="LinearLayoutManager"
             tools:context="com.cookplan.recipe_grid.RecipeGridFragment"
-            tools:listitem="@layout/recipe_list_item_layout" />
+            tools:listitem="@layout/recipe_list_item_layout"/>
     </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_recipe_fab"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/menu_yellow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -45,7 +46,47 @@
         android:layout_marginBottom="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:clickable="true"
-        app:fabSize="normal"
-        app:srcCompat="@drawable/ic_add_plus" />
+        app:srcCompat="@drawable/ic_add_plus"
+        fab:fab_size="normal"
+        fab:menu_colorNormal="@color/accent_color"
+        fab:menu_colorPressed="@color/accent_color_dark"
+        fab:menu_colorRipple="@color/accent_color_light"
+        fab:menu_labels_colorNormal="@color/transparency_grey"
+        fab:menu_labels_textColor="@color/white"
+        fab:menu_labels_textSize="@dimen/title_text_size">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_recipe_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:src="@drawable/ic_add_plus"
+            fab:fab_colorNormal="@color/accent_color"
+            fab:fab_label="Создать"
+            fab:fab_size="mini"
+            />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/import_recipe_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:src="@drawable/ic_import"
+            fab:fab_colorNormal="@color/accent_color"
+            fab:fab_label="Импортировать"
+            fab:fab_size="mini"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:clickable="true"-->
+    <!--app:fabSize="normal"/>-->
 </RelativeLayout>
