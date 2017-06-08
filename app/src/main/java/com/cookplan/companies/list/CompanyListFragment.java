@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
-import com.cookplan.companies.list.CompanyListBaseAdapter.CompanyListEventListener;
+import com.cookplan.companies.list.CompanyListRecyclerAdapter.CompanyListEventListener;
 import com.cookplan.models.Company;
 import com.cookplan.utils.PermissionUtils;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,19 +27,17 @@ import static com.cookplan.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE;
 
 public class CompanyListFragment extends BaseFragment implements CompanyListView {
 
-    private static final String MULTISELECT_LIST_KEY = "MULTISELECT_KEY";
-
 
     private boolean mPermissionDenied = false;
     private CompanyListPresenter presenter;
 
     private OnPointsListClickListener clickListener;
-    private CompanyListBaseAdapter adapter;
-    private boolean isMultiselect;
+    private CompanyListRecyclerAdapter adapter;
     private View mainView;
 
     public CompanyListFragment() {
     }
+
 
     public static CompanyListFragment newInstance() {
         CompanyListFragment fragment = new CompanyListFragment();
@@ -48,22 +46,10 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
         return fragment;
     }
 
-    public static CompanyListFragment newInstance(boolean isMultiselect) {
-        CompanyListFragment fragment = new CompanyListFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(MULTISELECT_LIST_KEY, isMultiselect);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        isMultiselect = false;
-        if (getArguments() != null) {
-            isMultiselect = getArguments().getBoolean(MULTISELECT_LIST_KEY);
-        }
         presenter = new CompanyListPresenterImpl(this);
     }
 
@@ -159,16 +145,12 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
             }
         };
 
-        if (!isMultiselect) {
-            adapter = new CompanyListRecyclerAdapter(new ArrayList<>(), eventListener);
-        } else {
-            adapter = new CompanyMultiselectRecyclerAdapter(new ArrayList<>(), eventListener);
-        }
+        adapter = new CompanyListRecyclerAdapter(new ArrayList<>(), eventListener);
         companyListRecyclerView.setAdapter(adapter);
 
         companyListRecyclerView.setRecyclerListener(viewHolder -> {
-            if (viewHolder instanceof CompanyListBaseAdapter.ViewHolder) {
-                CompanyListBaseAdapter.ViewHolder holder = (CompanyListBaseAdapter.ViewHolder) viewHolder;
+            if (viewHolder instanceof CompanyListRecyclerAdapter.ViewHolder) {
+                CompanyListRecyclerAdapter.ViewHolder holder = (CompanyListRecyclerAdapter.ViewHolder) viewHolder;
                 if (holder.map != null) {
                     // Clear the map and free up resources by changing the map type to none
                     holder.map.clear();
@@ -186,14 +168,6 @@ public class CompanyListFragment extends BaseFragment implements CompanyListView
 
     public List<Company> getValues() {
         return adapter != null ? adapter.getValues() : new ArrayList<>();
-    }
-
-    public List<Company> getSelectedValues() {
-        if (adapter instanceof CompanyMultiselectRecyclerAdapter) {
-            return ((CompanyMultiselectRecyclerAdapter) adapter).getSelectedValues();
-        } else {
-            return null;
-        }
     }
 
     @Override
