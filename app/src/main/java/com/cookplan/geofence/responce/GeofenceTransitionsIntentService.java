@@ -75,7 +75,6 @@ public class GeofenceTransitionsIntentService extends IntentService implements G
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
             presenter = new GeofenceResponsePresenterImpl(this);
@@ -108,7 +107,7 @@ public class GeofenceTransitionsIntentService extends IntentService implements G
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
                                                            R.drawable.main_drawable))
                 .setColor(getResources().getColor(R.color.primary, getTheme()))
-                .setContentTitle(getString(R.string.you_entered_title)+company.getName())
+                .setContentTitle(getString(R.string.you_entered_title) + company.getName())
                 .setContentText(getString(R.string.open_from_notification_title))
                 .setContentIntent(notificationPendingIntent);
 
@@ -116,7 +115,7 @@ public class GeofenceTransitionsIntentService extends IntentService implements G
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setSound(alarmSound);
-        builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+        builder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
