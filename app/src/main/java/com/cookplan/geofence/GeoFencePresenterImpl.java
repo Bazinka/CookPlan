@@ -87,7 +87,11 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
                         @Override
                         public void onSuccess(Company company) {
                             if (mainView != null && company.getId() != null) {
-                                mainView.setGeofenceAddedSuccessfull();
+                                if (company.isAddedToGeoFence()) {
+                                    mainView.setGeofenceAddedSuccessfull();
+                                } else {
+                                    mainView.setGeofenceRemovedSuccessfull();
+                                }
                             }
                         }
 
