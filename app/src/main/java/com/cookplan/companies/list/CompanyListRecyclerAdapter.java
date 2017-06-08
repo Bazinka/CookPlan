@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cookplan.R;
@@ -62,6 +63,12 @@ public class CompanyListRecyclerAdapter extends RecyclerView.Adapter<CompanyList
         if (holder.map != null) {
             holder.setMapLocation(holder.map, company);
         }
+
+
+        holder.geoFenceImageView.setTag(company);
+        holder.geoFenceImageView.setOnClickListener(view -> {
+            //TODO:доделать
+        });
     }
 
     public void updateItems(List<Company> companies) {
@@ -84,6 +91,7 @@ public class CompanyListRecyclerAdapter extends RecyclerView.Adapter<CompanyList
         public MapView mapView;
         public final TextView nameView;
         public final TextView commentView;
+        final ImageView geoFenceImageView;
         GoogleMap map;
 
         public ViewHolder(View view) {
@@ -93,6 +101,7 @@ public class CompanyListRecyclerAdapter extends RecyclerView.Adapter<CompanyList
             commentView = (TextView) view.findViewById(R.id.company_item_comment);
             mapView = (MapView) view.findViewById(R.id.company_map_preview);
             initializeMapView();
+            geoFenceImageView = (ImageView) view.findViewById(R.id.geofence_icon);
         }
 
         @Override
