@@ -288,4 +288,65 @@ public enum MeasureUnit implements Serializable {
             return true;
         }
     }
+
+    public static MeasureUnit parseUnit(String unitString) {
+        if (unitString.contains(RApplication.getAppContext().getString(R.string.by_the_taste))) {
+            return UNITS;
+        }
+        //try to find UNIT
+        String unitTitle = RApplication.getAppContext().getString(R.string.unit_title);
+        unitTitle = unitTitle.replace(".", "");
+        unitTitle = unitTitle + ".*";
+        String regex = String.format(unitTitle);
+        if (unitString.matches(regex)) {
+            return UNITS;
+        }
+
+        //try to find GRAMM
+        String grammTitle = RApplication.getAppContext().getString(R.string.gramm_title);
+        grammTitle = grammTitle.replace("р.", "");//leave only "г" from the "гр."
+        grammTitle = grammTitle + ".*";
+        regex = String.format(grammTitle);
+        if (unitString.matches(regex)) {
+            return GRAMM;
+        }
+
+        //try to find KILOGRAMM
+        String kilogrammTitle = RApplication.getAppContext().getString(R.string.kilogramm_title);
+        kilogrammTitle = kilogrammTitle.replace(".", "") + ".*";
+        regex = String.format(kilogrammTitle);
+        if (unitString.matches(regex)) {
+            return KILOGRAMM;
+        }
+
+        //try to find LITRE
+        String litreTitle = RApplication.getAppContext().getString(R.string.litre_title);
+        litreTitle = litreTitle.replace(".", ".*");
+        regex = String.format(litreTitle);
+        if (unitString.matches(regex)) {
+            return LITRE;
+        }
+
+        //try to find MILILITRE
+        String mililitreTitle = RApplication.getAppContext().getString(R.string.mililitre_title);
+        mililitreTitle = mililitreTitle.replace(".", ".*");
+        regex = String.format(mililitreTitle);
+        if (unitString.matches(regex)) {
+            return MILILITRE;
+        }
+
+        //try to find CUP
+        String cupTitle = RApplication.getAppContext().getString(R.string.cup_title);
+        cupTitle = cupTitle.replace(".", ".*");
+        regex = String.format(cupTitle);
+        if (unitString.matches(regex)) {
+            return CUP;
+        }
+
+        //                TEASPOON(6, R.string.teaspoon_title, false),
+        //                TABLESPOON(7, R.string.tablespoon_title, true),
+        //                BOTTLE(8, R.string.bottle_title, false),
+        //                PACKAGE(9, R.string.package_title, false);
+        return UNITS;
+    }
 }

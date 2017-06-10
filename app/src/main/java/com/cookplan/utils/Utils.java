@@ -115,4 +115,21 @@ public class Utils {
             return measureUnitList;
         }
     }
+
+    public static String getRegexAtLeastOneWord(String name) {
+        return "(" + name.toLowerCase().replaceAll("\\s+", "|") + ")";
+    }
+
+    public static String getRegexAllWord(String name) {
+        String[] splits = name.toLowerCase().split("\\s+");
+        String result = "";
+        if (splits.length > 1) {
+            for (String split : splits) {
+                result = result + "(?=.*\\b" + split + "\\b)";
+            }
+        } else {
+            result = result + name;
+        }
+        return result;
+    }
 }

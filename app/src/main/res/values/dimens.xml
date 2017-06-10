@@ -43,4 +43,7 @@
     <dimen name="todo_list_category_size">5dp</dimen>
     <dimen name="company_review_app_bar_height">300dp</dimen>
     <dimen name="company_review_app_bar_half_height">150dp</dimen>
+    <dimen name="button_margin_top">30dp</dimen>
+    <dimen name="button_margin_left">40dp</dimen>
+    <dimen name="flat_button_margin">8dp</dimen>
 </resources>

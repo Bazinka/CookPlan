@@ -5,7 +5,6 @@ import com.cookplan.models.Product;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -18,6 +17,8 @@ public interface ProductProvider {
     Observable<List<Product>> getProductList();
 
     Observable<List<Product>> getCompanyProductList(String companyId);
+
+    Observable<List<Product>> findProductsByNames(List<String> name);
 
     Single<Product> createProduct(Product product);
 

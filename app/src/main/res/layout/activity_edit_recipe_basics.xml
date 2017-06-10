@@ -108,9 +108,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/recipe_process_edit_layout"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="@dimen/button_margin_left"
+                    android:layout_marginRight="@dimen/button_margin_left"
+                    android:layout_marginTop="@dimen/button_margin_top"
                     android:text="@string/recognize_button_title"/>
 
             </RelativeLayout>

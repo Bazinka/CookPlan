@@ -1,11 +1,14 @@
 package com.cookplan.providers.impl;
 
+import android.util.Log;
+
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Product;
 import com.cookplan.providers.ProductProvider;
 import com.cookplan.utils.DatabaseConstants;
+import com.cookplan.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -84,6 +89,46 @@ public class ProductProviderImpl implements ProductProvider {
                 if (product.getCompanyIdList() != null) {
                     if (product.getCompanyIdList().contains(companyId)) {
                         products.add(product);
+                    }
+                }
+            }
+            return products;
+        });
+    }
+
+    @Override
+    public Observable<List<Product>> findProductsByNames(List<String> nameList) {
+        return subjectProductList.map(allProducts -> {
+            List<Product> products = new ArrayList<>();
+            for (String productName : nameList) {
+                boolean foundProduct = false;
+                for (Product product : allProducts) {
+                    if (product.getRusName().equals("Рахат-лукум")) {
+                        Log.d("Рахат-лукум", "Рахат-лукум");
+                    }
+                    if (productName.equals(product.toStringName())) {
+                        products.add(product);
+                        foundProduct = true;
+                        break;
+                    } else {
+                        String regExString = Utils.getRegexAllWord(productName);
+                        Pattern p = Pattern.compile(regExString);
+                        Matcher matcher = p.matcher(product.toStringName().toLowerCase());
+                        if (matcher.find()) {
+                            products.add(product);
+                            foundProduct = true;
+                            break;
+                        }
+                    }
+                }
+                if (!foundProduct) {//if didn't found special product, looking for suppose products
+                    for (Product product : allProducts) {
+                        String regExString = Utils.getRegexAtLeastOneWord(productName);
+                        Pattern p = Pattern.compile(regExString);
+                        Matcher matcher = p.matcher(product.toStringName().toLowerCase());
+                        if (matcher.find()) {
+                            products.add(product);
+                        }
                     }
                 }
             }

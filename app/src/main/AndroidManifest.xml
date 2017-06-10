@@ -109,6 +109,8 @@
 
         <activity android:name=".product_list.multiselect.MultiselectProductListActivity">
         </activity>
+        <activity android:name=".recipe_parsing.ImportRecipeActivity">
+        </activity>
     </application>
 
 </manifest>

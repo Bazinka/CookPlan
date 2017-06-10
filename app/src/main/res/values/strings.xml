@@ -276,6 +276,9 @@
     <string name="days_title">дней</string>
     <string name="company_added_to_geofence_for_10_days_message">Уведомления будут работать в течении 10 дней</string>
     <string name="geofence_notification_turned_off">Уведомления отключены</string>
+    <string name="import_recipe_title">Импорт рецепта</string>
+    <string name="import_button_title">Импортировать</string>
+    <string name="error_import_from_the_wrong_site_title">Пока мы не можем импортировать с этого сайта</string>
 
 
 </resources>
