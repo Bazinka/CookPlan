@@ -1,4 +1,4 @@
-package com.cookplan.recipe_parsing;
+package com.cookplan.recipe_import;
 
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;

@@ -1,4 +1,4 @@
-package com.cookplan.recipe_parsing.parser;
+package com.cookplan.recipe_import.parser;
 
 /**
  * Created by DariaEfimova on 09.06.17.

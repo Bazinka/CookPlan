@@ -1,4 +1,4 @@
-package com.cookplan.recipe_parsing;
+package com.cookplan.recipe_import;
 
 import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;

@@ -1,12 +1,12 @@
-package com.cookplan.recipe_parsing;
+package com.cookplan.recipe_import;
 
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
-import com.cookplan.recipe_parsing.parser.Parser;
-import com.cookplan.recipe_parsing.parser.ParserFactory;
-import com.cookplan.recipe_parsing.parser.ParserResultListener;
+import com.cookplan.recipe_import.parser.Parser;
+import com.cookplan.recipe_import.parser.ParserFactory;
+import com.cookplan.recipe_import.parser.ParserResultListener;
 
 import java.util.List;
 import java.util.Map;

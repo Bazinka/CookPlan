@@ -1,4 +1,4 @@
-package com.cookplan.recipe_parsing;
+package com.cookplan.recipe_import;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package com.cookplan.recipe_parsing;
+package com.cookplan.recipe_import;
 
 import android.content.Context;
 import android.content.Intent;
