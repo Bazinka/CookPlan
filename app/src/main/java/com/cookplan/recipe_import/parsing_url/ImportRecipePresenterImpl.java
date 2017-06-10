@@ -1,4 +1,4 @@
-package com.cookplan.recipe_import;
+package com.cookplan.recipe_import.parsing_url;
 
 import com.cookplan.R;
 import com.cookplan.RApplication;

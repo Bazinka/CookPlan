@@ -18,8 +18,8 @@ import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.main.MainActivity;
 import com.cookplan.models.Recipe;
+import com.cookplan.recipe_import.search_url.SearchRecipeUrlActivity;
 import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
-import com.cookplan.recipe_parsing.ImportRecipeActivity;
 import com.cookplan.recipe_view.RecipeViewActivity;
 import com.cookplan.utils.GridSpacingItemDecoration;
 import com.cookplan.utils.Utils;
@@ -118,14 +118,14 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
 
         FloatingActionButton importRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.import_recipe_fab);
         importRecipeFab.setOnClickListener(view -> {
-            startImportRecipeActivity();
+            startSearchRecipeUrlActivity();
         });
 
         return mainView;
     }
 
-    void startImportRecipeActivity() {
-        Intent intent = new Intent(getActivity(), ImportRecipeActivity.class);
+    void startSearchRecipeUrlActivity() {
+        Intent intent = new Intent(getActivity(), SearchRecipeUrlActivity.class);
         if (getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).startActivityWithLeftAnimation(intent);
         }

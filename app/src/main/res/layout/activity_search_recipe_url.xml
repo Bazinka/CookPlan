@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/main_margin_left"
+            android:layout_marginRight="@dimen/main_margin_left">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/enter_text_edittext_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/main_margin_left"
+                android:layout_marginTop="@dimen/main_margin_left"
+                android:layout_toLeftOf="@+id/search_btn"
+                android:layout_toStartOf="@+id/search_btn"
+                android:hint="@string/text_for_search"
+                android:scrollbars="vertical"
+                android:theme="@style/CookPlanTextInputLayoutStyle"
+                app:hintTextAppearance="@style/CookPlanHitInputStyle">
+
+                <EditText
+                    android:id="@+id/text_editText"
+                    style="@style/CookPlanEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textUri"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:scrollbars="vertical"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/search_btn"
+                style="@style/CookplanButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/enter_text_edittext_layout"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:drawableRight="@drawable/ic_search"
+                android:text="Поиск"/>
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_results_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/search_layout"
+            android:scrollbars="vertical"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

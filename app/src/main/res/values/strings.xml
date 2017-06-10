@@ -279,6 +279,8 @@
     <string name="import_recipe_title">Импорт рецепта</string>
     <string name="import_button_title">Импортировать</string>
     <string name="error_import_from_the_wrong_site_title">Пока мы не можем импортировать с этого сайта</string>
+    <string name="text_for_search">Текст для поиска</string>
+    <string name="search_recipe_title">Поиск рецепта</string>
 
 
 </resources>
