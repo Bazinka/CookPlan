@@ -14,48 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/enter_url_edittext_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/main_margin_left"
-            android:hint="Введите адрес страницы для импорта"
-            android:scrollbars="vertical"
-            android:theme="@style/CookPlanTextInputLayoutStyle"
-            app:hintTextAppearance="@style/CookPlanHitInputStyle">
-
-            <EditText
-                android:id="@+id/url_editText"
-                style="@style/CookPlanEditTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textUri"
-                android:lines="1"
-                android:maxLines="1"
-                android:scrollbars="vertical"/>
-        </android.support.design.widget.TextInputLayout>
-
-
-        <Button
-            android:id="@+id/import_btn"
-            style="@style/CookplanButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/enter_url_edittext_layout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/button_margin_left"
-            android:layout_marginRight="@dimen/button_margin_left"
-            android:layout_marginTop="@dimen/button_margin_top"
-            android:text="@string/import_button_title"/>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/approve_ingredients_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/import_btn"
-            android:visibility="gone"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical"
+            android:visibility="gone"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"

@@ -70,6 +70,7 @@ public class SearchRecipeUrlActivity extends BaseActivity implements SearchRecip
         GoogleRecipeListRecyclerAdapter adapter = new GoogleRecipeListRecyclerAdapter(
                 googleRecipes, url -> {
             Intent intent = new Intent(this, WebBrowserActivity.class);
+            intent.putExtra(WebBrowserActivity.URL_KEY, url);
             startActivityWithLeftAnimation(intent);
         }, this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_results_recycler_view);

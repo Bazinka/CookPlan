@@ -1,6 +1,5 @@
 package com.cookplan.recipe_import.parsing_url;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -8,9 +7,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.cookplan.BaseActivity;
@@ -24,6 +20,8 @@ import java.util.Map;
 
 public class ImportRecipeActivity extends BaseActivity implements ImportRecipeView {
 
+    public static final String URL_TO_IMPORT_KEY = "URL_TO_IMPORT_KEY";
+
     private ImportRecipePresenter presenter;
 
     @Override
@@ -32,27 +30,18 @@ public class ImportRecipeActivity extends BaseActivity implements ImportRecipeVi
         setContentView(R.layout.activity_import_recipe);
         setNavigationArrow();
         setTitle(getString(R.string.import_recipe_title));
+
         presenter = new ImportRecipePresenterImpl(this);
 
-        Button importButton = (Button) findViewById(R.id.import_btn);
-        if (importButton != null) {
-            importButton.setOnClickListener(view -> {
-                EditText urlEditText = (EditText) findViewById(R.id.url_editText);
-                String url = urlEditText.getText().toString();
-                if (!url.isEmpty()) {
-                    ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-                    progressBar.setVisibility(View.VISIBLE);
-                    InputMethodManager inputManager = (InputMethodManager)
-                            getSystemService(Context.INPUT_METHOD_SERVICE);
+        String url = getIntent().getStringExtra(URL_TO_IMPORT_KEY);
 
-                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                                                         InputMethodManager.HIDE_NOT_ALWAYS);
-                    if (presenter != null) {
-                        presenter.importRecipeFromUrl(url);
-                    }
-                }
-            });
+        if (presenter != null) {
+            presenter.importRecipeFromUrl(url);
         }
+
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.approve_ingredients_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
@@ -62,6 +51,9 @@ public class ImportRecipeActivity extends BaseActivity implements ImportRecipeVi
 
     @Override
     public void setResult(Recipe recipe, Map<String, List<Ingredient>> recipeToingredientsMap) {
+        if (recipeToingredientsMap == null || recipeToingredientsMap.size() == 0) {
+            finish();
+        }
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.approve_ingredients_recycler_view);
