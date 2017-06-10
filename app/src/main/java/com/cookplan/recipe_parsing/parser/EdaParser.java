@@ -88,25 +88,30 @@ public class EdaParser extends BaseParser {
         Elements ingredElements = doc.select(getIngredientItemTag());
         for (Element element : ingredElements) {
             Elements nameElem = element.select(getProductNameTag());
-            String name = nameElem != null ? nameElem.text() : "";
-            List<Ingredient> ingredients = new ArrayList<>();
-            for (Product product : products) {
-                Pattern p = Pattern.compile(Utils.getRegexAtLeastOneWord(name));
-                Matcher matcher = p.matcher(product.toStringName().toLowerCase());
-                if (matcher.find()) {
-                    Double amount = parseAmount(element);
-                    MeasureUnit unit = parseMeasureUnit(amount, element);
-                    Ingredient ingredient = new Ingredient(null,
-                                                           product.toStringName(),
-                                                           product,
-                                                           null,
-                                                           unit,
-                                                           amount,
-                                                           ShopListStatus.NONE);
-                    ingredients.add(ingredient);
-                }
+            if (nameElem == null || nameElem.size() == 0) {
+                nameElem = element.select("span.name");//if product doesn't have category on the website.
             }
-            ingredientMap.put(name + ": " + element.select(getAmountTag()).text(), ingredients);
+            String name = nameElem != null ? nameElem.text() : "";
+            if (!name.isEmpty()) {
+                List<Ingredient> ingredients = new ArrayList<>();
+                for (Product product : products) {
+                    Pattern p = Pattern.compile(Utils.getRegexAtLeastOneWord(name));
+                    Matcher matcher = p.matcher(product.toStringName().toLowerCase());
+                    if (matcher.find()) {
+                        Double amount = parseAmount(element);
+                        MeasureUnit unit = parseMeasureUnit(amount, element);
+                        Ingredient ingredient = new Ingredient(null,
+                                                               product.toStringName(),
+                                                               product,
+                                                               null,
+                                                               unit,
+                                                               amount,
+                                                               ShopListStatus.NONE);
+                        ingredients.add(ingredient);
+                    }
+                }
+                ingredientMap.put(name + ": " + element.select(getAmountTag()).text(), ingredients);
+            }
         }
         return ingredientMap;
     }

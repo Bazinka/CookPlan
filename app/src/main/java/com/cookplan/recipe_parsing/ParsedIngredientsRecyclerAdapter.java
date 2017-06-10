@@ -60,7 +60,7 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
         if (!amount.isEmpty()) {
             holder.amountTextView.setVisibility(View.VISIBLE);
 
-            holder.amountTextView.setText(ingredient.getAmountString());
+            holder.amountTextView.setText(amount);
         } else {
             holder.amountTextView.setVisibility(View.GONE);
         }
@@ -73,6 +73,7 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
         holder.mainView.setOnClickListener(view -> {
             int pos = (int) view.getTag();
             selectedIngred = ingredients.get(pos);
+            notifyDataSetChanged();
         });
     }
 
