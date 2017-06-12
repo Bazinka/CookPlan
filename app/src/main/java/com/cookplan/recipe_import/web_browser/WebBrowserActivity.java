@@ -43,10 +43,10 @@ public class WebBrowserActivity extends BaseActivity {
             }
 
             @Override
-            public void onPageFinished(WebView view, String url) {
+            public void onPageCommitVisible(WebView view, String url) {
                 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.GONE);
-                super.onPageFinished(view, url);
+                super.onPageCommitVisible(view, url);
             }
         });
         webView.loadUrl(recipeUrl);
