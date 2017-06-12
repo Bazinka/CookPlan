@@ -1,4 +1,4 @@
-package com.cookplan.recipe_import.parsing_url;
+package com.cookplan.recipe_import.approve_result;
 
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
@@ -12,7 +12,9 @@ import java.util.Map;
 
 public interface ImportRecipeView {
 
-    void setResult(Recipe recipe, Map<String, List<Ingredient>> ingredientList);
+    void setImportResult(Recipe recipe, Map<String, List<Ingredient>> ingredientList);
 
     void setError(String s);
+
+    void setRecipeSavedSuccessfully(String recipeId);
 }

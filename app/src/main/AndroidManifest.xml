@@ -109,7 +109,7 @@
 
         <activity android:name=".product_list.multiselect.MultiselectProductListActivity">
         </activity>
-        <activity android:name=".recipe_import.parsing_url.ImportRecipeActivity">
+        <activity android:name=".recipe_import.approve_result.ImportRecipeActivity">
         </activity>
         <activity android:name=".recipe_import.search_url.SearchRecipeUrlActivity">
         </activity>

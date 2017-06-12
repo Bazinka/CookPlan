@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/tools"
                 android:id="@+id/main_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,23 +61,29 @@
                 android:id="@+id/ingred_dont_exist_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/main_item_padding"
                 android:layout_marginLeft="@dimen/main_item_padding"
                 android:layout_marginRight="@dimen/main_item_padding"
+                android:layout_marginTop="@dimen/main_item_padding"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/new_product_name_edit_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/main_item_padding"
-                    android:layout_marginTop="@dimen/main_item_padding"
-                    android:clickable="false"
-                    android:ellipsize="end"
-                    android:gravity="left|center_vertical"
-                    android:lines="2"
-                    android:text="CookPlan не нашел у себя данных продуктов."
-                    android:textColor="@color/hint_or_disabled_text_color"
-                    android:textSize="@dimen/body_text_size"/>
+                    android:hint="@string/enter_new_product_title"
+                    android:theme="@style/CookPlanTextInputLayoutStyle"
+                    app:hintTextAppearance="@style/CookPlanHitInputStyle">
 
+                    <AutoCompleteTextView
+                        android:id="@+id/product_name_text"
+                        style="@style/CookPlanEditTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
+                        android:lines="1"/>
+
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -94,7 +101,7 @@
                     android:ellipsize="end"
                     android:gravity="left|center_vertical"
                     android:lines="2"
-                    android:text="CookPlan определил это как:\n(выберите верный продукт):"
+                    android:text="Или выберите из доступных в CookPlan:"
                     android:textColor="@color/hint_or_disabled_text_color"
                     android:textSize="@dimen/body_text_size"/>
 
@@ -110,7 +117,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/main_item_padding"
                     android:layout_marginTop="@dimen/main_item_padding"
                     android:orientation="vertical">
 
@@ -130,6 +136,7 @@
                             android:layout_height="wrap_content"
                             android:text="сохранить"
                             android:theme="@style/CookplanFlatButton"/>
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

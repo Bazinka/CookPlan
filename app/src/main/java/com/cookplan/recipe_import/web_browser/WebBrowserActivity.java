@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
-import com.cookplan.recipe_import.parsing_url.ImportRecipeActivity;
+import com.cookplan.recipe_import.approve_result.ImportRecipeActivity;
 
 public class WebBrowserActivity extends BaseActivity {
 

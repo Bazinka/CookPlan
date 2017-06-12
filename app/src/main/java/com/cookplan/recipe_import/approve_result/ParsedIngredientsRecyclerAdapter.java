@@ -1,4 +1,4 @@
-package com.cookplan.recipe_import.parsing_url;
+package com.cookplan.recipe_import.approve_result;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -21,9 +21,6 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
 
     public ParsedIngredientsRecyclerAdapter(List<Ingredient> items) {
         ingredients = items;
-        if (ingredients.size() == 1) {
-            selectedIngred = ingredients.get(0);
-        }
     }
 
     @Override
