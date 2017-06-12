@@ -6,7 +6,6 @@ import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 import com.cookplan.models.ShopListStatus;
-import com.cookplan.utils.Utils;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,8 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by DariaEfimova on 09.06.17.
@@ -52,14 +49,22 @@ public class EdaParser extends BaseParser {
 
         Elements products = doc.select(getIngredientItemTag());
         for (Element product : products) {
-            Elements nameElem = product.select(getProductNameTag());
-            String name = nameElem != null ? nameElem.text() : "";
+            String name = parseStringProductName(product);
             if (!name.isEmpty()) {
                 names.add(name);
             }
         }
 
         return names;
+    }
+
+    private String parseStringProductName(Element element) {
+        Elements nameElem = element.select(getProductNameTag());
+        if (nameElem == null || nameElem.size() == 0) {
+            nameElem = element.select("span.name");//if product doesn't have category on the website.
+        }
+        String name = nameElem != null ? nameElem.text() : "";
+        return name;
     }
 
 
@@ -83,37 +88,32 @@ public class EdaParser extends BaseParser {
     }
 
     @Override
-    protected Map<String, List<Ingredient>> parceDocumentToIngredientList(Document doc, List<Product> products) {
+    protected Map<String, List<Ingredient>> parceDocumentToIngredientList(Document doc, Map<String, List<Product>> namesToProducts) {
         Map<String, List<Ingredient>> ingredientMap = new HashMap<>();
         Elements ingredElements = doc.select(getIngredientItemTag());
         for (Element element : ingredElements) {
-            Elements nameElem = element.select(getProductNameTag());
-            if (nameElem == null || nameElem.size() == 0) {
-                nameElem = element.select("span.name");//if product doesn't have category on the website.
-            }
-            String name = nameElem != null ? nameElem.text() : "";
+            String name = parseStringProductName(element);
             if (!name.isEmpty()) {
                 List<Ingredient> ingredients = new ArrayList<>();
-                for (Product product : products) {
-                    Pattern p = Pattern.compile(Utils.getRegexAtLeastOneWord(name));
-                    Matcher matcher = p.matcher(product.toStringName().toLowerCase());
-                    if (matcher.find()) {
-                        Double amount = parseAmount(element);
-                        MeasureUnit unit = parseMeasureUnit(amount, element);
-                        Ingredient ingredient = new Ingredient(null,
-                                                               product.toStringName(),
-                                                               product,
-                                                               null,
-                                                               unit,
-                                                               amount,
-                                                               ShopListStatus.NONE);
-                        ingredients.add(ingredient);
-                    }
+                for (Product product : namesToProducts.get(name)) {
+                    ingredients.add(parseIngredient(product, element));
                 }
                 ingredientMap.put(name + ": " + element.select(getAmountTag()).text(), ingredients);
             }
         }
         return ingredientMap;
+    }
+
+    private Ingredient parseIngredient(Product product, Element element) {
+        Double amount = parseAmount(element);
+        MeasureUnit unit = parseMeasureUnit(amount, element);
+        return new Ingredient(null,
+                              product.toStringName(),
+                              product,
+                              null,
+                              unit,
+                              amount,
+                              ShopListStatus.NONE);
     }
 
     private MeasureUnit parseMeasureUnit(Double amount, Element element) {

@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.cookplan.models.MeasureUnit.BOTTLE;
 import static com.cookplan.models.MeasureUnit.CUP;
@@ -72,6 +74,22 @@ public class Utils {
         return kilogramUnitMap;
     }
 
+    public static boolean isStringEquals(String firstString, String secondString) {
+        boolean isEqual = false;
+        if (firstString.equals(secondString)) {
+            isEqual = true;
+        } else {
+            String regExString = Utils.getRegexAllLowerCaseWords(firstString);
+            Matcher matcher = Pattern
+                    .compile(regExString)
+                    .matcher(secondString.toLowerCase());
+            if (matcher.find()) {
+                isEqual = true;
+            }
+        }
+        return isEqual;
+    }
+
 
     private static class UnitsMapBuilder {
         private final Map<MeasureUnit, Double> measureUnitToAmoutMap;
@@ -117,18 +135,38 @@ public class Utils {
     }
 
     public static String getRegexAtLeastOneWord(String name) {
-        return "(" + name.toLowerCase().replaceAll("\\s+", "|") + ")";
-    }
-
-    public static String getRegexAllWord(String name) {
-        String[] splits = name.toLowerCase().split("\\s+");
+        String[] splits = name.split("\\s+");
         String result = "";
         if (splits.length > 1) {
-            for (String split : splits) {
+            String[] splitsLowerCase = name.toLowerCase().split("\\s+");
+            result = "(";
+            for (int i = 0; i < splits.length - 1; i++) {
+                if (splits[i].equals(splitsLowerCase[i])) {
+                    result = result + "\\b" + splits[i] + "\\b|";
+                } else {
+                    result = result + "\\b" + splits[i] + "\\b|\\b" + splitsLowerCase[i] + "\\b|";
+                }
+            }
+            if (splits[splits.length - 1].equals(splitsLowerCase[splits.length - 1])) {
+                result = result + "\\b" + splits[splits.length - 1] + "\\b)";
+            } else {
+                result = result + "\\b" + splits[splits.length - 1] + "\\b|" + splitsLowerCase[splits.length - 1] + "\\b)";
+            }
+        } else {
+            result = "(\\b" + name + "\\b|\\b" + name.toLowerCase() + "\\b)";
+        }
+        return result;
+    }
+
+    public static String getRegexAllLowerCaseWords(String name) {
+        String[] splitsLowerCase = name.toLowerCase().split("\\s+");
+        String result = "";
+        if (splitsLowerCase.length > 1) {
+            for (String split : splitsLowerCase) {
                 result = result + "(?=.*\\b" + split + "\\b)";
             }
         } else {
-            result = result + name;
+            result = "(?=.*\\b" + name.toLowerCase() + "\\b)";
         }
         return result;
     }

@@ -76,13 +76,13 @@ public abstract class BaseParser implements Parser {
 
     private void parseDocument(Document doc) {
         List<String> names = getProductsNames(doc);
-        productDataProvider.findProductsByNames(names).subscribeOn(Schedulers.io())
+        productDataProvider.getTheClosestProductsToStrings(names).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<List<Product>>() {
+                .subscribe(new DisposableObserver<Map<String, List<Product>>>() {
                     @Override
-                    public void onNext(List<Product> products) {
+                    public void onNext(Map<String, List<Product>> namesToProducts) {
                         if (resultListener != null) {
-                            Map<String, List<Ingredient>> ingredients = parceDocumentToIngredientList(doc, products);
+                            Map<String, List<Ingredient>> ingredients = parceDocumentToIngredientList(doc, namesToProducts);
                             Recipe recipe = parceDocumentToRecipe(doc);
                             resultListener.onSuccess(recipe, ingredients);
                         }
@@ -109,7 +109,7 @@ public abstract class BaseParser implements Parser {
 
     protected abstract List<String> getProductsNames(Document doc);
 
-    protected abstract Map<String, List<Ingredient>> parceDocumentToIngredientList(Document doc, List<Product> products);
+    protected abstract Map<String, List<Ingredient>> parceDocumentToIngredientList(Document doc, Map<String, List<Product>> namesToProducts);
 
     private Single<Document> getDocumentFromUrl(String url) {
         return Single.create(emitter -> {

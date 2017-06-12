@@ -3,6 +3,7 @@ package com.cookplan.providers;
 import com.cookplan.models.Product;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -18,7 +19,7 @@ public interface ProductProvider {
 
     Observable<List<Product>> getCompanyProductList(String companyId);
 
-    Observable<List<Product>> findProductsByNames(List<String> name);
+    Observable<Map<String, List<Product>>> getTheClosestProductsToStrings(List<String> name);
 
     Single<Product> createProduct(Product product);
 

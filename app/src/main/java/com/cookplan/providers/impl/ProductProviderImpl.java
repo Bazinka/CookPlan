@@ -1,7 +1,5 @@
 package com.cookplan.providers.impl;
 
-import android.util.Log;
-
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
@@ -97,42 +95,34 @@ public class ProductProviderImpl implements ProductProvider {
     }
 
     @Override
-    public Observable<List<Product>> findProductsByNames(List<String> nameList) {
+    public Observable<Map<String, List<Product>>> getTheClosestProductsToStrings(List<String> nameList) {
         return subjectProductList.map(allProducts -> {
-            List<Product> products = new ArrayList<>();
+            Map<String, List<Product>> result = new HashMap<>();
             for (String productName : nameList) {
+                List<Product> products = new ArrayList<>();
                 boolean foundProduct = false;
                 for (Product product : allProducts) {
-                    if (product.getRusName().equals("Рахат-лукум")) {
-                        Log.d("Рахат-лукум", "Рахат-лукум");
-                    }
-                    if (productName.equals(product.toStringName())) {
+                    if (Utils.isStringEquals(productName, product.toStringName())) {
                         products.add(product);
                         foundProduct = true;
-                        break;
-                    } else {
-                        String regExString = Utils.getRegexAllWord(productName);
-                        Pattern p = Pattern.compile(regExString);
-                        Matcher matcher = p.matcher(product.toStringName().toLowerCase());
-                        if (matcher.find()) {
-                            products.add(product);
-                            foundProduct = true;
+                        if (productName.split("\\s+").length != 1) {
                             break;
                         }
                     }
                 }
                 if (!foundProduct) {//if didn't found special product, looking for suppose products
+                    String regExString = Utils.getRegexAtLeastOneWord(productName);
+                    Pattern p = Pattern.compile(regExString);
                     for (Product product : allProducts) {
-                        String regExString = Utils.getRegexAtLeastOneWord(productName);
-                        Pattern p = Pattern.compile(regExString);
                         Matcher matcher = p.matcher(product.toStringName().toLowerCase());
                         if (matcher.find()) {
                             products.add(product);
                         }
                     }
                 }
+                result.put(productName, products);
             }
-            return products;
+            return result;
         });
     }
 
