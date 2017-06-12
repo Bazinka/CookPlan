@@ -24,7 +24,7 @@ public class WebBrowserActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_browser);
         setNavigationArrow();
-        setTitle("Импорт");
+        setTitle(getString(R.string.recipe_in_internet_title));
         recipeUrl = getIntent().getStringExtra(URL_KEY);
         if (recipeUrl.isEmpty()) {
             finish();

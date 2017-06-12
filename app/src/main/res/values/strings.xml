@@ -281,6 +281,7 @@
     <string name="error_import_from_the_wrong_site_title">Пока мы не можем импортировать с этого сайта</string>
     <string name="text_for_search">Текст для поиска</string>
     <string name="search_recipe_title">Поиск рецепта</string>
+    <string name="recipe_in_internet_title">Рецепт в интернете</string>
 
 
 </resources>
