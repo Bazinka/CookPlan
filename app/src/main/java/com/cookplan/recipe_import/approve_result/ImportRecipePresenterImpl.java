@@ -127,10 +127,30 @@ public class ImportRecipePresenterImpl implements ImportRecipePresenter {
 
                     @Override
                     public void onSuccess(Recipe recipe) {
-                        if (mainView != null) {
-                            recipeId = recipe.getId();
-                            mainView.setRecipeSavedSuccessfully(recipe.getId());
-                        }
+                        recipeDataProvider.getRecipeById(recipe.getId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new SingleObserver<Recipe>() {
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Recipe recipe) {
+                                        if (mainView != null) {
+                                            recipeId = recipe.getId();
+                                            mainView.setRecipeSavedSuccessfully(recipe);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        if (mainView != null && e instanceof CookPlanError) {
+                                            mainView.setError(e.getMessage());
+                                        }
+                                    }
+                                });
                     }
 
                     @Override

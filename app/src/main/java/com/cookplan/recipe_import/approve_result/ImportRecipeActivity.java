@@ -121,11 +121,11 @@ public class ImportRecipeActivity extends BaseActivity implements ImportRecipeVi
     }
 
     @Override
-    public void setRecipeSavedSuccessfully(String recipeId) {
+    public void setRecipeSavedSuccessfully(Recipe recipe) {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         if (adapter != null) {
-            adapter.setIdToRecipe(recipeId);
+            adapter.updateRecipe(recipe);
         }
     }
 

@@ -72,6 +72,7 @@ public class SearchRecipeUrlActivity extends BaseActivity implements SearchRecip
             Intent intent = new Intent(this, WebBrowserActivity.class);
             intent.putExtra(WebBrowserActivity.URL_KEY, url);
             startActivityWithLeftAnimation(intent);
+            finish();
         }, this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_results_recycler_view);
         recyclerView.setAdapter(adapter);

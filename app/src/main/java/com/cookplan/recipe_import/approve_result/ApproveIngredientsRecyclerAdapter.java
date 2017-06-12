@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,17 +112,19 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
         return recipe;
     }
 
-    public void setIdToRecipe(String idToRecipe) {
-        if (recipe != null) {
-            recipe.setId(idToRecipe);
-        }
+    public void updateRecipe(Recipe newRecipe) {
+        recipe = newRecipe;
         notifyDataSetChanged();
     }
 
     public void removeIngredientItem(String key) {
         values.remove(key);
         recipeToingredientsMap.remove(key);
-        notifyDataSetChanged();
+        if (values.size() == 0) {
+            listener.allItemsDone();
+        } else {
+            notifyDataSetChanged();
+        }
     }
 
     private void fillIngredientItemView(String key, IngredientViewHolder ingredientViewHolder) {
@@ -149,23 +153,19 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
                 String tag = (String) v.getTag();
                 if (tag != null) {
                     if (listener != null) {
-                        if (values.size() == 0) {
-                            listener.allItemsDone();
+                        if (adapter.getSelectedIngred() != null) {
+                            Ingredient ingredient = adapter.getSelectedIngred();
+                            ingredient.setRecipeId(recipe.getId());
+                            listener.onIngredientSaveEvent(tag, ingredient);
                         } else {
-                            if (adapter.getSelectedIngred() != null) {
-                                Ingredient ingredient = adapter.getSelectedIngred();
-                                ingredient.setRecipeId(recipe.getId());
-                                listener.onIngredientSaveEvent(tag, ingredient);
-                            } else {
-                                String productName = ingredientViewHolder.productNameEditText.getText().toString();
-                                if (!productName.isEmpty()) {
-                                    double amount = getAmountFromString(tag);
-                                    MeasureUnit unit = getMeasureUnitFromString(tag);
-                                    listener.onIngredientSaveEvent(
-                                            tag,
-                                            (ProductCategory) ingredientViewHolder.productCategorySpinner.getSelectedItem(),
-                                            productName, amount, unit);
-                                }
+                            String productName = ingredientViewHolder.productNameEditText.getText().toString();
+                            if (!productName.isEmpty()) {
+                                double amount = getAmountFromString(tag);
+                                MeasureUnit unit = getMeasureUnitFromString(tag);
+                                listener.onIngredientSaveEvent(
+                                        tag,
+                                        (ProductCategory) ingredientViewHolder.productCategorySpinner.getSelectedItem(),
+                                        productName, amount, unit);
                             }
                         }
                     }
@@ -184,10 +184,24 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
             }
         });
         ingredientViewHolder.productNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                adapter.clearSelectedItem();
-            } else {
+            if (!hasFocus) {
                 setCategorySpinnerValues(ingredientViewHolder);
+            }
+        });
+        ingredientViewHolder.productNameEditText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if (count > 0) {
+                    adapter.clearSelectedItem();
+                }
             }
         });
 

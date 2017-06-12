@@ -58,6 +58,7 @@ public class WebBrowserActivity extends BaseActivity {
                 Intent intent = new Intent(this, ImportRecipeActivity.class);
                 intent.putExtra(ImportRecipeActivity.URL_TO_IMPORT_KEY, recipeUrl);
                 startActivityWithLeftAnimation(intent);
+                finish();
             });
         }
     }
