@@ -4,11 +4,14 @@ package com.cookplan.recipe_grid;
 import android.support.annotation.NonNull;
 
 import com.cookplan.models.CookPlanError;
+import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.models.ShareUserInfo;
 import com.cookplan.providers.FamilyModeProvider;
+import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.RecipeProvider;
 import com.cookplan.providers.impl.FamilyModeProviderImpl;
+import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.RecipeProviderImpl;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -29,14 +32,16 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter, FirebaseAut
 
 
     private RecipeGridView mainView;
-    private RecipeProvider dataProvider;
+    private RecipeProvider recipeDataProvider;
+    private IngredientProvider ingredientDataProvider;
     private FamilyModeProvider familyModeProvider;
     private CompositeDisposable disposables;
 
     public RecipeGridPresenterImpl(RecipeGridView mainView) {
         this.mainView = mainView;
         FirebaseAuth.getInstance().addAuthStateListener(this);
-        dataProvider = new RecipeProviderImpl();
+        recipeDataProvider = new RecipeProviderImpl();
+        ingredientDataProvider = new IngredientProviderImpl();
         familyModeProvider = new FamilyModeProviderImpl();
         disposables = new CompositeDisposable();
     }
@@ -50,7 +55,7 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter, FirebaseAut
                                     @Override
                                     public void onNext(List<ShareUserInfo> shareUserInfos) {
                                         disposables.add(
-                                                dataProvider.getSharedToMeRecipeList(shareUserInfos)
+                                                recipeDataProvider.getSharedToMeRecipeList(shareUserInfos)
                                                         .subscribeOn(Schedulers.io())
                                                         .observeOn(AndroidSchedulers.mainThread())
                                                         .subscribeWith(new DisposableObserver<List<Recipe>>() {
@@ -95,7 +100,55 @@ public class RecipeGridPresenterImpl implements RecipeGridPresenter, FirebaseAut
 
     @Override
     public void removeRecipe(Recipe recipe) {
-        dataProvider.removeRecipe(recipe)
+        disposables.add(ingredientDataProvider.getIngredientListByRecipeId(recipe.getId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeWith(new DisposableObserver<List<Ingredient>>() {
+
+                                    @Override
+                                    public void onNext(List<Ingredient> ingredients) {
+                                        for (Ingredient ingredient : ingredients) {
+                                            removeIngredient(ingredient);
+                                        }
+                                        recipeDataProvider.removeRecipe(recipe)
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(new CompletableObserver() {
+                                                    @Override
+                                                    public void onSubscribe(Disposable d) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onComplete() {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Throwable e) {
+                                                        if (mainView != null && e instanceof CookPlanError) {
+                                                            mainView.setErrorToast(e.getMessage());
+                                                        }
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        if (mainView != null && e instanceof CookPlanError) {
+                                            mainView.setErrorToast(e.getMessage());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+
+                                    }
+                                }));
+    }
+
+    private void removeIngredient(Ingredient ingredient) {
+        ingredientDataProvider.removeIngredient(ingredient)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CompletableObserver() {
