@@ -17,4 +17,6 @@ public interface ImportRecipeView {
     void setError(String s);
 
     void setRecipeSavedSuccessfully(String recipeId);
+
+    void setIngredientSavedSuccessfully(String key);
 }

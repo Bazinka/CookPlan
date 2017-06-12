@@ -5,6 +5,8 @@ import com.cookplan.RApplication;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -289,64 +291,92 @@ public enum MeasureUnit implements Serializable {
         }
     }
 
+    /*
+    This method works only for russian language
+     */
     public static MeasureUnit parseUnit(String unitString) {
-        if (unitString.contains(RApplication.getAppContext().getString(R.string.by_the_taste))) {
-            return UNITS;
-        }
+        MeasureUnit unit = UNITS;
+
         //try to find UNIT
         String unitTitle = RApplication.getAppContext().getString(R.string.unit_title);
         unitTitle = unitTitle.replace(".", "");
-        unitTitle = unitTitle + ".*";
-        String regex = String.format(unitTitle);
-        if (unitString.matches(regex)) {
-            return UNITS;
+        String regExString = unitTitle + "\\.*";
+        Matcher matcher = Pattern.compile(regExString).matcher(unitString);
+        if (matcher.find()) {
+            unit = UNITS;
         }
-
         //try to find GRAMM
         String grammTitle = RApplication.getAppContext().getString(R.string.gramm_title);
-        grammTitle = grammTitle.replace("р.", "");//leave only "г" from the "гр."
-        grammTitle = grammTitle + ".*";
-        regex = String.format(grammTitle);
-        if (unitString.matches(regex)) {
-            return GRAMM;
+        grammTitle = "(\\b" + RApplication.getAppContext().getString(R.string.short_gramm_title)
+                + ".*\\b|\\b" + grammTitle + ")";
+        matcher = Pattern.compile(grammTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = GRAMM;
         }
 
         //try to find KILOGRAMM
         String kilogrammTitle = RApplication.getAppContext().getString(R.string.kilogramm_title);
-        kilogrammTitle = kilogrammTitle.replace(".", "") + ".*";
-        regex = String.format(kilogrammTitle);
-        if (unitString.matches(regex)) {
-            return KILOGRAMM;
+        kilogrammTitle = "(\\b" + kilogrammTitle + "*\\b)";
+        matcher = Pattern.compile(kilogrammTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = KILOGRAMM;
         }
 
         //try to find LITRE
         String litreTitle = RApplication.getAppContext().getString(R.string.litre_title);
-        litreTitle = litreTitle.replace(".", ".*");
-        regex = String.format(litreTitle);
-        if (unitString.matches(regex)) {
-            return LITRE;
+        litreTitle = "(\\b" + litreTitle + "*\\b)";
+        matcher = Pattern.compile(litreTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = LITRE;
         }
 
         //try to find MILILITRE
         String mililitreTitle = RApplication.getAppContext().getString(R.string.mililitre_title);
-        mililitreTitle = mililitreTitle.replace(".", ".*");
-        regex = String.format(mililitreTitle);
-        if (unitString.matches(regex)) {
-            return MILILITRE;
+        mililitreTitle = "(\\b" + mililitreTitle + "*\\b)";
+        matcher = Pattern.compile(mililitreTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = MILILITRE;
         }
 
         //try to find CUP
         String cupTitle = RApplication.getAppContext().getString(R.string.cup_title);
-        cupTitle = cupTitle.replace(".", ".*");
-        regex = String.format(cupTitle);
-        if (unitString.matches(regex)) {
-            return CUP;
+        cupTitle = "(\\b" + cupTitle + "*\\b)";
+        matcher = Pattern.compile(cupTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = CUP;
         }
 
-        //                TEASPOON(6, R.string.teaspoon_title, false),
-        //                TABLESPOON(7, R.string.tablespoon_title, true),
-        //                BOTTLE(8, R.string.bottle_title, false),
-        //                PACKAGE(9, R.string.package_title, false);
-        return UNITS;
+        //try to find TEASPOON
+        String teaspoonTitle = RApplication.getAppContext().getString(R.string.teaspoon_title);
+        teaspoonTitle = "(\\b" + teaspoonTitle.replace(".", ".*") + "\\b)";
+        matcher = Pattern.compile(teaspoonTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = TEASPOON;
+        }
+
+        //try to find TABLESPOON
+        String tablespoonTitle = RApplication.getAppContext().getString(R.string.tablespoon_title);
+        tablespoonTitle = "(\\b" + tablespoonTitle.replace(".", ".*") + "\\b)";
+        matcher = Pattern.compile(tablespoonTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = TABLESPOON;
+        }
+
+        //try to find BOTTLE
+        String bottleTitle = RApplication.getAppContext().getString(R.string.bottle_title);
+        bottleTitle = "(\\b" + bottleTitle + ".*\\b)";
+        matcher = Pattern.compile(bottleTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = BOTTLE;
+        }
+
+        //try to find PACKAGE
+        String packageTitle = RApplication.getAppContext().getString(R.string.package_title);
+        packageTitle = "(\\b" + packageTitle + "*\\b)";
+        matcher = Pattern.compile(packageTitle).matcher(unitString);
+        if (matcher.find()) {
+            unit = PACKAGE;
+        }
+        return unit;
     }
 }

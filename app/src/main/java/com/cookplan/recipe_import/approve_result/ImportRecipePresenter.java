@@ -1,6 +1,9 @@
 package com.cookplan.recipe_import.approve_result;
 
+import com.cookplan.models.Ingredient;
+import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
+import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
 
 import java.util.List;
@@ -16,4 +19,8 @@ public interface ImportRecipePresenter {
     List<Product> getAllProductsList();
 
     void saveRecipe(Recipe recipe);
+
+    void saveProductAndIngredient(String key, ProductCategory category, String name, double amount, MeasureUnit measureUnit);
+
+    void saveIngredient(String key, Ingredient ingredient);
 }

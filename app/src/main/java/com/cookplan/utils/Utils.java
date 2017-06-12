@@ -90,6 +90,25 @@ public class Utils {
         return isEqual;
     }
 
+    public static Double getDoubleFromString(String string) {
+        Double amount = 0.;
+        try {
+            if (string.equals("½")) {
+                amount = 0.5;
+            } else if (string.equals("¾")) {
+                amount = 3. / 4.;
+            } else if (string.equals("¼")) {
+                amount = 1. / 4.;
+            } else {
+                amount = Double.valueOf(string);
+            }
+        } catch (Exception e) {
+            //something went wrong, it means amount = 0;
+            e.printStackTrace();
+        }
+        return amount;
+    }
+
 
     private static class UnitsMapBuilder {
         private final Map<MeasureUnit, Double> measureUnitToAmoutMap;

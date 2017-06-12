@@ -58,11 +58,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ingred_dont_exist_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/main_item_padding"
-                android:layout_marginLeft="@dimen/main_item_padding"
+                android:layout_marginLeft="5dp"
                 android:layout_marginRight="@dimen/main_item_padding"
                 android:layout_marginTop="@dimen/main_item_padding"
                 android:orientation="vertical">
@@ -85,6 +84,14 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+                <Spinner
+                    android:id="@+id/category_list_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/small_item_padding"
+                    />
+
             </LinearLayout>
 
             <LinearLayout
@@ -96,7 +103,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/main_item_padding"
+                    android:layout_marginLeft="@dimen/main_item_padding"
+                    android:layout_marginRight="@dimen/main_item_padding"
                     android:clickable="false"
                     android:ellipsize="end"
                     android:gravity="left|center_vertical"
@@ -114,30 +122,31 @@
                     android:layout_marginRight="@dimen/main_item_padding"
                     android:scrollbars="vertical"/>
 
-                <LinearLayout
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/main_item_padding"
+                android:orientation="vertical">
+
+                <View
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/hint_or_disabled_text_color"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/main_item_padding"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <View
+                    <Button
+                        android:id="@+id/approve_button"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/hint_or_disabled_text_color"/>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:text="сохранить"
+                        android:theme="@style/CookplanFlatButton"/>
 
-                        <Button
-                            android:id="@+id/approve_button"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="сохранить"
-                            android:theme="@style/CookplanFlatButton"/>
-
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

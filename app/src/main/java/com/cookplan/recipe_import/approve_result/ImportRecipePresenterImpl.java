@@ -4,8 +4,11 @@ import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
+import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
+import com.cookplan.models.ShopListStatus;
 import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.ProductProvider;
 import com.cookplan.providers.RecipeProvider;
@@ -15,8 +18,12 @@ import com.cookplan.providers.impl.RecipeProviderImpl;
 import com.cookplan.recipe_import.parser.Parser;
 import com.cookplan.recipe_import.parser.ParserFactory;
 import com.cookplan.recipe_import.parser.ParserResultListener;
+import com.cookplan.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +46,7 @@ public class ImportRecipePresenterImpl implements ImportRecipePresenter {
     private IngredientProvider ingredientDataProvider;
     private CompositeDisposable disposables;
     private List<Product> allProductsList;
+    private String recipeId;
 
     public ImportRecipePresenterImpl(ImportRecipeView mainView) {
         this.mainView = mainView;
@@ -120,7 +128,88 @@ public class ImportRecipePresenterImpl implements ImportRecipePresenter {
                     @Override
                     public void onSuccess(Recipe recipe) {
                         if (mainView != null) {
+                            recipeId = recipe.getId();
                             mainView.setRecipeSavedSuccessfully(recipe.getId());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null && e instanceof CookPlanError) {
+                            mainView.setError(e.getMessage());
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void saveProductAndIngredient(String key, ProductCategory category, String name, double amount, MeasureUnit measureUnit) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null && recipeId != null) {
+            Map<MeasureUnit, Double> map = null;
+            List<MeasureUnit> measureUnitList = Arrays.asList(MeasureUnit.values());
+            if (measureUnit == MeasureUnit.KILOGRAMM) {
+                map = Utils.getKilogramUnitMap();
+                measureUnitList = Utils.getWeightUnitList();
+            }
+            if (measureUnit == MeasureUnit.LITRE) {
+                map = Utils.getLitreUnitMap();
+                measureUnitList = Utils.getVolumeUnitList();
+            }
+            List<MeasureUnit> mainMeasureUnitList = new ArrayList<>();
+            mainMeasureUnitList.add(measureUnit);
+            String rusName = null;
+            String engName = null;
+            if (RApplication.isCurrentLocaleRus()) {
+                rusName = name;
+            } else {
+                engName = name;
+            }
+            Product product = new Product(category, rusName, engName, mainMeasureUnitList,
+                                          measureUnitList, map, user.getUid());
+            product.increasingCount();
+            productDataProvider.createProduct(product)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Product>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Product product) {
+                            //save ingredient
+                            Ingredient ingredient = new Ingredient(null, product.toStringName(), product, recipeId,
+                                                                   measureUnit, amount, ShopListStatus.NONE);
+                            saveIngredient(key, ingredient);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null && e instanceof CookPlanError) {
+                                mainView.setError(e.getMessage());
+                            }
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void saveIngredient(String key, Ingredient ingredient) {
+        ingredientDataProvider.createIngredient(ingredient)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Ingredient>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Ingredient ingredient) {
+                        if (mainView != null) {
+                            mainView.setIngredientSavedSuccessfully(key);
                         }
                     }
 

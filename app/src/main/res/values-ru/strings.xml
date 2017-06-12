@@ -206,6 +206,7 @@
     <string name="search_recipe_title">Поиск рецепта</string>
     <string name="recipe_in_internet_title">Рецепт в интернете</string>
     <string name="enter_new_product_title">Введите новый продукт</string>
+    <string name="short_gramm_title">г</string>
 
 
 </resources>

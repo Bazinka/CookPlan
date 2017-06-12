@@ -11,6 +11,7 @@ import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,9 +19,14 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
 
     private final List<Ingredient> ingredients;
     private Ingredient selectedIngred;
+    private OnItemSelectedListener listener;
 
-    public ParsedIngredientsRecyclerAdapter(List<Ingredient> items) {
-        ingredients = items;
+    public ParsedIngredientsRecyclerAdapter(List<Ingredient> items, OnItemSelectedListener listener) {
+        ingredients = new ArrayList<>(items);
+        this.listener = listener;
+        if (ingredients.size() == 1) {
+            selectedIngred = ingredients.get(0);
+        }
     }
 
     @Override
@@ -71,6 +77,9 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
             int pos = (int) view.getTag();
             selectedIngred = ingredients.get(pos);
             notifyDataSetChanged();
+            if (listener != null) {
+                listener.OnItemSelect(selectedIngred);
+            }
         });
     }
 
@@ -81,6 +90,11 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
 
     public List<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+    public void clearSelectedItem() {
+        selectedIngred = null;
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -102,7 +116,7 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
         return selectedIngred;
     }
 
-    public interface OnItemClickListener {
-        void OnClick(Ingredient ingredient);
+    public interface OnItemSelectedListener {
+        void OnItemSelect(Ingredient ingredient);
     }
 }

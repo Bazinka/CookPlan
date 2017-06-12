@@ -9,15 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cookplan.R;
+import com.cookplan.add_ingredient_view.ProductCategoriesSpinnerAdapter;
 import com.cookplan.add_ingredient_view.ProductListAdapter;
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
+import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
+import com.cookplan.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -88,46 +95,9 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
             }
         }
         if (getItemViewType(position) == INGREDIENT.getId()) {
-            String key = getItemCount() == values.size() ? values.get(position) : values.get(position - 1);
             IngredientViewHolder ingredientViewHolder = (IngredientViewHolder) holder;
-            ingredientViewHolder.howItWasTextView.setText(key);
-            if (recipeToingredientsMap.get(key).size() != 0) {
-                ingredientViewHolder.parsedIngredListLayout.setVisibility(View.VISIBLE);
-                ingredientViewHolder.ingredDontExistLayout.setVisibility(View.GONE);
-                ingredientViewHolder.localingredRecyclerView.setHasFixedSize(true);
-                ingredientViewHolder.localingredRecyclerView.setNestedScrollingEnabled(false);
-                ingredientViewHolder.localingredRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-                ingredientViewHolder.localingredRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                ParsedIngredientsRecyclerAdapter adapter = new ParsedIngredientsRecyclerAdapter(recipeToingredientsMap.get(key));
-                ingredientViewHolder.localingredRecyclerView.setAdapter(adapter);
-
-                ingredientViewHolder.saveButton.setTag(key);
-                ingredientViewHolder.saveButton.setOnClickListener(v -> {
-                    String tag = (String) v.getTag();
-                    if (tag != null) {
-                        if (listener != null) {
-                            if (values.size() == 0) {
-                                listener.allItemsDone();
-                            } else {
-                                //                                if (adapter.getSelectedIngred() != null) {
-                                //                                    listener.onIngredientSaveEvent(tag, adapter.getSelectedIngred());
-                                //                                }//TODO: доделать возможность сохранять новый продукт
-                            }
-                        }
-                    }
-                });
-
-                ingredientViewHolder.productNameEditText.setAdapter(new ProductListAdapter(context, productList));
-                ingredientViewHolder.productNameEditText.setOnItemClickListener((parent, view, pos, id) -> {
-                    Product product = productList.get(pos);
-                    if (product != null) {
-                        view.setTag(product);
-                    }
-                });
-            } else {
-                ingredientViewHolder.parsedIngredListLayout.setVisibility(View.GONE);
-                ingredientViewHolder.ingredDontExistLayout.setVisibility(View.VISIBLE);
-            }
+            String key = getItemCount() == values.size() ? values.get(position) : values.get(position - 1);
+            fillIngredientItemView(key, ingredientViewHolder);
         }
     }
 
@@ -151,16 +121,115 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
         values.remove(key);
         recipeToingredientsMap.remove(key);
         notifyDataSetChanged();
+    }
 
+    private void fillIngredientItemView(String key, IngredientViewHolder ingredientViewHolder) {
+        ingredientViewHolder.howItWasTextView.setText(key);
+
+        ParsedIngredientsRecyclerAdapter adapter = new ParsedIngredientsRecyclerAdapter(
+                recipeToingredientsMap.get(key),
+                ingredient -> {
+                    ingredientViewHolder.productNameEditText.setTag(null);
+                    ingredientViewHolder.productNameEditText.setText(null);
+                });
+
+        if (recipeToingredientsMap.get(key).size() != 0) {
+            ingredientViewHolder.parsedIngredListLayout.setVisibility(View.VISIBLE);
+            ingredientViewHolder.localingredRecyclerView.setHasFixedSize(true);
+            ingredientViewHolder.localingredRecyclerView.setNestedScrollingEnabled(false);
+            ingredientViewHolder.localingredRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+            ingredientViewHolder.localingredRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            ingredientViewHolder.localingredRecyclerView.setAdapter(adapter);
+        } else {
+            ingredientViewHolder.parsedIngredListLayout.setVisibility(View.GONE);
+        }
+        ingredientViewHolder.saveButton.setTag(key);
+        ingredientViewHolder.saveButton.setOnClickListener(v -> {
+            if (recipe.getId() != null) {
+                String tag = (String) v.getTag();
+                if (tag != null) {
+                    if (listener != null) {
+                        if (values.size() == 0) {
+                            listener.allItemsDone();
+                        } else {
+                            if (adapter.getSelectedIngred() != null) {
+                                Ingredient ingredient = adapter.getSelectedIngred();
+                                ingredient.setRecipeId(recipe.getId());
+                                listener.onIngredientSaveEvent(tag, ingredient);
+                            } else {
+                                String productName = ingredientViewHolder.productNameEditText.getText().toString();
+                                if (!productName.isEmpty()) {
+                                    double amount = getAmountFromString(tag);
+                                    MeasureUnit unit = getMeasureUnitFromString(tag);
+                                    listener.onIngredientSaveEvent(
+                                            tag,
+                                            (ProductCategory) ingredientViewHolder.productCategorySpinner.getSelectedItem(),
+                                            productName, amount, unit);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(context, "Сначала подтвердите название и описание рецепта", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        ingredientViewHolder.productNameEditText.setAdapter(new ProductListAdapter(context, productList));
+        ingredientViewHolder.productNameEditText.setOnItemClickListener((parent, view, pos, id) -> {
+            Product product = productList.get(pos);
+            if (product != null) {
+                view.setTag(product);
+                setCategorySpinnerValues(ingredientViewHolder);
+            }
+        });
+        ingredientViewHolder.productNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                adapter.clearSelectedItem();
+            } else {
+                setCategorySpinnerValues(ingredientViewHolder);
+            }
+        });
+
+        setCategorySpinnerValues(ingredientViewHolder);
+    }
+
+    private MeasureUnit getMeasureUnitFromString(String tag) {
+        String[] splits = tag.split("\\d+");
+        return MeasureUnit.parseUnit(splits[splits.length - 1]);
+    }
+
+    private double getAmountFromString(String tag) {
+        double amount = 0;
+        String[] splits = tag.split(":");
+        if (splits.length == 2) {
+            String[] splitsSpace = splits[1].split("\\s+");
+            amount = Utils.getDoubleFromString(splitsSpace[1]);
+        }
+        return amount;
+    }
+
+    private void setCategorySpinnerValues(IngredientViewHolder holder) {
+        String name = holder.productNameEditText.getText().toString();
+        Product selectedProduct = (Product) holder.productNameEditText.getTag();
+        List<ProductCategory> categoryList = new ArrayList<>();
+        if (selectedProduct != null && name.equals(selectedProduct.toStringName())) {
+            categoryList.add(selectedProduct.getCategory());
+        } else {
+            categoryList.addAll(Arrays.asList(ProductCategory.values()));
+        }
+        ProductCategoriesSpinnerAdapter adapter = new ProductCategoriesSpinnerAdapter(context, categoryList);
+        holder.productCategorySpinner.setAdapter(adapter);
+        holder.productCategorySpinner.setSelection(0);
     }
 
     private class IngredientViewHolder extends RecyclerView.ViewHolder {
         public final View mainView;
         final TextView howItWasTextView;
         final RecyclerView localingredRecyclerView;
-        final ViewGroup ingredDontExistLayout;
         final ViewGroup parsedIngredListLayout;
         final AutoCompleteTextView productNameEditText;
+        final Spinner productCategorySpinner;
         final Button saveButton;
 
         IngredientViewHolder(View view) {
@@ -168,9 +237,10 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
             mainView = view.findViewById(R.id.main_view);
             howItWasTextView = (TextView) view.findViewById(R.id.approve_ingred_how_it_was);
             localingredRecyclerView = (RecyclerView) view.findViewById(R.id.local_ingredients_recycler_view);
-            ingredDontExistLayout = (ViewGroup) view.findViewById(R.id.ingred_dont_exist_layout);
             parsedIngredListLayout = (ViewGroup) view.findViewById(R.id.parsed_list_layout);
             productNameEditText = (AutoCompleteTextView) view.findViewById(R.id.product_name_text);
+            productCategorySpinner = (Spinner) view.findViewById(R.id.category_list_spinner);
+
             saveButton = (Button) view.findViewById(R.id.approve_button);
         }
     }
@@ -210,7 +280,7 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
 
         void onRecipeSaveEvent(Recipe recipe);
 
-        void onIngredientSaveEvent(Product product);
+        void onIngredientSaveEvent(String key, ProductCategory category, String name, double amount, MeasureUnit measureUnit);
 
         void onIngredientSaveEvent(String key, Ingredient ingredient);
     }

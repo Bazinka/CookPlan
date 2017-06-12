@@ -19,6 +19,7 @@ import java.util.Map;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -31,11 +32,13 @@ public abstract class BaseParser implements Parser {
 
     private String url;
     private ProductProvider productDataProvider;
+    private CompositeDisposable disposables;
     private ParserResultListener resultListener;
 
     public BaseParser(String url) {
         this.url = url;
         productDataProvider = new ProductProviderImpl();
+        disposables = new CompositeDisposable();
     }
 
     @Override
@@ -76,35 +79,38 @@ public abstract class BaseParser implements Parser {
 
     private void parseDocument(Document doc) {
         List<String> names = getProductsNames(doc);
-        productDataProvider.getTheClosestProductsToStrings(names).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<Map<String, List<Product>>>() {
-                    @Override
-                    public void onNext(Map<String, List<Product>> namesToProducts) {
-                        if (resultListener != null) {
-                            Map<String, List<Ingredient>> ingredients = parceDocumentToIngredientList(doc, namesToProducts);
-                            Recipe recipe = parceDocumentToRecipe(doc);
-                            resultListener.onSuccess(recipe, ingredients);
-                        }
-                    }
-
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (resultListener != null) {
-                            if (e instanceof CookPlanError) {
-                                resultListener.onError(e.getMessage());
-                            } else {
-                                resultListener.onError("В процессе импорта произошла ошибка.");
+        disposables.add(
+                productDataProvider.getTheClosestProductsToStrings(names)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableObserver<Map<String, List<Product>>>() {
+                            @Override
+                            public void onNext(Map<String, List<Product>> namesToProducts) {
+                                disposables.clear();
+                                if (resultListener != null) {
+                                    Map<String, List<Ingredient>> ingredients = parceDocumentToIngredientList(doc, namesToProducts);
+                                    Recipe recipe = parceDocumentToRecipe(doc);
+                                    resultListener.onSuccess(recipe, ingredients);
+                                }
                             }
-                        }
-                    }
 
-                    @Override
-                    public void onComplete() {
 
-                    }
-                });
+                            @Override
+                            public void onError(Throwable e) {
+                                if (resultListener != null) {
+                                    if (e instanceof CookPlanError) {
+                                        resultListener.onError(e.getMessage());
+                                    } else {
+                                        resultListener.onError("В процессе импорта произошла ошибка.");
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        }));
     }
 
     protected abstract List<String> getProductsNames(Document doc);

@@ -12,7 +12,8 @@ import android.widget.ProgressBar;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
-import com.cookplan.models.Product;
+import com.cookplan.models.MeasureUnit;
+import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe_view.RecipeViewActivity;
 
@@ -79,15 +80,23 @@ public class ImportRecipeActivity extends BaseActivity implements ImportRecipeVi
                         }
                     }
 
-
                     @Override
-                    public void onIngredientSaveEvent(Product product) {
-
+                    public void onIngredientSaveEvent(String key, ProductCategory category, String name, double amount, MeasureUnit measureUnit) {
+                        if (presenter != null) {
+                            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                            progressBar.setVisibility(View.VISIBLE);
+                            presenter.saveProductAndIngredient(key, category, name, amount, measureUnit);
+                        }
                     }
+
 
                     @Override
                     public void onIngredientSaveEvent(String key, Ingredient ingredient) {
-
+                        if (presenter != null) {
+                            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                            progressBar.setVisibility(View.VISIBLE);
+                            presenter.saveIngredient(key,ingredient);
+                        }
                     }
                 },
                 this);
@@ -113,8 +122,19 @@ public class ImportRecipeActivity extends BaseActivity implements ImportRecipeVi
 
     @Override
     public void setRecipeSavedSuccessfully(String recipeId) {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
         if (adapter != null) {
             adapter.setIdToRecipe(recipeId);
+        }
+    }
+
+    @Override
+    public void setIngredientSavedSuccessfully(String key) {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+        if (adapter != null) {
+            adapter.removeIngredientItem(key);
         }
     }
 }

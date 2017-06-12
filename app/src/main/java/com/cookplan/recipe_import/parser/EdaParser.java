@@ -6,6 +6,7 @@ import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 import com.cookplan.models.ShopListStatus;
+import com.cookplan.utils.Utils;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -132,18 +133,7 @@ public class EdaParser extends BaseParser {
             String amountString = amountElem.text();
             if (!amountString.contains(RApplication.getAppContext().getString(R.string.by_the_taste))) {
                 String[] splited = amountString.split("\\s+");
-                try {
-                    if (splited[0].equals("½")) {
-                        amount = 0.5;
-                    } else if (splited[0].equals("¾")) {
-                        amount = 3. / 4.;
-                    } else {
-                        amount = Double.valueOf(splited[0]);
-                    }
-                } catch (Exception e) {
-                    //something went wrong, it means amount = 0;
-                    e.printStackTrace();
-                }
+                 amount = Utils.getDoubleFromString(splited[0]);
             }
         }
         return amount;
