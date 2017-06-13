@@ -12,4 +12,7 @@ public class Constants {
     public static final long GEOFENCE_DEFAULT_PERIOD_MILLISECONDS = 10 * 24 * 60 * 60 * 1000;
 
     public static final long DAYS_TO_MILLISECONDS = 24 * 60 * 60 * 1000;
+
+    public static final int GOOGLE_SEARCH_RESULTS_NUMBER = 10;
+
 }

@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface SearchRecipeUrlView {
     void setResultGoogleSearchList(List<GoogleRecipe> googleRecipes);
+
+    void setError(int errorResource);
 }

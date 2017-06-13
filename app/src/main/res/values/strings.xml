@@ -284,6 +284,8 @@
     <string name="recipe_in_internet_title">Рецепт в интернете</string>
     <string name="enter_new_product_title">Введите новый продукт</string>
     <string name="short_gramm_title">g</string>
+    <string name="google_search_network_error">Ошибка при поиске рецептов. Попробуйте снова</string>
+    <string name="google_search_too_many_requests_error">Слишком много поисковых запросов на сегодня. Попробуйте заново завтра</string>
 
 
 </resources>

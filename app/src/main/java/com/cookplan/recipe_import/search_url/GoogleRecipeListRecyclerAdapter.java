@@ -17,14 +17,16 @@ import java.util.List;
 
 public class GoogleRecipeListRecyclerAdapter extends RecyclerView.Adapter<GoogleRecipeListRecyclerAdapter.ViewHolder> {
     private List<GoogleRecipe> values;
-    private GoogleRecipeListClickListener listener;
+    private GoogleRecipeListEventListener listener;
     private Context context;
+    private boolean needToLoadNextPart;
 
     public GoogleRecipeListRecyclerAdapter(List<GoogleRecipe> items,
-                                           GoogleRecipeListClickListener listener, Context context) {
+                                           GoogleRecipeListEventListener listener, Context context) {
         this.values = items;
         this.listener = listener;
         this.context = context;
+        needToLoadNextPart = true;
     }
 
     @Override
@@ -55,11 +57,30 @@ public class GoogleRecipeListRecyclerAdapter extends RecyclerView.Adapter<Google
                 listener.onItemClick(localRecipe.getUrl());
             }
         });
+        if (position > values.size() * 2 / 3 && listener != null && needToLoadNextPart) {
+            needToLoadNextPart = false;
+            listener.onLoadNextData(values.size());
+        }
     }
 
     @Override
     public int getItemCount() {
         return values.size();
+    }
+
+    public void addItems(List<GoogleRecipe> googleRecipes) {
+        values.addAll(googleRecipes);
+        notifyDataSetChanged();
+        if (googleRecipes.size() == 0) {
+            needToLoadNextPart = false;
+        } else {
+            needToLoadNextPart = true;
+        }
+    }
+
+    public void clearItems() {
+        values.clear();
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,7 +100,9 @@ public class GoogleRecipeListRecyclerAdapter extends RecyclerView.Adapter<Google
         }
     }
 
-    public interface GoogleRecipeListClickListener {
+    public interface GoogleRecipeListEventListener {
         void onItemClick(String url);
+
+        void onLoadNextData(int offset);
     }
 }

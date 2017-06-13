@@ -8,5 +8,7 @@ public interface SearchRecipeUrlPresenter {
 
     void searchRecipes(String query);
 
+    void loadNextPart(int offset);
+
     void onStop();
 }

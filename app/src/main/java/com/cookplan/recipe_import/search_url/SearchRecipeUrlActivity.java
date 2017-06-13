@@ -3,6 +3,7 @@ package com.cookplan.recipe_import.search_url;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,11 +18,13 @@ import com.cookplan.R;
 import com.cookplan.models.network.GoogleRecipe;
 import com.cookplan.recipe_import.web_browser.WebBrowserActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchRecipeUrlActivity extends BaseActivity implements SearchRecipeUrlView {
 
     private SearchRecipeUrlPresenter presenter;
+    private GoogleRecipeListRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,9 @@ public class SearchRecipeUrlActivity extends BaseActivity implements SearchRecip
                 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.VISIBLE);
                 presenter.searchRecipes(query);
+                if (adapter != null) {
+                    adapter.clearItems();
+                }
             }
         });
 
@@ -52,7 +58,30 @@ public class SearchRecipeUrlActivity extends BaseActivity implements SearchRecip
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        adapter = new GoogleRecipeListRecyclerAdapter(
+                new ArrayList<>(),
+                new GoogleRecipeListRecyclerAdapter.GoogleRecipeListEventListener() {
+                    @Override
+                    public void onItemClick(String url) {
+                        startWebActivity(url);
+                    }
 
+                    @Override
+                    public void onLoadNextData(int offset) {
+                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                        progressBar.setVisibility(View.VISIBLE);
+                        presenter.loadNextPart(offset);
+                    }
+                },
+                this);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void startWebActivity(String url) {
+        Intent intent = new Intent(this, WebBrowserActivity.class);
+        intent.putExtra(WebBrowserActivity.URL_KEY, url);
+        startActivityWithLeftAnimation(intent);
+        finish();
     }
 
     @Override
@@ -67,14 +96,18 @@ public class SearchRecipeUrlActivity extends BaseActivity implements SearchRecip
     public void setResultGoogleSearchList(List<GoogleRecipe> googleRecipes) {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
-        GoogleRecipeListRecyclerAdapter adapter = new GoogleRecipeListRecyclerAdapter(
-                googleRecipes, url -> {
-            Intent intent = new Intent(this, WebBrowserActivity.class);
-            intent.putExtra(WebBrowserActivity.URL_KEY, url);
-            startActivityWithLeftAnimation(intent);
-            finish();
-        }, this);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_results_recycler_view);
-        recyclerView.setAdapter(adapter);
+        if (adapter != null) {
+            adapter.addItems(googleRecipes);
+        }
+    }
+
+    @Override
+    public void setError(int errorResource) {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+        View mainView = findViewById(R.id.main_view);
+        if (mainView != null) {
+            Snackbar.make(mainView, getString(errorResource), Snackbar.LENGTH_LONG).show();
+        }
     }
 }
