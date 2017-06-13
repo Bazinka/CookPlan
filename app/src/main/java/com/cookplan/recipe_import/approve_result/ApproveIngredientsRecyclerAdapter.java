@@ -23,6 +23,7 @@ import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 import com.cookplan.models.ProductCategory;
 import com.cookplan.models.Recipe;
+import com.cookplan.models.ShopListStatus;
 import com.cookplan.utils.Utils;
 
 import java.util.ArrayList;
@@ -135,6 +136,7 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
                 ingredient -> {
                     ingredientViewHolder.productNameEditText.setTag(null);
                     ingredientViewHolder.productNameEditText.setText(null);
+                    setCategorySpinnerValues(null, ingredientViewHolder);
                 });
 
         if (recipeToingredientsMap.get(key).size() != 0) {
@@ -162,10 +164,18 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
                             if (!productName.isEmpty()) {
                                 double amount = getAmountFromString(tag);
                                 MeasureUnit unit = getMeasureUnitFromString(tag);
-                                listener.onIngredientSaveEvent(
-                                        tag,
-                                        (ProductCategory) ingredientViewHolder.productCategorySpinner.getSelectedItem(),
-                                        productName, amount, unit);
+                                Product product = (Product) ingredientViewHolder.productNameEditText.getTag();
+                                if (product == null || !productName.equals(product.toStringName())) {
+                                    listener.onIngredientSaveEvent(
+                                            tag,
+                                            (ProductCategory) ingredientViewHolder.productCategorySpinner.getSelectedItem(),
+                                            productName, amount, unit);
+                                } else {
+                                    Ingredient ingredient = new Ingredient(null, product.toStringName(),
+                                                                           product, recipe.getId(),
+                                                                           unit, amount, ShopListStatus.NONE);
+                                    listener.onIngredientSaveEvent(tag, ingredient);
+                                }
                             }
                         }
                     }
@@ -179,13 +189,8 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
         ingredientViewHolder.productNameEditText.setOnItemClickListener((parent, view, pos, id) -> {
             Product product = productList.get(pos);
             if (product != null) {
-                view.setTag(product);
-                setCategorySpinnerValues(ingredientViewHolder);
-            }
-        });
-        ingredientViewHolder.productNameEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                setCategorySpinnerValues(ingredientViewHolder);
+                ingredientViewHolder.productNameEditText.setTag(product);
+                setCategorySpinnerValues(product, ingredientViewHolder);
             }
         });
         ingredientViewHolder.productNameEditText.addTextChangedListener(new TextWatcher() {
@@ -205,7 +210,7 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
             }
         });
 
-        setCategorySpinnerValues(ingredientViewHolder);
+        setCategorySpinnerValues(null, ingredientViewHolder);
     }
 
     private MeasureUnit getMeasureUnitFromString(String tag) {
@@ -223,11 +228,9 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
         return amount;
     }
 
-    private void setCategorySpinnerValues(IngredientViewHolder holder) {
-        String name = holder.productNameEditText.getText().toString();
-        Product selectedProduct = (Product) holder.productNameEditText.getTag();
+    private void setCategorySpinnerValues(Product selectedProduct, IngredientViewHolder holder) {
         List<ProductCategory> categoryList = new ArrayList<>();
-        if (selectedProduct != null && name.equals(selectedProduct.toStringName())) {
+        if (selectedProduct != null) {
             categoryList.add(selectedProduct.getCategory());
         } else {
             categoryList.addAll(Arrays.asList(ProductCategory.values()));
