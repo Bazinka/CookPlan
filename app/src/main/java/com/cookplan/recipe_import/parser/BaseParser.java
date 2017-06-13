@@ -140,8 +140,14 @@ public abstract class BaseParser implements Parser {
         String description = parseDescriptionFromDoc(doc);
 
         recipe.setDesc(description);
+
+        List<String> imageUrls = parseImageUrlsFromDoc(doc);
+
+        recipe.setImageUrls(imageUrls);
         return recipe;
     }
+
+    protected abstract List<String> parseImageUrlsFromDoc(Document doc);
 
     protected abstract String parseDescriptionFromDoc(Document doc);
 

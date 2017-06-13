@@ -39,6 +39,21 @@ public class EdimDomaParser extends BaseParser {
         return description;
     }
 
+    @Override
+    protected List<String> parseImageUrlsFromDoc(Document doc) {
+        List<String> imageUrls = new ArrayList<>();
+        Elements imagesElements = doc.select("div.thumb-slider__slide");
+        for (Element element : imagesElements) {
+            if (element.children().size() == 1) {
+                String url = element.child(0).attr("src");
+                if (!url.isEmpty()) {
+                    imageUrls.add("https:" + url);
+                }
+            }
+        }
+        return imageUrls;
+    }
+
     private String getProductNameTag() {
         return "div.checkbox-info__name";
     }

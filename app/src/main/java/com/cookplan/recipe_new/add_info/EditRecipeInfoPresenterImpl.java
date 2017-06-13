@@ -210,7 +210,7 @@ public class EditRecipeInfoPresenterImpl implements EditRecipeInfoPresenter {
             mainView.showProgressBar();
         }
         if (recipe == null) {
-            recipe = new Recipe(newName, newDesc);
+            recipe = new Recipe(newName, newDesc, null);
         } else {
             recipe.setName(newName);
             recipe.setDesc(newDesc);

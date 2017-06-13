@@ -89,7 +89,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
                                     recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(recipe.getId()));
                                 } else {
                                     recipe = new Recipe(context.getString(R.string.without_recipe_title),
-                                                        context.getString(R.string.recipe_desc_is_not_needed_title));
+                                                        context.getString(R.string.recipe_desc_is_not_needed_title), null);
                                     recipeToIngredientsMap.put(recipe, recipeIdToIngredientMap.get(WITHOUT_RECIPE_KEY));
                                 }
                                 if (recipeToIngredientsMap.keySet().size() == recipeIdToIngredientMap.keySet().size()) {
@@ -152,7 +152,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
                 if (!wasFound && entry.getValue() != null) {
                     if (entry.getKey() == null || entry.getKey().getId() == null) {
                         recipeList.add(new Recipe(context.getString(R.string.without_recipe_title),
-                                                  context.getString(R.string.recipe_desc_is_not_needed_title)));
+                                                  context.getString(R.string.recipe_desc_is_not_needed_title), null));
                         recipeIdsToIngredientMap.put(WITHOUT_RECIPE_KEY, entry.getValue());
 
                     } else {

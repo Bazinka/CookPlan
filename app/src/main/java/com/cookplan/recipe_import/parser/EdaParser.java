@@ -37,6 +37,25 @@ public class EdaParser extends BaseParser {
         return description;
     }
 
+    @Override
+    protected String parseRecipeTitleFromDoc(Document doc) {
+        return doc.title();
+    }
+
+    @Override
+    protected List<String> parseImageUrlsFromDoc(Document doc) {
+        List<String> imageUrls = new ArrayList<>();
+        Elements imagesElements = doc.select("div.b-photo-gall__counter");
+        String imageUrlsString = imagesElements.attr("data-gall-photos-urls");
+        if (imageUrlsString != null) {
+            String[] splits = imageUrlsString.split(",");
+            for (String url : splits) {
+                imageUrls.add("https:" + url);
+            }
+        }
+        return imageUrls;
+    }
+
     private String getProductNameTag() {
         return "span.ingredient";
     }
@@ -48,6 +67,7 @@ public class EdaParser extends BaseParser {
     private String getAmountTag() {
         return "span.amount";
     }
+
 
     @Override
     protected List<String> getProductsNames(Document doc) {
@@ -108,11 +128,6 @@ public class EdaParser extends BaseParser {
             }
         }
         return ingredientMap;
-    }
-
-    @Override
-    protected String parseRecipeTitleFromDoc(Document doc) {
-        return doc.title();
     }
 
     private Ingredient parseIngredient(Product product, Element element) {
