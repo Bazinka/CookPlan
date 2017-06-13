@@ -108,7 +108,7 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
             }
-        });
+        }, getActivity());
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton addRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.add_recipe_fab);

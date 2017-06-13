@@ -1,11 +1,14 @@
 package com.cookplan.recipe_grid;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,10 +19,12 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
 
     private final List<Recipe> mValues;
     private RecipeListClickListener listener;
+    private Context context;
 
-    public RecipeGridRecyclerViewAdapter(List<Recipe> items, RecipeListClickListener listener) {
+    public RecipeGridRecyclerViewAdapter(List<Recipe> items, RecipeListClickListener listener, Context context) {
         mValues = items;
         this.listener = listener;
+        this.context = context;
     }
 
     @Override
@@ -51,7 +56,16 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
                 listener.onRecipeClick(recipe1);
             }
         });
-
+        if (recipe.getImageUrls() != null && !recipe.getImageUrls().isEmpty()) {
+            Glide.with(context)
+                    .load(recipe.getImageUrls().get(0))
+                    .placeholder(R.drawable.ic_default_recipe_image)
+                    .centerCrop()
+                    .crossFade()
+                    .into(holder.recipeImageView);
+        } else {
+            holder.recipeImageView.setImageResource(R.drawable.ic_default_recipe_image);
+        }
         holder.mainView.setOnLongClickListener(v -> {
             Recipe recipe1 = (Recipe) v.getTag();
             if (listener != null && recipe1 != null) {
@@ -77,6 +91,7 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
         public final TextView nameView;
         public final TextView authorNameView;
         public final ViewGroup authorNameLayout;
+        public final ImageView recipeImageView;
 
         public ViewHolder(View view) {
             super(view);
@@ -84,6 +99,8 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
             nameView = (TextView) view.findViewById(R.id.name);
             authorNameView = (TextView) view.findViewById(R.id.author_name);
             authorNameLayout = (ViewGroup) view.findViewById(R.id.author_layout);
+            recipeImageView = (ImageView) view.findViewById(R.id.recipe_image);
+
         }
 
         @Override

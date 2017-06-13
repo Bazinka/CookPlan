@@ -3,6 +3,7 @@ package com.cookplan.recipe_view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.main.ImageViewPagerAdapter;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe_new.add_info.EditRecipeInfoActivity;
@@ -102,6 +104,13 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
                     finish();
                 }
             });
+            ViewPager viewPager = (ViewPager) findViewById(R.id.recipe_images_viewpager);
+            if (recipe.getImageUrls() != null && !recipe.getImageUrls().isEmpty()) {
+                viewPager.setAdapter(new ImageViewPagerAdapter(recipe.getImageUrls(), this));
+                viewPager.setVisibility(View.VISIBLE);
+            } else {
+                viewPager.setVisibility(View.GONE);
+            }
         }
     }
 
