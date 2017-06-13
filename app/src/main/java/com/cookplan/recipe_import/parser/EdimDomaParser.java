@@ -21,32 +21,39 @@ import java.util.Map;
  * Created by DariaEfimova on 09.06.17.
  */
 
-public class EdaParser extends BaseParser {
+public class EdimDomaParser extends BaseParser {
 
-    public EdaParser(String url) {
+    public EdimDomaParser(String url) {
         super(url);
     }
 
     @Override
     protected String parseDescriptionFromDoc(Document doc) {
         String description = "";
-        Elements descriptionList = doc.select("div.step-description");
+        Elements descriptionList = doc.select("div.content-box");
         for (Element desc : descriptionList) {
-            description = description + desc.text() + "\n";
+            if (desc.select("div.recipe-step-title").size() != 0) {
+                description = description + desc.select("div.plain-text").text() + "\n";
+            }
         }
         return description;
     }
 
     private String getProductNameTag() {
-        return "span.ingredient";
+        return "div.checkbox-info__name";
     }
 
     private String getIngredientItemTag() {
-        return "li.ingredient-item";
+        return "tr.definition-list-table__tr";
     }
 
     private String getAmountTag() {
-        return "span.amount";
+        return "td.definition-list-table__td_value";
+    }
+
+    @Override
+    protected String parseRecipeTitleFromDoc(Document doc) {
+        return doc.select("h1.recipe-header__name").text();
     }
 
     @Override
@@ -66,9 +73,6 @@ public class EdaParser extends BaseParser {
 
     private String parseStringProductName(Element element) {
         Elements nameElem = element.select(getProductNameTag());
-        if (nameElem == null || nameElem.size() == 0) {
-            nameElem = element.select("span.name");//if product doesn't have category on the website.
-        }
         String name = nameElem != null ? nameElem.text() : "";
         return name;
     }
@@ -108,11 +112,6 @@ public class EdaParser extends BaseParser {
             }
         }
         return ingredientMap;
-    }
-
-    @Override
-    protected String parseRecipeTitleFromDoc(Document doc) {
-        return doc.title();
     }
 
     private Ingredient parseIngredient(Product product, Element element) {

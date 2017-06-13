@@ -10,6 +10,9 @@ public class ParserFactory {
         if (url.contains("eda.ru")) {
             return new EdaParser(url);
         }
+        if (url.contains("www.edimdoma.ru")) {
+            return new EdimDomaParser(url);
+        }
         return null;
     }
 }

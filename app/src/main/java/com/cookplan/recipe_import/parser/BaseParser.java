@@ -9,8 +9,6 @@ import com.cookplan.providers.impl.ProductProviderImpl;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.List;
@@ -137,23 +135,17 @@ public abstract class BaseParser implements Parser {
 
     private Recipe parceDocumentToRecipe(Document doc) {
         Recipe recipe = new Recipe();
-        recipe.setName(doc.title());
+        recipe.setName(parseRecipeTitleFromDoc(doc));
 
-        String description = "";
-
-        //parsing description of eda.ru
-        Elements descriptionList = doc.select(getDescTagName());
-        for (Element desc : descriptionList) {
-            description = description + desc.text() + "\n";
-        }
-        //end parsing eda.ru
-
+        String description = parseDescriptionFromDoc(doc);
 
         recipe.setDesc(description);
         return recipe;
     }
 
-    protected abstract String getDescTagName();
+    protected abstract String parseDescriptionFromDoc(Document doc);
+
+    protected abstract String parseRecipeTitleFromDoc(Document doc);
 
 
 }
