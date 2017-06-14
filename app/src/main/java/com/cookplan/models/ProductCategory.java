@@ -30,10 +30,10 @@ public enum ProductCategory implements Serializable {
     ANIMALS_PRODUCTS(R.string.animals_products_title, R.color.category_dark_green, 17),
     CONSERVATION(R.string.conservation_title, R.color.category_lime, 18),
     ICE_CREAM(R.string.ice_cream_title, R.color.category_dark_lime, 19),
-    DIABETIC_NUTRITION(R.string.diabetic_nutrition_title, R.color.category_yellow, 20),
-    COOKED_FOOD(R.string.cooked_food_title, R.color.category_dark_yellow, 21),
-    HOUSEHOLD_CHEMICALS(R.string.household_chemicals_and_household_goods_title, R.color.category_amber, 22),
-    COSMETICS_HYGIENE(R.string.cosmetics_and_hygiene_title, R.color.category_dark_amber, 23),
+    COOKED_FOOD(R.string.cooked_food_title, R.color.category_yellow, 20),
+    HOUSEHOLD_CHEMICALS(R.string.household_chemicals_and_household_goods_title, R.color.category_dark_yellow, 21),
+    COSMETICS_HYGIENE(R.string.cosmetics_and_hygiene_title, R.color.category_amber, 22),
+    MEDICINES(R.string.medicines_title, R.color.category_dark_amber, 23),
     GAMES_AND_TOYS(R.string.games_and_toys, R.color.category_orange, 24),
     ELECTRIC_AND_HOUSEHOLD_APPLIANCES(R.string.electric_appliances_and_household_appliances_title, R.color.category_dark_orange, 25),
     REPAIR_COTTAGE_REST_PRODUCTS(R.string.repair_cottages_and_rest_products_title, R.color.category_deep_orange, 26),
@@ -132,8 +132,8 @@ public enum ProductCategory implements Serializable {
         if (name.equals(ICE_CREAM.name())) {
             return ICE_CREAM;
         }
-        if (name.equals(DIABETIC_NUTRITION.name())) {
-            return DIABETIC_NUTRITION;
+        if (name.equals(MEDICINES.name())) {
+            return MEDICINES;
         }
         if (name.equals(COOKED_FOOD.name())) {
             return COOKED_FOOD;

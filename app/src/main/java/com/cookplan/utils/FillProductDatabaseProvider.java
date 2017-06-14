@@ -33,7 +33,6 @@ import static com.cookplan.models.ProductCategory.CONFECTIONERY;
 import static com.cookplan.models.ProductCategory.CONSERVATION;
 import static com.cookplan.models.ProductCategory.COOKED_FOOD;
 import static com.cookplan.models.ProductCategory.COSMETICS_HYGIENE;
-import static com.cookplan.models.ProductCategory.DIABETIC_NUTRITION;
 import static com.cookplan.models.ProductCategory.DRINKS_JUICE;
 import static com.cookplan.models.ProductCategory.EGGS;
 import static com.cookplan.models.ProductCategory.ELECTRIC_AND_HOUSEHOLD_APPLIANCES;
@@ -47,6 +46,7 @@ import static com.cookplan.models.ProductCategory.HOUSEHOLD_CHEMICALS;
 import static com.cookplan.models.ProductCategory.ICE_CREAM;
 import static com.cookplan.models.ProductCategory.MEAT_BIRDS;
 import static com.cookplan.models.ProductCategory.MEAT_GARSTRONOMY;
+import static com.cookplan.models.ProductCategory.MEDICINES;
 import static com.cookplan.models.ProductCategory.MILK_PRODUCT;
 import static com.cookplan.models.ProductCategory.REPAIR_COTTAGE_REST_PRODUCTS;
 import static com.cookplan.models.ProductCategory.STATIONERY;
@@ -95,7 +95,7 @@ public class FillProductDatabaseProvider {
                         COSMETICS_HYGIENE,
                         CHILD_PRODUCTS,
                         ANIMALS_PRODUCTS,
-                        DIABETIC_NUTRITION,
+                        MEDICINES,
                         GAMES_AND_TOYS,
                         ELECTRIC_AND_HOUSEHOLD_APPLIANCES,
                         REPAIR_COTTAGE_REST_PRODUCTS,
