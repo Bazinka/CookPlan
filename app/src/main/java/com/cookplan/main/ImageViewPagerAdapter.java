@@ -9,6 +9,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.cookplan.R;
+import com.cookplan.utils.FirebaseImageLoader;
+import com.cookplan.utils.Utils;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -33,9 +37,18 @@ public class ImageViewPagerAdapter extends PagerAdapter {
         ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.image_pagerview_item_layout, collection, false);
 
         ImageView imageView = (ImageView) layout.findViewById(R.id.recipe_image);
-        Glide.with(context)
-                .load(url)
-                .into(imageView);
+        if (Utils.isStringUrl(url)) {
+            Glide.with(context)
+                    .load(url)
+                    .into(imageView);
+        } else {
+            StorageReference imageRef = FirebaseStorage.getInstance().getReference(url);
+            Glide.with(context)
+                    .using(new FirebaseImageLoader())
+                    .load(imageRef)
+                    .centerCrop()
+                    .into(imageView);
+        }
         collection.addView(layout);
         return layout;
     }

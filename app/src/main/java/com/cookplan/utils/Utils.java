@@ -109,6 +109,10 @@ public class Utils {
         return amount;
     }
 
+    public static boolean isStringUrl(String url) {
+        return url.contains("http");
+    }
+
 
     private static class UnitsMapBuilder {
         private final Map<MeasureUnit, Double> measureUnitToAmoutMap;

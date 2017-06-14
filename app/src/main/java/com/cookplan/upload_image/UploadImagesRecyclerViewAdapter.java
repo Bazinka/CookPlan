@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.cookplan.R;
 import com.cookplan.utils.FirebaseImageLoader;
+import com.cookplan.utils.Utils;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -72,7 +73,7 @@ public class UploadImagesRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             String imageId = values.get(position - 1);
             UploadImageViewHolder uploadImageHolder = (UploadImageViewHolder) holder;
 
-            if (imageId.contains("http")) {
+            if (Utils.isStringUrl(imageId)) {
                 Glide.with(context)
                         .load(imageId)
                         .into(uploadImageHolder.imageView);

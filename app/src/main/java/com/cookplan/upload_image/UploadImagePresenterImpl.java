@@ -8,6 +8,7 @@ import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.providers.ImageProvider;
 import com.cookplan.providers.impl.ImageProviderImpl;
+import com.cookplan.utils.Utils;
 
 import java.io.File;
 
@@ -84,7 +85,7 @@ public class UploadImagePresenterImpl implements UploadImagePresenter {
 
     @Override
     public void removePhoto(String imageId) {
-        if (imageId != null && !imageId.contains("http") && imageProvider != null) {
+        if (imageId != null && !Utils.isStringUrl(imageId) && imageProvider != null) {
             imageProvider.removeImage(imageId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

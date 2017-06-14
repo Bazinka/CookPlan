@@ -114,6 +114,7 @@ public class RecipeProviderImpl implements RecipeProvider {
             Map<String, Object> values = new HashMap<>();
             values.put(DatabaseConstants.DATABASE_NAME_FIELD, recipe.getName());
             values.put(DatabaseConstants.DATABASE_DESCRIPTION_FIELD, recipe.getDesc());
+            values.put(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD, recipe.getImageUrls());
             DatabaseReference recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
             recipeRef.child(recipe.getId()).updateChildren(values, (databaseError, databaseReference) -> {
                 if (databaseError != null) {

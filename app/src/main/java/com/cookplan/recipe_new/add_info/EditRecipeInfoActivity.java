@@ -27,12 +27,19 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe_new.add_ingredients.EditRecipeIngredientsActivity;
 import com.cookplan.upload_image.UploadImageActivity;
+import com.cookplan.utils.FirebaseImageLoader;
 import com.cookplan.utils.PermissionUtils;
+import com.cookplan.utils.Utils;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import static com.cookplan.upload_image.UploadImageActivity.IMAGE_URL_KEY;
 
 public class EditRecipeInfoActivity extends BaseActivity implements EditRecipeInfoView {
     public static final String RECIPE_OBJECT_KEY = "recipe_name";
@@ -93,25 +100,7 @@ public class EditRecipeInfoActivity extends BaseActivity implements EditRecipeIn
             if (recipeDescEditText != null) {
                 recipeDescEditText.setText(recipe.getDesc());
             }
-            if (recipe.getImageUrls() != null && !recipe.getImageUrls().isEmpty()) {
-                LinearLayout ll = (LinearLayout) findViewById(R.id.existing_images_layout);
-                ll.removeAllViews();
-                for (String url : recipe.getImageUrls()) {
-                    ImageView imageView = new ImageView(this);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(150,
-                                                                                 LinearLayout.LayoutParams.MATCH_PARENT);
-                    lp.setMargins(5, 5, 5, 5);
-                    imageView.setLayoutParams(lp);
-                    imageView.setPadding(5, 0, 5, 0);
-                    imageView.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
-                    Glide.with(this)
-                            .load(url)
-                            .centerCrop()
-                            .into(imageView);
-                    ll.addView(imageView);
-                }
-                ll.invalidate();
-            }
+            fillImageLayout();
         }
 
 
@@ -140,6 +129,37 @@ public class EditRecipeInfoActivity extends BaseActivity implements EditRecipeIn
             nextFab.setOnClickListener(v -> {
                 onNextButtonClick();
             });
+        }
+    }
+
+    private void fillImageLayout() {
+        if (recipe.getImageUrls() != null && !recipe.getImageUrls().isEmpty()) {
+            LinearLayout ll = (LinearLayout) findViewById(R.id.existing_images_layout);
+            ll.removeAllViews();
+            for (String url : recipe.getImageUrls()) {
+                ImageView imageView = new ImageView(this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(150,
+                                                                             LinearLayout.LayoutParams.MATCH_PARENT);
+                lp.setMargins(5, 5, 5, 5);
+                imageView.setLayoutParams(lp);
+                imageView.setPadding(5, 0, 5, 0);
+                imageView.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+                if (Utils.isStringUrl(url)) {
+                    Glide.with(this)
+                            .load(url)
+                            .centerCrop()
+                            .into(imageView);
+                } else {
+                    StorageReference imageRef = FirebaseStorage.getInstance().getReference(url);
+                    Glide.with(this)
+                            .using(new FirebaseImageLoader())
+                            .load(imageRef)
+                            .centerCrop()
+                            .into(imageView);
+                }
+                ll.addView(imageView);
+            }
+            ll.invalidate();
         }
     }
 
@@ -201,18 +221,19 @@ public class EditRecipeInfoActivity extends BaseActivity implements EditRecipeIn
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent data) {
         //making photo
-        if (requestCode == PHOTO_REQUEST_CODE && resultCode == Activity.RESULT_OK
-                && presenter != null
-                && language != null) {
-            if (mProgressDialog == null) {
-                mProgressDialog = ProgressDialog.show(this, getString(R.string.processing_title),
-                                                      getString(R.string.processing_ocr_message), true);
-            } else {
-                mProgressDialog.show();
+        if (resultCode == Activity.RESULT_OK && presenter != null) {
+            if (requestCode == PHOTO_REQUEST_CODE && language != null) {
+                if (mProgressDialog == null) {
+                    mProgressDialog = ProgressDialog.show(this, getString(R.string.processing_title),
+                                                          getString(R.string.processing_ocr_message), true);
+                } else {
+                    mProgressDialog.show();
+                }
+                presenter.doOCR(language);
+            } else if (requestCode == GET_IMAGE_URL_LIST_REQUEST) {
+                recipe.setImageUrls(data.getStringArrayListExtra(IMAGE_URL_KEY));
+                fillImageLayout();
             }
-            presenter.doOCR(language);
-        } else {
-            Toast.makeText(this, "ERROR: Image was not obtained.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -298,7 +319,7 @@ public class EditRecipeInfoActivity extends BaseActivity implements EditRecipeIn
 
     private void startAddImageActivity() {
         Intent intent = new Intent(this, UploadImageActivity.class);
-        intent.putStringArrayListExtra(UploadImageActivity.IMAGE_URL_KEY, recipe.getImageUrlArrayList());
+        intent.putStringArrayListExtra(IMAGE_URL_KEY, recipe.getImageUrlArrayList());
         startActivityForResultWithLeftAnimation(intent, GET_IMAGE_URL_LIST_REQUEST);
     }
 }

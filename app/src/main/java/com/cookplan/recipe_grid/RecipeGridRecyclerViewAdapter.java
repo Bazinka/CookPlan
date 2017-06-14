@@ -11,7 +11,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
+import com.cookplan.utils.FirebaseImageLoader;
+import com.cookplan.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -57,12 +61,22 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
             }
         });
         if (recipe.getImageUrls() != null && !recipe.getImageUrls().isEmpty()) {
-            Glide.with(context)
-                    .load(recipe.getImageUrls().get(0))
-                    .placeholder(R.drawable.ic_default_recipe_image)
-                    .centerCrop()
-                    .crossFade()
-                    .into(holder.recipeImageView);
+            if (Utils.isStringUrl(recipe.getImageUrls().get(0))) {
+                Glide.with(context)
+                        .load(recipe.getImageUrls().get(0))
+                        .placeholder(R.drawable.ic_default_recipe_image)
+                        .centerCrop()
+                        .into(holder.recipeImageView);
+            } else {
+                StorageReference imageRef = FirebaseStorage.getInstance().getReference(recipe.getImageUrls().get(0));
+                Glide.with(context)
+                        .using(new FirebaseImageLoader())
+                        .load(imageRef)
+                        .placeholder(R.drawable.ic_default_recipe_image)
+                        .centerCrop()
+                        .crossFade()
+                        .into(holder.recipeImageView);
+            }
         } else {
             holder.recipeImageView.setImageResource(R.drawable.ic_default_recipe_image);
         }

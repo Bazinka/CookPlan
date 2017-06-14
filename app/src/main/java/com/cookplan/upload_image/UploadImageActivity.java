@@ -16,6 +16,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -217,5 +219,26 @@ public class UploadImageActivity extends BaseActivity implements UploadImageView
         if (adapter != null) {
             adapter.removeImage(imageId);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu _menu) {
+        getMenuInflater().inflate(R.menu.done_menu, _menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.app_bar_done) {
+            ArrayList<String> imagesList = new ArrayList<>(adapter.getValues());
+            Intent intent = new Intent();
+            intent.putStringArrayListExtra(IMAGE_URL_KEY, imagesList);
+            setResult(RESULT_OK, intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
