@@ -14,29 +14,34 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe_new.add_ingredients.EditRecipeIngredientsActivity;
+import com.cookplan.upload_image.UploadImageActivity;
 import com.cookplan.utils.PermissionUtils;
 
-public class EditRecipeInfoActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
-        EditRecipeInfoView {
+public class EditRecipeInfoActivity extends BaseActivity implements EditRecipeInfoView {
     public static final String RECIPE_OBJECT_KEY = "recipe_name";
+    public static final int GET_IMAGE_URL_LIST_REQUEST = 16;
+
     private static final int PHOTO_REQUEST_CODE = 101;
     private static final int RC_IMAGE_PERMS = 102;
     private static final String[] permission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA};
-
     private ProgressDialog mProgressDialog;
     private EditRecipeInfoPresenter presenter;
 
@@ -73,12 +78,39 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
                 return false;
             });
         }
+
+        ViewGroup addImageViewGroup = (ViewGroup) findViewById(R.id.add_image_view);
+        addImageViewGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAddImageActivity();
+            }
+        });
         if (recipe != null) {
             if (recipeNameEditText != null) {
                 recipeNameEditText.setText(recipe.getName());
             }
             if (recipeDescEditText != null) {
                 recipeDescEditText.setText(recipe.getDesc());
+            }
+            if (recipe.getImageUrls() != null && !recipe.getImageUrls().isEmpty()) {
+                LinearLayout ll = (LinearLayout) findViewById(R.id.existing_images_layout);
+                ll.removeAllViews();
+                for (String url : recipe.getImageUrls()) {
+                    ImageView imageView = new ImageView(this);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(150,
+                                                                                 LinearLayout.LayoutParams.MATCH_PARENT);
+                    lp.setMargins(5, 5, 5, 5);
+                    imageView.setLayoutParams(lp);
+                    imageView.setPadding(5, 0, 5, 0);
+                    imageView.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+                    Glide.with(this)
+                            .load(url)
+                            .centerCrop()
+                            .into(imageView);
+                    ll.addView(imageView);
+                }
+                ll.invalidate();
             }
         }
 
@@ -262,5 +294,11 @@ public class EditRecipeInfoActivity extends BaseActivity implements ActivityComp
         intent.putExtra(EditRecipeIngredientsActivity.RECIPE_OBJECT_KEY, recipe);
         startActivityWithLeftAnimation(intent);
         finish();
+    }
+
+    private void startAddImageActivity() {
+        Intent intent = new Intent(this, UploadImageActivity.class);
+        intent.putStringArrayListExtra(UploadImageActivity.IMAGE_URL_KEY, recipe.getImageUrlArrayList());
+        startActivityForResultWithLeftAnimation(intent, GET_IMAGE_URL_LIST_REQUEST);
     }
 }

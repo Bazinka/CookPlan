@@ -6,6 +6,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -91,6 +92,14 @@ public class Recipe implements Serializable {
 
     public List<String> getImageUrls() {
         return imageUrls;
+    }
+
+    public ArrayList<String> getImageUrlArrayList() {
+        if (imageUrls != null) {
+            return new ArrayList<>(imageUrls);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public static class RecipeDB {
