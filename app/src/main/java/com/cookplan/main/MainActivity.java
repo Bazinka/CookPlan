@@ -260,7 +260,7 @@ public class MainActivity extends BaseActivity
         View viewPager = findViewById(R.id.main_tabs_viewpager);
         viewPager.setVisibility(View.GONE);
 
-        setTitle(getString(R.string.list_points_title));
+        setTitle(getString(R.string.companies_list_title));
 
         MainCompaniesFragment fragment = MainCompaniesFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

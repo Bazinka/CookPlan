@@ -58,7 +58,7 @@ public class MainCompaniesFragment extends BaseFragment {
     }
 
     void setPointsListFragment() {
-        getActivity().setTitle(getString(R.string.list_points_title));
+        getActivity().setTitle(getString(R.string.companies_list_title));
         CompanyListFragment companyListFragment = CompanyListFragment.newInstance();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, companyListFragment);
