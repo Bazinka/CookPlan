@@ -109,6 +109,7 @@ public class IngredientProviderImpl implements IngredientProvider {
                     if (databaseError != null) {
                         emitter.onError(new CookPlanError(databaseError));
                     } else {
+                        ingredient.setId(reference.getKey());
                         emitter.onSuccess(ingredient);
                     }
                 }

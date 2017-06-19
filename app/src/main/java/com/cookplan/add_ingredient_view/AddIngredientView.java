@@ -1,6 +1,6 @@
 package com.cookplan.add_ingredient_view;
 
-import com.cookplan.models.MeasureUnit;
+import com.cookplan.models.Ingredient;
 import com.cookplan.models.Product;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface AddIngredientView {
 
     void setProductsList(List<Product> productsList);
 
-    void setSuccessSaveIngredient();
+    void setSuccessSaveIngredient(Ingredient ingredient);
 
     boolean isAddedToActivity();
 }

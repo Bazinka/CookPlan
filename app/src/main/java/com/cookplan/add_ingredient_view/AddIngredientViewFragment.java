@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cookplan.R;
+import com.cookplan.models.Ingredient;
 import com.cookplan.models.MeasureUnit;
 import com.cookplan.models.Product;
 import com.cookplan.models.ProductCategory;
@@ -28,8 +29,9 @@ import java.util.List;
 
 public class AddIngredientViewFragment extends Fragment implements AddIngredientView {
 
-    public static final String RECIPE_OBJECT_KEY = "new_recipe_name";
-    public static final String RECIPE_NEED_TO_BUY_KEY = "is_need_to_buy";
+    public static final String RECIPE_OBJECT_KEY = "RECIPE_OBJECT_KEY";
+    public static final String RECIPE_NEED_TO_BUY_KEY = "RECIPE_NEED_TO_BUY_KEY";
+    public static final String SAVE_BUTTON_VISABILITY_KEY = "SAVE_BUTTON_VISABILITY_KEY";
 
     private AddIngredientPresenter presenter;
 
@@ -37,9 +39,19 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     private ProgressBar progressBar;
     private View mainView;
 
-    //    private OnListFragmentInteractionListener mListener;
+    private boolean isSaveButtonVisible;
+    private AddIngredientViewEventListener eventListener;
 
     public AddIngredientViewFragment() {
+    }
+
+    public static AddIngredientViewFragment newInstance(boolean isSaveButtonVisible, boolean isNeedToBuy) {
+        AddIngredientViewFragment fragment = new AddIngredientViewFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(RECIPE_NEED_TO_BUY_KEY, isNeedToBuy);
+        args.putBoolean(SAVE_BUTTON_VISABILITY_KEY, isSaveButtonVisible);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public static AddIngredientViewFragment newInstance(boolean isNeedToBuy) {
@@ -71,6 +83,7 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
                 presenter.setRecipe(recipe);
             }
             presenter.setIsNeedToBuy(getArguments().getBoolean(RECIPE_NEED_TO_BUY_KEY, false));
+            isSaveButtonVisible = getArguments().getBoolean(SAVE_BUTTON_VISABILITY_KEY, true);
         }
     }
 
@@ -120,25 +133,32 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         });
 
         ImageButton saveProductButton = (ImageButton) mainView.findViewById(R.id.save_product_image_button);
+        saveProductButton.setVisibility(isSaveButtonVisible ? View.VISIBLE : View.GONE);
         saveProductButton.setOnClickListener(view -> {
-            EditText unitAmoutEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
-            String name = unitNameEditText.getText().toString();
-            if (!name.isEmpty() && unitAmoutEditText != null) {
-                String text = unitAmoutEditText.getText().toString();
-                if (!text.isEmpty()) {
-                    saveInrgedient(text);
-                } else {
-                    new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
-                            .setMessage(R.string.product_amount_not_exist)
-                            .setPositiveButton(android.R.string.ok, (dialog, which) -> saveInrgedient(null))
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .show();
-                }
-            }
+            saveButtonClick();
         });
+
         setCategorySpinnerValues();
         setMeasureSpinnerValues();
         return mainView;
+    }
+
+    public void saveButtonClick() {
+        EditText unitAmoutEditText = (EditText) mainView.findViewById(R.id.unit_amount_edit_text);
+        AutoCompleteTextView unitNameEditText = (AutoCompleteTextView) mainView.findViewById(R.id.product_name_text);
+        String name = unitNameEditText.getText().toString();
+        if (!name.isEmpty() && unitAmoutEditText != null) {
+            String text = unitAmoutEditText.getText().toString();
+            if (!text.isEmpty()) {
+                saveInrgedient(text);
+            } else {
+                new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                        .setMessage(R.string.product_amount_not_exist)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> saveInrgedient(null))
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            }
+        }
     }
 
     void saveInrgedient(String amount) {
@@ -170,6 +190,9 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     public void setErrorToast(String error) {
         progressBar.setVisibility(View.GONE);
         Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        if (eventListener != null) {
+            eventListener.onErrorSaveIngredient(error);
+        }
     }
 
     @Override
@@ -274,9 +297,12 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
     }
 
     @Override
-    public void setSuccessSaveIngredient() {
+    public void setSuccessSaveIngredient(Ingredient ingredient) {
         progressBar.setVisibility(View.GONE);
         unitAmountViewGroup.setVisibility(View.GONE);
+        if (eventListener != null) {
+            eventListener.onSuccessSaveIngredient(ingredient);
+        }
     }
 
     @Override
@@ -284,8 +310,14 @@ public class AddIngredientViewFragment extends Fragment implements AddIngredient
         return isAdded();
     }
 
+    public void setEventListener(AddIngredientViewEventListener eventListener) {
+        this.eventListener = eventListener;
+    }
 
-    //    public interface OnListFragmentInteractionListener {
-    //        void onListFragmentInteraction();
-    //    }
+    public interface AddIngredientViewEventListener {
+
+        void onSuccessSaveIngredient(Ingredient ingredient);
+
+        void onErrorSaveIngredient(String error);
+    }
 }

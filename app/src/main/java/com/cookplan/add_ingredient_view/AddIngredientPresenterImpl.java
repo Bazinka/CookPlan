@@ -125,7 +125,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                         @Override
                         public void onSuccess(Ingredient ingredient) {
                             if (mainView != null) {
-                                mainView.setSuccessSaveIngredient();
+                                mainView.setSuccessSaveIngredient(ingredient);
                             }
                         }
 
