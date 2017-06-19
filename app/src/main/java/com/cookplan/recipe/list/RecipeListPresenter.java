@@ -1,4 +1,4 @@
-package com.cookplan.recipe.grid;
+package com.cookplan.recipe.list;
 
 import com.cookplan.models.Recipe;
 
@@ -6,7 +6,7 @@ import com.cookplan.models.Recipe;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public interface RecipeGridPresenter {
+public interface RecipeListPresenter {
 
     public void getRecipeList();
 

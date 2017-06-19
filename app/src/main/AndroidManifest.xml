@@ -117,6 +117,10 @@
         </activity>
         <activity android:name=".upload_image.UploadImageActivity">
         </activity>
+        <activity android:name=".cooking_plan.add.AddCookingItemActivity">
+        </activity>
+        <activity android:name=".recipe.list.select.RecipeSelectListActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.cookplan.recipe.grid;
+package com.cookplan.recipe.list.main;
 
 
 import android.support.annotation.NonNull;
@@ -13,6 +13,8 @@ import com.cookplan.providers.RecipeProvider;
 import com.cookplan.providers.impl.FamilyModeProviderImpl;
 import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.RecipeProviderImpl;
+import com.cookplan.recipe.list.RecipeListPresenter;
+import com.cookplan.recipe.list.RecipeListView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -28,16 +30,16 @@ import io.reactivex.schedulers.Schedulers;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public class RecipeGridPresenterImpl implements RecipeGridPresenter, FirebaseAuth.AuthStateListener {
+public class RecipeListPresenterImpl implements RecipeListPresenter, FirebaseAuth.AuthStateListener {
 
 
-    private RecipeGridView mainView;
+    private RecipeListView mainView;
     private RecipeProvider recipeDataProvider;
     private IngredientProvider ingredientDataProvider;
     private FamilyModeProvider familyModeProvider;
     private CompositeDisposable disposables;
 
-    public RecipeGridPresenterImpl(RecipeGridView mainView) {
+    public RecipeListPresenterImpl(RecipeListView mainView) {
         this.mainView = mainView;
         FirebaseAuth.getInstance().addAuthStateListener(this);
         recipeDataProvider = new RecipeProviderImpl();

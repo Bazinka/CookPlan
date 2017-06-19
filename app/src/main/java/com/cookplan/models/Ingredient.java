@@ -29,6 +29,7 @@ public class Ingredient implements Parcelable {
     public String amountString;
     public ShopListStatus shopListStatus;
     public ProductCategory category;
+    public long cookingDate;
 
     public Ingredient() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -135,6 +136,11 @@ public class Ingredient implements Parcelable {
         for (DataSnapshot child : itemSnapshot.getChildren()) {
             if (child.getKey().equals(DatabaseConstants.DATABASE_NAME_FIELD)) {
                 ingredient.name = child.getValue().toString();
+            }
+            if (child.getKey().equals(DatabaseConstants.DATABASE_COOKING_DATE_FIELD)) {
+                if (child.getValue() instanceof Long) {
+                    ingredient.cookingDate = (Long) child.getValue();
+                }
             }
             if (child.getKey().equals(DatabaseConstants.DATABASE_USER_ID_FIELD)) {
                 ingredient.userId = child.getValue().toString();
@@ -258,4 +264,12 @@ public class Ingredient implements Parcelable {
             return new Ingredient[size];
         }
     };
+
+    public long getCookingDate() {
+        return cookingDate;
+    }
+
+    public void setCookingDate(long cookingDate) {
+        this.cookingDate = cookingDate;
+    }
 }

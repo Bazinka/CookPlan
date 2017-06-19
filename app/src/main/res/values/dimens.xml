@@ -47,4 +47,5 @@
     <dimen name="button_margin_left">40dp</dimen>
     <dimen name="flat_button_margin">8dp</dimen>
     <dimen name="card_recipe_big_image_height">250dp</dimen>
+    <dimen name="width_selected_stroke">2dp</dimen>
 </resources>

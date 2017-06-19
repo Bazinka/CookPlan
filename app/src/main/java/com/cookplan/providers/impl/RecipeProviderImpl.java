@@ -88,6 +88,20 @@ public class RecipeProviderImpl implements RecipeProvider {
         });
     }
 
+    @Override
+    public Observable<List<Recipe>> getUserRecipeList() {
+        return subjectRecipeList.map(allRecipes -> {
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            List<Recipe> resultRecipes = new ArrayList<>();
+            for (Recipe recipe : allRecipes) {
+                if (recipe.getUserId().equals(uid)) {
+                    resultRecipes.add(recipe);
+                }
+            }
+            return resultRecipes;
+        });
+    }
+
 
     @Override
     public Single<Recipe> createRecipe(Recipe recipe) {
@@ -115,6 +129,7 @@ public class RecipeProviderImpl implements RecipeProvider {
             values.put(DatabaseConstants.DATABASE_NAME_FIELD, recipe.getName());
             values.put(DatabaseConstants.DATABASE_DESCRIPTION_FIELD, recipe.getDesc());
             values.put(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD, recipe.getImageUrls());
+            values.put(DatabaseConstants.DATABASE_COOKING_DATE_FIELD, recipe.getCookingDate());
             DatabaseReference recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
             recipeRef.child(recipe.getId()).updateChildren(values, (databaseError, databaseReference) -> {
                 if (databaseError != null) {

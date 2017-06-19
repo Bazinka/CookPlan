@@ -207,6 +207,10 @@
     <string name="google_search_too_many_requests_error">Слишком много поисковых запросов на сегодня. Попробуйте заново завтра</string>
     <string name="edit_image_list_title">Редактирование картинок</string>
     <string name="medicines_title">Медикаменты</string>
+    <string name="cooking_plan_title">План питания</string>
+    <string name="add_cooking_item_title">Новый пункт в плане питания</string>
+    <string name="choose_the_recipe">Выберите рецепт</string>
+    <string name="chosen_recipe_title">Выбранный рецепт:</string>
 
 
 </resources>

@@ -27,8 +27,9 @@ import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
 import com.cookplan.companies.MainCompaniesFragment;
+import com.cookplan.cooking_plan.list.CookingPlanFragment;
 import com.cookplan.product_list.ProductListFragment;
-import com.cookplan.recipe.grid.RecipeGridFragment;
+import com.cookplan.recipe.list.main.RecipeListFragment;
 import com.cookplan.share.SharePresenter;
 import com.cookplan.share.SharePresenterImpl;
 import com.cookplan.share.ShareView;
@@ -145,6 +146,8 @@ public class MainActivity extends BaseActivity
             setTODOListFragment();
         } else if (itemId == R.id.nav_companies) {
             setCompaniesListFragment();
+        } else if (itemId == R.id.nav_cooking_plan) {
+            setCookingListFragment();
         } else if (itemId == R.id.nav_sign_out) {
             if (presenter != null) {
                 presenter.signOut();
@@ -172,7 +175,7 @@ public class MainActivity extends BaseActivity
         //        mainConteinerView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.recipe_list_menu_title));
-        RecipeGridFragment pointListFragment = RecipeGridFragment.newInstance();
+        RecipeListFragment pointListFragment = RecipeListFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
             transaction.add(R.id.fragment_container, pointListFragment);
@@ -263,6 +266,30 @@ public class MainActivity extends BaseActivity
         setTitle(getString(R.string.companies_list_title));
 
         MainCompaniesFragment fragment = MainCompaniesFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
+            transaction.add(R.id.fragment_container, fragment);
+        } else {
+            transaction.replace(R.id.fragment_container, fragment);
+        }
+        transaction.commit();
+    }
+
+    void setCookingListFragment() {
+        setFamilyModeMenuOptions();
+
+        View tabsLayout = findViewById(R.id.main_tabs_layout);
+        tabsLayout.setVisibility(View.GONE);
+        View viewPager = findViewById(R.id.main_tabs_viewpager);
+        viewPager.setVisibility(View.GONE);
+
+        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
+        //        mainConteinerView.setVisibility(View.VISIBLE);
+
+
+        setTitle(getString(R.string.cooking_plan_title));
+
+        CookingPlanFragment fragment = CookingPlanFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
             transaction.add(R.id.fragment_container, fragment);

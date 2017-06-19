@@ -149,6 +149,18 @@ public class IngredientProviderImpl implements IngredientProvider {
         });
     }
 
+    @Override
+    public Completable updateCookingTime(Ingredient ingredient) {
+        return Completable.create(emitter -> {
+            DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+            ingredientRef
+                    .child(ingredient.getId())
+                    .child(DatabaseConstants.DATABASE_COOKING_DATE_FIELD)
+                    .setValue(ingredient.getCookingDate())
+                    .addOnSuccessListener(aVoid -> emitter.onComplete())
+                    .addOnFailureListener(exception -> emitter.onError(new CookPlanError(exception.getMessage())));
+        });
+    }
     //    @Override
     //    public Single<Recipe> createRecipe(Recipe recipe) {
     //        return Single.create(emitter -> {

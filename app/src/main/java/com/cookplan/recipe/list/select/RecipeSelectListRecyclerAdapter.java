@@ -1,4 +1,4 @@
-package com.cookplan.recipe.grid;
+package com.cookplan.recipe.list.select;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -19,13 +19,13 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGridRecyclerViewAdapter.ViewHolder> {
+public class RecipeSelectListRecyclerAdapter extends RecyclerView.Adapter<RecipeSelectListRecyclerAdapter.ViewHolder> {
 
     private final List<Recipe> mValues;
     private RecipeListClickListener listener;
     private Context context;
 
-    public RecipeGridRecyclerViewAdapter(List<Recipe> items, RecipeListClickListener listener, Context context) {
+    public RecipeSelectListRecyclerAdapter(List<Recipe> items, RecipeListClickListener listener, Context context) {
         mValues = items;
         this.listener = listener;
         this.context = context;
@@ -34,7 +34,7 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recipe_list_item_layout, parent, false);
+                .inflate(R.layout.recipe_select_list_item_layout, parent, false);
         return new ViewHolder(view);
     }
 
@@ -80,13 +80,6 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
         } else {
             holder.recipeImageView.setImageResource(R.drawable.ic_default_recipe_image);
         }
-        holder.mainView.setOnLongClickListener(v -> {
-            Recipe recipe1 = (Recipe) v.getTag();
-            if (listener != null && recipe1 != null) {
-                listener.onRecipeLongClick(recipe1);
-            }
-            return true;
-        });
     }
 
     public void updateItems(List<Recipe> recipeList) {
@@ -109,7 +102,7 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
 
         public ViewHolder(View view) {
             super(view);
-            mainView = view;
+            mainView = view.findViewById(R.id.card_view);
             nameView = (TextView) view.findViewById(R.id.name);
             authorNameView = (TextView) view.findViewById(R.id.author_name);
             authorNameLayout = (ViewGroup) view.findViewById(R.id.author_layout);
@@ -124,8 +117,6 @@ public class RecipeGridRecyclerViewAdapter extends RecyclerView.Adapter<RecipeGr
     }
 
     public interface RecipeListClickListener {
-        public void onRecipeClick(Recipe recipe);
-
-        public void onRecipeLongClick(Recipe recipe);
+        void onRecipeClick(Recipe recipe);
     }
 }

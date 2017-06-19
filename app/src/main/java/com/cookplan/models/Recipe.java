@@ -21,19 +21,24 @@ public class Recipe implements Serializable {
     private List<String> imageUrls;
     private String userId;
     private String userName;
+    private long cookingDate;
 
     public Recipe() {
+        cookingDate = 0;
     }
 
-    public Recipe(String id, String name, String desc, List<String> imageUrls, String userId) {
+    public Recipe(String id, String name, String desc, List<String> imageUrls, String userId, long cookingDate) {
+        this();
         this.id = id;
         this.name = name;
         this.desc = desc;
         this.imageUrls = imageUrls;
         this.userId = userId;
+        this.cookingDate = cookingDate;
     }
 
     public Recipe(String name, String desc, List<String> imageUrls) {
+        this();
         this.name = name;
         this.desc = desc;
         this.imageUrls = imageUrls;
@@ -63,18 +68,28 @@ public class Recipe implements Serializable {
         this.imageUrls = imageUrls;
     }
 
+    public void setCookingDate(long cookingDate) {
+        this.cookingDate = cookingDate;
+    }
+
+    public long getCookingDate() {
+        return cookingDate;
+    }
+
     public String getDesc() {
         return desc;
     }
 
     public RecipeDB getRecipeDB() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        return new RecipeDB(auth.getCurrentUser().getUid(), name, desc, imageUrls);
+        return new RecipeDB(auth.getCurrentUser().getUid(), name, desc, imageUrls, cookingDate);
     }
 
     public static Recipe getRecipeFromDBObject(DataSnapshot itemSnapshot) {
         RecipeDB object = itemSnapshot.getValue(RecipeDB.class);
-        Recipe recipe = new Recipe(itemSnapshot.getKey(), object.getName(), object.getDesc(), object.getImageUrls(), object.getUserId());
+        Recipe recipe = new Recipe(itemSnapshot.getKey(), object.getName(),
+                                   object.getDesc(), object.getImageUrls(),
+                                   object.getUserId(), object.getCookingDate());
         return recipe;
     }
 
@@ -119,14 +134,19 @@ public class Recipe implements Serializable {
         @PropertyName(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD)
         public List<String> imageUrls;
 
+        @PropertyName(DatabaseConstants.DATABASE_COOKING_DATE_FIELD)
+        public long cookingDate;
+
+
         public RecipeDB() {
         }
 
-        public RecipeDB(String userId, String name, String desc, List<String> imageUrls) {
+        public RecipeDB(String userId, String name, String desc, List<String> imageUrls, long cookingDate) {
             this.name = name;
             this.desc = desc;
             this.userId = userId;
             this.imageUrls = imageUrls;
+            this.cookingDate = cookingDate;
         }
 
         public String getName() {
@@ -147,6 +167,10 @@ public class Recipe implements Serializable {
 
         public List<String> getImageUrls() {
             return imageUrls;
+        }
+
+        public long getCookingDate() {
+            return cookingDate;
         }
     }
 

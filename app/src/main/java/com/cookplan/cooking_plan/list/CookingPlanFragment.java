@@ -1,12 +1,11 @@
-package com.cookplan.recipe.grid;
+package com.cookplan.cooking_plan.list;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,29 +15,27 @@ import android.widget.Toast;
 import com.cookplan.BaseActivity;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
+import com.cookplan.cooking_plan.add.AddCookingItemActivity;
 import com.cookplan.main.MainActivity;
 import com.cookplan.models.Recipe;
-import com.cookplan.recipe.import_recipe.search_url.SearchRecipeUrlActivity;
-import com.cookplan.recipe.edit.add_info.EditRecipeInfoActivity;
 import com.cookplan.recipe.view_item.RecipeViewActivity;
-import com.cookplan.utils.GridSpacingItemDecoration;
-import com.cookplan.utils.Utils;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
+public class CookingPlanFragment extends BaseFragment implements CookingPlanView {
 
-    private RecipeGridRecyclerViewAdapter adapter;
-    private RecipeGridPresenter presenter;
+    private CookingPlanRecyclerViewAdapter adapter;
+    private CookingPlanPresenter presenter;
 
-    public RecipeGridFragment() {
+    public CookingPlanFragment() {
     }
 
 
-    public static RecipeGridFragment newInstance() {
-        RecipeGridFragment fragment = new RecipeGridFragment();
+    public static CookingPlanFragment newInstance() {
+        CookingPlanFragment fragment = new CookingPlanFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -50,7 +47,7 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
         if (getArguments() != null) {
         }
         setRetainInstance(true);
-        presenter = new RecipeGridPresenterImpl(this);
+        presenter = new CookingPlanPresenterImpl(this);
 
     }
 
@@ -58,7 +55,7 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
     public void onStart() {
         super.onStart();
         if (presenter != null) {
-            presenter.getRecipeList();
+            presenter.getCookingPlan();
         }
     }
 
@@ -73,16 +70,16 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_recipe_list, container, false);
+        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_cooking_plan_list, container, false);
         ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
 
         // Set the adapter
-        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.recipe_list_recycler);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utils.dpToPx(getActivity(), 16), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new RecipeGridRecyclerViewAdapter(new ArrayList<>(), new RecipeGridRecyclerViewAdapter.RecipeListClickListener() {
+        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.cooking_list_recycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        adapter = new CookingPlanRecyclerViewAdapter(new ArrayList<>(), new CookingPlanRecyclerViewAdapter.RecipeListClickListener() {
             @Override
             public void onRecipeClick(Recipe recipe) {
                 Activity activity = getActivity();
@@ -113,26 +110,24 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
 
         FloatingActionButton addRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.add_recipe_fab);
         addRecipeFab.setOnClickListener(view -> {
-            startNewRecipeActivity();
+            FloatingActionMenu menu = (FloatingActionMenu) mainView.findViewById(R.id.menu_yellow);
+            menu.setClosedOnTouchOutside(true);
+            startAddCookingPlanItemActivity(true);
         });
 
-        FloatingActionButton importRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.import_recipe_fab);
-        importRecipeFab.setOnClickListener(view -> {
-            startSearchRecipeUrlActivity();
+        FloatingActionButton addIngredientFab = (FloatingActionButton) mainView.findViewById(R.id.add_ingredient_fab);
+        addIngredientFab.setOnClickListener(view -> {
+            FloatingActionMenu menu = (FloatingActionMenu) mainView.findViewById(R.id.menu_yellow);
+            menu.setClosedOnTouchOutside(true);
+            startAddCookingPlanItemActivity(false);
         });
 
         return mainView;
     }
 
-    void startSearchRecipeUrlActivity() {
-        Intent intent = new Intent(getActivity(), SearchRecipeUrlActivity.class);
-        if (getActivity() instanceof BaseActivity) {
-            ((BaseActivity) getActivity()).startActivityWithLeftAnimation(intent);
-        }
-    }
-
-    void startNewRecipeActivity() {
-        Intent intent = new Intent(getActivity(), EditRecipeInfoActivity.class);
+    void startAddCookingPlanItemActivity(boolean isRecipeAdding) {
+        Intent intent = new Intent(getActivity(), AddCookingItemActivity.class);
+        intent.putExtra(AddCookingItemActivity.IS_RECIPE_NEEDED_TO_ADD_KEY, isRecipeAdding);
         if (getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).startActivityWithLeftAnimation(intent);
         }
@@ -147,14 +142,14 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
     }
 
     private void setRecyclerViewVisability(int visability) {
-        View recyclerView = mainView.findViewById(R.id.recipe_list_recycler);
+        View recyclerView = mainView.findViewById(R.id.cooking_list_recycler);
         if (recyclerView != null) {
             recyclerView.setVisibility(visability);
         }
     }
 
     @Override
-    public void setRecipeList(List<Recipe> recipeList) {
+    public void setCookingList(List<Recipe> recipeList) {
         ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
