@@ -33,7 +33,6 @@
             android:layout_height="match_parent"
             android:layout_below="@id/progress_bar"
             app:layoutManager="LinearLayoutManager"
-            tools:context="com.cookplan.recipe_grid.RecipeGridFragment"
             tools:listitem="@layout/recipe_list_item_layout"/>
     </RelativeLayout>
 

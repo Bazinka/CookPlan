@@ -28,7 +28,7 @@ import com.cookplan.RApplication;
 import com.cookplan.auth.ui.FirebaseAuthActivity;
 import com.cookplan.companies.MainCompaniesFragment;
 import com.cookplan.product_list.ProductListFragment;
-import com.cookplan.recipe_grid.RecipeGridFragment;
+import com.cookplan.recipe.grid.RecipeGridFragment;
 import com.cookplan.share.SharePresenter;
 import com.cookplan.share.SharePresenterImpl;
 import com.cookplan.share.ShareView;

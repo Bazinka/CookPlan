@@ -53,12 +53,12 @@
             android:value="106104ec1cff9417dfad0a211e594bc4c3582d55"/>
 
         <activity
-            android:name=".recipe_new.add_info.EditRecipeInfoActivity"
+            android:name=".recipe.edit.add_info.EditRecipeInfoActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateVisible"/>
-        <activity android:name=".recipe_new.add_ingredients.EditRecipeIngredientsActivity"/>
+        <activity android:name=".recipe.edit.add_ingredients.EditRecipeIngredientsActivity"/>
         <activity
-            android:name=".recipe_view.RecipeViewActivity"
+            android:name=".recipe.view_item.RecipeViewActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data
@@ -66,7 +66,7 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
-            android:name=".recipe_steps.RecipeStepsViewActivity"
+            android:name=".recipe.steps_mode.RecipeStepsViewActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.Fullscreen">
         </activity>
@@ -109,11 +109,11 @@
 
         <activity android:name=".product_list.multiselect.MultiselectProductListActivity">
         </activity>
-        <activity android:name=".recipe_import.approve_result.ImportRecipeActivity">
+        <activity android:name=".recipe.import_recipe.approve_result.ImportRecipeActivity">
         </activity>
-        <activity android:name=".recipe_import.search_url.SearchRecipeUrlActivity">
+        <activity android:name=".recipe.import_recipe.search_url.SearchRecipeUrlActivity">
         </activity>
-        <activity android:name=".recipe_import.web_browser.WebBrowserActivity">
+        <activity android:name=".recipe.import_recipe.web_browser.WebBrowserActivity">
         </activity>
         <activity android:name=".upload_image.UploadImageActivity">
         </activity>
