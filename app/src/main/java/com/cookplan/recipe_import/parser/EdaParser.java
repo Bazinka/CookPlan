@@ -45,12 +45,14 @@ public class EdaParser extends BaseParser {
     @Override
     protected List<String> parseImageUrlsFromDoc(Document doc) {
         List<String> imageUrls = new ArrayList<>();
-        Elements imagesElements = doc.select("div.b-photo-gall__counter");
+        Elements imagesElements = doc.select("div.g-first-page-block").select("div.s-photo-gall__trigger");
         String imageUrlsString = imagesElements.attr("data-gall-photos-urls");
         if (imageUrlsString != null) {
             String[] splits = imageUrlsString.split(",");
             for (String url : splits) {
-                imageUrls.add("https:" + url);
+                if (!url.isEmpty()) {
+                    imageUrls.add("https:" + url.replace("'", ""));
+                }
             }
         }
         return imageUrls;
