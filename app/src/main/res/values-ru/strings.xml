@@ -99,6 +99,7 @@
     <string name="books_and_printed_matter_title">Книги и печатная продукция</string>
     <string name="products_for_garden_title">Всё для сада и огорода</string>
     <string name="are_you_sure_remove_recipe">Вы уверены, что хотите удалить рецепт?</string>
+    <string name="are_you_sure_remove_ingredient">Вы уверены, что хотите удалить продукт?</string>
     <string name="are_you_sure_remove_company">Вы уверены, что хотите удалить место навсегда?</string>
     <string name="product_required_field">Необходимо выбрать продукт из списка</string>
     <string name="by_the_taste">по вкусу</string>

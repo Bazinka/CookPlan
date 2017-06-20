@@ -3,6 +3,7 @@ package com.cookplan.cooking_plan.list;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -98,12 +99,32 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
 
                     @Override
                     public void onRecipeLongClick(Recipe recipe) {
-
+                        new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                                .setMessage(R.string.are_you_sure_remove_recipe)
+                                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                    ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    if (presenter != null) {
+                                        presenter.removeRecipeFromCookingPlan(recipe);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show();
                     }
 
                     @Override
                     public void onIngredientLongClick(Ingredient ingredient) {
-
+                        new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                                .setMessage(R.string.are_you_sure_remove_ingredient)
+                                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                    ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    if (presenter != null) {
+                                        presenter.removeIngredientFromCookingPlan(ingredient);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show();
                     }
                 }, getActivity());
         recyclerView.setAdapter(adapter);
