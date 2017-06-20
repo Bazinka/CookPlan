@@ -48,20 +48,16 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
             if (object1 instanceof Recipe) {
                 Recipe recipe = (Recipe) object1;
                 date1 = new DateTime(recipe.getCookingDate());
-            } else {
-                if (object1 instanceof Ingredient) {
-                    Ingredient ingredient = (Ingredient) object1;
-                    date1 = new DateTime(ingredient.getCookingDate());
-                }
+            } else if (object1 instanceof Ingredient) {
+                Ingredient ingredient = (Ingredient) object1;
+                date1 = new DateTime(ingredient.getCookingDate());
             }
             if (object2 instanceof Recipe) {
-                Recipe recipe = (Recipe) object1;
+                Recipe recipe = (Recipe) object2;
                 date2 = new DateTime(recipe.getCookingDate());
-            } else {
-                if (object2 instanceof Ingredient) {
-                    Ingredient ingredient = (Ingredient) object1;
-                    date2 = new DateTime(ingredient.getCookingDate());
-                }
+            } else if (object2 instanceof Ingredient) {
+                Ingredient ingredient = (Ingredient) object2;
+                date2 = new DateTime(ingredient.getCookingDate());
             }
             if (date1 != null && date2 != null) {
                 if (date1.equals(date2)) {
