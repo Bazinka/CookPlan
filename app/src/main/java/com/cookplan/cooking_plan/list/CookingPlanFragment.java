@@ -98,14 +98,14 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
                     }
 
                     @Override
-                    public void onRecipeLongClick(Recipe recipe) {
+                    public void onRecipeLongClick(LocalDate date, Recipe recipe) {
                         new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
                                 .setMessage(R.string.are_you_sure_remove_recipe)
                                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                                     ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
                                     progressBar.setVisibility(View.VISIBLE);
                                     if (presenter != null) {
-                                        presenter.removeRecipeFromCookingPlan(recipe);
+                                        presenter.removeRecipeFromCookingPlan(date, recipe);
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, null)

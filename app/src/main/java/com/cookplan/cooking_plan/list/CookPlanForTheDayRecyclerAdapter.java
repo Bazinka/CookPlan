@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,11 +32,13 @@ import static com.cookplan.utils.Constants.ObjectType.RECIPE;
 public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookPlanForTheDayRecyclerAdapter.BaseViewHolder> {
 
     private final List<Object> values;
+    private final LocalDate valueDate;
     private CookPlanClickListener listener;
     private Context context;
 
-    public CookPlanForTheDayRecyclerAdapter(List<Object> items, CookPlanClickListener listener, Context context) {
+    public CookPlanForTheDayRecyclerAdapter(List<Object> items, LocalDate valueDate, CookPlanClickListener listener, Context context) {
         values = new ArrayList<>(items);
+        this.valueDate = valueDate;
         sortValue();
         this.listener = listener;
         this.context = context;
@@ -47,14 +50,14 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
             DateTime date2 = null;
             if (object1 instanceof Recipe) {
                 Recipe recipe = (Recipe) object1;
-                date1 = new DateTime(recipe.getCookingDate());
+                date1 = new DateTime(getRecipeMillisec(recipe));
             } else if (object1 instanceof Ingredient) {
                 Ingredient ingredient = (Ingredient) object1;
                 date1 = new DateTime(ingredient.getCookingDate());
             }
             if (object2 instanceof Recipe) {
                 Recipe recipe = (Recipe) object2;
-                date2 = new DateTime(recipe.getCookingDate());
+                date2 = new DateTime(getRecipeMillisec(recipe));
             } else if (object2 instanceof Ingredient) {
                 Ingredient ingredient = (Ingredient) object2;
                 date2 = new DateTime(ingredient.getCookingDate());
@@ -127,7 +130,8 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
                 recipeViewHolder.recipeImageView.setImageResource(R.drawable.ic_default_recipe_image);
             }
             recipeViewHolder.recipeNameView.setText(recipe.getName());
-            setTimeField(recipeViewHolder.recipeTimeView, recipe.getCookingDate());
+
+            setTimeField(recipeViewHolder.recipeTimeView, getRecipeMillisec(recipe));
         }
 
         if (getItemViewType(position) == INGREDIENT.getId()) {
@@ -164,7 +168,7 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
             Object tagObject = view.getTag();
             if (tagObject != null && listener != null) {
                 if (tagObject instanceof Recipe) {
-                    listener.onRecipeLongClick((Recipe) tagObject);
+                    listener.onRecipeLongClick(valueDate, (Recipe) tagObject);
                 }
                 if (tagObject instanceof Ingredient) {
                     listener.onIngredientLongClick((Ingredient) tagObject);
@@ -172,6 +176,16 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
             }
             return true;
         });
+    }
+
+    private long getRecipeMillisec(Recipe recipe) {
+        for (Long millisec : recipe.getCookingDate()) {
+            LocalDate date = new LocalDate(millisec);
+            if (date.equals(valueDate)) {
+                return millisec;
+            }
+        }
+        return -1;
     }
 
     private void setTimeField(TextView recipeTimeView, long millisec) {

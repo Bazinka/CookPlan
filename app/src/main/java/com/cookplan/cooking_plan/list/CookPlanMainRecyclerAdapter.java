@@ -50,7 +50,7 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
         LocalDate date = values.get(position);
 
         CookPlanForTheDayRecyclerAdapter adapter = new CookPlanForTheDayRecyclerAdapter(
-                map.get(date), listener, context);
+                map.get(date), date, listener, context);
 
         holder.cookingForDayRecyclerView.setHasFixedSize(true);
         holder.cookingForDayRecyclerView.setNestedScrollingEnabled(false);
@@ -146,7 +146,7 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
 
         void onRecipeClick(Recipe recipe);
 
-        void onRecipeLongClick(Recipe recipe);
+        void onRecipeLongClick(LocalDate date, Recipe recipe);
 
         void onIngredientLongClick(Ingredient ingredient);
     }

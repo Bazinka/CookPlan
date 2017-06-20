@@ -107,7 +107,7 @@ public class RecipeProviderImpl implements RecipeProvider {
         return subjectRecipeList.map(allRecipes -> {
             List<Recipe> resultRecipes = new ArrayList<>();
             for (Recipe recipe : allRecipes) {
-                if (recipe.getCookingDate() > 0) {
+                if (recipe.getCookingDate() != null && !recipe.getCookingDate().isEmpty()) {
                     resultRecipes.add(recipe);
                 }
             }
@@ -142,7 +142,7 @@ public class RecipeProviderImpl implements RecipeProvider {
             values.put(DatabaseConstants.DATABASE_NAME_FIELD, recipe.getName());
             values.put(DatabaseConstants.DATABASE_DESCRIPTION_FIELD, recipe.getDesc());
             values.put(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD, recipe.getImageUrls());
-            values.put(DatabaseConstants.DATABASE_COOKING_DATE_FIELD, recipe.getCookingDate());
+            values.put(DatabaseConstants.DATABASE_COOKING_DATE_LIST_FIELD, recipe.getCookingDate());
             DatabaseReference recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE);
             recipeRef.child(recipe.getId()).updateChildren(values, (databaseError, databaseReference) -> {
                 if (databaseError != null) {

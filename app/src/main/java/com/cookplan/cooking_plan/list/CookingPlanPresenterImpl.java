@@ -97,8 +97,14 @@ public class CookingPlanPresenterImpl implements CookingPlanPresenter, FirebaseA
     }
 
     @Override
-    public void removeRecipeFromCookingPlan(Recipe recipe) {
-        recipe.setCookingDate(0);
+    public void removeRecipeFromCookingPlan(LocalDate date, Recipe recipe) {
+        List<Long> cookingDateList = new ArrayList<>(recipe.getCookingDate());
+        for (Long millisec : cookingDateList) {
+            LocalDate recipeDate = new LocalDate(millisec);
+            if (recipeDate.equals(date)) {
+                recipe.getCookingDate().remove(millisec);
+            }
+        }
         recipeDataProvider.update(recipe)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -142,11 +148,13 @@ public class CookingPlanPresenterImpl implements CookingPlanPresenter, FirebaseA
     private Map<LocalDate, List<Object>> getResultMap(List<Recipe> recipeList, List<Ingredient> ingredientList) {
         Map<LocalDate, List<Object>> calendarListMap = new HashMap<>();
         for (Recipe recipe : recipeList) {
-            LocalDate date = getDateMillisec(recipe.getCookingDate());
-            if (!calendarListMap.containsKey(date)) {
-                calendarListMap.put(date, new ArrayList<>());
+            for (Long cookingDate : recipe.getCookingDate()) {
+                LocalDate date = getDateMillisec(cookingDate);
+                if (!calendarListMap.containsKey(date)) {
+                    calendarListMap.put(date, new ArrayList<>());
+                }
+                calendarListMap.get(date).add(recipe);
             }
-            calendarListMap.get(date).add(recipe);
         }
         for (Ingredient ingredient : ingredientList) {
             LocalDate date = getDateMillisec(ingredient.getCookingDate());

@@ -25,6 +25,7 @@ public class DatabaseConstants {
     public static final String DATABASE_NAME_FIELD = "name";
     public static final String DATABASE_COMMENT_FIELD = "comment";
     public static final String DATABASE_COOKING_DATE_FIELD = "cookingDate";
+    public static final String DATABASE_COOKING_DATE_LIST_FIELD = "cookingDateList";
     public static final String DATABASE_IMAGE_URL_LIST_FIELD = "imageUrls";
 
     public static final String DATABASE_RATIO_MEASURE_LIST_FIELD = "ratioMeasureList";

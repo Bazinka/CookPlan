@@ -21,20 +21,23 @@ public class Recipe implements Serializable {
     private List<String> imageUrls;
     private String userId;
     private String userName;
-    private long cookingDate;
+    private List<Long> cookingDateList;
 
     public Recipe() {
-        cookingDate = 0;
+        cookingDateList = new ArrayList<>();
     }
 
-    public Recipe(String id, String name, String desc, List<String> imageUrls, String userId, long cookingDate) {
+    public Recipe(String id, String name, String desc, List<String> imageUrls, String userId, List<Long> cookingDateList) {
         this();
         this.id = id;
         this.name = name;
         this.desc = desc;
         this.imageUrls = imageUrls;
         this.userId = userId;
-        this.cookingDate = cookingDate;
+        this.cookingDateList = new ArrayList<>();
+        if (cookingDateList != null) {
+            this.cookingDateList.addAll(cookingDateList);
+        }
     }
 
     public Recipe(String name, String desc, List<String> imageUrls) {
@@ -68,12 +71,19 @@ public class Recipe implements Serializable {
         this.imageUrls = imageUrls;
     }
 
-    public void setCookingDate(long cookingDate) {
-        this.cookingDate = cookingDate;
+    public void setCookingDate(List<Long> cookingDateList) {
+        this.cookingDateList = new ArrayList<>(cookingDateList);
     }
 
-    public long getCookingDate() {
-        return cookingDate;
+    public void addCookingDate(long cookingDate) {
+        if (cookingDateList == null) {
+            this.cookingDateList = new ArrayList<>();
+        }
+        cookingDateList.add(cookingDate);
+    }
+
+    public List<Long> getCookingDate() {
+        return cookingDateList;
     }
 
     public String getDesc() {
@@ -82,7 +92,7 @@ public class Recipe implements Serializable {
 
     public RecipeDB getRecipeDB() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        return new RecipeDB(auth.getCurrentUser().getUid(), name, desc, imageUrls, cookingDate);
+        return new RecipeDB(auth.getCurrentUser().getUid(), name, desc, imageUrls, cookingDateList);
     }
 
     public static Recipe getRecipeFromDBObject(DataSnapshot itemSnapshot) {
@@ -134,19 +144,19 @@ public class Recipe implements Serializable {
         @PropertyName(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD)
         public List<String> imageUrls;
 
-        @PropertyName(DatabaseConstants.DATABASE_COOKING_DATE_FIELD)
-        public long cookingDate;
+        @PropertyName(DatabaseConstants.DATABASE_COOKING_DATE_LIST_FIELD)
+        public List<Long> cookingDateList;
 
 
         public RecipeDB() {
         }
 
-        public RecipeDB(String userId, String name, String desc, List<String> imageUrls, long cookingDate) {
+        public RecipeDB(String userId, String name, String desc, List<String> imageUrls, List<Long> cookingDate) {
             this.name = name;
             this.desc = desc;
             this.userId = userId;
             this.imageUrls = imageUrls;
-            this.cookingDate = cookingDate;
+            this.cookingDateList = cookingDateList;
         }
 
         public String getName() {
@@ -169,8 +179,8 @@ public class Recipe implements Serializable {
             return imageUrls;
         }
 
-        public long getCookingDate() {
-            return cookingDate;
+        public List<Long> getCookingDate() {
+            return cookingDateList;
         }
     }
 

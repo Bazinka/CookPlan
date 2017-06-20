@@ -35,7 +35,7 @@ public class AddCookingItemPresenterImpl implements AddCookingItemPresenter {
 
     @Override
     public void saveRecipeToCookingPlan(Recipe recipe, DateTime date) {
-        recipe.setCookingDate(date.getMillis());
+        recipe.addCookingDate(date.getMillis());
         recipeDataProvider.update(recipe)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
