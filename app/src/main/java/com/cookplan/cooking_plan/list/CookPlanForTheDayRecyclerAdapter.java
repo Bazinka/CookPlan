@@ -140,12 +140,12 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
             ingredientViewHolder.nameTextView.setText(ingredient.getName());
 
 
-            if (ingredient.getAmountString() != null) {
+            if (ingredient.getMainAmount() != 0 && ingredient.getMainMeasureUnit() != null) {
                 ingredientViewHolder.amountTextView.setVisibility(View.VISIBLE);
-
-                ingredientViewHolder.amountTextView.setText(ingredient.getAmountString());
+                String amount = ingredient.getMainMeasureUnit().toValueString(ingredient.getMainAmount());
+                ingredientViewHolder.amountTextView.setText(amount);
             } else {
-                //                ingredientViewHolder.amountTextView.setVisibility(View.GONE);
+                ingredientViewHolder.amountTextView.setVisibility(View.GONE);
             }
             setTimeField(ingredientViewHolder.timeTextView, ingredient.getCookingDate());
         }
