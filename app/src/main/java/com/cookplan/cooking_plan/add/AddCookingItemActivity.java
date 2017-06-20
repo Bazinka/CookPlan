@@ -116,7 +116,7 @@ public class AddCookingItemActivity extends BaseActivity implements AddCookingIt
         choosenDate = new DateTime();
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             DateTime dt = new DateTime();
-            choosenDate = dt.withDate(year, month, dayOfMonth);
+            choosenDate = dt.withDate(year, month + 1, dayOfMonth);
         });
     }
 
