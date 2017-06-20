@@ -1,12 +1,16 @@
 package com.cookplan.cooking_plan.list;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -25,6 +29,7 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import org.joda.time.LocalDate;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +38,7 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
 
     private CookPlanMainRecyclerAdapter adapter;
     private CookingPlanPresenter presenter;
+    private Menu menu;
 
     public CookingPlanFragment() {
     }
@@ -50,6 +56,7 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        setHasOptionsMenu(true);
         setRetainInstance(true);
         presenter = new CookingPlanPresenterImpl(this);
 
@@ -61,6 +68,7 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
         if (presenter != null) {
             presenter.getCookingPlan();
         }
+        showMenu();
     }
 
     @Override
@@ -69,6 +77,7 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
         if (presenter != null) {
             presenter.onStop();
         }
+        hideMenu();
     }
 
     @Override
@@ -183,5 +192,55 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
         if (getActivity() != null) {
             Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void showMenu() {
+        if (menu != null) {
+            MenuItem menuItem = menu.findItem(R.id.action_remove);
+            if (menuItem != null) {
+                menuItem.setVisible(true);
+            }
+        }
+    }
+
+    private void hideMenu() {
+        if (menu != null) {
+            MenuItem menuItem = menu.findItem(R.id.action_remove);
+            if (menuItem != null) {
+                menuItem.setVisible(false);
+            }
+        }
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.calendar_menu, menu);
+        this.menu = menu;
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_calendar) {
+            Calendar newCalendar = Calendar.getInstance();
+            new DatePickerDialog(getActivity(),
+                                 (view, year, monthOfYear, dayOfMonth) -> {
+                                     LocalDate date = new LocalDate(year, monthOfYear + 1, dayOfMonth);
+                                     RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.cooking_list_recycler);
+                                     if (recyclerView != null) {
+                                         int position = adapter.getPositionForDate(date);
+                                         recyclerView.smoothScrollToPosition(position);
+                                     }
+                                 },
+                                 newCalendar.get(Calendar.YEAR),
+                                 newCalendar.get(Calendar.MONTH),
+                                 newCalendar.get(Calendar.DAY_OF_MONTH))
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
