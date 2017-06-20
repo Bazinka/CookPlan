@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMainRecyclerAdapter.ViewHolder> {
@@ -58,10 +59,12 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
         holder.cookingForDayRecyclerView.setAdapter(adapter);
 
         holder.dayOfMonthTextView.setText(date.toString("dd"));
-        holder.dayOfWeekTextView.setText(date.toString("EE"));
+        holder.nameOfMonthTextView.setText(date.toString("MMMM", Locale.getDefault()));
+        holder.dayOfWeekTextView.setText(date.toString("EEEE"));
         if (date.equals(new LocalDate())) {
             //it's today
             int todaysColorId = ContextCompat.getColor(context, R.color.accent_color);
+            holder.nameOfMonthTextView.setTextColor(todaysColorId);
             holder.dayOfMonthTextView.setTextColor(todaysColorId);
             holder.dayOfWeekTextView.setTextColor(todaysColorId);
         }
@@ -122,6 +125,7 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
         final TextView dayOfWeekTextView;
         final RecyclerView cookingForDayRecyclerView;
         final TextView dayOfMonthTextView;
+        final TextView nameOfMonthTextView;
 
 
         ViewHolder(View view) {
@@ -129,6 +133,8 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
             mainView = view.findViewById(R.id.main_view);
             dayOfMonthTextView = (TextView) view.findViewById(R.id.number_day_of_month_textview);
             dayOfWeekTextView = (TextView) view.findViewById(R.id.day_of_week_textview);
+            nameOfMonthTextView = (TextView) view.findViewById(R.id.name_of_month_textview);
+
             cookingForDayRecyclerView = (RecyclerView) view.findViewById(R.id.cooking_items_recycler_view);
         }
     }
