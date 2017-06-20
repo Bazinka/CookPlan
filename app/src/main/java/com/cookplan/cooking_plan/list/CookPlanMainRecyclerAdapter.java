@@ -61,13 +61,16 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
         holder.dayOfMonthTextView.setText(date.toString("dd"));
         holder.nameOfMonthTextView.setText(date.toString("MMMM", Locale.getDefault()));
         holder.dayOfWeekTextView.setText(date.toString("EEEE"));
+        int todaysColorId;
         if (date.equals(new LocalDate())) {
             //it's today
-            int todaysColorId = ContextCompat.getColor(context, R.color.accent_color);
-            holder.nameOfMonthTextView.setTextColor(todaysColorId);
-            holder.dayOfMonthTextView.setTextColor(todaysColorId);
-            holder.dayOfWeekTextView.setTextColor(todaysColorId);
+            todaysColorId = ContextCompat.getColor(context, R.color.accent_color);
+        } else {
+            todaysColorId = ContextCompat.getColor(context, R.color.primary_text_color);
         }
+        holder.nameOfMonthTextView.setTextColor(todaysColorId);
+        holder.dayOfMonthTextView.setTextColor(todaysColorId);
+        holder.dayOfWeekTextView.setTextColor(todaysColorId);
     }
 
     public void updateItems(Map<LocalDate, List<Object>> dateToObjectMap) {
