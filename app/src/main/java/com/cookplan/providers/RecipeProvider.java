@@ -19,6 +19,8 @@ public interface RecipeProvider {
 
     Observable<List<Recipe>> getUserRecipeList();
 
+    Observable<List<Recipe>> getRecipeListForCooking();
+
     Single<Recipe> createRecipe(Recipe recipe);
 
     Single<Recipe> update(Recipe recipe);

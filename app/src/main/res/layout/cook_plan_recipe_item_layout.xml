@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/main_view"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:clickable="false">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="true"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="@dimen/small_inrgedient_padding"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/cook_plan_recipe_height"
+            android:clickable="false">
+
+            <ImageView
+                android:id="@+id/cook_plan_recipe_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="false"
+                android:scaleType="fitCenter"
+                card_view:srcCompat="@drawable/ic_default_recipe_image"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/cook_plan_recipe_image"
+                android:background="@color/primary_transparent"
+                android:clickable="false"
+                android:padding="@dimen/card_recipe_name_padding">
+
+                <TextView
+                    android:id="@+id/cook_plan_recipe_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:clickable="false"
+                    android:maxLines="2"
+                    android:text="завтрак"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/subheding_text_size"/>
+
+                <TextView
+                    android:id="@+id/cook_plan_recipe_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/cook_plan_recipe_time"
+                    android:clickable="false"
+                    android:maxLines="2"
+                    android:text="Рецепт"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/title_text_size"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
+
+            <!--<TextView-->
+            <!--android:id="@+id/count"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/title"-->
+            <!--android:paddingBottom="@dimen/songs_count_padding_bottom"-->
+            <!--android:paddingLeft="@dimen/album_title_padding"-->
+            <!--android:paddingRight="@dimen/album_title_padding"-->
+            <!--android:textSize="@dimen/songs_count" />-->
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

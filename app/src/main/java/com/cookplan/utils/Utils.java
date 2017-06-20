@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import com.cookplan.models.MeasureUnit;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -111,6 +112,21 @@ public class Utils {
 
     public static boolean isStringUrl(String url) {
         return url.contains("http");
+    }
+
+    public static boolean isDateToday(Calendar date) {
+        Calendar today = Calendar.getInstance();
+        return date.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)
+                && date.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+                && date.get(Calendar.YEAR) == today.get(Calendar.YEAR);
+    }
+
+    public static boolean isDateTomorrow(Calendar date) {
+        Calendar today = Calendar.getInstance();
+        date.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH) - 1);
+        return date.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)
+                && date.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+                && date.get(Calendar.YEAR) == today.get(Calendar.YEAR);
     }
 
 

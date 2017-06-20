@@ -102,6 +102,19 @@ public class RecipeProviderImpl implements RecipeProvider {
         });
     }
 
+    @Override
+    public Observable<List<Recipe>> getRecipeListForCooking() {
+        return subjectRecipeList.map(allRecipes -> {
+            List<Recipe> resultRecipes = new ArrayList<>();
+            for (Recipe recipe : allRecipes) {
+                if (recipe.getCookingDate() > 0) {
+                    resultRecipes.add(recipe);
+                }
+            }
+            return resultRecipes;
+        });
+    }
+
 
     @Override
     public Single<Recipe> createRecipe(Recipe recipe) {

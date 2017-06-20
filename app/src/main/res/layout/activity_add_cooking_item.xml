@@ -87,7 +87,7 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:padding="@dimen/main_item_padding"
-                            android:text="Завтрак"
+                            android:text="@string/breakfast_title"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/subheding_text_size"/>
@@ -115,7 +115,7 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:padding="@dimen/main_item_padding"
-                            android:text="Полдник"
+                            android:text="@string/snack_title"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/subheding_text_size"/>
@@ -152,7 +152,7 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:padding="@dimen/main_item_padding"
-                            android:text="Обед"
+                            android:text="@string/lunch_title"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/subheding_text_size"/>
@@ -180,7 +180,7 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:padding="@dimen/main_item_padding"
-                            android:text="Ужин"
+                            android:text="@string/dinner_title"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/subheding_text_size"/>

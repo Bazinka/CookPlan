@@ -18,43 +18,26 @@ import com.cookplan.add_ingredient_view.AddIngredientViewFragment;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe.list.select.RecipeSelectListActivity;
+import com.cookplan.utils.Constants.TypeOfTime;
 
 import java.util.Calendar;
 
 import static com.cookplan.recipe.list.select.RecipeSelectListActivity.SELECTED_RECIPE_KEY;
+import static com.cookplan.utils.Constants.TypeOfTime.BREAKFAST;
+import static com.cookplan.utils.Constants.TypeOfTime.DINNER;
+import static com.cookplan.utils.Constants.TypeOfTime.LUNCH;
+import static com.cookplan.utils.Constants.TypeOfTime.SNACK;
 
 public class AddCookingItemActivity extends BaseActivity implements AddCookingItemView {
 
     private AddCookingItemPresenter presenter;
     private long dateInMillis;
 
-    private enum Time {
-        BREAKFAST(8, 0),
-        SNACK(11, 0),
-        LUNCH(13, 13),
-        DINNER(19, 0);
-        private int hour;
-        private int minute;
-
-        Time(int hour, int minute) {
-            this.hour = hour;
-            this.minute = minute;
-        }
-
-        public int getHour() {
-            return hour;
-        }
-
-        public int getMinute() {
-            return minute;
-        }
-    }
-
     public static final int SELECT_RECIPE_REQUEST = 21;
     public static final String IS_RECIPE_NEEDED_TO_ADD_KEY = "IS_RECIPE_NEEDED_TO_ADD_KEY";
 
     private AddIngredientViewFragment ingredientFragment;
-    private Time selectedTime;
+    private TypeOfTime selectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,25 +84,25 @@ public class AddCookingItemActivity extends BaseActivity implements AddCookingIt
 
         ViewGroup breakfastLayout = (ViewGroup) findViewById(R.id.breakfast_layout);
         breakfastLayout.setOnClickListener(view -> {
-            selectedTime = Time.BREAKFAST;
+            selectedTime = BREAKFAST;
         });
 
         ViewGroup snackLayout = (ViewGroup) findViewById(R.id.snack_layout);
         snackLayout.setOnClickListener(view -> {
-            selectedTime = Time.SNACK;
+            selectedTime = SNACK;
         });
 
         ViewGroup lunchLayout = (ViewGroup) findViewById(R.id.lunch_layout);
         lunchLayout.setOnClickListener(view -> {
-            selectedTime = Time.LUNCH;
+            selectedTime = LUNCH;
         });
 
         ViewGroup dinnerLayout = (ViewGroup) findViewById(R.id.dinner_layout);
         dinnerLayout.setOnClickListener(view -> {
-            selectedTime = Time.DINNER;
+            selectedTime = DINNER;
         });
 
-        selectedTime = Time.BREAKFAST;
+        selectedTime = BREAKFAST;
 
 
         CalendarView calendarView = (CalendarView) findViewById(R.id.cooking_time_calendar_view);

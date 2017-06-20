@@ -10,7 +10,5 @@ public interface CookingPlanPresenter {
 
     void getCookingPlan();
 
-    void removeRecipe(Recipe recipe);
-
     void onStop();
 }

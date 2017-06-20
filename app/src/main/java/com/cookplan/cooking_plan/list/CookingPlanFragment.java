@@ -3,7 +3,6 @@ package com.cookplan.cooking_plan.list;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -17,17 +16,20 @@ import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.cooking_plan.add.AddCookingItemActivity;
 import com.cookplan.main.MainActivity;
+import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe.view_item.RecipeViewActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CookingPlanFragment extends BaseFragment implements CookingPlanView {
 
-    private CookingPlanRecyclerViewAdapter adapter;
+    private CookPlanMainRecyclerAdapter adapter;
     private CookingPlanPresenter presenter;
 
     public CookingPlanFragment() {
@@ -79,33 +81,30 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-        adapter = new CookingPlanRecyclerViewAdapter(new ArrayList<>(), new CookingPlanRecyclerViewAdapter.RecipeListClickListener() {
-            @Override
-            public void onRecipeClick(Recipe recipe) {
-                Activity activity = getActivity();
-                if (activity instanceof BaseActivity) {
-                    Intent intent = new Intent(activity, RecipeViewActivity.class);
-                    intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
-                    ((BaseActivity) activity).startActivityForResultWithLeftAnimation(intent,
-                                                                                      MainActivity.OPEN_SHOP_LIST_REQUEST);
-                }
-            }
+        adapter = new CookPlanMainRecyclerAdapter(
+                new HashMap<>(),
+                new CookPlanMainRecyclerAdapter.CookPlanClickListener() {
+                    @Override
+                    public void onRecipeClick(Recipe recipe) {
+                        Activity activity = getActivity();
+                        if (activity instanceof BaseActivity) {
+                            Intent intent = new Intent(activity, RecipeViewActivity.class);
+                            intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
+                            ((BaseActivity) activity).startActivityForResultWithLeftAnimation(
+                                    intent, MainActivity.OPEN_SHOP_LIST_REQUEST);
+                        }
+                    }
 
-            @Override
-            public void onRecipeLongClick(Recipe recipe) {
-                new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
-                        .setMessage(R.string.are_you_sure_remove_recipe)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
-                            progressBar.setVisibility(View.VISIBLE);
-                            if (presenter != null) {
-                                presenter.removeRecipe(recipe);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-            }
-        }, getActivity());
+                    @Override
+                    public void onRecipeLongClick(Recipe recipe) {
+
+                    }
+
+                    @Override
+                    public void onIngredientLongClick(Ingredient ingredient) {
+
+                    }
+                }, getActivity());
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton addRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.add_recipe_fab);
@@ -149,12 +148,18 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
     }
 
     @Override
-    public void setCookingList(List<Recipe> recipeList) {
+    public void setCookingList(Map<Long, List<Object>> dateToObjectMap) {
         ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
-        adapter.updateItems(recipeList);
+        Map<Calendar, List<Object>> calendarToObjectMap = new HashMap<>();
+        for (Long millisec : dateToObjectMap.keySet()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(millisec);
+            calendarToObjectMap.put(calendar, dateToObjectMap.get(millisec));
+        }
+        adapter.updateItems(calendarToObjectMap);
     }
 
     @Override

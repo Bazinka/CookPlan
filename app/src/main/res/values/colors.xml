@@ -5,6 +5,7 @@
     <color name="primary_dark">#455A64</color><!--700-->
     <color name="primary_light">#CFD8DC</color><!--100-->
     <color name="primary_the_lightest">#ECEFF1</color><!--50-->
+    <color name="primary_transparent">#a6607D8B</color><!--50-->
 
     <!--cyan-->
     <color name="accent_color">#FFC107</color><!--500-->

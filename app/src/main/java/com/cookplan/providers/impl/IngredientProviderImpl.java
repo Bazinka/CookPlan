@@ -101,6 +101,19 @@ public class IngredientProviderImpl implements IngredientProvider {
     }
 
     @Override
+    public Observable<List<Ingredient>> getIngredientListForCooking() {
+        return subjectAllIngredients.map(allIngredients -> {
+            List<Ingredient> recipeIngredients = new ArrayList<>();
+            for (Ingredient ingredient : allIngredients) {
+                if (ingredient.getCookingDate() > 0) {
+                    recipeIngredients.add(ingredient);
+                }
+            }
+            return recipeIngredients;
+        });
+    }
+
+    @Override
     public Single<Ingredient> createIngredient(Ingredient ingredient) {
         return Single.create(emitter -> {
             DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);

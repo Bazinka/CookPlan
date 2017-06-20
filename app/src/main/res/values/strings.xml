@@ -292,6 +292,11 @@
     <string name="add_cooking_item_title">Новый пункт в плане питания</string>
     <string name="choose_the_recipe">Выберите рецепт</string>
     <string name="chosen_recipe_title">Выбранный рецепт:</string>
+    <string name="empty_cooking_plan_title">План покупок пока пуст</string>
+    <string name="breakfast_title">Завтрак</string>
+    <string name="lunch_title">Обед</string>
+    <string name="snack_title">Полдник</string>
+    <string name="dinner_title">Ужин</string>
 
 
 </resources>

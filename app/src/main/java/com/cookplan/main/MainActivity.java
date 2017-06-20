@@ -53,6 +53,7 @@ public class MainActivity extends BaseActivity
 
     private View rootView;
     private boolean isFamilyModeTurnOn = false;
+    private boolean isFamilyModeApprovedNow = false;
 
     private MainPresenter presenter;
 
@@ -164,6 +165,7 @@ public class MainActivity extends BaseActivity
     }
 
     void setRecipeListFragment() {
+        isFamilyModeApprovedNow = true;
         setFamilyModeMenuOptions();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
@@ -186,6 +188,7 @@ public class MainActivity extends BaseActivity
     }
 
     void setShoppingListFragment() {
+        isFamilyModeApprovedNow = true;
         setFamilyModeMenuOptions();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
@@ -206,6 +209,7 @@ public class MainActivity extends BaseActivity
     }
 
     void setProductListFragment() {
+        isFamilyModeApprovedNow = true;
         setFamilyModeMenuOptions();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
@@ -229,10 +233,9 @@ public class MainActivity extends BaseActivity
     }
 
     void setTODOListFragment() {
-        if (menu != null) {
-            menu.findItem(R.id.app_bar_share_on).setVisible(false);
-            menu.findItem(R.id.app_bar_share_off).setVisible(false);
-        }
+        isFamilyModeApprovedNow = false;
+        setFamilyModeMenuOptions();
+
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -254,10 +257,9 @@ public class MainActivity extends BaseActivity
     }
 
     void setCompaniesListFragment() {
-        if (menu != null) {
-            menu.findItem(R.id.app_bar_share_on).setVisible(false);
-            menu.findItem(R.id.app_bar_share_off).setVisible(false);
-        }
+        isFamilyModeApprovedNow = false;
+        setFamilyModeMenuOptions();
+
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
@@ -276,16 +278,13 @@ public class MainActivity extends BaseActivity
     }
 
     void setCookingListFragment() {
+        isFamilyModeApprovedNow = false;
         setFamilyModeMenuOptions();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
         View viewPager = findViewById(R.id.main_tabs_viewpager);
         viewPager.setVisibility(View.GONE);
-
-        //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
-        //        mainConteinerView.setVisibility(View.VISIBLE);
-
 
         setTitle(getString(R.string.cooking_plan_title));
 
@@ -453,12 +452,17 @@ public class MainActivity extends BaseActivity
 
     private void setFamilyModeMenuOptions() {
         if (menu != null) {
-            if (isFamilyModeTurnOn) {
-                menu.findItem(R.id.app_bar_share_on).setVisible(true);
-                menu.findItem(R.id.app_bar_share_off).setVisible(false);
+            if (isFamilyModeApprovedNow) {
+                if (isFamilyModeTurnOn) {
+                    menu.findItem(R.id.app_bar_share_on).setVisible(true);
+                    menu.findItem(R.id.app_bar_share_off).setVisible(false);
+                } else {
+                    menu.findItem(R.id.app_bar_share_on).setVisible(false);
+                    menu.findItem(R.id.app_bar_share_off).setVisible(true);
+                }
             } else {
                 menu.findItem(R.id.app_bar_share_on).setVisible(false);
-                menu.findItem(R.id.app_bar_share_off).setVisible(true);
+                menu.findItem(R.id.app_bar_share_off).setVisible(false);
             }
         }
     }

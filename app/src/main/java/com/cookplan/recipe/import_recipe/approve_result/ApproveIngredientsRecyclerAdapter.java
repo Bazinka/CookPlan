@@ -31,8 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.cookplan.recipe.import_recipe.approve_result.ApproveIngredientsRecyclerAdapter.ItemType.INGREDIENT;
-import static com.cookplan.recipe.import_recipe.approve_result.ApproveIngredientsRecyclerAdapter.ItemType.RECIPE;
+import static com.cookplan.utils.Constants.ObjectType.INGREDIENT;
+import static com.cookplan.utils.Constants.ObjectType.RECIPE;
 
 
 /**
@@ -277,20 +277,6 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    protected enum ItemType {
-        RECIPE(0),
-        INGREDIENT(1);
-
-        private int id;
-
-        ItemType(int id) {
-            this.id = id;
-        }
-
-        protected int getId() {
-            return id;
-        }
-    }
 
     public interface ApproveIngredientsEventListener {
         void allItemsDone();
