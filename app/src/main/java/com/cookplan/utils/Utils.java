@@ -115,10 +115,6 @@ public class Utils {
         return url.contains("http");
     }
 
-    public static boolean isDateToday(LocalDate date) {
-        return date.equals(new LocalDate());
-    }
-
     public static boolean isDateTomorrow(LocalDate date) {
         LocalDate tomorrow = new LocalDate();
         tomorrow = tomorrow.plusDays(1);

@@ -212,7 +212,6 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
             recipeNameView = (TextView) view.findViewById(R.id.cook_plan_recipe_name);
             recipeTimeView = (TextView) view.findViewById(R.id.cook_plan_recipe_time);
             recipeImageView = (ImageView) view.findViewById(R.id.cook_plan_recipe_image);
-
         }
     }
 

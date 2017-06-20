@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.cookplan.R;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
-import com.cookplan.utils.Utils;
 
 import org.joda.time.LocalDate;
 
@@ -60,7 +59,7 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
 
         holder.dayOfMonthTextView.setText(date.toString("dd"));
         holder.dayOfWeekTextView.setText(date.toString("EE"));
-        if (Utils.isDateToday(date)) {
+        if (date.equals(new LocalDate())) {
             //it's today
             int todaysColorId = ContextCompat.getColor(context, R.color.accent_color);
             holder.dayOfMonthTextView.setTextColor(todaysColorId);
@@ -74,6 +73,28 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
         values.clear();
         fillValues();
         notifyDataSetChanged();
+    }
+
+    //returns position of today's date or later
+    public int getPositionForToday() {
+        for (int pos = 0; pos < values.size(); pos++) {
+            if (values.get(pos).equals(new LocalDate())
+                    || values.get(pos).isAfter(new LocalDate())) {
+                return pos;
+            }
+        }
+        return 0;
+    }
+
+    //returns position of the date or later
+    public int getPositionForDate(LocalDate date) {
+        for (int pos = 0; pos < values.size(); pos++) {
+            if (values.get(pos).equals(date)
+                    || values.get(pos).isAfter(date)) {
+                return pos;
+            }
+        }
+        return 0;
     }
 
     private void fillValues() {

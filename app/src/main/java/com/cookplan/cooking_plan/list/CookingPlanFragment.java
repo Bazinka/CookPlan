@@ -22,7 +22,6 @@ import com.cookplan.recipe.view_item.RecipeViewActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.HashMap;
@@ -139,13 +138,9 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
         ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.VISIBLE);
-        setRecyclerViewVisability(View.GONE);
-    }
-
-    private void setRecyclerViewVisability(int visability) {
         View recyclerView = mainView.findViewById(R.id.cooking_list_recycler);
         if (recyclerView != null) {
-            recyclerView.setVisibility(visability);
+            recyclerView.setVisibility(View.GONE);
         }
     }
 
@@ -154,8 +149,12 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
         ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
-        setRecyclerViewVisability(View.VISIBLE);
         adapter.updateItems(dateToObjectMap);
+        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.cooking_list_recycler);
+        if (recyclerView != null) {
+            recyclerView.scrollToPosition(adapter.getPositionForToday());
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
