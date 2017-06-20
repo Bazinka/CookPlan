@@ -14,8 +14,9 @@ import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.RecipeProviderImpl;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,17 +101,17 @@ public class CookingPlanPresenterImpl implements CookingPlanPresenter, FirebaseA
                         }));
     }
 
-    private Map<Long, List<Object>> getResultMap(List<Recipe> recipeList, List<Ingredient> ingredientList) {
-        Map<Long, List<Object>> calendarListMap = new HashMap<>();
+    private Map<LocalDate, List<Object>> getResultMap(List<Recipe> recipeList, List<Ingredient> ingredientList) {
+        Map<LocalDate, List<Object>> calendarListMap = new HashMap<>();
         for (Recipe recipe : recipeList) {
-            long date = getDateMillisec(recipe.getCookingDate());
+            LocalDate date = getDateMillisec(recipe.getCookingDate());
             if (!calendarListMap.containsKey(date)) {
                 calendarListMap.put(date, new ArrayList<>());
             }
             calendarListMap.get(date).add(recipe);
         }
         for (Ingredient ingredient : ingredientList) {
-            long date = getDateMillisec(ingredient.getCookingDate());
+            LocalDate date = getDateMillisec(ingredient.getCookingDate());
             if (!calendarListMap.containsKey(date)) {
                 calendarListMap.put(date, new ArrayList<>());
             }
@@ -119,18 +120,9 @@ public class CookingPlanPresenterImpl implements CookingPlanPresenter, FirebaseA
         return calendarListMap;
     }
 
-    private long getDateMillisec(long cookingDate) {
-        Calendar originCalendar = Calendar.getInstance();
-        originCalendar.setTimeInMillis(cookingDate);
-
-        Calendar date = Calendar.getInstance();
-        date.set(Calendar.DAY_OF_MONTH, originCalendar.get(Calendar.DAY_OF_MONTH));
-        date.set(Calendar.MONTH, originCalendar.get(Calendar.MONTH));
-        date.set(Calendar.YEAR, originCalendar.get(Calendar.YEAR));
-        date.set(Calendar.HOUR, 0);
-        date.set(Calendar.MINUTE, 0);
-        date.set(Calendar.SECOND, 0);
-        return date.getTimeInMillis();
+    private LocalDate getDateMillisec(long cookingDate) {
+        LocalDate date = new LocalDate(cookingDate);
+        return date;
     }
 
     @Override

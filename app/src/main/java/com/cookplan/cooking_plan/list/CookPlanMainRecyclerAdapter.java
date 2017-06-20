@@ -15,9 +15,9 @@ import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.utils.Utils;
 
-import java.text.SimpleDateFormat;
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +25,12 @@ import java.util.Map;
 
 public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMainRecyclerAdapter.ViewHolder> {
 
-    private final Map<Calendar, List<Object>> map;
-    private final List<Calendar> values;
+    private final Map<LocalDate, List<Object>> map;
+    private final List<LocalDate> values;
     private CookPlanClickListener listener;
     private Context context;
 
-    public CookPlanMainRecyclerAdapter(Map<Calendar, List<Object>> items, CookPlanClickListener listener, Context context) {
+    public CookPlanMainRecyclerAdapter(Map<LocalDate, List<Object>> items, CookPlanClickListener listener, Context context) {
         map = new HashMap<>(items);
         values = new ArrayList<>();
         fillValues();
@@ -47,7 +47,7 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Calendar date = values.get(position);
+        LocalDate date = values.get(position);
 
         CookPlanForTheDayRecyclerAdapter adapter = new CookPlanForTheDayRecyclerAdapter(
                 map.get(date), listener, context);
@@ -58,10 +58,8 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
         holder.cookingForDayRecyclerView.setItemAnimator(new DefaultItemAnimator());
         holder.cookingForDayRecyclerView.setAdapter(adapter);
 
-        SimpleDateFormat formatDayOfMonth = new SimpleDateFormat("dd");
-        SimpleDateFormat formatDayOfWeek = new SimpleDateFormat("EE");
-        holder.dayOfMonthTextView.setText(formatDayOfMonth.format(date.getTime()));
-        holder.dayOfWeekTextView.setText(formatDayOfWeek.format(date.getTime()));
+        holder.dayOfMonthTextView.setText(date.toString("dd"));
+        holder.dayOfWeekTextView.setText(date.toString("EE"));
         if (Utils.isDateToday(date)) {
             //it's today
             int todaysColorId = ContextCompat.getColor(context, R.color.accent_color);
@@ -70,7 +68,7 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
         }
     }
 
-    public void updateItems(Map<Calendar, List<Object>> dateToObjectMap) {
+    public void updateItems(Map<LocalDate, List<Object>> dateToObjectMap) {
         map.clear();
         map.putAll(dateToObjectMap);
         values.clear();
@@ -79,13 +77,13 @@ public class CookPlanMainRecyclerAdapter extends RecyclerView.Adapter<CookPlanMa
     }
 
     private void fillValues() {
-        for (Calendar key : map.keySet()) {
+        for (LocalDate key : map.keySet()) {
             values.add(key);
         }
         Collections.sort(values, (calendar1, calendar2) -> {
             if (calendar1.equals(calendar2)) {
                 return 0;
-            } else if (calendar1.after(calendar2)) {
+            } else if (calendar1.isAfter(calendar2)) {
                 return 1;
             } else {
                 return -1;

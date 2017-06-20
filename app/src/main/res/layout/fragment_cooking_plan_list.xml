@@ -58,7 +58,7 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:src="@drawable/ic_add_plus"
             fab:fab_colorNormal="@color/accent_color"
-            fab:fab_label="Рецепт"
+            fab:fab_label="@string/recipe_title"
             fab:fab_size="mini"
             />
 
@@ -71,7 +71,7 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:src="@drawable/ic_add_plus"
             fab:fab_colorNormal="@color/accent_color"
-            fab:fab_label="Ингредиент"
+            fab:fab_label="@string/product_title"
             fab:fab_size="mini"/>
 
     </com.github.clans.fab.FloatingActionMenu>

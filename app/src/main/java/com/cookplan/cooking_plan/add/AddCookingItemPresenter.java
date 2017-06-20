@@ -3,7 +3,7 @@ package com.cookplan.cooking_plan.add;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
 
 /**
  * Created by DariaEfimova on 21.03.17.
@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 public interface AddCookingItemPresenter {
 
-    void saveRecipeToCookingPlan(Recipe recipe, int hour, int minute, long dateMillisek);
+    void saveRecipeToCookingPlan(Recipe recipe, DateTime date);
 
-    void saveIngredientToCookingPlan(Ingredient ingredient, int hour, int minute, long dateMillisek);
+    void saveIngredientToCookingPlan(Ingredient ingredient, DateTime date);
 }

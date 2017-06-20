@@ -1,6 +1,7 @@
 package com.cookplan.cooking_plan.list;
 
-import java.util.Calendar;
+import org.joda.time.LocalDate;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public interface CookingPlanView {
 
     void setErrorToast(String error);
 
-    void setCookingList(Map<Long, List<Object>> dateToObjectMap);
+    void setCookingList(Map<LocalDate, List<Object>> dateToObjectMap);
 
     void setEmptyView();
 }

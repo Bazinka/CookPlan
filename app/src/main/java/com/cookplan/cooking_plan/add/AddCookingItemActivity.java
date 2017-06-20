@@ -20,7 +20,7 @@ import com.cookplan.models.Recipe;
 import com.cookplan.recipe.list.select.RecipeSelectListActivity;
 import com.cookplan.utils.Constants.TypeOfTime;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
 
 import static com.cookplan.recipe.list.select.RecipeSelectListActivity.SELECTED_RECIPE_KEY;
 import static com.cookplan.utils.Constants.TypeOfTime.BREAKFAST;
@@ -31,7 +31,7 @@ import static com.cookplan.utils.Constants.TypeOfTime.SNACK;
 public class AddCookingItemActivity extends BaseActivity implements AddCookingItemView {
 
     private AddCookingItemPresenter presenter;
-    private long dateInMillis;
+    private DateTime choosenDate;
 
     public static final int SELECT_RECIPE_REQUEST = 21;
     public static final String IS_RECIPE_NEEDED_TO_ADD_KEY = "IS_RECIPE_NEEDED_TO_ADD_KEY";
@@ -67,9 +67,10 @@ public class AddCookingItemActivity extends BaseActivity implements AddCookingIt
                 @Override
                 public void onSuccessSaveIngredient(Ingredient ingredient) {
                     if (presenter != null) {
-                        presenter.saveIngredientToCookingPlan(ingredient, selectedTime.getHour(),
-                                                              selectedTime.getMinute(),
-                                                              dateInMillis);
+                        presenter.saveIngredientToCookingPlan(
+                                ingredient,
+                                choosenDate.withHourOfDay(selectedTime.getHour())
+                                        .withMinuteOfHour(selectedTime.getMinute()));
                     }
                 }
 
@@ -83,36 +84,39 @@ public class AddCookingItemActivity extends BaseActivity implements AddCookingIt
         }
 
         ViewGroup breakfastLayout = (ViewGroup) findViewById(R.id.breakfast_layout);
-        breakfastLayout.setOnClickListener(view -> {
-            selectedTime = BREAKFAST;
+        breakfastLayout.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                selectedTime = BREAKFAST;
+            }
         });
 
         ViewGroup snackLayout = (ViewGroup) findViewById(R.id.snack_layout);
-        snackLayout.setOnClickListener(view -> {
-            selectedTime = SNACK;
+        snackLayout.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                selectedTime = SNACK;
+            }
         });
 
         ViewGroup lunchLayout = (ViewGroup) findViewById(R.id.lunch_layout);
-        lunchLayout.setOnClickListener(view -> {
-            selectedTime = LUNCH;
+        lunchLayout.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                selectedTime = LUNCH;
+            }
         });
 
         ViewGroup dinnerLayout = (ViewGroup) findViewById(R.id.dinner_layout);
-        dinnerLayout.setOnClickListener(view -> {
-            selectedTime = DINNER;
+        dinnerLayout.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                selectedTime = DINNER;
+            }
         });
-
-        selectedTime = BREAKFAST;
-
 
         CalendarView calendarView = (CalendarView) findViewById(R.id.cooking_time_calendar_view);
 
-        Calendar calendar = Calendar.getInstance();
-        dateInMillis = calendar.getTimeInMillis();
-
+        choosenDate = new DateTime();
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            calendar.set(year, month, dayOfMonth);
-            dateInMillis = calendar.getTimeInMillis();
+            DateTime dt = new DateTime();
+            choosenDate = dt.withDate(year, month, dayOfMonth);
         });
     }
 
@@ -141,9 +145,10 @@ public class AddCookingItemActivity extends BaseActivity implements AddCookingIt
                     TextView recipeTitle = (TextView) findViewById(R.id.recipe_textView);
                     Recipe recipe = (Recipe) recipeTitle.getTag();
                     if (recipe != null) {
-                        presenter.saveRecipeToCookingPlan(recipe, selectedTime.getHour(),
-                                                          selectedTime.getMinute(),
-                                                          dateInMillis);
+                        presenter.saveRecipeToCookingPlan(
+                                recipe,
+                                choosenDate.withHourOfDay(selectedTime.getHour())
+                                        .withMinuteOfHour(selectedTime.getMinute()));
                     }
                 }
             }

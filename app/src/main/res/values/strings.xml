@@ -297,6 +297,8 @@
     <string name="lunch_title">Обед</string>
     <string name="snack_title">Полдник</string>
     <string name="dinner_title">Ужин</string>
+    <string name="recipe_title">Рецепт</string>
+    <string name="product_title">Продукт</string>
 
 
 </resources>

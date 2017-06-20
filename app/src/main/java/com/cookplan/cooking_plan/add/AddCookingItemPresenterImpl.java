@@ -8,7 +8,7 @@ import com.cookplan.providers.RecipeProvider;
 import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.RecipeProviderImpl;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
 
 import io.reactivex.CompletableObserver;
 import io.reactivex.SingleObserver;
@@ -34,8 +34,8 @@ public class AddCookingItemPresenterImpl implements AddCookingItemPresenter {
     }
 
     @Override
-    public void saveRecipeToCookingPlan(Recipe recipe, int hour, int minute, long dateMillisek) {
-        recipe.setCookingDate(getCookingDate(dateMillisek, hour, minute));
+    public void saveRecipeToCookingPlan(Recipe recipe, DateTime date) {
+        recipe.setCookingDate(date.getMillis());
         recipeDataProvider.update(recipe)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,8 +62,8 @@ public class AddCookingItemPresenterImpl implements AddCookingItemPresenter {
     }
 
     @Override
-    public void saveIngredientToCookingPlan(Ingredient ingredient, int hour, int minute, long dateMillisek) {
-        ingredient.setCookingDate(getCookingDate(dateMillisek, hour, minute));
+    public void saveIngredientToCookingPlan(Ingredient ingredient, DateTime date) {
+        ingredient.setCookingDate(date.getMillis());
         ingredientDataProvider.updateCookingTime(ingredient)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -88,15 +88,5 @@ public class AddCookingItemPresenterImpl implements AddCookingItemPresenter {
                     }
                 });
 
-    }
-
-    private long getCookingDate(long dateMillisek, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(dateMillisek);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, 0);
-        return calendar.getTimeInMillis();
     }
 }

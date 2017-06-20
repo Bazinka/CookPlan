@@ -19,8 +19,10 @@ import com.cookplan.utils.Utils;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import static com.cookplan.utils.Constants.ObjectType.INGREDIENT;
@@ -34,8 +36,44 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
 
     public CookPlanForTheDayRecyclerAdapter(List<Object> items, CookPlanClickListener listener, Context context) {
         values = new ArrayList<>(items);
+        sortValue();
         this.listener = listener;
         this.context = context;
+    }
+
+    private void sortValue() {
+        Collections.sort(values, (object1, object2) -> {
+            DateTime date1 = null;
+            DateTime date2 = null;
+            if (object1 instanceof Recipe) {
+                Recipe recipe = (Recipe) object1;
+                date1 = new DateTime(recipe.getCookingDate());
+            } else {
+                if (object1 instanceof Ingredient) {
+                    Ingredient ingredient = (Ingredient) object1;
+                    date1 = new DateTime(ingredient.getCookingDate());
+                }
+            }
+            if (object2 instanceof Recipe) {
+                Recipe recipe = (Recipe) object1;
+                date2 = new DateTime(recipe.getCookingDate());
+            } else {
+                if (object2 instanceof Ingredient) {
+                    Ingredient ingredient = (Ingredient) object1;
+                    date2 = new DateTime(ingredient.getCookingDate());
+                }
+            }
+            if (date1 != null && date2 != null) {
+                if (date1.equals(date2)) {
+                    return 0;
+                } else if (date1.isAfter(date2)) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+            return 0;
+        });
     }
 
     @Override
@@ -93,7 +131,7 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
                 recipeViewHolder.recipeImageView.setImageResource(R.drawable.ic_default_recipe_image);
             }
             recipeViewHolder.recipeNameView.setText(recipe.getName());
-            setTimeTiField(recipeViewHolder.recipeTimeView, recipe.getCookingDate());
+            setTimeField(recipeViewHolder.recipeTimeView, recipe.getCookingDate());
         }
 
         if (getItemViewType(position) == INGREDIENT.getId()) {
@@ -113,7 +151,7 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
             } else {
                 //                ingredientViewHolder.amountTextView.setVisibility(View.GONE);
             }
-            setTimeTiField(ingredientViewHolder.timeTextView, ingredient.getCookingDate());
+            setTimeField(ingredientViewHolder.timeTextView, ingredient.getCookingDate());
         }
 
         holder.mainView.setTag(object);
@@ -140,10 +178,9 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
         });
     }
 
-    private void setTimeTiField(TextView recipeTimeView, long millisec) {
-        Calendar date = Calendar.getInstance();
-        date.setTimeInMillis(millisec);
-        TypeOfTime typeOfTime = TypeOfTime.getTypeOfTimeByHours(date.get(Calendar.HOUR_OF_DAY));
+    private void setTimeField(TextView recipeTimeView, long millisec) {
+        DateTime date = new DateTime(millisec);
+        TypeOfTime typeOfTime = TypeOfTime.getTypeOfTimeByHours(date.getHourOfDay());
         if (typeOfTime != null) {
             recipeTimeView.setText(typeOfTime.toString());
         }

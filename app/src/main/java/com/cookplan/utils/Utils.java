@@ -7,8 +7,9 @@ import android.util.TypedValue;
 
 import com.cookplan.models.MeasureUnit;
 
+import org.joda.time.LocalDate;
+
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -114,19 +115,14 @@ public class Utils {
         return url.contains("http");
     }
 
-    public static boolean isDateToday(Calendar date) {
-        Calendar today = Calendar.getInstance();
-        return date.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)
-                && date.get(Calendar.MONTH) == today.get(Calendar.MONTH)
-                && date.get(Calendar.YEAR) == today.get(Calendar.YEAR);
+    public static boolean isDateToday(LocalDate date) {
+        return date.equals(new LocalDate());
     }
 
-    public static boolean isDateTomorrow(Calendar date) {
-        Calendar today = Calendar.getInstance();
-        date.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH) - 1);
-        return date.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)
-                && date.get(Calendar.MONTH) == today.get(Calendar.MONTH)
-                && date.get(Calendar.YEAR) == today.get(Calendar.YEAR);
+    public static boolean isDateTomorrow(LocalDate date) {
+        LocalDate tomorrow = new LocalDate();
+        tomorrow = tomorrow.plusDays(1);
+        return date.equals(tomorrow);
     }
 
 

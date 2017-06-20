@@ -22,7 +22,9 @@ import com.cookplan.recipe.view_item.RecipeViewActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,18 +150,12 @@ public class CookingPlanFragment extends BaseFragment implements CookingPlanView
     }
 
     @Override
-    public void setCookingList(Map<Long, List<Object>> dateToObjectMap) {
+    public void setCookingList(Map<LocalDate, List<Object>> dateToObjectMap) {
         ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
-        Map<Calendar, List<Object>> calendarToObjectMap = new HashMap<>();
-        for (Long millisec : dateToObjectMap.keySet()) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(millisec);
-            calendarToObjectMap.put(calendar, dateToObjectMap.get(millisec));
-        }
-        adapter.updateItems(calendarToObjectMap);
+        adapter.updateItems(dateToObjectMap);
     }
 
     @Override
