@@ -1,6 +1,7 @@
 package com.cookplan.cooking_plan.list;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.cookplan.R;
 import com.cookplan.cooking_plan.list.CookPlanMainRecyclerAdapter.CookPlanClickListener;
 import com.cookplan.models.Ingredient;
@@ -113,25 +116,34 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
                 if (Utils.isStringUrl(recipe.getImageUrls().get(0))) {
                     Glide.with(context)
                             .load(recipe.getImageUrls().get(0))
-                            .placeholder(R.drawable.ic_default_recipe_image)
-                            .centerCrop()
-                            .into(recipeViewHolder.recipeImageView);
+                            .asBitmap()
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    recipeViewHolder.recipeImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                    recipeViewHolder.recipeImageView.setImageBitmap(resource);
+                                }
+                            });
                 } else {
                     StorageReference imageRef = FirebaseStorage.getInstance().getReference(recipe.getImageUrls().get(0));
                     Glide.with(context)
                             .using(new FirebaseImageLoader())
                             .load(imageRef)
-                            .placeholder(R.drawable.ic_default_recipe_image)
-                            .centerCrop()
-                            .crossFade()
-                            .into(recipeViewHolder.recipeImageView);
+                            .asBitmap()
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    recipeViewHolder.recipeImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                    recipeViewHolder.recipeImageView.setImageBitmap(resource);
+                                }
+                            });
                 }
             } else {
+                recipeViewHolder.recipeImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 recipeViewHolder.recipeImageView.setImageResource(R.drawable.ic_default_recipe_image);
             }
-            recipeViewHolder.recipeNameView.setText(recipe.getName());
-
             setTimeField(recipeViewHolder.recipeTimeView, getRecipeMillisec(recipe));
+            recipeViewHolder.recipeNameView.setText(recipe.getName());
         }
 
         if (getItemViewType(position) == INGREDIENT.getId()) {
@@ -220,6 +232,7 @@ public class CookPlanForTheDayRecyclerAdapter extends RecyclerView.Adapter<CookP
         final TextView recipeNameView;
         final TextView recipeTimeView;
         final ImageView recipeImageView;
+
 
         RecipeViewHolder(View view) {
             super(view);
