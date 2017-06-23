@@ -8,9 +8,9 @@ import java.util.List;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public interface RecipeListView {
+public interface BaseRecipeListView {
 
-    void setErrorToast(String error);
+    void setError(String error);
 
     void setRecipeList(List<Recipe> ingredientList);
 

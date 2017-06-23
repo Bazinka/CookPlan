@@ -35,7 +35,7 @@
                 android:layout_alignBottom="@+id/cook_plan_recipe_image"
                 android:background="@color/primary_transparent"
                 android:clickable="false"
-                android:padding="@dimen/card_recipe_name_padding">
+                android:padding="@dimen/main_item_padding">
 
                 <TextView
                     android:id="@+id/cook_plan_recipe_time"

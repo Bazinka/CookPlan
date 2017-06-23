@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              xmlns:image="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_view_margin"
         android:elevation="@dimen/card_recipe_elevation"
@@ -15,13 +16,39 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="@dimen/card_recipe_image_height">
+
+            <ImageView
+                android:id="@+id/recipe_item_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="false"
+                android:scaleType="centerCrop"
+                android:visibility="invisible"
+                image:srcCompat="@drawable/ic_default_recipe_image"/>
+
+            <ImageView
+                android:id="@+id/empty_recipe_image"
+                android:layout_width="@dimen/card_recipe_fake_image_size"
+                android:layout_height="@dimen/card_recipe_fake_image_size"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="false"
+                android:scaleType="fitCenter"
+                image:srcCompat="@drawable/ic_default_recipe_image"/>
 
             <RelativeLayout
                 android:id="@+id/author_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/accent_color_lighter">
+                android:background="@drawable/accent_to_transparent_gradient_back"
+                android:paddingBottom="@dimen/main_item_padding"
+                android:paddingLeft="@dimen/main_item_padding"
+                android:paddingRight="@dimen/main_item_padding"
+                android:paddingTop="@dimen/small_item_padding">
 
                 <TextView
                     android:id="@+id/author_name"
@@ -29,39 +56,53 @@
                     android:layout_height="wrap_content"
                     android:gravity="left|center_vertical"
                     android:maxLines="2"
-                    android:padding="@dimen/card_recipe_name_padding"
+                    android:paddingBottom="@dimen/main_margin_left"
                     android:text="Название"
-                    android:textColor="@color/secondary_text_color"
-                    android:textSize="@dimen/body_text_size"/>
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/subheding_text_size"
+                    android:textStyle="bold"/>
             </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/recipe_image"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/card_recipe_image_height"
-                android:layout_below="@id/author_layout"
-                android:adjustViewBounds="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                card_view:srcCompat="@drawable/ic_default_recipe_image"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recipe_image"
-                android:background="@color/primary_the_lightest">
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/primary_to_transparent_gradient_back"
+                android:clickable="false"
+                android:padding="@dimen/main_item_padding">
 
-                <TextView
-                    android:id="@+id/name"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:maxLines="2"
-                    android:padding="@dimen/card_recipe_name_padding"
-                    android:text="Название"
-                    android:textColor="@color/primary_dark"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:paddingTop="@dimen/main_margin_left">
+
+                    <TextView
+                        android:id="@+id/recipe_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/add_to_cookplan_image_view"
+                        android:layout_toStartOf="@+id/add_to_cookplan_image_view"
+                        android:clickable="false"
+                        android:maxLines="2"
+                        android:text="Рецепт\nldf"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/title_text_size"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:id="@+id/add_to_cookplan_image_view"
+                        android:layout_width="@dimen/calendar_recipe_item_margin"
+                        android:layout_height="@dimen/calendar_recipe_item_margin"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/action_button_back"
+                        android:paddingLeft="@dimen/main_item_padding"
+                        android:paddingRight="@dimen/main_item_padding"
+                        android:scaleType="fitCenter"
+                        image:srcCompat="@drawable/ic_cooking_plan_white"/>
+
+                </RelativeLayout>
             </RelativeLayout>
 
             <!--<TextView-->

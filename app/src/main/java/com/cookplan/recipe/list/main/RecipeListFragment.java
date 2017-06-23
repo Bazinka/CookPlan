@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
@@ -20,21 +21,21 @@ import com.cookplan.main.MainActivity;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe.edit.add_info.EditRecipeInfoActivity;
 import com.cookplan.recipe.import_recipe.search_url.SearchRecipeUrlActivity;
-import com.cookplan.recipe.list.RecipeListPresenter;
-import com.cookplan.recipe.list.RecipeListView;
 import com.cookplan.recipe.view_item.RecipeViewActivity;
-import com.cookplan.utils.GridSpacingItemDecoration;
-import com.cookplan.utils.Utils;
+import com.cookplan.utils.Constants;
+import com.cookplan.views.ChooseCookingTimeView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeListFragment extends BaseFragment implements RecipeListView {
+public class RecipeListFragment extends BaseFragment implements MainRecipeListView {
 
     private RecipeListRecyclerViewAdapter adapter;
-    private RecipeListPresenter presenter;
+    private MainRecipeListPresenter presenter;
 
     public RecipeListFragment() {
     }
@@ -53,7 +54,7 @@ public class RecipeListFragment extends BaseFragment implements RecipeListView {
         if (getArguments() != null) {
         }
         setRetainInstance(true);
-        presenter = new RecipeListPresenterImpl(this);
+        presenter = new MainRecipeListPresenterImpl(this);
 
     }
 
@@ -82,36 +83,52 @@ public class RecipeListFragment extends BaseFragment implements RecipeListView {
 
         // Set the adapter
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.recipe_list_recycler);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utils.dpToPx(getActivity(), 16), true));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new RecipeListRecyclerViewAdapter(new ArrayList<>(), new RecipeListRecyclerViewAdapter.RecipeListClickListener() {
-            @Override
-            public void onRecipeClick(Recipe recipe) {
-                Activity activity = getActivity();
-                if (activity instanceof BaseActivity) {
-                    Intent intent = new Intent(activity, RecipeViewActivity.class);
-                    intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
-                    ((BaseActivity) activity).startActivityForResultWithLeftAnimation(intent,
-                                                                                      MainActivity.OPEN_SHOP_LIST_REQUEST);
-                }
-            }
+        adapter = new RecipeListRecyclerViewAdapter(
+                new ArrayList<>(),
+                new RecipeListRecyclerViewAdapter.RecipeListClickListener() {
+                    @Override
+                    public void onRecipeClick(Recipe recipe) {
+                        Activity activity = getActivity();
+                        if (activity instanceof BaseActivity) {
+                            Intent intent = new Intent(activity, RecipeViewActivity.class);
+                            intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
+                            ((BaseActivity) activity).startActivityForResultWithLeftAnimation(intent,
+                                                                                              MainActivity.OPEN_SHOP_LIST_REQUEST);
+                        }
+                    }
 
-            @Override
-            public void onRecipeLongClick(Recipe recipe) {
-                new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
-                        .setMessage(R.string.are_you_sure_remove_recipe)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
-                            progressBar.setVisibility(View.VISIBLE);
-                            if (presenter != null) {
-                                presenter.removeRecipe(recipe);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-            }
-        }, getActivity());
+                    @Override
+                    public void onRecipeLongClick(Recipe recipe) {
+                        new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                                .setMessage(R.string.are_you_sure_remove_recipe)
+                                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                    ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    if (presenter != null) {
+                                        presenter.removeRecipe(recipe);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show();
+                    }
+
+                    @Override
+                    public void onAddToCookPlanClick(Recipe recipe) {
+                        boolean addingToCookPlan;
+                        if (recipe.getCookingDate() != null && !recipe.getCookingDate().isEmpty()) {
+                            addingToCookPlan = false;
+                        } else {
+                            addingToCookPlan = true;
+                        }
+                        if (addingToCookPlan) {
+                            addRecipeToCookPlan(recipe);
+                        } else {
+                            removeRecipeToCookPlan(recipe);
+                        }
+                    }
+                }, getActivity());
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton addRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.add_recipe_fab);
@@ -129,6 +146,59 @@ public class RecipeListFragment extends BaseFragment implements RecipeListView {
         });
 
         return mainView;
+    }
+
+    private void addRecipeToCookPlan(Recipe recipe) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_recipe_to_cookplan_layout, null);
+
+        String message = getString(R.string.choose_date_for_cooking_dialog) + " " + recipe.getName();
+
+        TextView messageTextView = (TextView) dialogView.findViewById(R.id.choose_time_dialog_message);
+        messageTextView.setText(message);
+        ChooseCookingTimeView chooseCookingTimeView = (ChooseCookingTimeView) dialogView.findViewById(
+                R.id.choose_cooking_time_dialog_view);
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
+        dialogBuilder
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    dialog.dismiss();
+                    if (chooseCookingTimeView != null && recipe != null) {
+                        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                        progressBar.setVisibility(View.VISIBLE);
+                        Constants.TypeOfTime selectedTime = chooseCookingTimeView.getSelectedTime();
+                        DateTime choosenDate = chooseCookingTimeView.getSelectedDate();
+                        if (selectedTime != null && choosenDate != null) {
+                            presenter.addRecipeToCookPlan(
+                                    recipe,
+                                    choosenDate.withHourOfDay(selectedTime.getHour())
+                                            .withMinuteOfHour(selectedTime.getMinute()));
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null);
+
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.show();
+    }
+
+    private void removeRecipeToCookPlan(Recipe recipe) {
+        String message = getString(R.string.are_you_sure_remove_recipe_from_cookplan_part1)
+                + " " + recipe.getName() + " " +
+                getString(R.string.are_you_sure_remove_recipe_from_cookplan_part2);
+        new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
+                .setTitle(R.string.attention_title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    dialog.dismiss();
+                    ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                    progressBar.setVisibility(View.VISIBLE);
+                    if (presenter != null) {
+                        presenter.removeRecipeFromCookPlan(recipe);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     void startSearchRecipeUrlActivity() {
@@ -170,7 +240,7 @@ public class RecipeListFragment extends BaseFragment implements RecipeListView {
     }
 
     @Override
-    public void setErrorToast(String error) {
+    public void setError(String error) {
         if (getActivity() != null) {
             Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
         }

@@ -7,8 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -18,26 +16,21 @@ import com.cookplan.add_ingredient_view.AddIngredientViewFragment;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
 import com.cookplan.recipe.list.select.RecipeSelectListActivity;
-import com.cookplan.utils.Constants.TypeOfTime;
+import com.cookplan.utils.Constants;
+import com.cookplan.views.ChooseCookingTimeView;
 
 import org.joda.time.DateTime;
 
 import static com.cookplan.recipe.list.select.RecipeSelectListActivity.SELECTED_RECIPE_KEY;
-import static com.cookplan.utils.Constants.TypeOfTime.BREAKFAST;
-import static com.cookplan.utils.Constants.TypeOfTime.DINNER;
-import static com.cookplan.utils.Constants.TypeOfTime.LUNCH;
-import static com.cookplan.utils.Constants.TypeOfTime.SNACK;
 
 public class AddCookingItemActivity extends BaseActivity implements AddCookingItemView {
 
     private AddCookingItemPresenter presenter;
-    private DateTime choosenDate;
 
     public static final int SELECT_RECIPE_REQUEST = 21;
     public static final String IS_RECIPE_NEEDED_TO_ADD_KEY = "IS_RECIPE_NEEDED_TO_ADD_KEY";
 
     private AddIngredientViewFragment ingredientFragment;
-    private TypeOfTime selectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +59,10 @@ public class AddCookingItemActivity extends BaseActivity implements AddCookingIt
             ingredientFragment.setEventListener(new AddIngredientViewFragment.AddIngredientViewEventListener() {
                 @Override
                 public void onSuccessSaveIngredient(Ingredient ingredient) {
-                    if (presenter != null) {
+                    ChooseCookingTimeView chooseCookingTimeView = (ChooseCookingTimeView) findViewById(R.id.choose_time_view);
+                    Constants.TypeOfTime selectedTime = chooseCookingTimeView.getSelectedTime();
+                    DateTime choosenDate = chooseCookingTimeView.getSelectedDate();
+                    if (selectedTime != null && choosenDate != null && presenter != null) {
                         presenter.saveIngredientToCookingPlan(
                                 ingredient,
                                 choosenDate.withHourOfDay(selectedTime.getHour())
@@ -82,42 +78,6 @@ public class AddCookingItemActivity extends BaseActivity implements AddCookingIt
             transaction.replace(R.id.fragment_container, ingredientFragment);
             transaction.commit();
         }
-
-        ViewGroup breakfastLayout = (ViewGroup) findViewById(R.id.breakfast_layout);
-        breakfastLayout.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                selectedTime = BREAKFAST;
-            }
-        });
-
-        ViewGroup snackLayout = (ViewGroup) findViewById(R.id.snack_layout);
-        snackLayout.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                selectedTime = SNACK;
-            }
-        });
-
-        ViewGroup lunchLayout = (ViewGroup) findViewById(R.id.lunch_layout);
-        lunchLayout.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                selectedTime = LUNCH;
-            }
-        });
-
-        ViewGroup dinnerLayout = (ViewGroup) findViewById(R.id.dinner_layout);
-        dinnerLayout.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                selectedTime = DINNER;
-            }
-        });
-
-        CalendarView calendarView = (CalendarView) findViewById(R.id.cooking_time_calendar_view);
-
-        choosenDate = new DateTime();
-        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            DateTime dt = new DateTime();
-            choosenDate = dt.withDate(year, month + 1, dayOfMonth);
-        });
     }
 
     private void startChooseRecipeActivity() {
@@ -136,7 +96,10 @@ public class AddCookingItemActivity extends BaseActivity implements AddCookingIt
         int id = item.getItemId();
 
         if (id == R.id.app_bar_done) {
-            if (selectedTime != null) {
+            ChooseCookingTimeView chooseCookingTimeView = (ChooseCookingTimeView) findViewById(R.id.choose_time_view);
+            Constants.TypeOfTime selectedTime = chooseCookingTimeView.getSelectedTime();
+            DateTime choosenDate = chooseCookingTimeView.getSelectedDate();
+            if (selectedTime != null && choosenDate!= null) {
                 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.VISIBLE);
                 if (ingredientFragment != null) {

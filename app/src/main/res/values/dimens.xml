@@ -17,8 +17,7 @@
 
     <dimen name="card_view_margin">10dp</dimen>
     <dimen name="card_recipe_radius">5dp</dimen>
-    <dimen name="card_recipe_image_height">150dp</dimen>
-    <dimen name="card_recipe_name_padding">10dp</dimen>
+    <dimen name="card_recipe_image_height">250dp</dimen>
     <dimen name="card_recipe_elevation">5dp</dimen>
 
     <!--Text sizes-->
@@ -49,4 +48,6 @@
     <dimen name="card_recipe_big_image_height">250dp</dimen>
     <dimen name="width_selected_stroke">2dp</dimen>
     <dimen name="cook_plan_recipe_height">100dp</dimen>
+    <dimen name="card_recipe_fake_image_size">150dp</dimen>
+    <dimen name="calendar_recipe_item_margin">50dp</dimen>
 </resources>

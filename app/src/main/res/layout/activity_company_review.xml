@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/company_review_app_bar_half_height"
                 android:layout_gravity="bottom"
-                android:background="@drawable/company_review_subtitle_back"
+                android:background="@drawable/primary_to_transparent_gradient_back"
                 android:gravity="bottom"
                 android:orientation="vertical">
                 ​

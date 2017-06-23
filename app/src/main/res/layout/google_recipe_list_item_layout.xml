@@ -37,7 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:background="@drawable/company_review_subtitle_back"
+                    android:background="@drawable/primary_to_transparent_gradient_back"
                     android:padding="@dimen/main_item_padding">
 
 
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/image_layout"
                 android:orientation="vertical"
-                android:padding="@dimen/card_recipe_name_padding">
+                android:padding="@dimen/main_item_padding">
 
                 <TextView
                     android:id="@+id/desc_textview"

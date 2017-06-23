@@ -12,17 +12,17 @@ import android.widget.Toast;
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
 import com.cookplan.models.Recipe;
-import com.cookplan.recipe.list.RecipeListPresenter;
-import com.cookplan.recipe.list.RecipeListView;
+import com.cookplan.recipe.list.BaseRecipeListPresenter;
+import com.cookplan.recipe.list.BaseRecipeListView;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeSelectListFragment extends BaseFragment implements RecipeListView {
+public class RecipeSelectListFragment extends BaseFragment implements BaseRecipeListView {
 
     private RecipeSelectListRecyclerAdapter adapter;
-    private RecipeListPresenter presenter;
+    private BaseRecipeListPresenter presenter;
 
     private RecipeSelectEventListener listener;
 
@@ -114,7 +114,7 @@ public class RecipeSelectListFragment extends BaseFragment implements RecipeList
     }
 
     @Override
-    public void setErrorToast(String error) {
+    public void setError(String error) {
         if (getActivity() != null) {
             Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
         }

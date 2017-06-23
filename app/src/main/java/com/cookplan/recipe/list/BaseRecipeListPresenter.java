@@ -6,7 +6,7 @@ import com.cookplan.models.Recipe;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public interface RecipeListPresenter {
+public interface BaseRecipeListPresenter {
 
     public void getRecipeList();
 

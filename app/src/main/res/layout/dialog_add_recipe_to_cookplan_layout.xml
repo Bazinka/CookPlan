@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/choose_time_dialog_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:gravity="center"
+            android:paddingLeft="@dimen/main_margin_left"
+            android:paddingRight="@dimen/main_margin_left"
+            android:paddingTop="@dimen/main_margin_left"
+            android:text="@string/choose_date_for_cooking_dialog"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/subheding_text_size"/>
+
+        <com.cookplan.views.ChooseCookingTimeView
+            android:id="@+id/choose_cooking_time_dialog_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+</RelativeLayout>

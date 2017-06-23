@@ -5,8 +5,8 @@ import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Recipe;
 import com.cookplan.providers.RecipeProvider;
 import com.cookplan.providers.impl.RecipeProviderImpl;
-import com.cookplan.recipe.list.RecipeListPresenter;
-import com.cookplan.recipe.list.RecipeListView;
+import com.cookplan.recipe.list.BaseRecipeListPresenter;
+import com.cookplan.recipe.list.BaseRecipeListView;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ import io.reactivex.schedulers.Schedulers;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public class RecipeSelectListPresenterImpl implements RecipeListPresenter {
+public class RecipeSelectListPresenterImpl implements BaseRecipeListPresenter {
 
 
-    private RecipeListView mainView;
+    private BaseRecipeListView mainView;
     private RecipeProvider recipeDataProvider;
     private CompositeDisposable disposables;
 
-    public RecipeSelectListPresenterImpl(RecipeListView mainView) {
+    public RecipeSelectListPresenterImpl(BaseRecipeListView mainView) {
         this.mainView = mainView;
         recipeDataProvider = new RecipeProviderImpl();
         disposables = new CompositeDisposable();
@@ -54,7 +54,7 @@ public class RecipeSelectListPresenterImpl implements RecipeListPresenter {
                             @Override
                             public void onError(Throwable e) {
                                 if (mainView != null && e instanceof CookPlanError) {
-                                    mainView.setErrorToast(e.getMessage());
+                                    mainView.setError(e.getMessage());
                                 }
                             }
 

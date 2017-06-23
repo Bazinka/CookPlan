@@ -82,6 +82,12 @@ public class Recipe implements Serializable {
         cookingDateList.add(cookingDate);
     }
 
+    public void clearCookingDateList() {
+        if (cookingDateList != null && !cookingDateList.isEmpty()) {
+            cookingDateList.clear();
+        }
+    }
+
     public List<Long> getCookingDate() {
         return cookingDateList;
     }

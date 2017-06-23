@@ -13,13 +13,15 @@ import com.cookplan.providers.RecipeProvider;
 import com.cookplan.providers.impl.FamilyModeProviderImpl;
 import com.cookplan.providers.impl.IngredientProviderImpl;
 import com.cookplan.providers.impl.RecipeProviderImpl;
-import com.cookplan.recipe.list.RecipeListPresenter;
-import com.cookplan.recipe.list.RecipeListView;
+import com.cookplan.recipe.list.BaseRecipeListView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.joda.time.DateTime;
 
 import java.util.List;
 
 import io.reactivex.CompletableObserver;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -30,16 +32,15 @@ import io.reactivex.schedulers.Schedulers;
  * Created by DariaEfimova on 21.03.17.
  */
 
-public class RecipeListPresenterImpl implements RecipeListPresenter, FirebaseAuth.AuthStateListener {
+public class MainRecipeListPresenterImpl implements MainRecipeListPresenter, FirebaseAuth.AuthStateListener {
 
-
-    private RecipeListView mainView;
+    private BaseRecipeListView mainView;
     private RecipeProvider recipeDataProvider;
     private IngredientProvider ingredientDataProvider;
     private FamilyModeProvider familyModeProvider;
     private CompositeDisposable disposables;
 
-    public RecipeListPresenterImpl(RecipeListView mainView) {
+    public MainRecipeListPresenterImpl(BaseRecipeListView mainView) {
         this.mainView = mainView;
         FirebaseAuth.getInstance().addAuthStateListener(this);
         recipeDataProvider = new RecipeProviderImpl();
@@ -76,7 +77,7 @@ public class RecipeListPresenterImpl implements RecipeListPresenter, FirebaseAut
                                                             @Override
                                                             public void onError(Throwable e) {
                                                                 if (mainView != null && e instanceof CookPlanError) {
-                                                                    mainView.setErrorToast(e.getMessage());
+                                                                    mainView.setError(e.getMessage());
                                                                 }
                                                             }
 
@@ -89,7 +90,7 @@ public class RecipeListPresenterImpl implements RecipeListPresenter, FirebaseAut
                                     @Override
                                     public void onError(Throwable e) {
                                         if (mainView != null && e instanceof CookPlanError) {
-                                            mainView.setErrorToast(e.getMessage());
+                                            mainView.setError(e.getMessage());
                                         }
                                     }
 
@@ -129,7 +130,7 @@ public class RecipeListPresenterImpl implements RecipeListPresenter, FirebaseAut
                                                     @Override
                                                     public void onError(Throwable e) {
                                                         if (mainView != null && e instanceof CookPlanError) {
-                                                            mainView.setErrorToast(e.getMessage());
+                                                            mainView.setError(e.getMessage());
                                                         }
                                                     }
                                                 });
@@ -138,7 +139,7 @@ public class RecipeListPresenterImpl implements RecipeListPresenter, FirebaseAut
                                     @Override
                                     public void onError(Throwable e) {
                                         if (mainView != null && e instanceof CookPlanError) {
-                                            mainView.setErrorToast(e.getMessage());
+                                            mainView.setError(e.getMessage());
                                         }
                                     }
 
@@ -167,7 +168,7 @@ public class RecipeListPresenterImpl implements RecipeListPresenter, FirebaseAut
                     @Override
                     public void onError(Throwable e) {
                         if (mainView != null && e instanceof CookPlanError) {
-                            mainView.setErrorToast(e.getMessage());
+                            mainView.setError(e.getMessage());
                         }
                     }
                 });
@@ -183,5 +184,37 @@ public class RecipeListPresenterImpl implements RecipeListPresenter, FirebaseAut
     @Override
     public void onStop() {
         disposables.clear();
+    }
+
+    @Override
+    public void addRecipeToCookPlan(Recipe recipe, DateTime date) {
+        recipe.addCookingDate(date.getMillis());
+        updateRecipe(recipe);
+    }
+
+    @Override
+    public void removeRecipeFromCookPlan(Recipe recipe) {
+        recipe.clearCookingDateList();
+        updateRecipe(recipe);
+    }
+
+    private void updateRecipe(Recipe recipe) {
+        recipeDataProvider.update(recipe)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Recipe>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Recipe recipe) {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+                });
     }
 }

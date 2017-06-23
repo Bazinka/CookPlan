@@ -13,6 +13,7 @@
     <color name="accent_color_darker">#FF6F00</color><!--900-->
     <color name="accent_color_light">#FFD54F</color><!--300-->
     <color name="accent_color_lighter">#FFF8E1</color><!--50-->
+    <color name="accent_color_lighter_transparent">#a6FFF8E1</color><!--50-->
 
     <color name="window_background_color">#FAFAFA</color>
     <color name="primary_text_color">#DF000000</color>

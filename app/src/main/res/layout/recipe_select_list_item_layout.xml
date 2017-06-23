@@ -35,7 +35,7 @@
                     android:clickable="false"
                     android:gravity="left|center_vertical"
                     android:maxLines="2"
-                    android:padding="@dimen/card_recipe_name_padding"
+                    android:padding="@dimen/main_item_padding"
                     android:text="Название"
                     android:textColor="@color/secondary_text_color"
                     android:textSize="@dimen/body_text_size"/>
@@ -66,7 +66,7 @@
                     android:clickable="false"
                     android:gravity="center"
                     android:maxLines="2"
-                    android:padding="@dimen/card_recipe_name_padding"
+                    android:padding="@dimen/main_item_padding"
                     android:text="Название"
                     android:textColor="@color/primary_dark"
                     android:textSize="@dimen/title_text_size"/>

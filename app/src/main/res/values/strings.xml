@@ -300,6 +300,10 @@
     <string name="dinner_title">Ужин</string>
     <string name="recipe_title">Рецепт</string>
     <string name="product_title">Продукт</string>
+    <string name="recipe_from_title">Рецепт от:</string>
+    <string name="are_you_sure_remove_recipe_from_cookplan_part1">Вы уверены, что хотите удалить</string>
+    <string name="are_you_sure_remove_recipe_from_cookplan_part2">из вашего плана питания?</string>
+    <string name="choose_date_for_cooking_dialog">Выберите день и время, когда вы собираетесь готовить</string>
 
 
 </resources>
