@@ -22,37 +22,23 @@ import static com.cookplan.models.MeasureUnit.PACKAGE;
 import static com.cookplan.models.MeasureUnit.TABLESPOON;
 import static com.cookplan.models.MeasureUnit.TEASPOON;
 import static com.cookplan.models.MeasureUnit.UNITS;
-import static com.cookplan.models.ProductCategory.ALCOHOL_DRINKS;
-import static com.cookplan.models.ProductCategory.ANIMALS_PRODUCTS;
 import static com.cookplan.models.ProductCategory.BAKERY_PRODUCTS;
-import static com.cookplan.models.ProductCategory.BOOKS_PRINTED_PRODUCTS;
-import static com.cookplan.models.ProductCategory.CAR_PRODUCTS;
 import static com.cookplan.models.ProductCategory.CHEESE;
 import static com.cookplan.models.ProductCategory.CHILD_PRODUCTS;
 import static com.cookplan.models.ProductCategory.CONFECTIONERY;
 import static com.cookplan.models.ProductCategory.CONSERVATION;
-import static com.cookplan.models.ProductCategory.COOKED_FOOD;
-import static com.cookplan.models.ProductCategory.COSMETICS_HYGIENE;
 import static com.cookplan.models.ProductCategory.DRINKS_JUICE;
 import static com.cookplan.models.ProductCategory.EGGS;
-import static com.cookplan.models.ProductCategory.ELECTRIC_AND_HOUSEHOLD_APPLIANCES;
 import static com.cookplan.models.ProductCategory.FISH_SEAFOOD_CAVIAR;
 import static com.cookplan.models.ProductCategory.FROZEN_FOOD;
 import static com.cookplan.models.ProductCategory.FRUITS_VEGETABLES;
-import static com.cookplan.models.ProductCategory.GADREN_PRODUCTS;
-import static com.cookplan.models.ProductCategory.GAMES_AND_TOYS;
 import static com.cookplan.models.ProductCategory.GROCERY;
-import static com.cookplan.models.ProductCategory.HOUSEHOLD_CHEMICALS;
 import static com.cookplan.models.ProductCategory.ICE_CREAM;
 import static com.cookplan.models.ProductCategory.MEAT_BIRDS;
 import static com.cookplan.models.ProductCategory.MEAT_GARSTRONOMY;
-import static com.cookplan.models.ProductCategory.MEDICINES;
 import static com.cookplan.models.ProductCategory.MILK_PRODUCT;
-import static com.cookplan.models.ProductCategory.REPAIR_COTTAGE_REST_PRODUCTS;
-import static com.cookplan.models.ProductCategory.STATIONERY;
 import static com.cookplan.models.ProductCategory.TEA_COFFEE_CACAO;
 import static com.cookplan.models.ProductCategory.VEGETABLE_OIL_SAUCE_CONDIMENTS;
-import static com.cookplan.models.ProductCategory.WARDROBE;
 import static com.cookplan.models.ProductCategory.WITHOUT_CATEGORY;
 
 /**
@@ -72,40 +58,7 @@ public class FillProductDatabaseProvider {
     }
 
     public static void savePriorityList() {
-        RApplication.savePriorityList(
-                Arrays.asList(
-                        FRUITS_VEGETABLES,
-                        COOKED_FOOD,
-                        MEAT_BIRDS,
-                        FISH_SEAFOOD_CAVIAR,
-                        MEAT_GARSTRONOMY,
-                        CHEESE,
-                        CONFECTIONERY,
-                        BAKERY_PRODUCTS,
-                        MILK_PRODUCT,
-                        TEA_COFFEE_CACAO,
-                        VEGETABLE_OIL_SAUCE_CONDIMENTS,
-                        CONSERVATION,
-                        GROCERY,
-                        EGGS,
-                        DRINKS_JUICE,
-                        FROZEN_FOOD,
-                        ICE_CREAM,
-                        HOUSEHOLD_CHEMICALS,
-                        COSMETICS_HYGIENE,
-                        CHILD_PRODUCTS,
-                        ANIMALS_PRODUCTS,
-                        MEDICINES,
-                        GAMES_AND_TOYS,
-                        ELECTRIC_AND_HOUSEHOLD_APPLIANCES,
-                        REPAIR_COTTAGE_REST_PRODUCTS,
-                        CAR_PRODUCTS,
-                        WARDROBE,
-                        STATIONERY,
-                        BOOKS_PRINTED_PRODUCTS,
-                        GADREN_PRODUCTS,
-                        ALCOHOL_DRINKS,
-                        WITHOUT_CATEGORY));//ProductCategory.values()
+        RApplication.savePriorityList(Arrays.asList(ProductCategory.values()));
     }
 
 
@@ -1944,79 +1897,79 @@ public class FillProductDatabaseProvider {
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Семга (консервы)",null,
+                                   .add("Семга (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Скумбрия (консервы)",null,
+                                   .add("Скумбрия (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Тунец (консервы)",null,
+                                   .add("Тунец (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Треска (консервы)",null,
+                                   .add("Треска (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Форель (консервы)",null,
+                                   .add("Форель (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Шпроты (консервы)",null,
+                                   .add("Шпроты (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Язь (консервы)",null,
+                                   .add("Язь (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Паштет (консервы)",null,
+                                   .add("Паштет (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Тушенка (консервы)",null,
+                                   .add("Тушенка (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Сливки (консервы)",null,
+                                   .add("Сливки (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Белые грибы (консервы)",null,
+                                   .add("Белые грибы (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Грузди (консервы)",null,
+                                   .add("Грузди (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Маслята (консервы)",null,
+                                   .add("Маслята (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Моховики (консервы)",null,
+                                   .add("Моховики (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Опята (консервы)",null,
+                                   .add("Опята (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Рыжики (консервы)",null,
+                                   .add("Рыжики (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Шампиньоны (консервы)",null,
+                                   .add("Шампиньоны (консервы)", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Ягоды протертые",null,
+                                   .add("Ягоды протертые", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Фрукты в сиропе",null,
+                                   .add("Фрукты в сиропе", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
@@ -2027,17 +1980,17 @@ public class FillProductDatabaseProvider {
                                                new UnitsListBuilder()
                                                        .addAll(volumeUnitArray)//LITRE, MILILITRE, CUP, TEASPOON, TABLESPOON, PACKAGE, BOTTLE
                                                        .build())
-                                   .add("Сгущенка вареная",null,
+                                   .add("Сгущенка вареная", null,
                                         new UnitsMapBuilder(litreUnitMap)
                                                 .put(PACKAGE, 2.5)
                                                 .put(UNITS, 2.5)
                                                 .build())
-                                   .add("Сгущенка с добавками",null,
+                                   .add("Сгущенка с добавками", null,
                                         new UnitsMapBuilder(litreUnitMap)
                                                 .put(PACKAGE, 2.5)
                                                 .put(UNITS, 2.5)
                                                 .build())
-                                   .add("Сгущенка цельная",null,
+                                   .add("Сгущенка цельная", null,
                                         new UnitsMapBuilder(litreUnitMap)
                                                 .put(PACKAGE, 2.5)
                                                 .put(UNITS, 2.5)
@@ -2082,11 +2035,11 @@ public class FillProductDatabaseProvider {
                                                new UnitsListBuilder()
                                                        .addAll(new MeasureUnit[]{GRAMM, KILOGRAMM, PACKAGE, UNITS})
                                                        .build())
-                                   .add("Мороженое",null,
+                                   .add("Мороженое", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
-                                   .add("Пломбир",null,
+                                   .add("Пломбир", null,
                                         new UnitsMapBuilder()
                                                 .put(UNITS, 1.)
                                                 .build())
