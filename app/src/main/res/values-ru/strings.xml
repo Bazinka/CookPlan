@@ -223,6 +223,7 @@
     <string name="are_you_sure_remove_recipe_from_cookplan_part1">Вы уверены, что хотите удалить</string>
     <string name="are_you_sure_remove_recipe_from_cookplan_part2">из вашего плана питания?</string>
     <string name="choose_date_for_cooking_dialog">Выберите день и время, когда вы собираетесь готовить</string>
+    <string name="setting_doesnt_exist_yet_title">Пока для данного раздела нет Настроек</string>
 
 
 </resources>

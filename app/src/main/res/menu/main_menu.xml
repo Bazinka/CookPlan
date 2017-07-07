@@ -3,6 +3,13 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings_white"
+        android:title="Settings"
+        android:visible="true"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/app_bar_share_on"
         android:icon="@drawable/ic_family_mode_on"
         android:title="Share"

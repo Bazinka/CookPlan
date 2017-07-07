@@ -45,6 +45,14 @@ import java.util.ArrayList;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView, ShareView {
 
+    private enum FragmentType {
+        SHOPPING_LIST,
+        RECEPIES,
+        TODO_LIST,
+        COMPANY_LIST,
+        COOKING_PLAN
+    }
+
     public static final int OPEN_SHOP_LIST_REQUEST = 10;
     public static final int SHARE_USER_LIST_REQUEST = 11;
     public static final String SHARE_USER_EMAIL_LIST_KEY = "SHARE_USER_EMAIL_LIST_KEY";
@@ -60,6 +68,8 @@ public class MainActivity extends BaseActivity
     protected SharePresenter sharePresenter;
 
     protected Menu menu;
+    private FragmentType selectedMenuItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +176,8 @@ public class MainActivity extends BaseActivity
 
     void setRecipeListFragment() {
         isFamilyModeApprovedNow = true;
-        setFamilyModeMenuOptions();
+        selectedMenuItem = FragmentType.RECEPIES;
+        setMenuIconsVisible();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
@@ -177,19 +188,20 @@ public class MainActivity extends BaseActivity
         //        mainConteinerView.setVisibility(View.VISIBLE);
 
         setTitle(getString(R.string.recipe_list_menu_title));
-        RecipeListFragment pointListFragment = RecipeListFragment.newInstance();
+        RecipeListFragment fragment = RecipeListFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            transaction.add(R.id.fragment_container, pointListFragment);
+            transaction.add(R.id.fragment_container, fragment);
         } else {
-            transaction.replace(R.id.fragment_container, pointListFragment);
+            transaction.replace(R.id.fragment_container, fragment);
         }
         transaction.commit();
     }
 
     void setShoppingListFragment() {
         isFamilyModeApprovedNow = true;
-        setFamilyModeMenuOptions();
+        selectedMenuItem = FragmentType.SHOPPING_LIST;
+        setMenuIconsVisible();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.VISIBLE);
@@ -210,7 +222,8 @@ public class MainActivity extends BaseActivity
 
     void setProductListFragment() {
         isFamilyModeApprovedNow = true;
-        setFamilyModeMenuOptions();
+        selectedMenuItem = null;
+        setMenuIconsVisible();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
@@ -234,7 +247,8 @@ public class MainActivity extends BaseActivity
 
     void setTODOListFragment() {
         isFamilyModeApprovedNow = false;
-        setFamilyModeMenuOptions();
+        selectedMenuItem = FragmentType.TODO_LIST;
+        setMenuIconsVisible();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
@@ -258,7 +272,8 @@ public class MainActivity extends BaseActivity
 
     void setCompaniesListFragment() {
         isFamilyModeApprovedNow = false;
-        setFamilyModeMenuOptions();
+        selectedMenuItem = FragmentType.COMPANY_LIST;
+        setMenuIconsVisible();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
@@ -279,7 +294,8 @@ public class MainActivity extends BaseActivity
 
     void setCookingListFragment() {
         isFamilyModeApprovedNow = false;
-        setFamilyModeMenuOptions();
+        selectedMenuItem = FragmentType.COOKING_PLAN;
+        setMenuIconsVisible();
 
         View tabsLayout = findViewById(R.id.main_tabs_layout);
         tabsLayout.setVisibility(View.GONE);
@@ -398,7 +414,7 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu _menu) {
         getMenuInflater().inflate(R.menu.main_menu, _menu);
         menu = _menu;
-        setFamilyModeMenuOptions();
+        setMenuIconsVisible();
         return super.onCreateOptionsMenu(_menu);
     }
 
@@ -429,6 +445,18 @@ public class MainActivity extends BaseActivity
                         .show();
                 return true;
             }
+        } else if (id == R.id.settings) {
+            if (selectedMenuItem != null) {
+                switch (selectedMenuItem) {
+                    case COOKING_PLAN:
+                        Intent intent = new Intent(this, AddUserForSharingActivity.class);
+                        startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
+                        break;
+                    default:
+                        showSnackbar(R.string.setting_doesnt_exist_yet_title);
+                }
+            }
+            return true;
         } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&
                 FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
             new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
@@ -446,26 +474,56 @@ public class MainActivity extends BaseActivity
     public void setShareIcon(boolean _isFamilyModeTurnOn) {
         if (menu != null) {
             isFamilyModeTurnOn = _isFamilyModeTurnOn;
-            setFamilyModeMenuOptions();
+            setMenuIconsVisible();
         }
     }
 
-    private void setFamilyModeMenuOptions() {
+    private void setMenuIconsVisible() {
         if (menu != null) {
-            if (isFamilyModeApprovedNow) {
-                if (isFamilyModeTurnOn) {
-                    menu.findItem(R.id.app_bar_share_on).setVisible(true);
-                    menu.findItem(R.id.app_bar_share_off).setVisible(false);
-                } else {
-                    menu.findItem(R.id.app_bar_share_on).setVisible(false);
-                    menu.findItem(R.id.app_bar_share_off).setVisible(true);
-                }
-            } else {
-                menu.findItem(R.id.app_bar_share_on).setVisible(false);
-                menu.findItem(R.id.app_bar_share_off).setVisible(false);
+            setFamilyModeMenuIconsVisible();
+            setSettingsMenuIconVisible();
+        }
+    }
+
+    private void setSettingsMenuIconVisible() {
+        if (selectedMenuItem != null) {
+            switch (selectedMenuItem) {
+                case SHOPPING_LIST:
+                    menu.findItem(R.id.settings).setVisible(false);
+                    break;
+                case RECEPIES:
+                    menu.findItem(R.id.settings).setVisible(false);
+                    break;
+                case TODO_LIST:
+                    menu.findItem(R.id.settings).setVisible(false);
+                    break;
+                case COMPANY_LIST:
+                    menu.findItem(R.id.settings).setVisible(false);
+                    break;
+                case COOKING_PLAN:
+                    menu.findItem(R.id.settings).setVisible(true);
+                    break;
+                default:
+                    menu.findItem(R.id.settings).setVisible(false);
             }
         }
     }
+
+    private void setFamilyModeMenuIconsVisible() {
+        if (isFamilyModeApprovedNow) {
+            if (isFamilyModeTurnOn) {
+                menu.findItem(R.id.app_bar_share_on).setVisible(true);
+                menu.findItem(R.id.app_bar_share_off).setVisible(false);
+            } else {
+                menu.findItem(R.id.app_bar_share_on).setVisible(false);
+                menu.findItem(R.id.app_bar_share_off).setVisible(true);
+            }
+        } else {
+            menu.findItem(R.id.app_bar_share_on).setVisible(false);
+            menu.findItem(R.id.app_bar_share_off).setVisible(false);
+        }
+    }
+
 
     @Override
     public void setShareError(int errorResourceId) {
