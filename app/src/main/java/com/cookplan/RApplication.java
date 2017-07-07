@@ -34,6 +34,7 @@ public class RApplication extends Application {
     public static final String PREFS_NAME = "COOK_PLAN_APP";
     private static final String CATEGORY_PRIORITY_PREFS_NAME = "CATEGORY_PRIORITY_PREFS_NAME";
     private static final String IS_ANONYMOUS_POSSIBLE_PREFS_NAME = "IS_ANONYMOUS_POSSIBLE_PREFS_NAME";
+    private static final String IS_COOK_PLAN_NOTIFICATION_TURNED_ON = "IS_COOK_PLAN_NOTIFICATION_TURNED_ON";
 
     private static Context context;
 
@@ -102,6 +103,27 @@ public class RApplication extends Application {
                                                 Context.MODE_PRIVATE);
 
         return settings.getBoolean(IS_ANONYMOUS_POSSIBLE_PREFS_NAME, true);
+    }
+
+    public static void saveCookPlanNotificationChanged(boolean isNotificationTurnedOn) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+
+        settings = context.getSharedPreferences(PREFS_NAME,
+                                                Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        editor.putBoolean(IS_COOK_PLAN_NOTIFICATION_TURNED_ON, isNotificationTurnedOn);
+        editor.commit();
+    }
+
+    public static boolean isCookPlanNotificationTurnedOn() {
+        SharedPreferences settings;
+
+        settings = context.getSharedPreferences(PREFS_NAME,
+                                                Context.MODE_PRIVATE);
+
+        return settings.getBoolean(IS_COOK_PLAN_NOTIFICATION_TURNED_ON, false);
     }
 
     public static void savePriorityList(List<ProductCategory> priorityOfCategories) {

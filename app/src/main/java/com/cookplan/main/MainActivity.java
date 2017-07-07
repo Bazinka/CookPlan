@@ -30,6 +30,7 @@ import com.cookplan.companies.MainCompaniesFragment;
 import com.cookplan.cooking_plan.list.CookingPlanFragment;
 import com.cookplan.product_list.ProductListFragment;
 import com.cookplan.recipe.list.main.RecipeListFragment;
+import com.cookplan.setting.SettingsActivity;
 import com.cookplan.share.SharePresenter;
 import com.cookplan.share.SharePresenterImpl;
 import com.cookplan.share.ShareView;
@@ -447,14 +448,8 @@ public class MainActivity extends BaseActivity
             }
         } else if (id == R.id.settings) {
             if (selectedMenuItem != null) {
-                switch (selectedMenuItem) {
-                    case COOKING_PLAN:
-                        Intent intent = new Intent(this, AddUserForSharingActivity.class);
-                        startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST);
-                        break;
-                    default:
-                        showSnackbar(R.string.setting_doesnt_exist_yet_title);
-                }
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivityWithLeftAnimation(intent);
             }
             return true;
         } else if (FirebaseAuth.getInstance().getCurrentUser() != null &&

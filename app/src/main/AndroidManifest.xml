@@ -121,6 +121,13 @@
         </activity>
         <activity android:name=".recipe.list.select.RecipeSelectListActivity">
         </activity>
+        <activity android:name=".setting.SettingsActivity">
+        </activity>
+
+        <service
+            android:name=".setting.CookPlanNotificationsJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>
