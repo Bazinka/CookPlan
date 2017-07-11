@@ -27,6 +27,7 @@ import com.cookplan.main.MainActivity;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
+import com.cookplan.utils.Constants;
 
 import org.joda.time.LocalDate;
 
@@ -212,8 +213,8 @@ public class CookPlanNotificationsJobService extends JobService {
     private void scheduleJob(Context context) {
         ComponentName serviceComponent = new ComponentName(context, CookPlanNotificationsJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
-        builder.setMinimumLatency(4 * 1000); // wait at least
-        builder.setOverrideDeadline(5 * 1000); // maximum delay
+        builder.setMinimumLatency(Constants.DELAY_COOKPLAN_NOTIFICATION_JOB); // wait at least
+        builder.setOverrideDeadline(Constants.DELAY_COOKPLAN_NOTIFICATION_JOB); // maximum delay
         JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(builder.build());
     }
