@@ -51,6 +51,7 @@
 
         <com.cookplan.views.ChooseCookingTimeView
             android:id="@+id/choose_time_view"
+            android:layout_below="@id/choose_item_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
