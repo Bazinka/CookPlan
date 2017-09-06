@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/main_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:paddingTop="@dimen/main_item_padding">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/to_shop_list_recipe_back"
+        android:clickable="false"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/small_item_padding"
+        android:paddingLeft="@dimen/small_item_padding"
+        android:paddingRight="@dimen/small_item_padding"
+        android:paddingTop="@dimen/main_item_padding">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/recipe_name_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/main_item_padding"
+                android:layout_marginTop="@dimen/main_item_padding"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/cooking_plan_title"
+                android:textAllCaps="true"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/title_text_size"
+                android:textStyle="bold"/>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/add_all_switch_compat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/recipe_name_textview"
+                android:paddingBottom="@dimen/main_item_padding"
+                android:paddingTop="@dimen/main_item_padding"
+                android:text="@string/add_all_products_title"
+                android:textAllCaps="true"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/subheding_text_size"
+                android:textStyle="bold"
+                app:showText="false"
+                app:switchPadding="@dimen/main_item_padding"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:clickable="false">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ingredients_to_shop_list_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

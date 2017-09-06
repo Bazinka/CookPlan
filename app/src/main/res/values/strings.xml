@@ -306,6 +306,9 @@
     <string name="choose_date_for_cooking_dialog">Выберите день и время, когда вы собираетесь готовить</string>
     <string name="settings_title">Настройки</string>
     <string name="setting_cookplan_switch_title">Напоминания о запланированных блюдах</string>
+    <string name="add_to_shop_list_from_notify_title">Choose an items to the shopping list</string>
+    <string name="add_all_products_title">Добавить все</string>
+    <string name="remove_all_products_title">Убрать все</string>
 
 
 </resources>

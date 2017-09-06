@@ -19,6 +19,8 @@ public interface IngredientProvider {
 
     Observable<List<Ingredient>> getIngredientListByRecipeId(String recipeId);
 
+    Observable<List<Ingredient>> getIngredientListByIdList(List<String> ingredientIds);
+
     Observable<List<Ingredient>> getIngredientListForCooking();
 
     Single<Ingredient> createIngredient(Ingredient ingredient);

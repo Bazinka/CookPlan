@@ -86,7 +86,6 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
 
         rootView = findViewById(R.id.main_snackbar_layout);
-
         sharePresenter = new SharePresenterImpl(this);
         presenter = new MainPresenterImpl(this, this);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

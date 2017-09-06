@@ -1,4 +1,4 @@
-package com.cookplan.setting;
+package com.cookplan.services;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.cookplan.R;
@@ -27,6 +26,7 @@ import com.cookplan.main.MainActivity;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
+import com.cookplan.shopping_list.add_from_notify.ToShopListFromNotifyActivity;
 import com.cookplan.utils.Constants;
 
 import org.joda.time.LocalDate;
@@ -39,6 +39,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
+
+import static com.cookplan.shopping_list.add_from_notify.ToShopListFromNotifyActivity.INGREDIENTS_IDS_KEY;
+import static com.cookplan.shopping_list.add_from_notify.ToShopListFromNotifyActivity.RECIPE_IDS_KEY;
 
 /**
  * Service to handle callbacks from the JobScheduler. Requests scheduled with the JobScheduler
@@ -128,27 +131,41 @@ public class CookPlanNotificationsJobService extends JobService {
 
     private void sendNotification(List<Object> objects) {
         String namesObjects = "";
+        ArrayList<String> recipeIdsObjects = new ArrayList<>();
+        ArrayList<String> ingredientIdsObjects = new ArrayList<>();
         for (Object object : objects) {
             if (!namesObjects.isEmpty()) {
                 namesObjects = namesObjects + ", ";
             }
             if (object instanceof Recipe) {
-                namesObjects = namesObjects + ((Recipe) object).getName();
+                Recipe recipe = (Recipe) object;
+                namesObjects = namesObjects + recipe.getName();
+                recipeIdsObjects.add(recipe.getId());
             } else if (object instanceof Ingredient) {
-                namesObjects = namesObjects + ((Ingredient) object).getName();
+                Ingredient ingredient = (Ingredient) object;
+                namesObjects = namesObjects + ingredient.getName();
+                ingredientIdsObjects.add(ingredient.getId());
             }
         }
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
-        stackBuilder.addParentStack(MainActivity.class);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                notificationIntent, 0);
 
-        stackBuilder.addNextIntent(notificationIntent);
+        Intent actionAddSelectedItemsIntent = new Intent(getApplicationContext(), ToShopListFromNotifyActivity.class);
+        actionAddSelectedItemsIntent.putStringArrayListExtra(RECIPE_IDS_KEY, recipeIdsObjects);
+        actionAddSelectedItemsIntent.putStringArrayListExtra(INGREDIENTS_IDS_KEY, ingredientIdsObjects);
+        PendingIntent actionAddPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        2,
+                        actionAddSelectedItemsIntent, 0);
 
-        PendingIntent notificationPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
 
         builder.setSmallIcon(R.drawable.main_drawable)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
@@ -156,7 +173,9 @@ public class CookPlanNotificationsJobService extends JobService {
                 .setColor(getResources().getColor(R.color.primary, getTheme()))
                 .setContentTitle("На завтра у вас: " + objects.size() + " блюд.")
                 .setContentText(namesObjects)
-                .setContentIntent(notificationPendingIntent);
+                .setContentIntent(notificationPendingIntent)
+                .addAction(R.drawable.ic_shopping_list, "Добавить продукты в список покупок",
+                           actionAddPendingIntent);
 
         builder.setAutoCancel(true);
 

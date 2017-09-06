@@ -115,6 +115,21 @@ public class RecipeProviderImpl implements RecipeProvider {
         });
     }
 
+    @Override
+    public Observable<List<Recipe>> getRecipeListByIdList(List<String> recipeIds) {
+        return subjectRecipeList.map(allRecipes -> {
+            List<Recipe> resultRecipes = new ArrayList<>();
+            if (recipeIds != null && !recipeIds.isEmpty()) {
+                for (Recipe recipe : allRecipes) {
+                    if (recipeIds.contains(recipe.getId())) {
+                        resultRecipes.add(recipe);
+                    }
+                }
+            }
+            return resultRecipes;
+        });
+    }
+
 
     @Override
     public Single<Recipe> createRecipe(Recipe recipe) {

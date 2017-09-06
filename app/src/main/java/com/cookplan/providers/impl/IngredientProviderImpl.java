@@ -101,6 +101,21 @@ public class IngredientProviderImpl implements IngredientProvider {
     }
 
     @Override
+    public Observable<List<Ingredient>> getIngredientListByIdList(List<String> ingredientIds) {
+        return subjectAllIngredients.map(allIngredients -> {
+            List<Ingredient> recipeIngredients = new ArrayList<>();
+            if (ingredientIds != null && !ingredientIds.isEmpty()) {
+                for (Ingredient ingredient : allIngredients) {
+                    if (ingredientIds.contains(ingredient.getId())) {
+                        recipeIngredients.add(ingredient);
+                    }
+                }
+            }
+            return recipeIngredients;
+        });
+    }
+
+    @Override
     public Observable<List<Ingredient>> getIngredientListForCooking() {
         return subjectAllIngredients.map(allIngredients -> {
             List<Ingredient> recipeIngredients = new ArrayList<>();

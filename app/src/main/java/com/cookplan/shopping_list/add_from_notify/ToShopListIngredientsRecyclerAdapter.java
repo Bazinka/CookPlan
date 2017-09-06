@@ -1,4 +1,4 @@
-package com.cookplan.recipe.import_recipe.approve_result;
+package com.cookplan.shopping_list.add_from_notify;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -10,23 +10,16 @@ import android.widget.TextView;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.Ingredient;
+import com.cookplan.models.ShopListStatus;
 
-import java.util.ArrayList;
 import java.util.List;
 
-
-public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<ParsedIngredientsRecyclerAdapter.ViewHolder> {
+public class ToShopListIngredientsRecyclerAdapter extends RecyclerView.Adapter<ToShopListIngredientsRecyclerAdapter.ViewHolder> {
 
     private final List<Ingredient> ingredients;
-    private Ingredient selectedIngred;
-    private OnItemSelectedListener listener;
 
-    public ParsedIngredientsRecyclerAdapter(List<Ingredient> items, OnItemSelectedListener listener) {
-        ingredients = new ArrayList<>(items);
-        this.listener = listener;
-        if (ingredients.size() == 1) {
-            selectedIngred = ingredients.get(0);
-        }
+    public ToShopListIngredientsRecyclerAdapter(List<Ingredient> items) {
+        ingredients = items;
     }
 
     @Override
@@ -40,7 +33,7 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Ingredient ingredient = ingredients.get(position);
 
-        if (selectedIngred != null && ingredient.getName().equals(selectedIngred.getName())) {
+        if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
             holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
                                                                     R.color.white));
             holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
@@ -48,7 +41,7 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
             if (ingredient.getCategory() != null) {
                 holder.mainView.setBackgroundResource(ingredient.getCategory().getColorId());
             }
-        } else {
+        } else if (ingredient.getShopListStatus() == ShopListStatus.NONE) {
             holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
                                                                     R.color.primary_text_color));
             holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
@@ -75,11 +68,13 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
         holder.mainView.setTag(position);
         holder.mainView.setOnClickListener(view -> {
             int pos = (int) view.getTag();
-            selectedIngred = ingredients.get(pos);
-            notifyDataSetChanged();
-            if (listener != null) {
-                listener.OnItemSelect(selectedIngred);
+            Ingredient selectIngredient = ingredients.get(pos);
+            if (ingredient.getShopListStatus() == ShopListStatus.NEED_TO_BUY) {
+                ingredient.setShopListStatus(ShopListStatus.NONE);
+            } else {
+                ingredient.setShopListStatus(ShopListStatus.NEED_TO_BUY);
             }
+            notifyDataSetChanged();
         });
     }
 
@@ -92,8 +87,14 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
         return ingredients;
     }
 
-    public void clearSelectedItem() {
-        selectedIngred = null;
+    public void updateItems(boolean isChecked) {
+        for (Ingredient ingredient : ingredients) {
+            if (isChecked) {
+                ingredient.setShopListStatus(ShopListStatus.NEED_TO_BUY);
+            } else {
+                ingredient.setShopListStatus(ShopListStatus.NONE);
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -110,13 +111,5 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
             categoryView = v.findViewById(R.id.category_view);
             mainView = v.findViewById(R.id.main_view);
         }
-    }
-
-    public Ingredient getSelectedIngred() {
-        return selectedIngred;
-    }
-
-    public interface OnItemSelectedListener {
-        void OnItemSelect(Ingredient ingredient);
     }
 }

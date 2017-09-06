@@ -17,7 +17,7 @@ public class Constants {
     public static final long DAYS_TO_MILLISECONDS = 24 * 60 * 60 * 1000;
 
     public static final int GOOGLE_SEARCH_RESULTS_NUMBER = 10;
-    public static final long DELAY_COOKPLAN_NOTIFICATION_JOB = 4 * 1000;
+    public static final long DELAY_COOKPLAN_NOTIFICATION_JOB = 60 * 1000;
 
     public enum ObjectType {
         RECIPE(0),

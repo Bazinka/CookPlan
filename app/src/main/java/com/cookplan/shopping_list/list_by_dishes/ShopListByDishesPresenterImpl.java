@@ -251,9 +251,9 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
 
     @Override
     public void setRecipeIngredBought(Recipe recipe, List<Ingredient> ingredientList) {
-        boolean isNeedToRemove = recipe.getId() == null;
         for (Ingredient ingred : ingredientList) {
             ingred.setShopListStatus(ShopListStatus.NONE);
+            boolean isNeedToRemove = recipe.getId() == null || ingred.getCookingDate() > 0;
             if (isNeedToRemove) {
                 ingredientDataProvider.removeIngredient(ingred)
                         .subscribeOn(Schedulers.io())

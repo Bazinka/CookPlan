@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import com.cookplan.services.CookPlanNotificationsJobService;
+
 import static com.cookplan.RApplication.saveCookPlanNotificationChanged;
 
 /**
