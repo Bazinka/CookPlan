@@ -124,7 +124,7 @@
             android:layout_below="@id/save_point_photo_main_layout"
             android:layout_marginTop="30dp"
             android:background="@drawable/button_background"
-            android:text="@string/save_place_title"
+            android:text="@string/save_title"
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/primary_text_color"
