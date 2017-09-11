@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
-                    android:text="Название точки"
+                    android:text="@string/point_name"
                     android:textSize="@dimen/headline_text_size"
                     android:textStyle="bold"/>
 
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:lines="4"
-                    android:text="Название точки"
+                    android:text="@string/point_name"
                     android:textSize="@dimen/subheding_text_size"/>
 
             </LinearLayout>

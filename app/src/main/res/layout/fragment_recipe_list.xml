@@ -63,7 +63,7 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:src="@drawable/ic_add_plus"
             fab:fab_colorNormal="@color/accent_color"
-            fab:fab_label="Создать"
+            fab:fab_label="@string/create_recipe_button_title"
             fab:fab_size="mini"
             />
 
@@ -76,7 +76,7 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:src="@drawable/ic_import"
             fab:fab_colorNormal="@color/accent_color"
-            fab:fab_label="Импортировать"
+            fab:fab_label="@string/import_title"
             fab:fab_size="mini"/>
 
     </com.github.clans.fab.FloatingActionMenu>

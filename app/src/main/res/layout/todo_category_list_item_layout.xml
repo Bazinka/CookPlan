@@ -22,7 +22,7 @@
             android:clickable="false"
             android:gravity="left|center_vertical"
             android:paddingBottom="@dimen/todo_list_category_size"
-            android:text="название"
+            android:text="@string/name_title"
             android:textColor="@color/primary_text_color"
             android:textSize="@dimen/body_text_size"/>
 

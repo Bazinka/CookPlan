@@ -47,7 +47,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:maxLines="2"
-                        android:text="Название"
+                        android:text="@string/name_title"
                         android:textColor="@color/white"
                         android:textSize="@dimen/title_text_size"/>
                 </RelativeLayout>
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left|center_vertical"
                     android:maxLines="2"
-                    android:text="Название"
+                    android:text="@string/name_title"
                     android:textColor="@color/secondary_text_color"
                     android:textSize="@dimen/body_text_size"/>
 
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left|center_vertical"
                     android:maxLines="2"
-                    android:text="Название"
+                    android:text="@string/name_title"
                     android:textColor="@color/accent_color"
                     android:textSize="@dimen/body_text_size"/>
             </LinearLayout>
