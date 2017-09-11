@@ -24,7 +24,7 @@
             android:clickable="false"
             android:ellipsize="end"
             android:lines="1"
-            android:text="название"
+            android:text="@string/name_title"
             android:textColor="@color/primary_text_color"
             android:textSize="@dimen/subheding_text_size"/>
 
@@ -36,7 +36,6 @@
             android:clickable="false"
             android:ellipsize="end"
             android:lines="1"
-            android:text="12"
             android:textColor="@color/secondary_text_color"
             android:textSize="@dimen/subheding_text_size"/>
     </RelativeLayout>

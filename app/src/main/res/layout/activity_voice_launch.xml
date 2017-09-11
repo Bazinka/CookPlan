@@ -20,6 +20,6 @@
         android:layout_below="@id/progress_bar"
         android:layout_centerHorizontal="true"
         android:padding="@dimen/main_item_padding"
-        android:text="Обработка информации..."
+        android:text="@string/processing_data_text"
         android:textSize="@dimen/subheding_text_size"/>
 </RelativeLayout>

@@ -127,7 +127,6 @@
     <string name="name_of_place">Название точки</string>
     <string name="comment">Комментарии</string>
     <string name="default_place_name">Здесь я был в</string>
-    <string name="save_place_title">Сохранить точку</string>
     <string name="map">Карта</string>
     <string name="search_new_place_title">Поиск нового места</string>
     <string name="add_point_photo_title">Фотографии</string>
@@ -168,7 +167,6 @@
     <string name="company_added_to_geofence_for_10_days_message">Уведомления будут работать в течении 10 дней</string>
     <string name="geofence_notification_turned_off">Уведомления отключены</string>
     <string name="import_recipe_title">Импорт рецепта</string>
-    <string name="import_button_title">Импортировать</string>
     <string name="error_import_from_the_wrong_site_title">Пока мы не можем импортировать с этого сайта</string>
     <string name="text_for_search">Текст для поиска</string>
     <string name="search_recipe_title">Поиск рецепта</string>
@@ -179,6 +177,24 @@
     <string name="google_search_too_many_requests_error">Слишком много поисковых запросов на сегодня. Попробуйте заново завтра</string>
     <string name="edit_image_list_title">Редактирование картинок</string>
     <string name="medicines_title">Медикаменты</string>
+    <string name="all_right_title">Все верно</string>
+    <string name="import_title">Импортировать</string>
+    <string name="create_recipe_button_title">Создать</string>
+    <string name="or_text">или</string>
+    <string name="chose_contact_title">Вы выбрали контакты:</string>
+    <string name="search_title">Поиск</string>
+    <string name="database_is_updating">База данных обновляется</string>
+    <string name="processing_data_text">Обработка информации...</string>
+    <string name="add_place_text">Добавить место</string>
+    <string name="in_recipe_was">В рецепте было:</string>
+    <string name="name_title">название</string>
+    <string name="or_choose_from_cookplan_title">Или выберите из доступных в CookPlan:</string>
+    <string name="save_title">сохранить</string>
+    <string name="recipe_name_title">Название рецепта:</string>
+    <string name="coudnt_import">Не получилось импортировать</string>
+    <string name="recipes_description_title">Инструкции по приготовлению блюда:</string>
+    <string name="description_title">описание</string>
+    <string name="point_name">Название точки</string>
 
 
 </resources>

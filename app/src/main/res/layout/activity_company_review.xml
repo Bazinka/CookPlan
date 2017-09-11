@@ -48,7 +48,6 @@
                     android:layout_marginLeft="35dp"
                     android:layout_marginRight="@dimen/main_margin_left"
                     android:layout_marginTop="@dimen/main_margin_left"
-                    android:text="Lorem Ipsum "
                     android:textColor="@color/white"
                     android:textSize="@dimen/subheding_text_size"
                     android:textStyle="bold"

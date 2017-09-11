@@ -53,7 +53,7 @@
                 android:paddingLeft="@dimen/group_item_left_margin"
                 android:paddingRight="@dimen/main_margin_left"
                 android:paddingTop="@dimen/group_item_margin"
-                android:text="название"
+                android:text="@string/name_title"
                 android:textColor="@color/primary"
                 android:textSize="@dimen/headline_text_size"
                 android:textStyle="bold"/>

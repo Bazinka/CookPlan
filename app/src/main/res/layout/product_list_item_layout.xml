@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:gravity="left|center_vertical"
-                android:text="название"
+                android:text="@string/name_title"
                 android:textColor="@color/primary_text_color"
                 android:textSize="@dimen/subheding_text_size"/>
 
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:gravity="left|center_vertical"
-                android:text="название"
+                android:text="@string/name_title"
                 android:textColor="@color/hint_or_disabled_text_color"
                 android:textSize="@dimen/body_text_size"/>
 

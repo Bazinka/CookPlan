@@ -33,7 +33,7 @@
                 android:ellipsize="end"
                 android:gravity="left|center_vertical"
                 android:lines="1"
-                android:text="название"
+                android:text="@string/name_title"
                 android:textColor="@color/primary_text_color"
                 android:textSize="@dimen/subheding_text_size"/>
 

@@ -10,7 +10,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/small_item_padding"
         android:layout_marginTop="@dimen/small_item_padding"
-        android:text="текс"
         android:textColor="@color/primary_text_color"
         android:textSize="@dimen/title_text_size" />
 

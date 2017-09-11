@@ -19,6 +19,6 @@
         android:layout_below="@id/progress_bar"
         android:layout_centerHorizontal="true"
         android:padding="@dimen/main_item_padding"
-        android:text="База данных обновляется"
+        android:text="@string/database_is_updating"
         android:textSize="@dimen/subheding_text_size"/>
 </RelativeLayout>

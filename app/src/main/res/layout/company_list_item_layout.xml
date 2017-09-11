@@ -47,7 +47,7 @@
                         android:ellipsize="end"
                         android:gravity="left|center_vertical"
                         android:lines="1"
-                        android:text="название"
+                        android:text="@string/name_title"
                         android:textColor="@color/primary_text_color"
                         android:textSize="@dimen/title_text_size"
                         android:textStyle="bold"/>
@@ -64,7 +64,7 @@
                         android:ellipsize="end"
                         android:gravity="left|center_vertical"
                         android:lines="1"
-                        android:text="описание"
+                        android:text="@string/description_title"
                         android:textColor="@color/hint_or_disabled_text_color"
                         android:textSize="@dimen/body_text_size"/>
                 </RelativeLayout>

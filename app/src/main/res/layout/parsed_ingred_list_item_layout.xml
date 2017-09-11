@@ -45,7 +45,7 @@
                     android:layout_toLeftOf="@id/ingredient_item_amount"
                     android:clickable="false"
                     android:gravity="left|center_vertical"
-                    android:text="название"
+                    android:text="@string/name_title"
                     android:textColor="@color/primary_text_color"
                     android:textSize="@dimen/subheding_text_size"/>
 
@@ -59,7 +59,6 @@
                     android:lines="1"
                     android:paddingLeft="@dimen/main_margin_left"
                     android:paddingRight="@dimen/small_inrgedient_padding"
-                    android:text="12"
                     android:textColor="@color/secondary_text_color"
                     android:textSize="@dimen/subheding_text_size"/>
 
