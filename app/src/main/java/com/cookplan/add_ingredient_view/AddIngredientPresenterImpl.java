@@ -114,7 +114,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
                                                    amount,
                                                    isNeedToBuy ? ShopListStatus.NEED_TO_BUY : ShopListStatus.NONE);
             ingredientDataProvider.createIngredient(ingredient)
-                    .subscribeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<Ingredient>() {
                         @Override
