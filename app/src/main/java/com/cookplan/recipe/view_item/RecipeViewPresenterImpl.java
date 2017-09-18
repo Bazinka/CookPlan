@@ -3,6 +3,7 @@ package com.cookplan.recipe.view_item;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Recipe;
+import com.cookplan.models.ShopListStatus;
 import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.impl.IngredientProviderImpl;
 
@@ -91,10 +92,34 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
 
 
     @Override
-    public void addAllIngredientToShoppingList(List<Ingredient> ingredients) {
+    public void changeIngredListShopStatus(List<Ingredient> ingredients, ShopListStatus status) {
         for (Ingredient ingredient : ingredients) {
-            addIngredientToShoppingList(ingredient);
+            ingredient.setShopListStatus(status);
         }
+        //        mainView.updateIngredientList();
+        dataProvider.updateShopStatusList(ingredients)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (mainView != null) {
+                            mainView.ingredListChangedShoplistStatus(status == ShopListStatus.NONE);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mainView != null) {
+                            mainView.setErrorToast(e.getMessage());
+                        }
+                    }
+                });
     }
 
     @Override

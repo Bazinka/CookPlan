@@ -3,6 +3,7 @@ package com.cookplan.recipe.view_item;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.cookplan.models.ShopListStatus.NEED_TO_BUY;
+import static com.cookplan.models.ShopListStatus.NONE;
 
 public class RecipeViewActivity extends BaseActivity implements RecipeView {
 
@@ -91,17 +93,14 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
             fab.setOnClickListener(view -> {
                 if (!isAllIngredientsChecked) {
                     isAllIngredientsChecked = true;
-                    setFabView();
-                    for (Ingredient ingredient : adapter.getIngredients()) {
-                        ingredient.setShopListStatus(NEED_TO_BUY);
-                    }
-                    adapter.notifyDataSetChanged();
                     if (presenter != null) {
-                        presenter.addAllIngredientToShoppingList(adapter.getIngredients());
+                        presenter.changeIngredListShopStatus(adapter.getIngredients(), NEED_TO_BUY);
                     }
                 } else {
-                    setResult(RESULT_OK);
-                    finish();
+                    isAllIngredientsChecked = false;
+                    if (presenter != null) {
+                        presenter.changeIngredListShopStatus(adapter.getIngredients(), NONE);
+                    }
                 }
             });
             ViewPager viewPager = (ViewPager) findViewById(R.id.recipe_images_viewpager);
@@ -155,7 +154,7 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
     private void setFabView() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_ingred_to_shop_list_fab);
         if (isAllIngredientsChecked) {
-            fab.setImageResource(R.drawable.ic_shopping_list_white);
+            fab.setImageResource(R.drawable.ic_remove_items_from_shop_list);
         } else {
             fab.setImageResource(R.drawable.ic_add_items_to_shop_list);
         }
@@ -163,6 +162,26 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
 
     @Override
     public void setIngredientSuccessfulUpdate(Ingredient ingredient) {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void ingredListChangedShoplistStatus(boolean isRemoved) {
+        View mainView = findViewById(R.id.snackbar_layout);
+        if (mainView != null) {
+            Snackbar snackbar;
+            if (isRemoved) {
+                snackbar = Snackbar.make(mainView, "Продукты успешно удалены из списка покупок", Snackbar.LENGTH_LONG);
+            } else {
+                snackbar = Snackbar.make(mainView, "Продукты успешно добавлены в список покупок", Snackbar.LENGTH_LONG)
+                        .setAction("Открыть список покупок", view -> {
+                            setResult(RESULT_OK);
+                            finish();
+                        });
+
+            }
+            snackbar.show();
+        }
         adapter.notifyDataSetChanged();
     }
 

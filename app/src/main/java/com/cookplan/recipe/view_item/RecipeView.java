@@ -15,4 +15,5 @@ public interface RecipeView {
 
     void setIngredientSuccessfulUpdate(Ingredient ingredient);
 
+    void ingredListChangedShoplistStatus(boolean isRemoved);
 }

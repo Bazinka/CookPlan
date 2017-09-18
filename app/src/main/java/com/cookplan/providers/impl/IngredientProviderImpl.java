@@ -12,7 +12,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -145,6 +147,31 @@ public class IngredientProviderImpl implements IngredientProvider {
                     .setValue(ingredient.getShopListStatus())
                     .addOnSuccessListener(aVoid -> emitter.onComplete())
                     .addOnFailureListener(exception -> emitter.onError(new CookPlanError(exception.getMessage())));
+        });
+    }
+
+    @Override
+    public Completable updateShopStatusList(List<Ingredient> ingredients) {
+        return Completable.create(emitter -> {
+            DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+            ingredientRef.runTransaction(new Transaction.Handler() {
+                @Override
+                public Transaction.Result doTransaction(MutableData mutableData) {
+                    for (Ingredient ingredient : ingredients) {
+                        mutableData
+                                .child(ingredient.getId())
+                                .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
+                                .setValue(ingredient.getShopListStatus());
+                    }
+                    return Transaction.success(mutableData);
+                }
+
+                @Override
+                public void onComplete(DatabaseError databaseError, boolean b,
+                                       DataSnapshot dataSnapshot) {
+                    emitter.onComplete();
+                }
+            });
         });
     }
 
