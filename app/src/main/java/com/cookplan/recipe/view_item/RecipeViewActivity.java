@@ -162,7 +162,7 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
 
     @Override
     public void setIngredientSuccessfulUpdate(Ingredient ingredient) {
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -182,7 +182,7 @@ public class RecipeViewActivity extends BaseActivity implements RecipeView {
             }
             snackbar.show();
         }
-        adapter.notifyDataSetChanged();
+        //        adapter.notifyDataSetChanged();
     }
 
     @Override

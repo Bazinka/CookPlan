@@ -1,5 +1,8 @@
 package com.cookplan.providers.impl;
 
+import android.os.Looper;
+import android.util.Log;
+
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
@@ -141,12 +144,22 @@ public class IngredientProviderImpl implements IngredientProvider {
     public Completable updateShopStatus(Ingredient ingredient) {
         return Completable.create(emitter -> {
             DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
-            ingredientRef
-                    .child(ingredient.getId())
-                    .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
-                    .setValue(ingredient.getShopListStatus())
-                    .addOnSuccessListener(aVoid -> emitter.onComplete())
-                    .addOnFailureListener(exception -> emitter.onError(new CookPlanError(exception.getMessage())));
+            ingredientRef.runTransaction(new Transaction.Handler() {
+                @Override
+                public Transaction.Result doTransaction(MutableData mutableData) {
+                    ingredientRef
+                            .child(ingredient.getId())
+                            .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
+                            .setValue(ingredient.getShopListStatus());
+                    return Transaction.success(mutableData);
+                }
+
+                @Override
+                public void onComplete(DatabaseError databaseError, boolean b,
+                                       DataSnapshot dataSnapshot) {
+                    emitter.onComplete();
+                }
+            });
         });
     }
 
@@ -162,6 +175,11 @@ public class IngredientProviderImpl implements IngredientProvider {
                                 .child(ingredient.getId())
                                 .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
                                 .setValue(ingredient.getShopListStatus());
+                    }
+                    if (Looper.myLooper() == Looper.getMainLooper()) {
+                        Log.d("updateShopStatusList", "Main Thread");
+                    } else {
+                        Log.d("updateShopStatusList", "мы не в основном потоке");
                     }
                     return Transaction.success(mutableData);
                 }

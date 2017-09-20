@@ -76,9 +76,9 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
 
                     @Override
                     public void onComplete() {
-                        if (mainView != null) {
-                            mainView.setIngredientSuccessfulUpdate(ingredient);
-                        }
+//                        if (mainView != null) {
+//                            mainView.setIngredientSuccessfulUpdate(ingredient);
+//                        }
                     }
 
                     @Override
@@ -88,6 +88,9 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
                         }
                     }
                 });
+//        if (mainView != null) {
+//            mainView.setIngredientSuccessfulUpdate(ingredient);
+//        }
     }
 
 
@@ -96,7 +99,6 @@ public class RecipeViewPresenterImpl implements RecipeViewPresenter {
         for (Ingredient ingredient : ingredients) {
             ingredient.setShopListStatus(status);
         }
-        //        mainView.updateIngredientList();
         dataProvider.updateShopStatusList(ingredients)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
