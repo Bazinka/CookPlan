@@ -22,6 +22,8 @@
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <color name="transparency_primary_the_lightest">#a6ECEFF1</color><!--50-->
     <color name="transparency_grey">#a6595959</color>
 
     <color name="category_red">#F44336</color>

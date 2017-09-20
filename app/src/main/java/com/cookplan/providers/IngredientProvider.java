@@ -23,6 +23,8 @@ public interface IngredientProvider {
 
     Completable removeIngredient(Ingredient ingredient);
 
+    Completable removeIngredientList(List<Ingredient> ingredients);
+
     Completable updateShopStatus(Ingredient ingredient);
 
     Completable updateShopStatusList(List<Ingredient> ingredients);

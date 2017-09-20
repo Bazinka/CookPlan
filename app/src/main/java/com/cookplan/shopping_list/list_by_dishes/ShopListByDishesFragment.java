@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ProgressBar;
 
 import com.cookplan.BaseFragment;
 import com.cookplan.R;
@@ -24,7 +23,7 @@ import java.util.Map;
 public class ShopListByDishesFragment extends BaseFragment implements ShopListByDishesView {
 
     private ShopListByDishPresenter presenter;
-    private ProgressBar progressBar;
+    private View progressBarLayout;
 
     public ShopListByDishesFragment() {
     }
@@ -51,7 +50,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
                              Bundle savedInstanceState) {
         mainView = (ViewGroup) inflater.inflate(R.layout.fragment_shop_list_by_dish, container, false);
 
-        progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        progressBarLayout = mainView.findViewById(R.id.progress_bar_layout);
         return mainView;
     }
 
@@ -62,7 +61,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
             presenter.getShoppingList();
         }
         setEmptyView();
-        progressBar.setVisibility(View.VISIBLE);
+        progressBarLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
 
     @Override
     public void setEmptyView() {
-        progressBar.setVisibility(View.GONE);
+        progressBarLayout.setVisibility(View.GONE);
         setEmptyViewVisability(View.VISIBLE);
         setContentVisability(View.GONE);
     }
@@ -108,11 +107,10 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
 
     @Override
     public void setIngredientListToRecipe(List<Recipe> newGroupList, Map<String, List<Ingredient>> newChildMap) {
-        progressBar.setVisibility(View.GONE);
+        progressBarLayout.setVisibility(View.GONE);
 
         if (newGroupList.isEmpty()) {
-            setEmptyViewVisability(View.VISIBLE);
-            setContentVisability(View.GONE);
+            setEmptyView();
         } else {
             setEmptyViewVisability(View.GONE);
             setContentVisability(View.VISIBLE);
@@ -139,10 +137,10 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
 
                             @Override
                             public void onDeleteGroupClick(Recipe recipe, List<Ingredient> ingredientList) {
-                                progressBar.setVisibility(View.VISIBLE);
                                 new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
                                         .setMessage(R.string.delete_recipe_from_shop_list_question)
                                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                            progressBarLayout.setVisibility(View.VISIBLE);
                                             if (presenter != null) {
                                                 presenter.setRecipeIngredBought(recipe, ingredientList);
                                             }

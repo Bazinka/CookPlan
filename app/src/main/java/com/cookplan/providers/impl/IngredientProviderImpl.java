@@ -141,6 +141,34 @@ public class IngredientProviderImpl implements IngredientProvider {
     }
 
     @Override
+    public Completable removeIngredientList(List<Ingredient> ingredients) {
+        return Completable.create(emitter -> {
+            DatabaseReference ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);
+            ingredRef.runTransaction(new Transaction.Handler() {
+                @Override
+                public Transaction.Result doTransaction(MutableData mutableData) {
+                    for (Ingredient ingredient : ingredients) {
+                        if (ingredient.getId() != null) {
+                            MutableData ref = mutableData.child(ingredient.getId());
+                            ref.setValue(null);
+                        } else {
+                            emitter.onError(new CookPlanError(RApplication.getAppContext().getString(R.string.ingred_remove_error)));
+                        }
+                    }
+                    emitter.onComplete();
+                    return Transaction.success(mutableData);
+                }
+
+                @Override
+                public void onComplete(DatabaseError databaseError, boolean b,
+                                       DataSnapshot dataSnapshot) {
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
+
+    @Override
     public Completable updateShopStatus(Ingredient ingredient) {
         return Completable.create(emitter -> {
             DatabaseReference ingredientRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE);

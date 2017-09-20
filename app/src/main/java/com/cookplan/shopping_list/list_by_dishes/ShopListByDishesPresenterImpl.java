@@ -252,53 +252,53 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
     @Override
     public void setRecipeIngredBought(Recipe recipe, List<Ingredient> ingredientList) {
         boolean isNeedToRemove = recipe.getId() == null;
-        for (Ingredient ingred : ingredientList) {
-            ingred.setShopListStatus(ShopListStatus.NONE);
-            if (isNeedToRemove) {
-                ingredientDataProvider.removeIngredient(ingred)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new CompletableObserver() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
+        if (isNeedToRemove) {
+            ingredientDataProvider.removeIngredientList(ingredientList)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
 
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null && e instanceof CookPlanError) {
+                                mainView.setErrorToast(e.getMessage());
                             }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                if (mainView != null && e instanceof CookPlanError) {
-                                    mainView.setErrorToast(e.getMessage());
-                                }
-                            }
-                        });
-            } else {
-                ingredientDataProvider.updateShopStatus(ingred)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new CompletableObserver() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                if (mainView != null) {
-                                    mainView.setErrorToast(e.getMessage());
-                                }
-                            }
-                        });
+                        }
+                    });
+        } else {
+            for (Ingredient ingred : ingredientList) {
+                ingred.setShopListStatus(ShopListStatus.NONE);
             }
+            ingredientDataProvider.updateShopStatusList(ingredientList)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mainView != null) {
+                                mainView.setErrorToast(e.getMessage());
+                            }
+                        }
+                    });
         }
     }
 }
