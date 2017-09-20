@@ -59,30 +59,37 @@ public class EdaParser extends BaseParser {
     }
 
     private String getProductNameTag() {
-        return "span.ingredient";
+        return "span.content-item__name";
     }
 
     private String getIngredientItemTag() {
-        return "li.ingredient-item";
+        return "p.ingredients-list__content-item";
+    }
+
+    private Elements getIngredientsElementList(Document doc) {
+        Element ingredients = doc.select("div.ingredients-list").first();
+        Elements products = null;
+        if (ingredients != null) {
+            products = ingredients.select(getIngredientItemTag());
+        }
+        return products;
     }
 
     private String getAmountTag() {
-        return "span.amount";
+        return "span.content-item__measure";
     }
 
 
     @Override
     protected List<String> getProductsNames(Document doc) {
         List<String> names = new ArrayList<>();
-
-        Elements products = doc.select(getIngredientItemTag());
+        Elements products = getIngredientsElementList(doc);
         for (Element product : products) {
             String name = parseStringProductName(product);
             if (!name.isEmpty()) {
                 names.add(name);
             }
         }
-
         return names;
     }
 
@@ -118,7 +125,7 @@ public class EdaParser extends BaseParser {
     @Override
     protected Map<String, List<Ingredient>> parceDocumentToIngredientList(Document doc, Map<String, List<Product>> namesToProducts) {
         Map<String, List<Ingredient>> ingredientMap = new HashMap<>();
-        Elements ingredElements = doc.select(getIngredientItemTag());
+        Elements ingredElements = getIngredientsElementList(doc);
         for (Element element : ingredElements) {
             String name = parseStringProductName(element);
             if (!name.isEmpty()) {
