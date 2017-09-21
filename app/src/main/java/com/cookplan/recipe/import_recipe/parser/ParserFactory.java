@@ -8,10 +8,10 @@ public class ParserFactory {
 
     public static final Parser createParser(String url) {
         if (url.contains("eda.ru")) {
-            return new EdaParser(url);
+            return new EdaHtmlParser(url);
         }
         if (url.contains("www.edimdoma.ru")) {
-            return new EdimDomaParser(url);
+            return new EdimDomaHtmlParser(url);
         }
         return null;
     }

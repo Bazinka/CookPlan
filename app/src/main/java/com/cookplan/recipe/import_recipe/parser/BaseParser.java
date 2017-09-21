@@ -2,10 +2,7 @@ package com.cookplan.recipe.import_recipe.parser;
 
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
-import com.cookplan.models.Product;
 import com.cookplan.models.Recipe;
-import com.cookplan.providers.ProductProvider;
-import com.cookplan.providers.impl.ProductProviderImpl;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,9 +14,7 @@ import java.util.Map;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -29,14 +24,10 @@ import io.reactivex.schedulers.Schedulers;
 public abstract class BaseParser implements Parser {
 
     private String url;
-    private ProductProvider productDataProvider;
-    private CompositeDisposable disposables;
     private ParserResultListener resultListener;
 
     public BaseParser(String url) {
         this.url = url;
-        productDataProvider = new ProductProviderImpl();
-        disposables = new CompositeDisposable();
     }
 
     @Override
@@ -75,45 +66,7 @@ public abstract class BaseParser implements Parser {
                 });
     }
 
-    private void parseDocument(Document doc) {
-        List<String> names = getProductsNames(doc);
-        disposables.add(
-                productDataProvider.getTheClosestProductsToStrings(names)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(new DisposableObserver<Map<String, List<Product>>>() {
-                            @Override
-                            public void onNext(Map<String, List<Product>> namesToProducts) {
-                                disposables.clear();
-                                if (resultListener != null) {
-                                    Map<String, List<Ingredient>> ingredients = parceDocumentToIngredientList(doc, namesToProducts);
-                                    Recipe recipe = parceDocumentToRecipe(doc);
-                                    resultListener.onSuccess(recipe, ingredients);
-                                }
-                            }
-
-
-                            @Override
-                            public void onError(Throwable e) {
-                                if (resultListener != null) {
-                                    if (e instanceof CookPlanError) {
-                                        resultListener.onError(e.getMessage());
-                                    } else {
-                                        resultListener.onError("В процессе импорта произошла ошибка.");
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        }));
-    }
-
-    protected abstract List<String> getProductsNames(Document doc);
-
-    protected abstract Map<String, List<Ingredient>> parceDocumentToIngredientList(Document doc, Map<String, List<Product>> namesToProducts);
+    protected abstract void parseDocument(Document doc);
 
     private Single<Document> getDocumentFromUrl(String url) {
         return Single.create(emitter -> {
@@ -133,25 +86,19 @@ public abstract class BaseParser implements Parser {
         });
     }
 
-    private Recipe parceDocumentToRecipe(Document doc) {
-        Recipe recipe = new Recipe();
-        recipe.setName(parseRecipeTitleFromDoc(doc));
-
-        String description = parseDescriptionFromDoc(doc);
-
-        recipe.setDesc(description);
-
-        List<String> imageUrls = parseImageUrlsFromDoc(doc);
-
-        recipe.setImageUrls(imageUrls);
-        return recipe;
+    protected void onImportSuccess(Recipe recipe, Map<String, List<Ingredient>> ingredients) {
+        if (resultListener != null) {
+            resultListener.onSuccess(recipe, ingredients);
+        }
     }
 
-    protected abstract List<String> parseImageUrlsFromDoc(Document doc);
-
-    protected abstract String parseDescriptionFromDoc(Document doc);
-
-    protected abstract String parseRecipeTitleFromDoc(Document doc);
-
-
+    protected void onImportError(Throwable e) {
+        if (resultListener != null) {
+            if (e instanceof CookPlanError) {
+                resultListener.onError(e.getMessage());
+            } else {
+                resultListener.onError("В процессе импорта произошла ошибка.");
+            }
+        }
+    }
 }
