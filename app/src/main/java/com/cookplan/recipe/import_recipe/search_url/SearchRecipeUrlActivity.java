@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.network.GoogleRecipe;
+import com.cookplan.recipe.import_recipe.approve_result.ImportRecipeActivity;
 import com.cookplan.recipe.import_recipe.web_browser.WebBrowserActivity;
 
 import java.util.ArrayList;
@@ -75,13 +76,18 @@ public class SearchRecipeUrlActivity extends BaseActivity implements SearchRecip
                 },
                 this);
         recyclerView.setAdapter(adapter);
+        startWebActivity(null);
     }
 
     private void startWebActivity(String url) {
-        Intent intent = new Intent(this, WebBrowserActivity.class);
-        intent.putExtra(WebBrowserActivity.URL_KEY, url);
+        Intent intent = new Intent(this, ImportRecipeActivity.class);
+        intent.putExtra(ImportRecipeActivity.URL_TO_IMPORT_KEY, "https://eda.ru/recepty/zavtraki/pishnie-amerikanskie-pankejki-42716");
         startActivityWithLeftAnimation(intent);
-        finish();
+
+//        Intent intent = new Intent(this, WebBrowserActivity.class);
+//        intent.putExtra(WebBrowserActivity.URL_KEY, url);
+//        startActivityWithLeftAnimation(intent);
+//        finish();
     }
 
     @Override

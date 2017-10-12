@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,7 +122,7 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
     public void removeIngredientItem(String key) {
         values.remove(key);
         recipeToingredientsMap.remove(key);
-        if (values.size() == 0) {
+        if (values.size() == 0 && recipe.getId() != null) {
             listener.allItemsDone();
         } else {
             notifyDataSetChanged();
@@ -211,6 +212,14 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
         });
 
         setCategorySpinnerValues(null, ingredientViewHolder);
+
+        ingredientViewHolder.closeButton.setTag(key);
+        ingredientViewHolder.closeButton.setOnClickListener(v -> {
+            String tag = (String) v.getTag();
+            if (tag != null) {
+                removeIngredientItem(tag);
+            }
+        });
     }
 
     private MeasureUnit getMeasureUnitFromString(String tag) {
@@ -248,6 +257,7 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
         final AutoCompleteTextView productNameEditText;
         final Spinner productCategorySpinner;
         final Button saveButton;
+        final ImageView closeButton;
 
         IngredientViewHolder(View view) {
             super(view);
@@ -259,6 +269,7 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
             productCategorySpinner = (Spinner) view.findViewById(R.id.category_list_spinner);
 
             saveButton = (Button) view.findViewById(R.id.approve_button);
+            closeButton = (ImageView) view.findViewById(R.id.close_btn);
         }
     }
 

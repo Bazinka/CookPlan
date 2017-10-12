@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/tools"
+                xmlns:app2="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/main_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -22,22 +23,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/main_item_padding"
-                android:layout_marginRight="@dimen/main_item_padding"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/approve_ingred_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_marginBottom="@dimen/main_item_padding"
                     android:layout_marginTop="@dimen/main_item_padding"
+                    android:layout_toLeftOf="@+id/close_btn"
                     android:clickable="false"
                     android:ellipsize="end"
-                    android:gravity="left|center_vertical"
                     android:lines="1"
                     android:text="@string/in_recipe_was"
                     android:textColor="@color/hint_or_disabled_text_color"
@@ -47,15 +49,25 @@
                     android:id="@+id/approve_ingred_how_it_was"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/approve_ingred_title"
+                    android:layout_toLeftOf="@+id/close_btn"
                     android:clickable="false"
                     android:ellipsize="end"
-                    android:gravity="left|center_vertical"
                     android:lines="1"
                     android:text="@string/name_title"
                     android:textColor="@color/primary_text_color"
                     android:textSize="@dimen/subheding_text_size"/>
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/close_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/main_item_padding"
+                    app2:srcCompat="@drawable/ic_close"/>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
