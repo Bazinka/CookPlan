@@ -215,7 +215,7 @@ public class ProductProviderImpl implements ProductProvider {
                             }
                         });
             } else {
-                emitter.onError(new CookPlanError(RApplication.getAppContext().getString(R.string.product_doesnt_exist)));
+                emitter.onError(new CookPlanError(RApplication.Companion.getAppContext().getString(R.string.product_doesnt_exist)));
             }
         });
     }

@@ -217,7 +217,7 @@ public class EdaHtmlParser extends BaseParser {
         Elements amountElem = element.select(getAmountTag());
         if (amountElem.size() == 1) {
             String amountString = amountElem.text();
-            if (!amountString.contains(RApplication.getAppContext().getString(R.string.by_the_taste))) {
+            if (!amountString.contains(RApplication.Companion.getAppContext().getString(R.string.by_the_taste))) {
                 String[] splited = amountString.split("\\s+");
                 amount = Utils.getDoubleFromString(splited[0]);
             }

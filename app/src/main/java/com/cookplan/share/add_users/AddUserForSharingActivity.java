@@ -15,13 +15,12 @@ import android.widget.EditText;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.main.MainActivity;
 import com.cookplan.models.Contact;
 import com.cookplan.share.contact_list.ContactListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.cookplan.main.MainActivity.SHARE_USER_EMAIL_LIST_KEY;
 
 public class AddUserForSharingActivity extends BaseActivity implements AddUserForSharingView {
 
@@ -108,7 +107,7 @@ public class AddUserForSharingActivity extends BaseActivity implements AddUserFo
                 emails.add(contact.getEmail());
             }
             Intent intent = new Intent();
-            intent.putStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY, emails);
+            intent.putStringArrayListExtra(MainActivity.Companion.getSHARE_USER_EMAIL_LIST_KEY(), emails);
             setResult(RESULT_OK, intent);
             finish();
             return true;

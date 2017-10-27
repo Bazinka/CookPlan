@@ -135,7 +135,7 @@ public class IngredientProviderImpl implements IngredientProvider {
                             }
                         });
             } else {
-                emitter.onError(new CookPlanError(RApplication.getAppContext().getString(R.string.ingred_remove_error)));
+                emitter.onError(new CookPlanError(RApplication.Companion.getAppContext().getString(R.string.ingred_remove_error)));
             }
         });
     }
@@ -152,7 +152,7 @@ public class IngredientProviderImpl implements IngredientProvider {
                             MutableData ref = mutableData.child(ingredient.getId());
                             ref.setValue(null);
                         } else {
-                            emitter.onError(new CookPlanError(RApplication.getAppContext().getString(R.string.ingred_remove_error)));
+                            emitter.onError(new CookPlanError(RApplication.Companion.getAppContext().getString(R.string.ingred_remove_error)));
                         }
                     }
                     emitter.onComplete();

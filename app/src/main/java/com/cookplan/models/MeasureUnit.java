@@ -36,13 +36,13 @@ public enum MeasureUnit implements Serializable {
 
     @Override
     public String toString() {
-        return RApplication.getAppContext().getString(nameRecourseId);
+        return RApplication.Companion.getAppContext().getString(nameRecourseId);
     }
 
     public String toValueString(double value) {
         String valueString;
         if (value < 1e-8 && value > -1e-8) {//value==0.0
-            return RApplication.getAppContext().getString(R.string.by_the_taste);
+            return RApplication.Companion.getAppContext().getString(R.string.by_the_taste);
         }
 
         if (this == KILOGRAMM && value < 1.) {
@@ -298,7 +298,7 @@ public enum MeasureUnit implements Serializable {
         MeasureUnit unit = UNITS;
 
         //try to find UNIT
-        String unitTitle = RApplication.getAppContext().getString(R.string.unit_title);
+        String unitTitle = RApplication.Companion.getAppContext().getString(R.string.unit_title);
         unitTitle = unitTitle.replace(".", "");
         String regExString = unitTitle + "\\.*";
         Matcher matcher = Pattern.compile(regExString).matcher(unitString);
@@ -306,8 +306,8 @@ public enum MeasureUnit implements Serializable {
             unit = UNITS;
         }
         //try to find GRAMM
-        String grammTitle = RApplication.getAppContext().getString(R.string.gramm_title);
-        grammTitle = "(\\b" + RApplication.getAppContext().getString(R.string.short_gramm_title)
+        String grammTitle = RApplication.Companion.getAppContext().getString(R.string.gramm_title);
+        grammTitle = "(\\b" + RApplication.Companion.getAppContext().getString(R.string.short_gramm_title)
                 + ".*\\b|\\b" + grammTitle + ")";
         matcher = Pattern.compile(grammTitle).matcher(unitString);
         if (matcher.find()) {
@@ -315,7 +315,7 @@ public enum MeasureUnit implements Serializable {
         }
 
         //try to find KILOGRAMM
-        String kilogrammTitle = RApplication.getAppContext().getString(R.string.kilogramm_title);
+        String kilogrammTitle = RApplication.Companion.getAppContext().getString(R.string.kilogramm_title);
         kilogrammTitle = "(\\b" + kilogrammTitle + "*\\b)";
         matcher = Pattern.compile(kilogrammTitle).matcher(unitString);
         if (matcher.find()) {
@@ -323,7 +323,7 @@ public enum MeasureUnit implements Serializable {
         }
 
         //try to find LITRE
-        String litreTitle = RApplication.getAppContext().getString(R.string.litre_title);
+        String litreTitle = RApplication.Companion.getAppContext().getString(R.string.litre_title);
         litreTitle = "(\\b" + litreTitle + "*\\b)";
         matcher = Pattern.compile(litreTitle).matcher(unitString);
         if (matcher.find()) {
@@ -331,7 +331,7 @@ public enum MeasureUnit implements Serializable {
         }
 
         //try to find MILILITRE
-        String mililitreTitle = RApplication.getAppContext().getString(R.string.mililitre_title);
+        String mililitreTitle = RApplication.Companion.getAppContext().getString(R.string.mililitre_title);
         mililitreTitle = "(\\b" + mililitreTitle + "*\\b)";
         matcher = Pattern.compile(mililitreTitle).matcher(unitString);
         if (matcher.find()) {
@@ -339,7 +339,7 @@ public enum MeasureUnit implements Serializable {
         }
 
         //try to find CUP
-        String cupTitle = RApplication.getAppContext().getString(R.string.cup_title);
+        String cupTitle = RApplication.Companion.getAppContext().getString(R.string.cup_title);
         cupTitle = "(\\b" + cupTitle + "*\\b)";
         matcher = Pattern.compile(cupTitle).matcher(unitString);
         if (matcher.find()) {
@@ -347,7 +347,7 @@ public enum MeasureUnit implements Serializable {
         }
 
         //try to find TEASPOON
-        String teaspoonTitle = RApplication.getAppContext().getString(R.string.teaspoon_title);
+        String teaspoonTitle = RApplication.Companion.getAppContext().getString(R.string.teaspoon_title);
         teaspoonTitle = "(\\b" + teaspoonTitle.replace(".", ".*") + "\\b)";
         matcher = Pattern.compile(teaspoonTitle).matcher(unitString);
         if (matcher.find()) {
@@ -355,7 +355,7 @@ public enum MeasureUnit implements Serializable {
         }
 
         //try to find TABLESPOON
-        String tablespoonTitle = RApplication.getAppContext().getString(R.string.tablespoon_title);
+        String tablespoonTitle = RApplication.Companion.getAppContext().getString(R.string.tablespoon_title);
         tablespoonTitle = "(\\b" + tablespoonTitle.replace(".", ".*") + "\\b)";
         matcher = Pattern.compile(tablespoonTitle).matcher(unitString);
         if (matcher.find()) {
@@ -363,7 +363,7 @@ public enum MeasureUnit implements Serializable {
         }
 
         //try to find BOTTLE
-        String bottleTitle = RApplication.getAppContext().getString(R.string.bottle_title);
+        String bottleTitle = RApplication.Companion.getAppContext().getString(R.string.bottle_title);
         bottleTitle = "(\\b" + bottleTitle + ".*\\b)";
         matcher = Pattern.compile(bottleTitle).matcher(unitString);
         if (matcher.find()) {
@@ -371,7 +371,7 @@ public enum MeasureUnit implements Serializable {
         }
 
         //try to find PACKAGE
-        String packageTitle = RApplication.getAppContext().getString(R.string.package_title);
+        String packageTitle = RApplication.Companion.getAppContext().getString(R.string.package_title);
         packageTitle = "(\\b" + packageTitle + "*\\b)";
         matcher = Pattern.compile(packageTitle).matcher(unitString);
         if (matcher.find()) {

@@ -157,7 +157,7 @@ public class AddIngredientPresenterImpl implements AddIngredientPresenter {
             mainMeasureUnitList.add(measureUnit);
             String rusName = null;
             String engName = null;
-            if (RApplication.isCurrentLocaleRus()) {
+            if (RApplication.Companion.isCurrentLocaleRus()) {
                 rusName = name;
             } else {
                 engName = name;

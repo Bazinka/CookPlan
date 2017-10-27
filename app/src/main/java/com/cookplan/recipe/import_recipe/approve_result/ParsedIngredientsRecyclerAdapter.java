@@ -41,17 +41,17 @@ public class ParsedIngredientsRecyclerAdapter extends RecyclerView.Adapter<Parse
         Ingredient ingredient = ingredients.get(position);
 
         if (selectedIngred != null && ingredient.getName().equals(selectedIngred.getName())) {
-            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                     R.color.white));
-            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                       R.color.white));
             if (ingredient.getCategory() != null) {
                 holder.mainView.setBackgroundResource(ingredient.getCategory().getColorId());
             }
         } else {
-            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                     R.color.primary_text_color));
-            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                       R.color.primary_text_color));
             holder.mainView.setBackgroundResource(R.color.white);
         }

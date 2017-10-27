@@ -38,11 +38,11 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
         Ingredient ingredient = ingredients.get(position);
 
         if (ingredient.getShopListStatus() == ShopListStatus.ALREADY_BOUGHT) {
-            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                     R.color.white));
             holder.nameTextView.setPaintFlags(holder.nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                       R.color.white));
             holder.amountTextView.setPaintFlags(holder.amountTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -50,10 +50,10 @@ public class TotalShopListRecyclerViewAdapter extends RecyclerView.Adapter<Total
                 holder.mainView.setBackgroundResource(ingredient.getCategory().getColorId());
             }
         } else {
-            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            holder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                     R.color.primary_text_color));
             holder.nameTextView.setPaintFlags(holder.nameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            holder.amountTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                       R.color.primary_text_color));
             holder.amountTextView.setPaintFlags(holder.amountTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             holder.mainView.setBackgroundResource(R.color.white);

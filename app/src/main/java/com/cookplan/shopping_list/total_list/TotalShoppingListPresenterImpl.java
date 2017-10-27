@@ -73,7 +73,7 @@ public class TotalShoppingListPresenterImpl extends ShoppingListBasePresenterImp
             }
         }
         List<Ingredient> needToBuySortedIngredients = new ArrayList<>();
-        for (ProductCategory category : RApplication.getPriorityList()) {
+        for (ProductCategory category : RApplication.Companion.getPriorityList()) {
             for (Ingredient ingredient : needToBuyIngredients) {
                 if (ingredient.getCategory() == category) {
                     needToBuySortedIngredients.add(ingredient);

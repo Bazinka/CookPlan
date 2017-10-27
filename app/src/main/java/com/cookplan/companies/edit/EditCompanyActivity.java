@@ -94,7 +94,7 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
             mapView.onCreate(null);
             mapView.setClickable(false);
             mapView.getMapAsync(googleMap -> {
-                MapsInitializer.initialize(RApplication.getAppContext());
+                MapsInitializer.initialize(RApplication.Companion.getAppContext());
                 LatLng location = new LatLng(latitude, longitude);
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f));
                 googleMap.addMarker(new MarkerOptions().position(location));

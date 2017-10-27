@@ -46,7 +46,7 @@ public class CompanyToDoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         }
 
         if (toDoItem.getToDoStatus() == HAVE_DONE) {
-            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                         R.color.white));
             itemHolder.nameTextView.setPaintFlags(
                     itemHolder.nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -56,7 +56,7 @@ public class CompanyToDoRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 itemHolder.mainView.setBackgroundResource(R.color.primary_light);
             }
         } else {
-            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                         R.color.primary_text_color));
             itemHolder.nameTextView.setPaintFlags(itemHolder.nameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             itemHolder.mainView.setBackgroundResource(R.color.white);

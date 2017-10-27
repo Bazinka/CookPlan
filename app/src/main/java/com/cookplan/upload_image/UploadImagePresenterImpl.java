@@ -37,18 +37,18 @@ public class UploadImagePresenterImpl implements UploadImagePresenter {
     public Uri getOutputImagePath() {
         Uri outputFileUri = null;
         try {
-            File file = new File(RApplication.getAppContext().getExternalFilesDir(
+            File file = new File(RApplication.Companion.getAppContext().getExternalFilesDir(
                     android.os.Environment.DIRECTORY_PICTURES).getAbsolutePath()
                                          + File.separator
                                          + "photo.jpg");
             outputFileUri = FileProvider.getUriForFile(
-                    RApplication.getAppContext(),
-                    RApplication.getAppContext().getApplicationContext().getPackageName() + ".provider",
+                    RApplication.Companion.getAppContext(),
+                    RApplication.Companion.getAppContext().getApplicationContext().getPackageName() + ".provider",
                     file);
         } catch (Exception e) {
             e.printStackTrace();
             if (mainView != null) {
-                mainView.setError(RApplication.getAppContext().getString(R.string.text_wasnt_recognize));
+                mainView.setError(RApplication.Companion.getAppContext().getString(R.string.text_wasnt_recognize));
             }
         }
         return outputFileUri;

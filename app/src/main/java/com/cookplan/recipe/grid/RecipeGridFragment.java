@@ -73,12 +73,12 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_recipe_list, container, false);
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        setMainView((ViewGroup) inflater.inflate(R.layout.fragment_recipe_list, container, false));
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
 
         // Set the adapter
-        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.recipe_list_recycler);
+        RecyclerView recyclerView = (RecyclerView) getMainView().findViewById(R.id.recipe_list_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utils.dpToPx(getActivity(), 16), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -90,7 +90,7 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
                     Intent intent = new Intent(activity, RecipeViewActivity.class);
                     intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
                     ((BaseActivity) activity).startActivityForResultWithLeftAnimation(intent,
-                                                                                      MainActivity.OPEN_SHOP_LIST_REQUEST);
+                                                                                      MainActivity.Companion.getOPEN_SHOP_LIST_REQUEST());
                 }
             }
 
@@ -99,7 +99,7 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
                 new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
                         .setMessage(R.string.are_you_sure_remove_recipe)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                            ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
                             progressBar.setVisibility(View.VISIBLE);
                             if (presenter != null) {
                                 presenter.removeRecipe(recipe);
@@ -111,17 +111,17 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
         }, getActivity());
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton addRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.add_recipe_fab);
+        FloatingActionButton addRecipeFab = (FloatingActionButton) getMainView().findViewById(R.id.add_recipe_fab);
         addRecipeFab.setOnClickListener(view -> {
             startNewRecipeActivity();
         });
 
-        FloatingActionButton importRecipeFab = (FloatingActionButton) mainView.findViewById(R.id.import_recipe_fab);
+        FloatingActionButton importRecipeFab = (FloatingActionButton) getMainView().findViewById(R.id.import_recipe_fab);
         importRecipeFab.setOnClickListener(view -> {
             startSearchRecipeUrlActivity();
         });
 
-        return mainView;
+        return getMainView();
     }
 
     void startSearchRecipeUrlActivity() {
@@ -140,14 +140,14 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
 
     @Override
     public void setEmptyView() {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.VISIBLE);
         setRecyclerViewVisability(View.GONE);
     }
 
     private void setRecyclerViewVisability(int visability) {
-        View recyclerView = mainView.findViewById(R.id.recipe_list_recycler);
+        View recyclerView = getMainView().findViewById(R.id.recipe_list_recycler);
         if (recyclerView != null) {
             recyclerView.setVisibility(visability);
         }
@@ -155,7 +155,7 @@ public class RecipeGridFragment extends BaseFragment implements RecipeGridView {
 
     @Override
     public void setRecipeList(List<Recipe> recipeList) {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);

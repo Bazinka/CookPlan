@@ -52,7 +52,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                 TextView categoryNameTextView = (TextView) v.findViewById(R.id.category_product_item_name);
                 if (categoryNameTextView != null) {
                     categoryNameTextView.setText(product.getCategory().toString());
-                    categoryNameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                    categoryNameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                              product.getCategory().getColorId()));
                 }
                 View categoryView = v.findViewById(R.id.category_view);

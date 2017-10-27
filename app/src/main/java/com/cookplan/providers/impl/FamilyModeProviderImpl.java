@@ -130,7 +130,7 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
                                          (databaseError, reference) -> {
                                              if (databaseError != null) {
                                                  emitter.onError(new CookPlanError(
-                                                         RApplication.getAppContext().getString(R.string.error_share_title)));
+                                                         RApplication.Companion.getAppContext().getString(R.string.error_share_title)));
                                              } else {
                                                  dataSharedItem.setId(reference.getKey());
                                                  emitter.onSuccess(dataSharedItem);
@@ -154,7 +154,7 @@ public class FamilyModeProviderImpl implements FamilyModeProvider {
                                     (databaseError, reference) -> {
                                         if (databaseError != null) {
                                             emitter.onError(new CookPlanError(
-                                                    RApplication.getAppContext().getString(R.string.error_share_title)));
+                                                    RApplication.Companion.getAppContext().getString(R.string.error_share_title)));
                                         } else {
                                             emitter.onSuccess(dataSharedItem);
                                         }

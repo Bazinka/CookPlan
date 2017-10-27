@@ -202,7 +202,7 @@ public class ToDoListProviderImpl implements ToDoListProvider {
                             }
                         });
             } else {
-                emitter.onError(new CookPlanError(RApplication.getAppContext().getString(R.string.error_remove_todo_item)));
+                emitter.onError(new CookPlanError(RApplication.Companion.getAppContext().getString(R.string.error_remove_todo_item)));
             }
         });
     }
@@ -221,7 +221,7 @@ public class ToDoListProviderImpl implements ToDoListProvider {
                             }
                         });
             } else {
-                emitter.onError(new CookPlanError(RApplication.getAppContext().getString(R.string.error_remove_todo_item)));
+                emitter.onError(new CookPlanError(RApplication.Companion.getAppContext().getString(R.string.error_remove_todo_item)));
             }
         });
     }

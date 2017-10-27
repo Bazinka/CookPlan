@@ -64,9 +64,9 @@ public class CompanyToDoListFragment extends BaseFragment implements CompanyToDo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_company_todo_list, container, false);
+        setMainView((ViewGroup) inflater.inflate(R.layout.fragment_company_todo_list, container, false));
 
-        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.todo_list_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) getMainView().findViewById(R.id.todo_list_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -75,7 +75,7 @@ public class CompanyToDoListFragment extends BaseFragment implements CompanyToDo
         //        fab.setOnClickListener(view -> {
         //            startNewToDoItemActivity();
         //        });
-        return mainView;
+        return getMainView();
     }
 
     private void startNewToDoItemActivity() {
@@ -87,7 +87,7 @@ public class CompanyToDoListFragment extends BaseFragment implements CompanyToDo
 
     @Override
     public void setToDoList(List<ToDoItem> todoList) {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
@@ -95,7 +95,7 @@ public class CompanyToDoListFragment extends BaseFragment implements CompanyToDo
             item.setCategory(presenter.getToDoCategoryById(item.getCategoryId()));
         }
         CompanyToDoRecyclerViewAdapter adapter = new CompanyToDoRecyclerViewAdapter(todoList);
-        RecyclerView needToBuyRecyclerView = (RecyclerView) mainView.findViewById(R.id.todo_list_recycler_view);
+        RecyclerView needToBuyRecyclerView = (RecyclerView) getMainView().findViewById(R.id.todo_list_recycler_view);
         needToBuyRecyclerView.setAdapter(adapter);
     }
 
@@ -110,14 +110,14 @@ public class CompanyToDoListFragment extends BaseFragment implements CompanyToDo
 
     @Override
     public void setEmptyView() {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.VISIBLE);
         setRecyclerViewVisability(View.GONE);
     }
 
     private void setRecyclerViewVisability(int visability) {
-        View recyclerView = mainView.findViewById(R.id.todo_list_recycler_view);
+        View recyclerView = getMainView().findViewById(R.id.todo_list_recycler_view);
         if (recyclerView != null) {
             recyclerView.setVisibility(visability);
         }

@@ -48,10 +48,10 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_shop_list_by_dish, container, false);
+        setMainView((ViewGroup) inflater.inflate(R.layout.fragment_shop_list_by_dish, container, false));
 
-        progressBarLayout = mainView.findViewById(R.id.progress_bar_layout);
-        return mainView;
+        progressBarLayout = getMainView().findViewById(R.id.progress_bar_layout);
+        return getMainView();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
 
     @Override
     public void setErrorToast(String error) {
-        Snackbar.make(mainView, getString(R.string.error_load_shop_list), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getMainView(), getString(R.string.error_load_shop_list), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
     }
 
     private void setContentVisability(int visability) {
-        ViewGroup contentLayout = (ViewGroup) mainView.findViewById(R.id.main_content_layout);
+        ViewGroup contentLayout = (ViewGroup) getMainView().findViewById(R.id.main_content_layout);
         if (contentLayout != null) {
             contentLayout.setVisibility(visability);
         }
@@ -93,14 +93,14 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
 
     @Override
     public List<Recipe> getExistedRecipeList() {
-        ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
+        ExpandableListView expandableListView = (ExpandableListView) getMainView().findViewById(R.id.shop_list_by_dish_expListView);
         ShopListExpandableListAdapter adapter = (ShopListExpandableListAdapter) expandableListView.getExpandableListAdapter();
         return adapter != null ? adapter.getRecipeList() : new ArrayList<>();
     }
 
     @Override
     public Map<String, List<Ingredient>> getExistedRecipeIdsToingredientsMap() {
-        ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
+        ExpandableListView expandableListView = (ExpandableListView) getMainView().findViewById(R.id.shop_list_by_dish_expListView);
         ShopListExpandableListAdapter adapter = (ShopListExpandableListAdapter) expandableListView.getExpandableListAdapter();
         return adapter != null ? adapter.getRecipeIdsToIngredientMap() : new HashMap<>();
     }
@@ -116,7 +116,7 @@ public class ShopListByDishesFragment extends BaseFragment implements ShopListBy
             setContentVisability(View.VISIBLE);
 
             if (getActivity() != null) {
-                ExpandableListView expandableListView = (ExpandableListView) mainView.findViewById(R.id.shop_list_by_dish_expListView);
+                ExpandableListView expandableListView = (ExpandableListView) getMainView().findViewById(R.id.shop_list_by_dish_expListView);
                 ShopListExpandableListAdapter needToBuyAdapter = new ShopListExpandableListAdapter(
                         getActivity(),
                         newGroupList,

@@ -42,7 +42,7 @@ public class ProductCategoriesSpinnerAdapter extends ArrayAdapter<ProductCategor
             TextView categoryNameTextView = (TextView) v.findViewById(R.id.category_product_item_name);
             if (categoryNameTextView != null) {
                 categoryNameTextView.setText(category.toString());
-                categoryNameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                categoryNameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                          category.getColorId()));
             }
         }

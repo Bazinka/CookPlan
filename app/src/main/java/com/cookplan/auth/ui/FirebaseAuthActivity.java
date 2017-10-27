@@ -31,7 +31,7 @@ public class FirebaseAuthActivity extends BaseActivity implements FirebaseAuthVi
         rootView = findViewById(R.id.firebase_auth_root);
 
         Button signInButton = (Button) findViewById(R.id.sign_in_google_button);
-        if (RApplication.isAnonymousPossible()) {
+        if (RApplication.Companion.isAnonymousPossible()) {
             authTextView.setVisibility(View.VISIBLE);
             authTextView.setText(R.string.anonymnous_auth);
             signInButton.setVisibility(View.GONE);
@@ -44,7 +44,7 @@ public class FirebaseAuthActivity extends BaseActivity implements FirebaseAuthVi
                 }
             });
         }
-        presenter = new FirebaseAuthPresenterImpl(this, this, RApplication.isAnonymousPossible());
+        presenter = new FirebaseAuthPresenterImpl(this, this, RApplication.Companion.isAnonymousPossible());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class FirebaseAuthActivity extends BaseActivity implements FirebaseAuthVi
         super.onStart();
         if (presenter != null) {
             if (presenter.getCurrentUser() == null) {
-                if (RApplication.isAnonymousPossible()) {
+                if (RApplication.Companion.isAnonymousPossible()) {
                     presenter.firstAuthSignIn();
                 }
             } else {

@@ -102,7 +102,7 @@ public class MultiselectProductListAdapter extends BaseExpandableListAdapter {
             categoryNameView.setVisibility(View.VISIBLE);
             categoryColorView.setVisibility(View.VISIBLE);
             categoryNameView.setText(product.getCategory().toString());
-            int color = ContextCompat.getColor(RApplication.getAppContext(),
+            int color = ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                product.getCategory().getColorId());
             categoryNameView.setTextColor(color);
             categoryColorView.setBackgroundResource(product.getCategory().getColorId());
@@ -113,7 +113,7 @@ public class MultiselectProductListAdapter extends BaseExpandableListAdapter {
 
         boolean isProductSelected = isProductSelected(product);
         if (isProductSelected) {
-            nameView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            nameView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                          R.color.white));
             nameView.setPaintFlags(nameView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -121,7 +121,7 @@ public class MultiselectProductListAdapter extends BaseExpandableListAdapter {
                 mainView.setBackgroundResource(product.getCategory().getColorId());
             }
         } else {
-            nameView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+            nameView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                          R.color.primary_text_color));
             nameView.setPaintFlags(nameView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
@@ -166,7 +166,7 @@ public class MultiselectProductListAdapter extends BaseExpandableListAdapter {
 
         TextView headerTextView = (TextView) convertView.findViewById(R.id.product_category_name);
         headerTextView.setText(category.toString());
-        headerTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+        headerTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                            category.getColorId()));
         View categoryColorView = convertView.findViewById(R.id.category_view);
         categoryColorView.setBackgroundResource(category.getColorId());

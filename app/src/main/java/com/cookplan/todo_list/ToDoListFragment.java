@@ -84,9 +84,9 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_todo_list, container, false);
+        setMainView((ViewGroup) inflater.inflate(R.layout.fragment_todo_list, container, false));
 
-        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.todo_list_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) getMainView().findViewById(R.id.todo_list_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ToDoListRecyclerViewAdapter(new ToDoListRecyclerViewAdapter.OnToDoItemClickListener() {
             @Override
@@ -98,11 +98,11 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
         });
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.add_todo_item_fab);
+        FloatingActionButton fab = (FloatingActionButton) getMainView().findViewById(R.id.add_todo_item_fab);
         fab.setOnClickListener(view -> {
             startNewToDoItemActivity();
         });
-        return mainView;
+        return getMainView();
     }
 
     private void startNewToDoItemActivity() {
@@ -114,7 +114,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
 
     @Override
     public void setToDoList(List<ToDoItem> todoList) {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);
@@ -132,7 +132,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
 
     @Override
     public void setEmptyView() {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.VISIBLE);
         setRecyclerViewVisability(View.GONE);
@@ -140,7 +140,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
     }
 
     private void setRecyclerViewVisability(int visability) {
-        View recyclerView = mainView.findViewById(R.id.todo_list_recycler_view);
+        View recyclerView = getMainView().findViewById(R.id.todo_list_recycler_view);
         if (recyclerView != null) {
             recyclerView.setVisibility(visability);
         }
@@ -162,7 +162,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
                     .setTitle(R.string.delete_todo_list_title)
                     .setMessage(R.string.choose_right_delete_mode)
                     .setPositiveButton(R.string.delete_have_done_items, (dialog, which) -> {
-                        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
                         progressBar.setVisibility(View.VISIBLE);
                         if (presenter != null) {
                             presenter.deleteToDoItems(adapter.getHaveDoneItems());
@@ -170,7 +170,7 @@ public class ToDoListFragment extends BaseFragment implements ToDoListView {
                     })
                     .setNeutralButton(android.R.string.cancel, null)
                     .setNegativeButton(R.string.delete_all_items_title, (dialog, which) -> {
-                        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+                        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
                         progressBar.setVisibility(View.VISIBLE);
                         if (presenter != null) {
                             presenter.deleteToDoCategories(adapter.getAllToDoCategory());

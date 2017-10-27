@@ -38,7 +38,7 @@ public class CompanyProductsRecyclerAdapter extends RecyclerView.Adapter<Company
             holder.categoryNameView.setVisibility(View.VISIBLE);
             holder.categoryColorView.setVisibility(View.VISIBLE);
             holder.categoryNameView.setText(product.getCategory().toString());
-            int color = ContextCompat.getColor(RApplication.getAppContext(),
+            int color = ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                product.getCategory().getColorId());
             holder.categoryNameView.setTextColor(color);
             holder.categoryColorView.setBackgroundResource(product.getCategory().getColorId());

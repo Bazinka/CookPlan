@@ -70,12 +70,12 @@ public class ProductListFragment extends BaseFragment implements ProductListView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_product_list, container, false);
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        setMainView((ViewGroup) inflater.inflate(R.layout.fragment_product_list, container, false));
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
 
         // Set the adapter
-        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.product_list_recycler);
+        RecyclerView recyclerView = (RecyclerView) getMainView().findViewById(R.id.product_list_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
@@ -88,7 +88,7 @@ public class ProductListFragment extends BaseFragment implements ProductListView
         });
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.add_product_fab);
+        FloatingActionButton fab = (FloatingActionButton) getMainView().findViewById(R.id.add_product_fab);
         fab.setOnClickListener(view -> {
 
             new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
@@ -104,19 +104,19 @@ public class ProductListFragment extends BaseFragment implements ProductListView
         });
 
 
-        return mainView;
+        return getMainView();
     }
 
     @Override
     public void setEmptyView() {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.VISIBLE);
         setRecyclerViewVisability(View.GONE);
     }
 
     private void setRecyclerViewVisability(int visability) {
-        View recyclerView = mainView.findViewById(R.id.product_list_recycler);
+        View recyclerView = getMainView().findViewById(R.id.product_list_recycler);
         if (recyclerView != null) {
             recyclerView.setVisibility(visability);
         }
@@ -124,7 +124,7 @@ public class ProductListFragment extends BaseFragment implements ProductListView
 
     @Override
     public void setProductList(List<Product> productList) {
-        ProgressBar progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setRecyclerViewVisability(View.VISIBLE);

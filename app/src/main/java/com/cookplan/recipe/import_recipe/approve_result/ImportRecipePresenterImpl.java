@@ -79,7 +79,7 @@ public class ImportRecipePresenterImpl implements ImportRecipePresenter {
         } else {
             if (mainView != null) {
                 mainView.setError(
-                        RApplication.getAppContext()
+                        RApplication.Companion.getAppContext()
                                 .getString(R.string.error_import_from_the_wrong_site_title));
             }
         }
@@ -180,7 +180,7 @@ public class ImportRecipePresenterImpl implements ImportRecipePresenter {
             mainMeasureUnitList.add(measureUnit);
             String rusName = null;
             String engName = null;
-            if (RApplication.isCurrentLocaleRus()) {
+            if (RApplication.Companion.isCurrentLocaleRus()) {
                 rusName = name;
             } else {
                 engName = name;

@@ -120,7 +120,7 @@ public class CompanyListRecyclerAdapter extends RecyclerView.Adapter<CompanyList
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            MapsInitializer.initialize(RApplication.getAppContext());
+            MapsInitializer.initialize(RApplication.Companion.getAppContext());
             map = googleMap;
             Company company = (Company) mapView.getTag();
             if (company != null) {

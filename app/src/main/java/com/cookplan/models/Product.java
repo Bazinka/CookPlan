@@ -94,7 +94,7 @@ public class Product implements Parcelable {
     }
 
     public String toStringName() {
-        if (RApplication.isCurrentLocaleRus()) {
+        if (RApplication.Companion.isCurrentLocaleRus()) {
             return rusName != null ? rusName : "";
         } else {
             return engName != null ? engName : "";

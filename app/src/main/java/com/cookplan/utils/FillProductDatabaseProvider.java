@@ -58,7 +58,7 @@ public class FillProductDatabaseProvider {
     }
 
     public static void savePriorityList() {
-        RApplication.savePriorityList(Arrays.asList(ProductCategory.values()));
+        RApplication.Companion.savePriorityList(Arrays.asList(ProductCategory.values()));
     }
 
 

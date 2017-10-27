@@ -51,11 +51,11 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = (ViewGroup) inflater.inflate(R.layout.fragment_total_shop_list, container, false);
+        setMainView((ViewGroup) inflater.inflate(R.layout.fragment_total_shop_list, container, false));
 
-        progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+        progressBar = (ProgressBar) getMainView().findViewById(R.id.progress_bar);
 
-        RecyclerView needToBuyRecyclerView = (RecyclerView) mainView.findViewById(R.id.total_need_to_buy_recycler);
+        RecyclerView needToBuyRecyclerView = (RecyclerView) getMainView().findViewById(R.id.total_need_to_buy_recycler);
         needToBuyRecyclerView.setHasFixedSize(true);
         needToBuyRecyclerView.setNestedScrollingEnabled(false);
         needToBuyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -80,7 +80,7 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
 
-        ImageView deleteImageButton = (ImageView) mainView.findViewById(R.id.delete_image_view);
+        ImageView deleteImageButton = (ImageView) getMainView().findViewById(R.id.delete_image_view);
         deleteImageButton.setOnClickListener(v -> {
             new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(R.string.delete_shop_list_title)
@@ -106,7 +106,7 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
                     })
                     .show();
         });
-        return mainView;
+        return getMainView();
     }
 
     @Override
@@ -134,7 +134,7 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
 
     @Override
     public void setErrorToast(String error) {
-        Snackbar.make(mainView, getString(R.string.error_load_shop_list), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getMainView(), getString(R.string.error_load_shop_list), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -145,7 +145,7 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
     }
 
     private void setContentVisability(int visability) {
-        ViewGroup contentLayout = (ViewGroup) mainView.findViewById(R.id.main_content_layout);
+        ViewGroup contentLayout = (ViewGroup) getMainView().findViewById(R.id.main_content_layout);
         if (contentLayout != null) {
             contentLayout.setVisibility(visability);
         }
@@ -156,7 +156,7 @@ public class TotalShoppingListFragment extends BaseFragment implements TotalShop
         progressBar.setVisibility(View.GONE);
         setEmptyViewVisability(View.GONE);
         setContentVisability(View.VISIBLE);
-        ViewGroup needToBuyLayout = (ViewGroup) mainView.findViewById(R.id.need_to_buy_layout);
+        ViewGroup needToBuyLayout = (ViewGroup) getMainView().findViewById(R.id.need_to_buy_layout);
         if (!allIngredientList.isEmpty()) {
             setLayoutVisability(needToBuyLayout, View.VISIBLE);
             if (needToBuyAdapter != null) {

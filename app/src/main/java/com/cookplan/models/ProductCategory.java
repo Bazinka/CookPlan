@@ -68,7 +68,7 @@ public enum ProductCategory implements Serializable {
 
     @Override
     public String toString() {
-        return RApplication.getAppContext().getString(nameResourceId);
+        return RApplication.Companion.getAppContext().getString(nameResourceId);
     }
 
     public static ProductCategory getProductCategoryByName(String name) {

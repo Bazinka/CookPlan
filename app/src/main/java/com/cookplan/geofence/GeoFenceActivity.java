@@ -48,7 +48,7 @@ public class GeoFenceActivity extends BaseActivity implements GeoFenceView {
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.company_review_map);
             mapFragment.getMapAsync(_googleMap -> {
-                MapsInitializer.initialize(RApplication.getAppContext());
+                MapsInitializer.initialize(RApplication.Companion.getAppContext());
                 googleMap = _googleMap;
                 LatLng location = new LatLng(company.getLatitude(), company.getLongitude());
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f));

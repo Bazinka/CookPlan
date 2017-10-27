@@ -49,7 +49,7 @@ public class ToDoCategoryListAdapter extends ArrayAdapter<ToDoCategory> {
             if (nameTextView != null) {
                 //              Log.i(MY_DEBUG_TAG, "getView Customer Name:"+customer.getStringName());
                 nameTextView.setText(toDoCategory.getName());
-                nameTextView.setTextColor(ContextCompat.getColor(RApplication.getAppContext(),
+                nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
                                                                  toDoCategory.getColor().getColorId()));
             }
 
