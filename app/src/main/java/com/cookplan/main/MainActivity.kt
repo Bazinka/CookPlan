@@ -78,8 +78,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val headerView = navigationView.getHeaderView(0)
         val user = presenter?.currentUser
         if (user != null) {
-            navigationView.menu.findItem(R.id.nav_sign_in).isVisible = user.isAnonymous
-            navigationView.menu.findItem(R.id.nav_sign_out).isVisible = !user.isAnonymous
+            navigationView.menu.findItem(R.id.nav_sign_in).isVisible = user?.isAnonymous
+            navigationView.menu.findItem(R.id.nav_sign_out).isVisible = !user?.isAnonymous
 
             val photoImageView = headerView.findViewById(R.id.user_photo_imageView) as ImageView
             Glide.with(this)
@@ -260,12 +260,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         } else if (requestCode == SHARE_USER_LIST_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 val emailList = data.getStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY)
-                if (emailList != null) {
-                    if (emailList.isEmpty()) {
-                        sharePresenter?.turnOffFamilyMode()
-                    } else {
-                        sharePresenter?.shareData(emailList)
-                    }
+                if (emailList?.isEmpty() ?: false) {
+                    sharePresenter?.turnOffFamilyMode()
+                } else {
+                    sharePresenter?.shareData(emailList)
                 }
             }
         } else {
@@ -357,7 +355,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         .show()
                 return true
             }
-        } else if (FirebaseAuth.getInstance().currentUser != null && FirebaseAuth.getInstance().currentUser!!.isAnonymous) {
+        } else if (FirebaseAuth.getInstance().currentUser?.isAnonymous ?: false) {
             AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
                     .setTitle(R.string.attention_title)
                     .setMessage(R.string.need_to_auth)
