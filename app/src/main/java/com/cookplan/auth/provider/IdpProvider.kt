@@ -32,7 +32,7 @@ interface IdpProvider {
 
     fun setAuthenticationCallback(callback: IdpCallback)
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent)
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
     fun startLogin(activity: Activity)
 

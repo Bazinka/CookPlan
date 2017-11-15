@@ -13,7 +13,7 @@ interface FirebaseAuthPresenter {
 
     fun onDestroy()
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent)
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
     fun firstAuthSignIn()
 }

@@ -89,7 +89,7 @@ class GoogleProvider @JvmOverloads constructor(activity: FragmentActivity, email
         mGoogleApiClient = null
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_SIGN_IN) {
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             if (result != null) {

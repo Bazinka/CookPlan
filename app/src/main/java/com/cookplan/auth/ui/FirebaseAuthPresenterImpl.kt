@@ -45,7 +45,7 @@ open class FirebaseAuthPresenterImpl : FirebaseAuthPresenter, IdpProvider.IdpCal
         provider?.startLogin(activity)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == GoogleProvider.RC_SIGN_IN) {
             provider?.onActivityResult(requestCode, resultCode, data)
         } else {

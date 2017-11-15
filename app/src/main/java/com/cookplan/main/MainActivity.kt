@@ -238,7 +238,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         dismissDialog()
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == OPEN_SHOP_LIST_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
@@ -248,7 +248,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         } else if (requestCode == SHARE_USER_LIST_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                val emailList = data.getStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY)
+                val emailList = data?.getStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY)
                 if (emailList?.isEmpty() ?: false) {
                     sharePresenter?.turnOffFamilyMode()
                 } else {
