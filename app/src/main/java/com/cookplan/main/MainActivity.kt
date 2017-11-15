@@ -53,10 +53,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.setDrawerListener(toggle)
@@ -66,7 +66,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         sharePresenter = SharePresenterImpl(this)
         presenter = MainPresenterImpl(this, this)
-        val navigationView = findViewById(R.id.nav_view) as NavigationView
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
         fillNavHeader()
         navigationView.setNavigationItemSelectedListener(this)
         navigationView.setCheckedItem(R.id.nav_shopping_list)
@@ -74,20 +74,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun fillNavHeader() {
-        val navigationView = findViewById(R.id.nav_view) as NavigationView
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
         val headerView = navigationView.getHeaderView(0)
         val user = presenter?.currentUser
         if (user != null) {
             navigationView.menu.findItem(R.id.nav_sign_in).isVisible = user?.isAnonymous
             navigationView.menu.findItem(R.id.nav_sign_out).isVisible = !user?.isAnonymous
 
-            val photoImageView = headerView.findViewById(R.id.user_photo_imageView) as ImageView
+            val photoImageView = headerView.findViewById<ImageView>(R.id.user_photo_imageView)
             Glide.with(this)
                     .load(user.photoUrl?.path)
                     .placeholder(R.drawable.main_drawable)
                     .into(photoImageView)
 
-            val nameTextView = headerView.findViewById(R.id.user_name_textView) as TextView
+            val nameTextView = headerView.findViewById<TextView>(R.id.user_name_textView)
             nameTextView.text = user.displayName
         } else {
             signedOut()
@@ -95,7 +95,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
@@ -128,7 +128,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             presenter?.signIn()
         }
 
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
@@ -136,9 +136,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     internal fun setRecipeListFragment() {
         setFamilyModeMenuOptions()
 
-        val tabsLayout = findViewById(R.id.main_tabs_layout)
+        val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
-        val viewPager = findViewById(R.id.main_tabs_viewpager)
+        val viewPager = findViewById<ViewPager>(R.id.main_tabs_viewpager)
         viewPager.visibility = View.GONE
 
         //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
@@ -158,10 +158,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     internal fun setShoppingListFragment() {
         setFamilyModeMenuOptions()
 
-        val tabsLayout = findViewById(R.id.main_tabs_layout)
+        val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.VISIBLE
 
-        val viewPager = findViewById(R.id.main_tabs_viewpager) as ViewPager
+        val viewPager = findViewById<ViewPager>(R.id.main_tabs_viewpager)
         viewPager.visibility = View.VISIBLE
 
         val adapter = ViewPagerTabsAdapter(supportFragmentManager)
@@ -170,17 +170,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         //        adapter.addFragment(new ThreeFragment(), "THREE");
         viewPager.adapter = adapter
 
-        val tabLayout = findViewById(R.id.main_tabs_layout) as TabLayout
-        tabLayout.setupWithViewPager(viewPager)
+        tabsLayout.setupWithViewPager(viewPager)
         setTitle(getString(R.string.shopping_list_title))
     }
 
     internal fun setProductListFragment() {
         setFamilyModeMenuOptions()
 
-        val tabsLayout = findViewById(R.id.main_tabs_layout)
+        val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
-        val viewPager = findViewById(R.id.main_tabs_viewpager)
+        val viewPager = findViewById<ViewPager>(R.id.main_tabs_viewpager)
         viewPager.visibility = View.GONE
 
         //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
@@ -202,9 +201,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         menu?.findItem(R.id.app_bar_share_on)?.isVisible = false
         menu?.findItem(R.id.app_bar_share_off)?.isVisible = false
 
-        val tabsLayout = findViewById(R.id.main_tabs_layout)
+        val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
-        val viewPager = findViewById(R.id.main_tabs_viewpager)
+        val viewPager = findViewById<ViewPager>(R.id.main_tabs_viewpager)
         viewPager.visibility = View.GONE
 
         //        FrameLayout mainConteinerView = (FrameLayout) findViewById(R.id.fragment_container);
@@ -226,9 +225,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         menu?.findItem(R.id.app_bar_share_on)?.isVisible = false
         menu?.findItem(R.id.app_bar_share_off)?.isVisible = false
 
-        val tabsLayout = findViewById(R.id.main_tabs_layout)
+        val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
-        val viewPager = findViewById(R.id.main_tabs_viewpager)
+        val viewPager = findViewById<ViewPager>(R.id.main_tabs_viewpager)
         viewPager.visibility = View.GONE
 
         setTitle(getString(R.string.companies_list_title))
@@ -254,7 +253,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if (requestCode == OPEN_SHOP_LIST_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 setShoppingListFragment()
-                val navigationView = findViewById(R.id.nav_view) as NavigationView
+                val navigationView = findViewById<NavigationView>(R.id.nav_view)
                 navigationView.setCheckedItem(R.id.nav_shopping_list)
             }
         } else if (requestCode == SHARE_USER_LIST_REQUEST) {
@@ -288,14 +287,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun signedInWithAnonymous() {
-        val navigationView = findViewById(R.id.nav_view) as NavigationView
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.menu.findItem(R.id.nav_sign_in).isVisible = true
         navigationView.menu.findItem(R.id.nav_sign_out).isVisible = false
     }
 
     override fun signedInWithGoogle() {
         fillNavHeader()
-        val navigationView = findViewById(R.id.nav_view) as NavigationView
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.menu.findItem(R.id.nav_sign_in).isVisible = false
         navigationView.menu.findItem(R.id.nav_sign_out).isVisible = true
     }
@@ -306,7 +305,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun signedOut() {
-        val navigationView = findViewById(R.id.nav_view) as NavigationView
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.menu.findItem(R.id.nav_sign_in).isVisible = false
         navigationView.menu.findItem(R.id.nav_sign_out).isVisible = false
         val intent = Intent()
