@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:better="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportHeight="24"
-    android:viewportWidth="24"
-    better:viewportHeight="24"
-    better:viewportWidth="24"
-    tools:ignore="NewApi">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportHeight="24"
+        android:viewportWidth="24"
+        tools:ignore="NewApi">
 
 
     <path
         android:fillColor="@color/primary_light"
         android:pathData="M0,12
         A10,10 0 1,1 24,12
-        A10,10 0 1,1 0,14 Z"
-        better:fillColor="@color/primary_light"
-        better:pathData="M0,14
-        A10,10 0 1,1 28,14
-        A10,10 0 1,1 0,14 Z" />
+        A10,10 0 1,1 0,14 Z"/>
 </vector>

@@ -10,24 +10,27 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
-apply plugin: 'me.tatarka.retrolambda'
 apply from: "$rootDir/constants.gradle"
+apply plugin: 'kotlin-android-extensions'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
 }
 
+androidExtensions {
+    experimental = true
+}
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion project.ext.targetSdk
+    buildToolsVersion project.ext.buildTools
     defaultConfig {
         applicationId "com.cookplan"
-        minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion project.ext.minSdk
+        targetSdkVersion project.ext.targetSdk
+        versionCode project.ext.versionCode
+        versionName project.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -102,8 +105,8 @@ dependencies {
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.rmtheis:tess-two:5.4.1'
     compile 'net.danlew:android.joda:2.9.4.1'
-    compile 'com.bettervectordrawable:lib:0.8'
-    compile 'com.android.support:multidex:1.0.1'
+//    compile 'com.bettervectordrawable:lib:0.8'
+    compile 'com.android.support:multidex:1.0.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.google.code.gson:gson:2.7'
     compile 'io.reactivex.rxjava2:rxjava:2.0.4'
@@ -118,7 +121,6 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
     testCompile 'junit:junit:4.12'
-    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:+'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 

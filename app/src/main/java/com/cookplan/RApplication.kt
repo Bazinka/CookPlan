@@ -4,20 +4,13 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-
-import com.bettervectordrawable.VectorDrawableCompat
 import com.cookplan.models.ProductCategory
 import com.cookplan.utils.FillProductDatabaseProvider
 import com.crashlytics.android.Crashlytics
 import com.google.gson.Gson
-
-import net.danlew.android.joda.JodaTimeAndroid
-
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.Locale
-
 import io.fabric.sdk.android.Fabric
+import net.danlew.android.joda.JodaTimeAndroid
+import java.util.*
 
 
 /**
@@ -41,8 +34,8 @@ class RApplication : Application() {
     }
 
     private fun findAllVectorResourceIdsSlow() {
-        val ids = VectorDrawableCompat.findAllVectorResourceIdsSlow(resources, R.drawable::class.java)
-        VectorDrawableCompat.enableResourceInterceptionFor(resources, *ids)
+//        val ids = VectorDrawableCompat.findAllVectorResourceIdsSlow(resources, R.drawable::class.java)
+//        VectorDrawableCompat.enableResourceInterceptionFor(resources, *ids)
     }
 
     companion object {
