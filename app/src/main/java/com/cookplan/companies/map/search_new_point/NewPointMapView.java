@@ -76,12 +76,12 @@ public class NewPointMapView extends Fragment implements OnMapReadyCallback, Goo
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
             // Get the location button view
-            View locationButton = ((View) mapFragment.getView().findViewById(1).getParent()).findViewById(2);
+//            View locationButton = ((View) mapFragment.getView().findViewById(1).getParent()).findViewById(2);
 
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            params.setMargins(0, 0, 30, 30);
+//            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+//            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+//            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//            params.setMargins(0, 0, 30, 30);
         }
 
 
