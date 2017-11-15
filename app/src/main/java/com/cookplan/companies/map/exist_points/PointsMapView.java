@@ -72,11 +72,11 @@ public class PointsMapView extends Fragment implements OnMapReadyCallback,
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
             // Get the location button view
-            View locationButton = ((View) mapFragment.getView().findViewById(1).getParent()).findViewById(2);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-            //            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
-            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-            params.setMargins(0, 30, 30, 0);
+//            View locationButton = ((View) mapFragment.getView().findViewById(1).getParent()).findViewById(2);
+//            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+//                        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+//            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+//            params.setMargins(0, 30, 30, 0);
         }
         return mainView;
     }
