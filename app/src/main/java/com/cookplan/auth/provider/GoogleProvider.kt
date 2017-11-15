@@ -23,21 +23,20 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
-
 import com.cookplan.R
-import com.cookplan.auth.ui.AuthUI.IdpConfig
 import com.cookplan.auth.util.GoogleApiConstants
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Scope
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 
-class GoogleProvider @JvmOverloads constructor(activity: FragmentActivity, idpConfig: IdpConfig, email: String? = null) : IdpProvider, OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+class GoogleProvider @JvmOverloads constructor(activity: FragmentActivity, email: String? = null) : IdpProvider, OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private var mGoogleApiClient: GoogleApiClient? = null
     private val mActivity: Activity
@@ -62,9 +61,7 @@ class GoogleProvider @JvmOverloads constructor(activity: FragmentActivity, idpCo
         }
 
         // Add additional scopes
-        for (scopeString in idpConfig.scopes) {
-            builder.requestScopes(Scope(scopeString))
-        }
+        builder.requestScopes(Scope(Scopes.DRIVE_FILE))
 
         if (!TextUtils.isEmpty(email)) {
             builder.setAccountName(email)

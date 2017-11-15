@@ -25,19 +25,6 @@ open class FirebaseAuthPresenterImpl : FirebaseAuthPresenter, IdpProvider.IdpCal
     override val currentUser: FirebaseUser?
         get() = FirebaseAuth.getInstance().currentUser
 
-    protected val googleProvider: AuthUI.IdpConfig
-        get() = AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER)
-                .setPermissions(googlePermissions)
-                .build()
-
-    private//add Google drive file
-    val googlePermissions: List<String>
-        get() {
-            val result = ArrayList<String>()
-            result.add(Scopes.DRIVE_FILE)
-            return result
-        }
-
     constructor(mainView: FirebaseAuthView?,
                 activity: FragmentActivity) {
         this.mainView = mainView
@@ -52,7 +39,7 @@ open class FirebaseAuthPresenterImpl : FirebaseAuthPresenter, IdpProvider.IdpCal
         mainView?.showLoadingDialog(R.string.progress_dialog_loading)
 
         if (provider == null) {
-            provider = GoogleProvider(activity, googleProvider)
+            provider = GoogleProvider(activity)
         }
         provider?.setAuthenticationCallback(this)
         provider?.startLogin(activity)
