@@ -192,7 +192,7 @@ public class EdaTextParser extends BaseParser {
         Matcher measureMatcher = measurePattern.matcher(ingredientAllText);
         MeasureUnit unit = MeasureUnit.UNITS;
         if (measureMatcher.find()) {
-            unit = MeasureUnit.parseUnit(measureMatcher.group().toString());
+            unit = MeasureUnit.Companion.parseUnit(measureMatcher.group().toString());
             Log.d("PARSING", "amount: " + amount);
         }
 

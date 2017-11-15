@@ -51,7 +51,7 @@ public class IngredientProviderImpl implements IngredientProvider {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Ingredient> allIngredients = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    Ingredient ingredient = Ingredient.getIngredientFromDBObject(itemSnapshot);
+                    Ingredient ingredient = Ingredient.Companion.getIngredientFromDBObject(itemSnapshot);
                     allIngredients.add(ingredient);
                 }
                 if (subjectAllIngredients != null) {

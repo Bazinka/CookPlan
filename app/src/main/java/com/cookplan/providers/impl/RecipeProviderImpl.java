@@ -48,7 +48,7 @@ public class RecipeProviderImpl implements RecipeProvider {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Recipe> recipes = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    Recipe recipe = Recipe.getRecipeFromDBObject(itemSnapshot);
+                    Recipe recipe = Recipe.Companion.getRecipeFromDBObject(itemSnapshot);
                     recipes.add(recipe);
                 }
 
@@ -137,7 +137,7 @@ public class RecipeProviderImpl implements RecipeProvider {
             items.addListenerForSingleValueEvent(new ValueEventListener() {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
-                        Recipe recipe = Recipe.getRecipeFromDBObject(dataSnapshot);
+                        Recipe recipe = Recipe.Companion.getRecipeFromDBObject(dataSnapshot);
                         if (emitter != null) {
                             emitter.onSuccess(recipe);
                         }

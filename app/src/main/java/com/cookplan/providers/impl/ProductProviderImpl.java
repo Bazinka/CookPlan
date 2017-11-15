@@ -52,7 +52,7 @@ public class ProductProviderImpl implements ProductProvider {
                         List<Product> products = new ArrayList<>();
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                            Product product = Product.parseProductFromDB(itemSnapshot);
+                            Product product = Product.Companion.parseProductFromDB(itemSnapshot);
                             if (product != null && user != null) {
                                 if (product.getUserId() == null || product.getUserId().equals(user.getUid())) {
                                     products.add(product);

@@ -224,7 +224,7 @@ public class ApproveIngredientsRecyclerAdapter extends RecyclerView.Adapter<Recy
 
     private MeasureUnit getMeasureUnitFromString(String tag) {
         String[] splits = tag.split("\\d+");
-        return MeasureUnit.parseUnit(splits[splits.length - 1]);
+        return MeasureUnit.Companion.parseUnit(splits[splits.length - 1]);
     }
 
     private double getAmountFromString(String tag) {

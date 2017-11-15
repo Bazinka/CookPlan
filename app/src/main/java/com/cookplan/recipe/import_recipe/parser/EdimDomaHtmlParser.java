@@ -198,7 +198,7 @@ public class EdimDomaHtmlParser extends BaseParser {
         MeasureUnit unit = MeasureUnit.UNITS;
         String unitString = getMeasureUnitString(amount, element);
         if (unitString != null) {
-            unit = MeasureUnit.parseUnit(unitString);
+            unit = MeasureUnit.Companion.parseUnit(unitString);
         }
         return unit;
     }
