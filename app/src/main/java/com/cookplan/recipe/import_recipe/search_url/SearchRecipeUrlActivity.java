@@ -76,18 +76,17 @@ public class SearchRecipeUrlActivity extends BaseActivity implements SearchRecip
                 },
                 this);
         recyclerView.setAdapter(adapter);
-        startWebActivity(null);
     }
 
     private void startWebActivity(String url) {
-        Intent intent = new Intent(this, ImportRecipeActivity.class);
-        intent.putExtra(ImportRecipeActivity.URL_TO_IMPORT_KEY, "https://eda.ru/recepty/zavtraki/pishnie-amerikanskie-pankejki-42716");
-        startActivityWithLeftAnimation(intent);
+        //        Intent intent = new Intent(this, ImportRecipeActivity.class);
+        //        intent.putExtra(ImportRecipeActivity.URL_TO_IMPORT_KEY, "https://eda.ru/recepty/zavtraki/pishnie-amerikanskie-pankejki-42716");
+        //        startActivityWithLeftAnimation(intent);
 
-//        Intent intent = new Intent(this, WebBrowserActivity.class);
-//        intent.putExtra(WebBrowserActivity.URL_KEY, url);
-//        startActivityWithLeftAnimation(intent);
-//        finish();
+        Intent intent = new Intent(this, WebBrowserActivity.class);
+        intent.putExtra(WebBrowserActivity.URL_KEY, url);
+        startActivityWithLeftAnimation(intent);
+        finish();
     }
 
     @Override
