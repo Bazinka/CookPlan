@@ -23,8 +23,9 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.cookplan.BaseActivity
 import com.cookplan.R
-import com.cookplan.RApplication
 import com.cookplan.auth.ui.FirebaseAuthActivity
+import com.cookplan.auth.ui.FirebaseAuthPresenter
+import com.cookplan.auth.ui.FirebaseAuthView
 import com.cookplan.companies.MainCompaniesFragment
 import com.cookplan.product_list.ProductListFragment
 import com.cookplan.recipe.grid.RecipeGridFragment
@@ -35,16 +36,15 @@ import com.cookplan.share.add_users.AddUserForSharingActivity
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment
 import com.cookplan.todo_list.ToDoListFragment
-import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, MainView, ShareView {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, FirebaseAuthView, ShareView {
 
     private var mProgressDialog: ProgressDialog? = null
 
     private var rootView: View? = null
     private var isFamilyModeTurnOn = false
 
-    private var presenter: MainPresenter? = null
+    private var presenter: FirebaseAuthPresenter? = null
 
     protected var sharePresenter: SharePresenter? = null
 
@@ -77,21 +77,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         val headerView = navigationView.getHeaderView(0)
         val user = presenter?.currentUser
-        if (user != null) {
-            navigationView.menu.findItem(R.id.nav_sign_in).isVisible = user?.isAnonymous
-            navigationView.menu.findItem(R.id.nav_sign_out).isVisible = !user?.isAnonymous
 
-            val photoImageView = headerView.findViewById<ImageView>(R.id.user_photo_imageView)
-            Glide.with(this)
-                    .load(user.photoUrl?.path)
-                    .placeholder(R.drawable.main_drawable)
-                    .into(photoImageView)
+        val photoImageView = headerView.findViewById<ImageView>(R.id.user_photo_imageView)
+        Glide.with(this)
+                .load(user?.photoUrl?.path)
+                .placeholder(R.drawable.main_drawable)
+                .into(photoImageView)
 
-            val nameTextView = headerView.findViewById<TextView>(R.id.user_name_textView)
-            nameTextView.text = user.displayName
-        } else {
-            signedOut()
-        }
+        val nameTextView = headerView.findViewById<TextView>(R.id.user_name_textView)
+        nameTextView.text = user?.displayName
     }
 
     override fun onBackPressed() {
@@ -122,10 +116,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             setTODOListFragment()
         } else if (itemId == R.id.nav_companies) {
             setCompaniesListFragment()
-        } else if (itemId == R.id.nav_sign_out) {
-            presenter?.signOut()
-        } else if (itemId == R.id.nav_sign_in) {
-            presenter?.signIn()
         }
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -286,33 +276,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         mProgressDialog?.show()
     }
 
-    override fun signedInWithAnonymous() {
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.menu.findItem(R.id.nav_sign_in).isVisible = true
-        navigationView.menu.findItem(R.id.nav_sign_out).isVisible = false
-    }
-
     override fun signedInWithGoogle() {
         fillNavHeader()
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.menu.findItem(R.id.nav_sign_in).isVisible = false
-        navigationView.menu.findItem(R.id.nav_sign_out).isVisible = true
     }
 
     override fun signedInFailed() {
         dismissDialog()
         showSnackbar(R.string.unknown_sign_in_response)
-    }
 
-    override fun signedOut() {
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.menu.findItem(R.id.nav_sign_in).isVisible = false
-        navigationView.menu.findItem(R.id.nav_sign_out).isVisible = false
-        val intent = Intent()
-        RApplication.saveAnonymousPossibility(false)
-        intent.setClass(this, FirebaseAuthActivity::class.java)
+        val intent = Intent(this, FirebaseAuthActivity::class.java)
         startActivityWithLeftAnimation(intent)
-        finish()
+
     }
 
     override fun showLoadingDialog(@StringRes stringResource: Int) {
@@ -333,7 +307,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (!FirebaseAuth.getInstance().currentUser!!.isAnonymous && (id == R.id.app_bar_share_off || id == R.id.app_bar_share_on)) {
+        if (id == R.id.app_bar_share_off || id == R.id.app_bar_share_on) {
             if (id == R.id.app_bar_share_off) {
                 val intent = Intent(this, AddUserForSharingActivity::class.java)
                 startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST)
@@ -354,12 +328,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         .show()
                 return true
             }
-        } else if (FirebaseAuth.getInstance().currentUser?.isAnonymous ?: false) {
-            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                    .setTitle(R.string.attention_title)
-                    .setMessage(R.string.need_to_auth)
-                    .setPositiveButton(android.R.string.ok) { dialog, _ -> dialog.dismiss() }
-                    .show()
         }
         return super.onOptionsItemSelected(item)
     }

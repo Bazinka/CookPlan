@@ -12,33 +12,33 @@
  * limitations under the License.
  */
 
-package com.cookplan.auth.provider;
+package com.cookplan.auth.provider
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
-public interface IdpProvider {
+interface IdpProvider {
+
+    val providerId: String
 
     /**
      * Retrieves the name of the IDP, for display on-screen.
      */
-    String getName(Context context);
+    fun getName(context: Context): String
 
-    String getProviderId();
+    fun setAuthenticationCallback(callback: IdpCallback)
 
-    void setAuthenticationCallback(IdpCallback callback);
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent)
 
-    void onActivityResult(int requestCode, int resultCode, Intent data);
-
-    void startLogin(Activity activity);
+    fun startLogin(activity: Activity)
 
     interface IdpCallback {
-        void onSuccess(GoogleSignInAccount account);
+        fun onSuccess(account: GoogleSignInAccount)
 
-        void onFailure(Bundle extra);
+        fun onFailure(extra: Bundle)
     }
 }

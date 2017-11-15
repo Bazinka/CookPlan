@@ -28,9 +28,6 @@ class RApplication : Application() {
         if (priorityList == null) {
             FillProductDatabaseProvider.savePriorityList()
         }
-        if (!isAnonymousPossibleSaved) {
-            saveAnonymousPossibility(true)
-        }
     }
 
     private fun findAllVectorResourceIdsSlow() {
@@ -46,7 +43,6 @@ class RApplication : Application() {
 
         val PREFS_NAME = "COOK_PLAN_APP"
         private val CATEGORY_PRIORITY_PREFS_NAME = "CATEGORY_PRIORITY_PREFS_NAME"
-        private val IS_ANONYMOUS_POSSIBLE_PREFS_NAME = "IS_ANONYMOUS_POSSIBLE_PREFS_NAME"
 
         var appContext: Context? = null
             private set
@@ -68,37 +64,6 @@ class RApplication : Application() {
                 } else {
                     false
                 }
-            }
-
-        fun saveAnonymousPossibility(isPossible: Boolean) {
-            val settings: SharedPreferences
-            val editor: SharedPreferences.Editor
-
-            settings = appContext!!.getSharedPreferences(PREFS_NAME,
-                    Context.MODE_PRIVATE)
-            editor = settings.edit()
-
-            editor.putBoolean(IS_ANONYMOUS_POSSIBLE_PREFS_NAME, isPossible)
-            editor.commit()
-        }
-
-        private val isAnonymousPossibleSaved: Boolean
-            get() {
-                val settings: SharedPreferences
-                settings = appContext!!.getSharedPreferences(PREFS_NAME,
-                        Context.MODE_PRIVATE)
-
-                return settings.contains(IS_ANONYMOUS_POSSIBLE_PREFS_NAME)
-            }
-
-        val isAnonymousPossible: Boolean
-            get() {
-                val settings: SharedPreferences
-
-                settings = appContext!!.getSharedPreferences(PREFS_NAME,
-                        Context.MODE_PRIVATE)
-
-                return settings.getBoolean(IS_ANONYMOUS_POSSIBLE_PREFS_NAME, true)
             }
 
         fun savePriorityList(priorityOfCategories: List<ProductCategory>) {

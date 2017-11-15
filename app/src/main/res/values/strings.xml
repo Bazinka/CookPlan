@@ -4,9 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="unknown_sign_in_response">Unknown response from AuthUI sign-in</string>
-    <string name="sign_out_failed">Sign out failed</string>
-    <string name="sign_out">Sign out</string>
+    <string name="unknown_sign_in_response">Error login. Please, try again.</string>
     <string name="recipe_list_menu_title">Recipes</string>
 
     <!--    Permissions    -->
