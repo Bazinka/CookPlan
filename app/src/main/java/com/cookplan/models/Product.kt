@@ -17,7 +17,7 @@ data class Product(var id: String? = null,
                    var rusName: String = "",
                    var engName: String = "",
                    var countUsing: Int = 0,
-                   var category: ProductCategory? = null,
+                   var category: ProductCategory = ProductCategory.WITHOUT_CATEGORY,
                    var companyIdList: MutableList<String> = mutableListOf(),
                    var ratioMeasureList: ArrayList<RatioMeasure> = arrayListOf<RatioMeasure>()) : Parcelable {
     constructor(source: Parcel) : this(
@@ -28,7 +28,7 @@ data class Product(var id: String? = null,
             source.readString(),
             source.readString(),
             source.readInt(),
-            source.readSerializable() as ProductCategory?) {
+            source.readSerializable() as ProductCategory) {
         companyIdList = java.util.ArrayList()
         source.readStringList(companyIdList)
 

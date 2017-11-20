@@ -15,12 +15,12 @@ data class Ingredient(var id: String? = null,
                       var productId: String? = null,
                       var recipeId: String? = null,
                       var mainMeasureUnit: MeasureUnit = MeasureUnit.UNITS,
-                      var mainAmount: Double? = null,
+                      var mainAmount: Double = -1.toDouble(),
                       var amountString: String? = null,
                       var shopAmountList: MutableList<Double> = mutableListOf(),
                       var shopMeasureList: MutableList<MeasureUnit> = mutableListOf(),
                       var shopListStatus: ShopListStatus? = null,
-                      var category: ProductCategory? = null) : Parcelable {
+                      var category: ProductCategory = ProductCategory.WITHOUT_CATEGORY) : Parcelable {
     var userId: String? = FirebaseAuth.getInstance().currentUser?.uid
 
     var userName: String? = null
@@ -37,7 +37,7 @@ data class Ingredient(var id: String? = null,
             source.readString(),
             source.readString(),
             source.readSerializable() as MeasureUnit,
-            source.readValue(Double::class.java.classLoader) as Double?,
+            source.readValue(Double::class.java.classLoader) as Double,
             source.readString()
     )
 

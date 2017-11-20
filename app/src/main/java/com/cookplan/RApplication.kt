@@ -25,7 +25,7 @@ class RApplication : Application() {
         JodaTimeAndroid.init(this)
         findAllVectorResourceIdsSlow()
         appContext = applicationContext
-        if (priorityList == null) {
+        if (getPriorityList().isEmpty()) {
             FillProductDatabaseProvider.savePriorityList()
         }
     }
@@ -82,26 +82,23 @@ class RApplication : Application() {
             editor.commit()
         }
 
-        val priorityList: ArrayList<ProductCategory>?
-            get() {
-                val settings: SharedPreferences
-                var priorityList: List<ProductCategory>
+        fun getPriorityList(): List<ProductCategory> {
+            val settings: SharedPreferences
+            var priorityList: List<ProductCategory> = arrayListOf()
 
-                settings = appContext!!.getSharedPreferences(PREFS_NAME,
-                        Context.MODE_PRIVATE)
+            settings = appContext!!.getSharedPreferences(PREFS_NAME,
+                    Context.MODE_PRIVATE)
 
-                if (settings.contains(CATEGORY_PRIORITY_PREFS_NAME)) {
-                    val json = settings.getString(CATEGORY_PRIORITY_PREFS_NAME, null)
-                    val gson = Gson()
-                    val items = gson.fromJson(json,
-                            Array<ProductCategory>::class.java)
+            if (settings.contains(CATEGORY_PRIORITY_PREFS_NAME)) {
+                val json = settings.getString(CATEGORY_PRIORITY_PREFS_NAME, null)
+                val gson = Gson()
+                val items = gson.fromJson(json,
+                        Array<ProductCategory>::class.java)
 
-                    priorityList = Arrays.asList(*items)
-                    priorityList = ArrayList(priorityList)
-                } else
-                    return null
-
-                return priorityList
+                priorityList = Arrays.asList(*items)
             }
+
+            return priorityList
+        }
     }
 }

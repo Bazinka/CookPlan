@@ -49,7 +49,7 @@ enum class ProductCategory private constructor(private val nameResourceId: Int, 
 
     companion object {
 
-        fun getProductCategoryByName(name: String): ProductCategory? {
+        fun getProductCategoryByName(name: String): ProductCategory {
             if (name == WITHOUT_CATEGORY.name) {
                 return WITHOUT_CATEGORY
             }
@@ -145,7 +145,7 @@ enum class ProductCategory private constructor(private val nameResourceId: Int, 
             }
             return if (name == GADREN_PRODUCTS.name) {
                 GADREN_PRODUCTS
-            } else null
+            } else WITHOUT_CATEGORY
         }
     }
 }

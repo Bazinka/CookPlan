@@ -225,7 +225,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
     public void setIngredientBought(Ingredient ingredient, ShopListStatus newStatus) {
         if (newStatus != ShopListStatus.NONE) {
             ingredient.setShopListStatus(newStatus);
-            ingredientDataProvider.updateShopStatus(ingredient)
+            getIngredientDataProvider().updateShopStatus(ingredient)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new CompletableObserver() {
@@ -253,7 +253,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
     public void setRecipeIngredBought(Recipe recipe, List<Ingredient> ingredientList) {
         boolean isNeedToRemove = recipe.getId() == null;
         if (isNeedToRemove) {
-            ingredientDataProvider.removeIngredientList(ingredientList)
+            getIngredientDataProvider().removeIngredientList(ingredientList)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new CompletableObserver() {
@@ -278,7 +278,7 @@ public class ShopListByDishesPresenterImpl extends ShoppingListBasePresenterImpl
             for (Ingredient ingred : ingredientList) {
                 ingred.setShopListStatus(ShopListStatus.NONE);
             }
-            ingredientDataProvider.updateShopStatusList(ingredientList)
+            getIngredientDataProvider().updateShopStatusList(ingredientList)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new CompletableObserver() {
