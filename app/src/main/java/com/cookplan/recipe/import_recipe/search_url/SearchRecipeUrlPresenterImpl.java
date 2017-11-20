@@ -34,7 +34,7 @@ public class SearchRecipeUrlPresenterImpl implements SearchRecipeUrlPresenter {
     }
 
     private void loadRecipes(int offset) {
-        disposables.add(NetworkServiceFactory.createService().getRecipes(lastQuery, offset, GOOGLE_SEARCH_RESULTS_NUMBER)
+        disposables.add(NetworkServiceFactory.INSTANCE.createService().getRecipes(lastQuery, offset, GOOGLE_SEARCH_RESULTS_NUMBER)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeWith(new DisposableObserver<GoogleSearchResponce>() {
