@@ -36,14 +36,14 @@ data class Product(var id: String? = null,
         source.readTypedList<RatioMeasure>(ratioMeasureList, RatioMeasure.CREATOR)
     }
 
-    constructor(productCategory: ProductCategory, russianName: String, englishName: String,
+    constructor(productCategory: ProductCategory, russianName: String?, englishName: String?,
                 mainMeasUnitList: MutableList<MeasureUnit>,
                 measUnitList: MutableList<MeasureUnit>,
-                unitToAmoutMap: Map<MeasureUnit, Double>,
+                unitToAmoutMap: Map<MeasureUnit, Double>?,
                 userId: String) : this(mainMeasureUnitList = mainMeasUnitList,
             measureUnitList = measUnitList,
-            rusName = russianName,
-            engName = englishName,
+            rusName = russianName ?: "",
+            engName = englishName ?: "",
             category = productCategory,
             userId = userId, countUsing = 0) {
         fillRatioList(unitToAmoutMap)
