@@ -16,7 +16,11 @@ data class Recipe(var id: String? = null,
                   var desc: String? = null,
                   var imageUrls: List<String> = listOf(),
                   val userId: String? = null,
-                  var userName: String? = null) : Serializable {
+                  var userName: String? = null) : Serializable, Comparable<Recipe> {
+
+    override fun compareTo(other: Recipe): Int {
+        return this.name?.compareTo(other.name ?: String()) ?: 0
+    }
 
     constructor(nameRecipe: String? = null,
                 descRecipe: String? = null) : this(name = nameRecipe, desc = descRecipe)
