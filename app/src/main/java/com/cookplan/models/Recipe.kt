@@ -28,7 +28,7 @@ data class Recipe(var id: String? = null,
     val recipeDB: RecipeDB
         get() {
             val auth = FirebaseAuth.getInstance()
-            return RecipeDB(auth.currentUser?.uid, name, desc, images = imageUrls)
+            return RecipeDB(auth.currentUser?.uid, name, desc, imageUrls = imageUrls)
         }
 
     val imageUrlArrayList: ArrayList<String>
@@ -38,14 +38,14 @@ data class Recipe(var id: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD) var name: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_DESCRIPTION_FIELD) var desc: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_USER_ID_FIELD) var userId: String? = null,
-                        @PropertyName(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD) var images: List<String> = listOf()) {
+                        @PropertyName(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD) var imageUrls: List<String> = listOf()) {
     }
 
     companion object {
 
         fun getRecipeFromDBObject(itemSnapshot: DataSnapshot): Recipe {
             val `object` = itemSnapshot.getValue(RecipeDB::class.java)
-            return Recipe(itemSnapshot.key, `object`.name, `object`.desc, `object`.images, `object`.userId)
+            return Recipe(itemSnapshot.key, `object`.name, `object`.desc, `object`.imageUrls, `object`.userId)
         }
     }
 }
