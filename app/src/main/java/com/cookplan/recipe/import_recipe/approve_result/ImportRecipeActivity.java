@@ -105,7 +105,7 @@ public class ImportRecipeActivity extends BaseActivity implements ImportRecipeVi
 
     private void startNewRecipeActivity(Recipe recipe) {
         Intent intent = new Intent(this, RecipeViewActivity.class);
-        intent.putExtra(RecipeViewActivity.RECIPE_OBJECT_KEY, recipe);
+        intent.putExtra(RecipeViewActivity.Companion.getRECIPE_OBJECT_KEY(), recipe);
         startActivityWithLeftAnimation(intent);
         finish();
     }

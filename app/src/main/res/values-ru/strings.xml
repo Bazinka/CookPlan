@@ -38,7 +38,7 @@
     <string name="recipe_desc_is_not_needed_title">Описание не нужно, все и так понятно...</string>
     <string name="attention_title">Внимание</string>
     <string name="whats_cooking_title">Что готовим?</string>
-    <string name="ingredients">Ингридиенты:</string>
+    <string name="ingredients">Ингредиенты:</string>
     <string name="recipe_description_title">Приготовление</string>
     <string name="tab_all_ingredients_title">Все</string>
     <string name="tab_ingredients_by_dish_title">По блюдам</string>
@@ -193,6 +193,7 @@
     <string name="recipes_description_title">Инструкции по приготовлению блюда:</string>
     <string name="description_title">описание</string>
     <string name="point_name">Название точки</string>
+    <string name="add_all_ingredients_to_shop_list_title">Добавить все в список покупок</string>
 
 
 </resources>

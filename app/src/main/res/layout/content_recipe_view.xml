@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_recipe_view">
 
@@ -20,36 +21,68 @@
             android:layout_centerHorizontal="true"
             android:indeterminate="true"/>
 
-        <TextView
-            android:id="@+id/ingredients_title_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progress_bar"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/ingredients"
-            android:textSize="@dimen/title_text_size"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ingredients_recycler_view"
+        <RelativeLayout
+            android:id="@+id/ingredient_content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/ingredients_title_textview"
-            android:scrollbars="vertical"/>
+            android:layout_below="@id/progress_bar">
 
-        <View
-            android:id="@+id/separate_view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/ingredients_recycler_view"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin"
-            android:background="@color/primary_the_lightest"/>
+            <RelativeLayout
+                android:id="@+id/ingredients_title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_marginRight="@dimen/text_margin">
+
+                <TextView
+                    android:id="@+id/ingredients_title_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:text="@string/ingredients"
+                    android:textSize="@dimen/title_text_size"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ingredients_title_textview"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/add_shop_list_items_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_background"
+                        android:drawableLeft="@drawable/ic_add_items_to_shop_list"
+                        android:padding="@dimen/main_item_padding"
+                        android:text="@string/add_all_ingredients_to_shop_list_title"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ingredients_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/ingredients_title_layout"
+                android:scrollbars="vertical"/>
+
+            <View
+                android:id="@+id/separate_view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/ingredients_recycler_view"
+                android:layout_marginBottom="@dimen/text_margin"
+                android:layout_marginTop="@dimen/text_margin"
+                android:background="@color/primary_the_lightest"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/description_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/separate_view"
+            android:layout_below="@id/ingredient_content_layout"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/recipe_description_title"
             android:textSize="@dimen/title_text_size"/>

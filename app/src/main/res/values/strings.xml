@@ -260,5 +260,6 @@
     <string name="recipes_description_title">How to cook this dish:</string>
     <string name="description_title">description</string>
     <string name="point_name">Name of point</string>
+    <string name="add_all_ingredients_to_shop_list_title">Add all ingredients to shopping list</string>
 
 </resources>
