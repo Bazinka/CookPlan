@@ -82,7 +82,6 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
                 intent.putParcelableArrayListExtra(RecipeStepsViewActivity.INGREDIENT_LIST_OBJECT_KEY,
                         adapter?.getIngredients() as ArrayList<Ingredient>)
                 startActivityWithLeftAnimation(intent)
-                finish()
             }
 
             val viewPager = findViewById<View>(R.id.recipe_images_viewpager) as ViewPager
@@ -171,7 +170,6 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
             val intent = Intent(this, EditRecipeInfoActivity::class.java)
             intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, reviewRecipe)
             startActivityWithLeftAnimation(intent)
-            finish()
             return true
         }
         return super.onOptionsItemSelected(item)
