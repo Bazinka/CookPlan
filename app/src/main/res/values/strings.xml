@@ -261,5 +261,7 @@
     <string name="description_title">description</string>
     <string name="point_name">Name of point</string>
     <string name="add_all_ingredients_to_shop_list_title">Add all ingredients to shopping list</string>
+    <string name="english_lan_string">eng</string>
+    <string name="russian_lan_string">rus</string>
 
 </resources>

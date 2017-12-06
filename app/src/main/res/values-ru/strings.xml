@@ -194,6 +194,8 @@
     <string name="description_title">описание</string>
     <string name="point_name">Название точки</string>
     <string name="add_all_ingredients_to_shop_list_title">Добавить все в список покупок</string>
+    <string name="english_lan_string">eng</string>
+    <string name="russian_lan_string">rus</string>
 
 
 </resources>

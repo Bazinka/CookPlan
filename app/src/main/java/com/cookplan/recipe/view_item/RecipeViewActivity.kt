@@ -170,6 +170,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
             val intent = Intent(this, EditRecipeInfoActivity::class.java)
             intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, reviewRecipe)
             startActivityWithLeftAnimation(intent)
+            finish();
             return true
         }
         return super.onOptionsItemSelected(item)
