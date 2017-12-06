@@ -50,35 +50,37 @@ class ShopListByDishesPresenterImpl(private val mainView: ShopListByDishesView?,
             mainView?.setEmptyView()
         } else {
             val recipeToIngredientsMap = sortedMapOf<Recipe, List<Ingredient>>()
+            if (!(recipeIdToIngredientMap[WITHOUT_RECIPE_KEY]?.isEmpty() ?: true)) {
+                recipeToIngredientsMap.put(Recipe(context.getString(R.string.without_recipe_title),
+                        context.getString(R.string.recipe_desc_is_not_needed_title)),
+                        recipeIdToIngredientMap[WITHOUT_RECIPE_KEY])
+            }
             for ((key) in recipeIdToIngredientMap) {
-                recipeDataProvider.getRecipeById(key)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(object : SingleObserver<Recipe> {
-                            override fun onSubscribe(d: Disposable) {
+                if (!key.equals(WITHOUT_RECIPE_KEY)) {
+                    recipeDataProvider.getRecipeById(key)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(object : SingleObserver<Recipe> {
+                                override fun onSubscribe(d: Disposable) {
 
-                            }
-
-                            override fun onSuccess(recipe: Recipe) {
-                                var keyRecipe = recipe
-                                if (recipe.id == null) {
-                                    keyRecipe = Recipe(context.getString(R.string.without_recipe_title),
-                                            context.getString(R.string.recipe_desc_is_not_needed_title))
                                 }
-                                recipeToIngredientsMap.put(keyRecipe,
-                                        recipeIdToIngredientMap[recipe.id ?: WITHOUT_RECIPE_KEY] ?: listOf())
 
-                                if (recipeToIngredientsMap.keys.size == recipeIdToIngredientMap.keys.size) {
-                                    makeValidDataForTheView(recipeToIngredientsMap)
-                                }
-                            }
+                                override fun onSuccess(recipe: Recipe) {
+                                    recipeToIngredientsMap.put(recipe,
+                                            recipeIdToIngredientMap[recipe.id] ?: listOf())
 
-                            override fun onError(e: Throwable) {
-                                if (mainView != null && e is CookPlanError) {
-                                    setError(e.message)
+                                    if (recipeToIngredientsMap.keys.size == recipeIdToIngredientMap.keys.size) {
+                                        makeValidDataForTheView(recipeToIngredientsMap)
+                                    }
                                 }
-                            }
-                        })
+
+                                override fun onError(e: Throwable) {
+                                    if (mainView != null && e is CookPlanError) {
+                                        setError(e.message)
+                                    }
+                                }
+                            })
+                }
             }
         }
     }

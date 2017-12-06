@@ -37,7 +37,7 @@ class RecipeGridPresenterImpl(private val mainView: RecipeGridView) : RecipeGrid
     }
 
     override fun getRecipeList() {
-        disposables.add(familyModeProvider.infoSharedToMe
+        disposables.add(familyModeProvider.getInfoSharedToMe()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<List<ShareUserInfo>>() {
@@ -75,7 +75,7 @@ class RecipeGridPresenterImpl(private val mainView: RecipeGridView) : RecipeGrid
     }
 
     override fun removeRecipe(recipe: Recipe) {
-        disposables.add(ingredientDataProvider.getIngredientListByRecipeId(recipe.id)
+        disposables.add(ingredientDataProvider.getIngredientListByRecipeId(recipe.id ?: String())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<List<Ingredient>>() {

@@ -21,6 +21,7 @@ public class DatabaseConstants {
     public static final String DATABASE_SHARED_DATA_FIELD = "sharedData";
 
     public static final String DATABASE_USER_ID_FIELD = "userId";
+    public static final String DATABASE_USER_NAME = "userName";
     public static final String DATABASE_ITEM_ID_FIELD = "id";
     public static final String DATABASE_NAME_FIELD = "name";
     public static final String DATABASE_COMMENT_FIELD = "comment";

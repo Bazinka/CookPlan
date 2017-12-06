@@ -1,6 +1,7 @@
 package com.cookplan.recipe.view_item
 
 import com.cookplan.models.Ingredient
+import com.cookplan.models.Recipe
 import com.cookplan.models.ShopListStatus
 
 /**
@@ -8,6 +9,8 @@ import com.cookplan.models.ShopListStatus
  */
 
 interface RecipeViewPresenter {
+
+    fun getRecipeObject(): Recipe
 
     fun getIngredientList()
 

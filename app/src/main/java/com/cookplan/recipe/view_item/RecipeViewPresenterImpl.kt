@@ -18,8 +18,7 @@ import io.reactivex.schedulers.Schedulers
  * Created by DariaEfimova on 23.03.17.
  */
 
-class RecipeViewPresenterImpl(private val mainView: RecipeView?, private val recipe: Recipe?) : RecipeViewPresenter {
-
+class RecipeViewPresenterImpl(private val mainView: RecipeView?, private val recipe: Recipe) : RecipeViewPresenter {
 
     private val dataProvider: IngredientProvider
     private val disposables: CompositeDisposable
@@ -30,24 +29,26 @@ class RecipeViewPresenterImpl(private val mainView: RecipeView?, private val rec
     }
 
     override fun getIngredientList() {
-        disposables.add(dataProvider.getIngredientListByRecipeId(recipe?.id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<List<Ingredient>>() {
-                    override fun onNext(ingredients: List<Ingredient>) {
-                        mainView?.setIngredientList(ingredients)
-                    }
-
-                    override fun onError(e: Throwable) {
-                        if (mainView != null && e is CookPlanError) {
-                            mainView.setErrorToast(e.message ?: String())
+        if (recipe.id != null) {
+            disposables.add(dataProvider.getIngredientListByRecipeId(recipe.id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableObserver<List<Ingredient>>() {
+                        override fun onNext(ingredients: List<Ingredient>) {
+                            mainView?.setIngredientList(ingredients)
                         }
-                    }
 
-                    override fun onComplete() {
+                        override fun onError(e: Throwable) {
+                            if (mainView != null && e is CookPlanError) {
+                                mainView.setErrorToast(e.message ?: String())
+                            }
+                        }
 
-                    }
-                }))
+                        override fun onComplete() {
+
+                        }
+                    }))
+        }
     }
 
     override fun addIngredientToShoppingList(ingredient: Ingredient) {
@@ -100,4 +101,9 @@ class RecipeViewPresenterImpl(private val mainView: RecipeView?, private val rec
     override fun onStop() {
         disposables.clear()
     }
+
+    override fun getRecipeObject(): Recipe {
+        return recipe
+    }
+
 }

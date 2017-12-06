@@ -36,7 +36,7 @@ abstract class ShoppingListBasePresenterImpl : ShoppingListBasePresenter, Fireba
 
     override fun getShoppingList() {
         disposables.add(
-                familyModeProvider.infoSharedToMe
+                familyModeProvider.getInfoSharedToMe()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(object : DisposableObserver<List<ShareUserInfo>>() {

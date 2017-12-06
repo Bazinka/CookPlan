@@ -115,11 +115,11 @@ public class EdaTextParser extends BaseParser {
     }
 
     private Recipe getRecipeObject(String allRecipeText) {
-        Recipe recipe = new Recipe();
         Pattern recipeNamePattern = Pattern.compile(RECIPE_NAME_PATTERN);
         Matcher recipeNameMatcher = recipeNamePattern.matcher(allRecipeText);
+        String name = new String();
         if (recipeNameMatcher.find()) {
-            recipe.setName(recipeNameMatcher.group().toString());
+            name = recipeNameMatcher.group().toString();
         }
 
         Pattern recipeDescPattern = Pattern.compile(RECIPE_DESCRIPTION_PATTERN);
@@ -133,8 +133,8 @@ public class EdaTextParser extends BaseParser {
             Log.d("PARSING", "recipe desc: " + recipeDescMatcher.group().toString());
             start = recipeDescMatcher.start() + 1;
         }
-        recipe.setDesc(recipeDescription);
 
+        Recipe recipe = new Recipe(new String (), name, recipeDescription, null, null, null);
 
         return recipe;
     }

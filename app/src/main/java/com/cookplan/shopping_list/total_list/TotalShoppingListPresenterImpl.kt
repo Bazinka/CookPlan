@@ -144,7 +144,7 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
     }
 
     override fun deleteIngredients(ingredients: List<Ingredient>) {
-        for ((_, name, _, _, _, _, _, _, _, status) in ingredients) {
+        for ((_, _, _, name, _, _, _, _, _, _, _, status) in ingredients) {
             val realIngredients = ProductToIngredientMap.get(name) ?: listOf()
             for (realIngredient in realIngredients) {
                 if (status === realIngredient.shopListStatus) {

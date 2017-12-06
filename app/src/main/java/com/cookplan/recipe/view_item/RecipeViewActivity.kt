@@ -31,7 +31,6 @@ import java.util.*
 class RecipeViewActivity : BaseActivity(), RecipeView {
 
     private var adapter: RecipeViewInrgedientsAdapter? = null
-    private var reviewRecipe: Recipe? = null
     private var isAllIngredientsChecked: Boolean = false
     private var presenter: RecipeViewPresenter? = null
 
@@ -45,9 +44,9 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
         if (!intent.hasExtra(RECIPE_OBJECT_KEY)) {
             finish()
         } else {
-            reviewRecipe = intent.getSerializableExtra(RECIPE_OBJECT_KEY) as Recipe
+            var reviewRecipe = intent.getSerializableExtra(RECIPE_OBJECT_KEY) as Recipe
 
-            setTitle(reviewRecipe?.name)
+            setTitle(reviewRecipe.name)
 
             val recyclerView = findViewById<RecyclerView>(R.id.ingredients_recycler_view)
             recyclerView.setHasFixedSize(true)
@@ -62,7 +61,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
             presenter = RecipeViewPresenterImpl(this, reviewRecipe)
 
             val descTextView = findViewById<TextView>(R.id.description_body_textview)
-            descTextView.text = reviewRecipe?.desc
+            descTextView.text = reviewRecipe.desc
 
             val openShopListLayout = findViewById<Button>(R.id.add_shop_list_items_button)
             openShopListLayout.setOnClickListener {
@@ -85,8 +84,8 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
             }
 
             val viewPager = findViewById<View>(R.id.recipe_images_viewpager) as ViewPager
-            if (reviewRecipe?.imageUrls?.isEmpty() ?: false) {
-                viewPager.adapter = ImageViewPagerAdapter(reviewRecipe?.imageUrls ?: listOf(), this)
+            if (reviewRecipe.imageUrls.isEmpty() ?: false) {
+                viewPager.adapter = ImageViewPagerAdapter(reviewRecipe.imageUrls ?: listOf(), this)
                 viewPager.visibility = View.VISIBLE
             } else {
                 viewPager.visibility = View.GONE
@@ -109,8 +108,8 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
         progressBar.visibility = View.INVISIBLE
         if (!ingredientList.isEmpty()) {
             isAllIngredientsChecked = true
-            for ((_, _, _, _, _, _, _, _, _, shopListStatus) in ingredientList) {
-                if (shopListStatus !== NEED_TO_BUY) {
+            for (ingredient in ingredientList) {
+                if (ingredient.shopListStatus !== NEED_TO_BUY) {
                     isAllIngredientsChecked = false
                     break
                 }
@@ -155,7 +154,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
     override fun onCreateOptionsMenu(_menu: Menu): Boolean {
         menuInflater.inflate(R.menu.recipe_view_menu, _menu)
         val user = FirebaseAuth.getInstance().currentUser
-        if (user != null && reviewRecipe!!.userId == user.uid) {
+        if (user != null && presenter?.getRecipeObject()?.userId == user.uid) {
             _menu.findItem(R.id.app_bar_edit).isVisible = true
         } else {
             _menu.findItem(R.id.app_bar_edit).isVisible = false
@@ -168,7 +167,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
 
         if (id == R.id.app_bar_edit) {
             val intent = Intent(this, EditRecipeInfoActivity::class.java)
-            intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, reviewRecipe)
+            intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, presenter?.getRecipeObject())
             startActivityWithLeftAnimation(intent)
             finish();
             return true

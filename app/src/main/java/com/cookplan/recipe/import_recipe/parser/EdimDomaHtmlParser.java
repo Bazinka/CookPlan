@@ -71,16 +71,13 @@ public class EdimDomaHtmlParser extends BaseParser {
     }
 
     private Recipe parceDocumentToRecipe(Document doc) {
-        Recipe recipe = new Recipe();
-        recipe.setName(parseRecipeTitleFromDoc(doc));
+        String name = parseRecipeTitleFromDoc(doc);
 
         String description = parseDescriptionFromDoc(doc);
 
-        recipe.setDesc(description);
-
         List<String> imageUrls = parseImageUrlsFromDoc(doc);
 
-        recipe.setImageUrls(imageUrls);
+        Recipe recipe = new Recipe(new String(), name, description, imageUrls, null, null);
         return recipe;
     }
 
