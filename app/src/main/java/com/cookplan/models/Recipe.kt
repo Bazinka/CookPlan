@@ -13,7 +13,7 @@ import java.util.*
 
 data class Recipe(var id: String? = null,
                   var name: String? = null,
-                  var desc: String? = null,
+                  var desc: String = String(),
                   var imageUrls: List<String> = listOf(),
                   val userId: String? = null,
                   var userName: String? = null) : Serializable, Comparable<Recipe> {
@@ -23,7 +23,7 @@ data class Recipe(var id: String? = null,
     }
 
     constructor(nameRecipe: String? = null,
-                descRecipe: String? = null) : this(name = nameRecipe, desc = descRecipe)
+                descRecipe: String? = String()) : this(name = nameRecipe, desc = descRecipe ?: String())
 
     val recipeDB: RecipeDB
         get() {
@@ -36,7 +36,7 @@ data class Recipe(var id: String? = null,
 
     data class RecipeDB(var id: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD) var name: String? = null,
-                        @PropertyName(DatabaseConstants.DATABASE_DESCRIPTION_FIELD) var desc: String? = null,
+                        @PropertyName(DatabaseConstants.DATABASE_DESCRIPTION_FIELD) var desc: String = String(),
                         @PropertyName(DatabaseConstants.DATABASE_USER_ID_FIELD) var userId: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD) var imageUrls: List<String> = listOf()) {
     }
