@@ -10,12 +10,6 @@ interface FirebaseAuthView {
 
     fun showSnackbar(messageRes: Int)
 
-    fun dismissDialog()
-
-    fun showLoadingDialog(@StringRes stringResource: Int)
-
-    fun showLoadingDialog(message: String)
-
     fun signedInWithGoogle()
 
     fun signedInFailed()

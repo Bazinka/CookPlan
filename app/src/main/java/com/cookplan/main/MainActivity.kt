@@ -1,10 +1,8 @@
 package com.cookplan.main
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.StringRes
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
@@ -38,8 +36,6 @@ import com.cookplan.shopping_list.total_list.TotalShoppingListFragment
 import com.cookplan.todo_list.ToDoListFragment
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, FirebaseAuthView, ShareView {
-
-    private var mProgressDialog: ProgressDialog? = null
 
     private var rootView: View? = null
     private var isFamilyModeTurnOn = false
@@ -235,7 +231,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onDestroy() {
         super.onDestroy()
         presenter?.onDestroy()
-        dismissDialog()
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -264,38 +259,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         Snackbar.make(rootView!!, messageRes, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun showLoadingDialog(message: String) {
-        dismissDialog()
-        if (mProgressDialog == null) {
-            mProgressDialog = ProgressDialog(this)
-            mProgressDialog?.isIndeterminate = true
-            mProgressDialog?.setTitle("")
-        }
-
-        mProgressDialog?.setMessage(message)
-        mProgressDialog?.show()
-    }
-
     override fun signedInWithGoogle() {
         fillNavHeader()
     }
 
     override fun signedInFailed() {
-        dismissDialog()
         showSnackbar(R.string.unknown_sign_in_response)
 
         val intent = Intent(this, FirebaseAuthActivity::class.java)
         startActivityWithLeftAnimation(intent)
 
-    }
-
-    override fun showLoadingDialog(@StringRes stringResource: Int) {
-        showLoadingDialog(getString(stringResource))
-    }
-
-    override fun dismissDialog() {
-        mProgressDialog?.dismiss()
-        mProgressDialog = null
     }
 
     override fun onCreateOptionsMenu(_menu: Menu): Boolean {
