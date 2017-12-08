@@ -36,7 +36,6 @@ open class FirebaseAuthPresenterImpl : FirebaseAuthPresenter, IdpProvider.IdpCal
     }
 
     override fun firstAuthSignIn() {
-        mainView?.showLoadingDialog(R.string.progress_dialog_loading)
 
         if (provider == null) {
             provider = GoogleProvider(activity)
@@ -61,7 +60,6 @@ open class FirebaseAuthPresenterImpl : FirebaseAuthPresenter, IdpProvider.IdpCal
                     mainView?.signedInFailed()
                 }
                 .addOnCompleteListener { task ->
-                    mainView?.dismissDialog()
                     if (task.isSuccessful) {
                         mainView?.signedInWithGoogle()
                     } else {

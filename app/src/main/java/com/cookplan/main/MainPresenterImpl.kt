@@ -29,7 +29,6 @@ class MainPresenterImpl(private val firebaseAuthView: FirebaseAuthView?, activit
                             firebaseAuthView?.signedInFailed()
                         }
                         .addOnCompleteListener { task ->
-                            firebaseAuthView?.dismissDialog()
                             if (task.isSuccessful) {
                                 firebaseAuthView?.signedInWithGoogle()
                             } else {
@@ -40,7 +39,6 @@ class MainPresenterImpl(private val firebaseAuthView: FirebaseAuthView?, activit
                 firebaseAuthView?.signedInFailed()
             }
         }?.addOnCompleteListener { task ->
-            firebaseAuthView?.dismissDialog()
             if (task.isSuccessful) {
                 firebaseAuthView?.signedInWithGoogle()
             } else if (task.exception !is FirebaseAuthUserCollisionException) {
