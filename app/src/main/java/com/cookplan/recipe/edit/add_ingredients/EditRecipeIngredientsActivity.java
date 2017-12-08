@@ -37,7 +37,7 @@ public class EditRecipeIngredientsActivity extends BaseActivity implements EditR
         }
         setTitle(getString(R.string.add_recipe_second_screen_title) + " " + recipe.getName());
 
-        AddIngredientViewFragment fragment = AddIngredientViewFragment.newInstance(recipe, false);
+        AddIngredientViewFragment fragment = AddIngredientViewFragment.Companion.newInstance(recipe, false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
