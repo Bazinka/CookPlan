@@ -136,8 +136,8 @@ class IngredientProviderImpl : IngredientProvider {
                     return Transaction.success(mutableData)
                 }
 
-                override fun onComplete(databaseError: DatabaseError, b: Boolean,
-                                        dataSnapshot: DataSnapshot) {
+                override fun onComplete(databaseError: DatabaseError?, b: Boolean,
+                                        dataSnapshot: DataSnapshot?) {
                     emitter.onComplete()
                 }
             })
@@ -183,8 +183,8 @@ class IngredientProviderImpl : IngredientProvider {
                     return Transaction.success(mutableData)
                 }
 
-                override fun onComplete(databaseError: DatabaseError, b: Boolean,
-                                        dataSnapshot: DataSnapshot) {
+                override fun onComplete(databaseError: DatabaseError?, b: Boolean,
+                                        dataSnapshot: DataSnapshot?) {
                     emitter.onComplete()
                 }
             })
