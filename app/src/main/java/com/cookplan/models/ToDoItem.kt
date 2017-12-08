@@ -8,12 +8,12 @@ import java.io.Serializable
 
 data class ToDoItem(var id: String? = null,
                     var userId: String? = null,
-                    var name: String? = null,
+                    var name: String,
                     var comment: String? = null,
                     var companyId: String? = null,
                     var categoryId: String? = null,
                     var category: ToDoCategory? = null,
-                    var toDoStatus: ToDoItemStatus? = ToDoItemStatus.NEED_TO_DO) : Serializable {
+                    var toDoStatus: ToDoItemStatus = ToDoItemStatus.NEED_TO_DO) : Serializable {
 
     constructor(user: String,
                 name: String,

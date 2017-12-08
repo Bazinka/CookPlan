@@ -5,8 +5,8 @@ package com.cookplan.models
  */
 
 data class ShareUserInfo(var id: String? = null,
-                         var ownerUserId: String? = null,
-                         var ownerUserName: String? = null,
+                         var ownerUserId: String = String(),
+                         var ownerUserName: String = String(),
                          var clientUserEmailList: List<String> = listOf()) {
     constructor(userId: String,
                 userName: String,
