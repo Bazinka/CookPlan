@@ -97,11 +97,11 @@ data class Ingredient(val userId: String? = FirebaseAuth.getInstance().currentUs
         }
 
         fun getIngredientFromDBObject(itemSnapshot: DataSnapshot): Ingredient {
-            var userId = String();
+            var userId: String? = null;
             var userName = String();
             var name = String();
-            var productId = String();
-            var recipeId = String();
+            var productId: String? = null;
+            var recipeId: String? = null;
             var mainMeasureUnit = MeasureUnit.UNITS
             var mainAmount: Double = 0.toDouble()
             var shopAmountList = mutableListOf<Double>()

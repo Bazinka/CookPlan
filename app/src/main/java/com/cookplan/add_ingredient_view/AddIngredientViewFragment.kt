@@ -36,9 +36,8 @@ class AddIngredientViewFragment : Fragment(), AddIngredientView {
         if (arguments?.containsKey(RECIPE_OBJECT_KEY) ?: false) {
             val recipe = arguments?.getSerializable(RECIPE_OBJECT_KEY) as Recipe
             presenter?.setRecipe(recipe)
-            presenter?.isNeedToBuy = arguments?.getBoolean(RECIPE_NEED_TO_BUY_KEY, false) ?: false
-
         }
+        presenter?.isNeedToBuy = arguments?.getBoolean(RECIPE_NEED_TO_BUY_KEY, false) ?: false
     }
 
     override fun onStart() {
@@ -202,11 +201,13 @@ class AddIngredientViewFragment : Fragment(), AddIngredientView {
         } else {
             measureUnits.addAll(MeasureUnit.values().toMutableList())
         }
-        val adapter = MeasureUnitsSpinnerAdapter(activity as Context,
-                measureUnits,
-                mainMeasureUnits)
-        spinner?.adapter = adapter
-        spinner?.setSelection(0)
+        if (activity != null) {
+            val adapter = MeasureUnitsSpinnerAdapter(activity as Context,
+                    measureUnits,
+                    mainMeasureUnits)
+            spinner?.adapter = adapter
+            spinner?.setSelection(0)
+        }
     }
 
     override fun setSuccessSaveIngredient() {

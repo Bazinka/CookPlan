@@ -12,22 +12,21 @@ import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.models.ShopListStatus
-import java.util.*
 
 
 class ShopListExpandableListAdapter(private val context: Context,
-                                    val recipeList: ArrayList<Recipe>,
+                                    val recipeList: MutableList<Recipe>,
                                     val recipeIdsToIngredientMap: Map<String, List<Ingredient>>,
                                     private val ingredClickListener: (Ingredient) -> Unit?,
                                     private val deleteGroupListener: (Recipe, List<Ingredient>) -> Any?) : BaseExpandableListAdapter() {
 
     override fun getChild(groupPosition: Int, childPosititon: Int): Any {
-        val recipeId = recipeList[groupPosition].id ?: WITHOUT_RECIPE_KEY
+        val recipeId = recipeList[groupPosition].id
         return recipeIdsToIngredientMap[recipeId]?.get(childPosititon) ?: Unit
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        val recipeId = recipeList[groupPosition].id ?: WITHOUT_RECIPE_KEY
+        val recipeId = recipeList[groupPosition].id
         return recipeIdsToIngredientMap.get(recipeId)?.size ?: 0
     }
 
@@ -106,7 +105,7 @@ class ShopListExpandableListAdapter(private val context: Context,
         deleteImageView.tag = recipe
         deleteImageView.setOnClickListener {
             val selectedRecipe = it.getTag() as Recipe
-            val ingredients = recipeIdsToIngredientMap.get(selectedRecipe.id ?: WITHOUT_RECIPE_KEY) ?: listOf()
+            val ingredients = recipeIdsToIngredientMap.get(selectedRecipe.id) ?: listOf()
             deleteGroupListener(selectedRecipe, ingredients)
         }
         return convertView
@@ -118,9 +117,5 @@ class ShopListExpandableListAdapter(private val context: Context,
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
         return true
-    }
-
-    companion object {
-        private val WITHOUT_RECIPE_KEY = "without_recipe"
     }
 }

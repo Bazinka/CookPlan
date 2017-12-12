@@ -51,7 +51,7 @@ class ShopListByDishesPresenterImpl(private val mainView: ShopListByDishesView?,
         } else {
             val recipeToIngredientsMap = sortedMapOf<Recipe, List<Ingredient>>()
             if (!(recipeIdToIngredientMap[WITHOUT_RECIPE_KEY]?.isEmpty() ?: true)) {
-                recipeToIngredientsMap.put(Recipe(context.getString(R.string.without_recipe_title),
+                recipeToIngredientsMap.put(Recipe(WITHOUT_RECIPE_KEY, context.getString(R.string.without_recipe_title),
                         context.getString(R.string.recipe_desc_is_not_needed_title)),
                         recipeIdToIngredientMap[WITHOUT_RECIPE_KEY])
             }
@@ -69,9 +69,7 @@ class ShopListByDishesPresenterImpl(private val mainView: ShopListByDishesView?,
                                     recipeToIngredientsMap.put(recipe,
                                             recipeIdToIngredientMap[recipe.id] ?: listOf())
 
-                                    if (recipeToIngredientsMap.keys.size == recipeIdToIngredientMap.keys.size) {
-                                        makeValidDataForTheView(recipeToIngredientsMap)
-                                    }
+                                    makeValidDataForTheView(recipeToIngredientsMap)
                                 }
 
                                 override fun onError(e: Throwable) {
@@ -80,26 +78,25 @@ class ShopListByDishesPresenterImpl(private val mainView: ShopListByDishesView?,
                                     }
                                 }
                             })
+                } else {
+                    makeValidDataForTheView(recipeToIngredientsMap)
                 }
             }
         }
     }
 
     private fun makeValidDataForTheView(recipeToIngredientsMap: SortedMap<Recipe, List<Ingredient>>) {
-        val recipeIdsToIngredientMap: SortedMap<String, List<Ingredient>> = sortedMapOf()
-        val recipeList: ArrayList<Recipe> = arrayListOf()
+        if (recipeToIngredientsMap.keys.size == recipeIdToIngredientMap.keys.size) {
+            val recipeIdsToIngredientMap: SortedMap<String, List<Ingredient>> = sortedMapOf()
+            val recipeList = mutableListOf<Recipe>()
 
-        for (key in recipeToIngredientsMap.keys) {
-            var recipeKey = key
-            if (recipeKey.id == null) {
-                recipeKey = Recipe(context.getString(R.string.without_recipe_title),
-                        context.getString(R.string.recipe_desc_is_not_needed_title))
+            for (key in recipeToIngredientsMap.keys) {
+                recipeList.add(key)
+                recipeIdsToIngredientMap.put(key.id, recipeToIngredientsMap[key])
             }
-            recipeList.add(recipeKey)
-            recipeIdsToIngredientMap.put(key.id ?: WITHOUT_RECIPE_KEY, recipeToIngredientsMap[key])
-        }
 
-        mainView?.setIngredientListToRecipe(recipeList, recipeIdsToIngredientMap)
+            mainView?.setIngredientListToRecipe(recipeList, recipeIdsToIngredientMap)
+        }
     }
 
     override fun changeIngredientStatus(ingredient: Ingredient, newStatus: ShopListStatus) {

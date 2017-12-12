@@ -12,10 +12,10 @@ import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.models.ShopListStatus
-import java.util.*
 
 
 class ShopListByDishesFragment : BaseFragment(), ShopListByDishesView {
+
 
     private var presenter: ShopListByDishPresenter? = null
     private var progressBarLayout: View? = null
@@ -61,7 +61,7 @@ class ShopListByDishesFragment : BaseFragment(), ShopListByDishesView {
         contentLayout?.visibility = visability
     }
 
-    override fun setIngredientListToRecipe(newGroupList: ArrayList<Recipe>, newChildMap: Map<String, List<Ingredient>>) {
+    override fun setIngredientListToRecipe(newGroupList: MutableList<Recipe>, newChildMap: Map<String, List<Ingredient>>) {
         progressBarLayout?.visibility = View.GONE
 
         if (newGroupList.isEmpty()) {
