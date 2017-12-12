@@ -25,7 +25,7 @@ data class Recipe(var id: String,
     val recipeDB: RecipeDB
         get() {
             val auth = FirebaseAuth.getInstance()
-            return RecipeDB(auth.currentUser?.uid, name, desc, imageUrls = imageUrls)
+            return RecipeDB(id = String(), name = name, desc = desc, imageUrls = imageUrls, userId = auth.currentUser?.uid)
         }
 
     val imageUrlArrayList: ArrayList<String>

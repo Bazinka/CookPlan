@@ -12,6 +12,7 @@ import com.cookplan.models.Recipe
 import com.cookplan.providers.RecipeProvider
 import com.cookplan.providers.impl.RecipeProviderImpl
 import com.cookplan.utils.Utils
+import com.google.firebase.auth.FirebaseAuth
 import com.googlecode.tesseract.android.TessBaseAPI
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -183,12 +184,12 @@ class EditRecipeInfoPresenterImpl(private val mainView: EditRecipeInfoView?, pri
 
         var newRecipe = recipe
         if (newRecipe == null) {
-            newRecipe = Recipe(newName, newDesc)
+            newRecipe = Recipe(id = String(), name = newName, desc = newDesc, userId = FirebaseAuth.getInstance().currentUser?.uid)
         } else {
             newRecipe.name = newName
             newRecipe.desc = newDesc
         }
-        if (newRecipe.id == null) {
+        if (newRecipe.id.isEmpty()) {
             dataProvider.createRecipe(newRecipe)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
