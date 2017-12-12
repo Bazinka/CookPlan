@@ -170,11 +170,13 @@ class AddIngredientViewFragment : Fragment(), AddIngredientView {
         val spinner = mainView?.findViewById<Spinner>(R.id.category_list_spinner)
         val product = unitNameEditText?.tag as Product?
 
-        val adapter = ProductCategoriesSpinnerAdapter(activity as Context,
-                if (name == product?.toStringName()) mutableListOf<ProductCategory>(product.category)
-                else ProductCategory.values().toMutableList())
-        spinner?.adapter = adapter
-        spinner?.setSelection(0)
+        if (activity != null) {
+            val adapter = ProductCategoriesSpinnerAdapter(activity as Context,
+                    if (name == product?.toStringName()) mutableListOf<ProductCategory>(product.category)
+                    else ProductCategory.values().toMutableList())
+            spinner?.adapter = adapter
+            spinner?.setSelection(0)
+        }
     }
 
     internal fun setMeasureSpinnerValues() {
