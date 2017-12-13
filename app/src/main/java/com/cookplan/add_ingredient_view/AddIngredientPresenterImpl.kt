@@ -104,12 +104,12 @@ class AddIngredientPresenterImpl(private val mainView: AddIngredientView?) : Add
         var map: Map<MeasureUnit, Double>? = null
         var measureUnitList: MutableList<MeasureUnit> = Arrays.asList(*MeasureUnit.values())
         if (measureUnit === MeasureUnit.KILOGRAMM) {
-            map = Utils.getKilogramUnitMap()
-            measureUnitList = Utils.getWeightUnitList()
+            map = Utils.kilogramUnitMap
+            measureUnitList = Utils.weightUnitList
         }
         if (measureUnit === MeasureUnit.LITRE) {
-            map = Utils.getLitreUnitMap()
-            measureUnitList = Utils.getVolumeUnitList()
+            map = Utils.litreUnitMap
+            measureUnitList = Utils.volumeUnitList
         }
 
         var rusName: String? = null

@@ -53,7 +53,8 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
         // Set the adapter
         val recyclerView = mainView?.findViewById<RecyclerView>(R.id.recipe_list_recycler)
         recyclerView?.layoutManager = GridLayoutManager(activity, 2)
-        recyclerView?.addItemDecoration(GridSpacingItemDecoration(2, Utils.dpToPx(activity, 16), true))
+        recyclerView?.addItemDecoration(GridSpacingItemDecoration(2,
+                Utils.dpToPx(activity as Context, 16), true))
         recyclerView?.itemAnimator = DefaultItemAnimator()
         adapter = RecipeGridRecyclerViewAdapter(
                 { clickRecipe ->

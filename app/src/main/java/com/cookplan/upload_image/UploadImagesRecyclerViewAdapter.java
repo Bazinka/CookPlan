@@ -73,7 +73,7 @@ public class UploadImagesRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             String imageId = values.get(position - 1);
             UploadImageViewHolder uploadImageHolder = (UploadImageViewHolder) holder;
 
-            if (Utils.isStringUrl(imageId)) {
+            if (Utils.INSTANCE.isStringUrl(imageId)) {
                 Glide.with(context)
                         .load(imageId)
                         .into(uploadImageHolder.imageView);

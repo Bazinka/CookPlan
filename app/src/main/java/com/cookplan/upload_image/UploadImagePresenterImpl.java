@@ -85,7 +85,7 @@ public class UploadImagePresenterImpl implements UploadImagePresenter {
 
     @Override
     public void removePhoto(String imageId) {
-        if (imageId != null && !Utils.isStringUrl(imageId) && imageProvider != null) {
+        if (imageId != null && !Utils.INSTANCE.isStringUrl(imageId) && imageProvider != null) {
             imageProvider.removeImage(imageId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

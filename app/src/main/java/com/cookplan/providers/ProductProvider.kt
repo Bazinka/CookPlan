@@ -16,7 +16,7 @@ interface ProductProvider {
 
     fun getCompanyProductList(companyId: String): Observable<List<Product>>
 
-    fun getTheClosestProductsToStrings(names: List<String>): Observable<Map<String, List<Product>>>
+    fun getTheClosestProductsToStrings(names: List<String>): Observable<MutableMap<String, List<Product>>>
 
     fun createProduct(product: Product): Single<Product>
 

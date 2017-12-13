@@ -11,7 +11,6 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
-import java.util.*
 import java.util.regex.Pattern
 
 /**
@@ -58,7 +57,7 @@ class ProductProviderImpl : ProductProvider {
 
     override fun getCompanyProductList(companyId: String): Observable<List<Product>> {
         return subjectProductList.map { productList ->
-            val products = ArrayList<Product>()
+            val products = mutableListOf<Product>()
             for (product in productList) {
                 if (product.companyIdList.contains(companyId)) {
                     products.add(product)
@@ -68,9 +67,9 @@ class ProductProviderImpl : ProductProvider {
         }
     }
 
-    override fun getTheClosestProductsToStrings(names: List<String>): Observable<Map<String, List<Product>>> {
+    override fun getTheClosestProductsToStrings(names: List<String>): Observable<MutableMap<String, List<Product>>> {
         return subjectProductList.map { allProducts ->
-            val result = HashMap<String, List<Product>>()
+            val result = mutableMapOf<String, List<Product>>()
             for (productName in names) {
                 val products = mutableListOf<Product>()
                 var foundProduct = false
@@ -116,7 +115,7 @@ class ProductProviderImpl : ProductProvider {
 
     override fun updateProductNames(product: Product): Single<Product> {
         return Single.create { emitter ->
-            val values = HashMap<String, Any>()
+            val values = mutableMapOf<String, Any>()
             values.put(DatabaseConstants.DATABASE_PRODUCT_RUS_NAME_FIELD, product.rusName)
             values.put(DatabaseConstants.DATABASE_PRODUCT_ENG_NAME_FIELD, product.engName)
             val productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE)
@@ -132,7 +131,7 @@ class ProductProviderImpl : ProductProvider {
 
     override fun updateProductCompanies(product: Product): Completable {
         return Completable.create { emitter ->
-            val values = HashMap<String, Any>()
+            val values = mutableMapOf<String, Any>()
             values.put(DatabaseConstants.DATABASE_COMPANY_ID_LIST_FIELD, product.companyIdList)
             val productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE)
             productRef.child(product.id).updateChildren(values) { databaseError, databaseReference ->

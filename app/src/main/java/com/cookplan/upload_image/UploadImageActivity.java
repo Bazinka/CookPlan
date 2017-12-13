@@ -54,7 +54,7 @@ public class UploadImageActivity extends BaseActivity implements UploadImageView
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.image_list_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utils.dpToPx(this, 16), true));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utils.INSTANCE.dpToPx(this, 16), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         adapter = new UploadImagesRecyclerViewAdapter(
                 urls,
