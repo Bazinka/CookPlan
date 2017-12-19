@@ -31,24 +31,21 @@ class ProductProviderImpl : ProductProvider {
 
     private fun getFirebaseAllProductList() {
         val items = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE)
-        items.orderByChild(DatabaseConstants.DATABASE_PRODUCT_COUNT_USING_FIELD)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val products = mutableListOf<Product>()
-                        for (itemSnapshot in dataSnapshot.children) {
-                            val product = Product.parseProductFromDB(itemSnapshot)
-                            if (product.userId == null
-                                    || product.userId == FirebaseAuth.getInstance().currentUser?.uid) {
-                                products.add(product)
-                            }
+        items.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val products = dataSnapshot.children
+                        .map { Product.parseProductFromDB(it) }
+                        .filter {
+                            (it.userId == null
+                                    || it.userId == FirebaseAuth.getInstance().currentUser?.uid)
                         }
-                        subjectProductList.onNext(products)
-                    }
+                subjectProductList.onNext(products)
+            }
 
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        subjectProductList.onError(CookPlanError(databaseError))
-                    }
-                })
+            override fun onCancelled(databaseError: DatabaseError) {
+                subjectProductList.onError(CookPlanError(databaseError))
+            }
+        })
     }
 
     override fun getProductList(): Observable<List<Product>> {
