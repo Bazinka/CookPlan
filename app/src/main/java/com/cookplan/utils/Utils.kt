@@ -211,4 +211,5 @@ object Utils {
 //        }
 //        return result;
     }
+    val SEPARATOR_IN_TEXT = "\n"//[\r\n]+
 }

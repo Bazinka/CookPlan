@@ -90,7 +90,7 @@ class EdaTextParser(url: String) : BaseParser(url) {
         var start = 0
         while (recipeDescMatcher.find(start)) {
             if (!recipeDescription.contains(recipeDescMatcher.group().toString())) {
-                recipeDescription += recipeDescMatcher.group().toString() + Parser.Companion.SEPARATOR_IN_TEXT
+                recipeDescription += recipeDescMatcher.group().toString() + Utils.SEPARATOR_IN_TEXT
             }
             Log.d("PARSING", "recipe desc: " + recipeDescMatcher.group().toString())
             start = recipeDescMatcher.start() + 1

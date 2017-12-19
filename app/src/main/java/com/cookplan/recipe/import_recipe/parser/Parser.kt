@@ -7,9 +7,4 @@ package com.cookplan.recipe.import_recipe.parser
 interface Parser {
 
     fun parceUrl(resultListener: ParserResultListener)
-
-    companion object {
-
-        val SEPARATOR_IN_TEXT = "\n"//[\r\n]+
-    }
 }
