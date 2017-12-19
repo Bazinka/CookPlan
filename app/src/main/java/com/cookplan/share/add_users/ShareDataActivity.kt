@@ -81,7 +81,7 @@ class ShareDataActivity : BaseActivity(), ShareDataView {
     }
 
     private fun getEmail(emailText: String): String {
-        if (!emailText.contains(getString(R.string.gmail_ending_title))) {
+        if (!emailText.isEmpty() && !emailText.contains(getString(R.string.gmail_ending_title))) {
             return emailText + getString(R.string.gmail_ending_title)
         } else return emailText
     }
