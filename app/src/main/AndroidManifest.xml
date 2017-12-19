@@ -39,7 +39,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".auth.ui.FirebaseAuthActivity"
+            android:name=".auth.ui.AuthActivity"
             android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -70,7 +70,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.Fullscreen">
         </activity>
-        <activity android:name=".share.add_users.AddUserForSharingActivity">
+        <activity android:name=".share.add_users.ShareDataActivity">
         </activity>
         <activity android:name=".share.contact_list.ContactListActivity">
         </activity>

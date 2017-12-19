@@ -63,7 +63,7 @@ public class VoiceLaunchActivity extends BaseActivity implements VoiceLauncherVi
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_DEBUG_LOG_RESOLUTION);
-        intent.setComponent(new ComponentName("com.cookplan", "com.cookplan.auth.ui.FirebaseAuthActivity"));
+        intent.setComponent(new ComponentName("com.cookplan", "com.cookplan.auth.ui.AuthActivity"));
         startActivity(intent);
     }
 

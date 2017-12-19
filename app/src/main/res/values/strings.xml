@@ -263,5 +263,6 @@
     <string name="add_all_ingredients_to_shop_list_title">Add all ingredients to shopping list</string>
     <string name="english_lan_string">eng</string>
     <string name="russian_lan_string">rus</string>
+    <string name="share_data_title">Поделиться информацией</string>
 
 </resources>

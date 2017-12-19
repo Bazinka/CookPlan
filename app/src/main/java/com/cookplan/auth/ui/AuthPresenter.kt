@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseUser
  * Created by DariaEfimova on 10.04.17.
  */
 
-interface FirebaseAuthPresenter {
+interface AuthPresenter {
     val currentUser: FirebaseUser?
 
     fun onDestroy()
@@ -16,4 +16,6 @@ interface FirebaseAuthPresenter {
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
     fun firstAuthSignIn()
+
+    fun isFamilyModeTurnOnRequest()
 }

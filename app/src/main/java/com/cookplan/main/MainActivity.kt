@@ -4,45 +4,32 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.cookplan.BaseActivity
 import com.cookplan.R
-import com.cookplan.auth.ui.FirebaseAuthActivity
-import com.cookplan.auth.ui.FirebaseAuthPresenter
-import com.cookplan.auth.ui.FirebaseAuthView
 import com.cookplan.companies.MainCompaniesFragment
 import com.cookplan.product_list.ProductListFragment
 import com.cookplan.recipe.grid.RecipeGridFragment
-import com.cookplan.share.SharePresenter
-import com.cookplan.share.SharePresenterImpl
-import com.cookplan.share.ShareView
-import com.cookplan.share.add_users.AddUserForSharingActivity
+import com.cookplan.share.add_users.ShareDataActivity
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment
 import com.cookplan.todo_list.ToDoListFragment
+import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, FirebaseAuthView, ShareView {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var rootView: View? = null
-    private var isFamilyModeTurnOn = false
-
-    private var presenter: FirebaseAuthPresenter? = null
-
-    protected var sharePresenter: SharePresenter? = null
 
     protected var menu: Menu? = null
 
@@ -60,8 +47,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         rootView = findViewById(R.id.main_snackbar_layout)
 
-        sharePresenter = SharePresenterImpl(this)
-        presenter = MainPresenterImpl(this, this)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         fillNavHeader()
         navigationView.setNavigationItemSelectedListener(this)
@@ -72,7 +57,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun fillNavHeader() {
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         val headerView = navigationView.getHeaderView(0)
-        val user = presenter?.currentUser
+        val user = FirebaseAuth.getInstance().currentUser
 
         val photoImageView = headerView.findViewById<ImageView>(R.id.user_photo_imageView)
         Glide.with(this)
@@ -94,7 +79,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onStart() {
-        sharePresenter?.isFamilyModeTurnOnRequest()
         super.onStart()
     }
 
@@ -120,8 +104,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     internal fun setRecipeListFragment() {
-        setFamilyModeMenuOptions()
-
         val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
         val viewPager = findViewById<ViewPager>(R.id.main_tabs_viewpager)
@@ -142,7 +124,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     internal fun setShoppingListFragment() {
-        setFamilyModeMenuOptions()
 
         val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.VISIBLE
@@ -161,7 +142,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     internal fun setProductListFragment() {
-        setFamilyModeMenuOptions()
 
         val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
@@ -228,11 +208,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         transaction.commit()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter?.onDestroy()
-    }
-
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == OPEN_SHOP_LIST_REQUEST) {
@@ -241,87 +216,36 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 val navigationView = findViewById<NavigationView>(R.id.nav_view)
                 navigationView.setCheckedItem(R.id.nav_shopping_list)
             }
-        } else if (requestCode == SHARE_USER_LIST_REQUEST) {
-            if (resultCode == Activity.RESULT_OK) {
-                val emailList = data?.getStringArrayListExtra(SHARE_USER_EMAIL_LIST_KEY)
-                if (emailList?.isEmpty() ?: false) {
-                    sharePresenter?.turnOffFamilyMode()
-                } else {
-                    sharePresenter?.shareData(emailList)
-                }
-            }
-        } else {
-            presenter?.onActivityResult(requestCode, resultCode, data)
+        } else if (requestCode == SHARE_USER_LIST_REQUEST && resultCode == Activity.RESULT_OK) {
+            setFamilyModeMenuOptions(data?.getBooleanExtra(FAMILY_TURNED_ON_KEY, false) ?: false)
         }
-    }
-
-    override fun showSnackbar(messageRes: Int) {
-        Snackbar.make(rootView!!, messageRes, Snackbar.LENGTH_LONG).show()
-    }
-
-    override fun signedInWithGoogle() {
-        fillNavHeader()
-    }
-
-    override fun signedInFailed() {
-        showSnackbar(R.string.unknown_sign_in_response)
-
-        val intent = Intent(this, FirebaseAuthActivity::class.java)
-        startActivityWithLeftAnimation(intent)
-
     }
 
     override fun onCreateOptionsMenu(_menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, _menu)
         menu = _menu
-        setFamilyModeMenuOptions()
+        setFamilyModeMenuOptions(intent.getBooleanExtra(FAMILY_TURNED_ON_KEY, false))
         return super.onCreateOptionsMenu(_menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.app_bar_share_off || id == R.id.app_bar_share_on) {
-            if (id == R.id.app_bar_share_off) {
-                val intent = Intent(this, AddUserForSharingActivity::class.java)
-                startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST)
-                return true
-            } else {
-                AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle(R.string.attention_title)
-                        .setMessage(R.string.turn_off_family_mode_question)
-                        .setPositiveButton(R.string.change_users_faminy_mode_title) { dialog, _ ->
-                            dialog.dismiss()
-                            val intent = Intent(this, AddUserForSharingActivity::class.java)
-                            startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST)
-                        }
-                        .setNegativeButton(R.string.turn_off_faminy_mode) { dialog, _ ->
-                            sharePresenter?.turnOffFamilyMode()
-                            dialog.dismiss()
-                        }
-                        .show()
-                return true
-            }
+            val intent = Intent(this, ShareDataActivity::class.java)
+            startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun setShareIcon(_isFamilyModeTurnOn: Boolean) {
-        isFamilyModeTurnOn = _isFamilyModeTurnOn
-        setFamilyModeMenuOptions()
-    }
-
-    private fun setFamilyModeMenuOptions() {
+    private fun setFamilyModeMenuOptions(isFamilyModeTurnOn: Boolean) {
         menu?.findItem(R.id.app_bar_share_on)?.isVisible = isFamilyModeTurnOn
         menu?.findItem(R.id.app_bar_share_off)?.isVisible = !isFamilyModeTurnOn
-    }
-
-    override fun setShareError(errorResourceId: Int) {
-        Toast.makeText(this, errorResourceId, Toast.LENGTH_LONG).show()
     }
 
     companion object {
         val OPEN_SHOP_LIST_REQUEST = 10
         val SHARE_USER_LIST_REQUEST = 11
-        val SHARE_USER_EMAIL_LIST_KEY = "SHARE_USER_EMAIL_LIST_KEY"
+
+        val FAMILY_TURNED_ON_KEY = "FAMILY_TURNED_ON_REQUEST"
     }
 }

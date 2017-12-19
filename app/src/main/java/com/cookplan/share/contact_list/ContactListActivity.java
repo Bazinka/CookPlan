@@ -20,8 +20,6 @@ import com.cookplan.utils.PermissionUtils;
 
 import java.util.ArrayList;
 
-import static com.cookplan.share.add_users.AddUserForSharingActivity.GET_USER_LIST_FROM_CONTACT_KEY;
-
 public class ContactListActivity extends BaseActivity implements ContactListView {
 
     private ContactListAdapter adapter;
@@ -58,7 +56,7 @@ public class ContactListActivity extends BaseActivity implements ContactListView
         if (id == R.id.app_bar_done) {
             ArrayList<Contact> contactList = adapter.getSelectedContactList();
             Intent intent = new Intent();
-            intent.putParcelableArrayListExtra(GET_USER_LIST_FROM_CONTACT_KEY, contactList);
+            //            intent.putParcelableArrayListExtra(Companion.getGET_USER_LIST_FROM_CONTACT_KEY(), contactList);
             setResult(RESULT_OK, intent);
             finish();
             return true;

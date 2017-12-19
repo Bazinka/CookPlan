@@ -6,26 +6,33 @@ import android.support.v4.app.FragmentActivity
 import com.cookplan.R
 import com.cookplan.auth.provider.GoogleProvider
 import com.cookplan.auth.provider.IdpProvider
+import com.cookplan.models.ShareUserInfo
+import com.cookplan.providers.FamilyModeProvider
+import com.cookplan.providers.impl.FamilyModeProviderImpl
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.Scopes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import java.util.*
+import io.reactivex.MaybeObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by DariaEfimova on 10.04.17.
  */
 
-open class FirebaseAuthPresenterImpl : FirebaseAuthPresenter, IdpProvider.IdpCallback {
+open class AuthPresenterImpl : AuthPresenter, IdpProvider.IdpCallback {
 
-    private var mainView: FirebaseAuthView? = null
+    private var mainView: AuthView? = null
     protected var activity: FragmentActivity
     protected var provider: GoogleProvider? = null
+
+    private val familyModeProvider: FamilyModeProvider = FamilyModeProviderImpl()
 
     override val currentUser: FirebaseUser?
         get() = FirebaseAuth.getInstance().currentUser
 
-    constructor(mainView: FirebaseAuthView?,
+    constructor(mainView: AuthView?,
                 activity: FragmentActivity) {
         this.mainView = mainView
         this.activity = activity
@@ -71,5 +78,29 @@ open class FirebaseAuthPresenterImpl : FirebaseAuthPresenter, IdpProvider.IdpCal
     override fun onFailure(extra: Bundle) {
         // stay on this screen
         mainView?.signedInFailed()
+    }
+
+    override fun isFamilyModeTurnOnRequest() {
+        familyModeProvider.getDataSharedByMe()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : MaybeObserver<ShareUserInfo> {
+                    override fun onSubscribe(d: Disposable) {
+
+                    }
+
+                    override fun onSuccess(shareUserInfo: ShareUserInfo) {
+                        mainView?.goToNextScreen(true)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        mainView?.setError(R.string.error_share_data_loading)
+                    }
+
+                    override fun onComplete() {
+                        mainView?.goToNextScreen(false)
+                    }
+                })
+
     }
 }

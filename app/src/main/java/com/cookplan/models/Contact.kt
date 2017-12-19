@@ -7,7 +7,7 @@ import android.os.Parcelable
  * Created by DariaEfimova on 03.05.17.
  */
 
-data class Contact(var email: String? = null, var name: String? = null, var phoneUrl: String? = null) : Parcelable {
+data class Contact(var email: String = String(), var name: String = String(), var phoneUrl: String = String()) : Parcelable {
 
     constructor(emailAddress: String) : this(email = emailAddress)
 

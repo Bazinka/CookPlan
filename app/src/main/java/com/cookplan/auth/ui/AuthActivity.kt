@@ -9,17 +9,14 @@ import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.main.MainActivity
 
-class FirebaseAuthActivity : BaseActivity(), FirebaseAuthView {
+class AuthActivity : BaseActivity(), AuthView {
 
-    private var rootView: View? = null
-
-    private var presenter: FirebaseAuthPresenter? = null
+    private var presenter: AuthPresenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_firebase_auth)
-        rootView = findViewById(R.id.firebase_auth_root)
-        presenter = FirebaseAuthPresenterImpl(this, this)
+        presenter = AuthPresenterImpl(this, this)
     }
 
     override fun onStart() {
@@ -32,20 +29,12 @@ class FirebaseAuthActivity : BaseActivity(), FirebaseAuthView {
         presenter?.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun startMainActivity() {
-        val intent = Intent()
-        intent.setClass(this, MainActivity::class.java)
-        startActivityWithLeftAnimation(intent)
-        finish()
-    }
-
-
     override fun showSnackbar(messageRes: Int) {
-        Snackbar.make(rootView!!, messageRes, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(findViewById(R.id.firebase_auth_root), messageRes, Snackbar.LENGTH_LONG).show()
     }
 
     override fun signedInWithGoogle() {
-        startMainActivity()
+        presenter?.isFamilyModeTurnOnRequest()
     }
 
     override fun signedInFailed() {
@@ -56,5 +45,17 @@ class FirebaseAuthActivity : BaseActivity(), FirebaseAuthView {
         signInButton.setOnClickListener { v ->
             presenter?.firstAuthSignIn()
         }
+    }
+
+    override fun goToNextScreen(isFamilyModeTurnOn: Boolean) {
+        val intent = Intent()
+        intent.setClass(this, MainActivity::class.java)
+        intent.putExtra(MainActivity.FAMILY_TURNED_ON_KEY, isFamilyModeTurnOn)
+        startActivityWithLeftAnimation(intent)
+        finish()
+    }
+
+    override fun setError(errorResourceId: Int) {
+        showSnackbar(errorResourceId)
     }
 }
