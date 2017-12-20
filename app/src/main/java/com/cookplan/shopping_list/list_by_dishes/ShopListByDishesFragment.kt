@@ -3,15 +3,15 @@ package com.cookplan.shopping_list.list_by_dishes
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ExpandableListView
 import com.cookplan.BaseFragment
 import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
-import com.cookplan.models.ShopListStatus
 
 
 class ShopListByDishesFragment : BaseFragment(), ShopListByDishesView {
@@ -69,21 +69,12 @@ class ShopListByDishesFragment : BaseFragment(), ShopListByDishesView {
         } else {
             setEmptyViewVisability(View.GONE)
             setContentVisability(View.VISIBLE)
-            val expandableListView = mainView?.findViewById<View>(R.id.shop_list_by_dish_expListView) as ExpandableListView
-            val needToBuyAdapter = ShopListExpandableListAdapter(
-                    activity as Context,
-                    newGroupList,
-                    newChildMap,
-                    { ingredient ->
-                        val newStatus: ShopListStatus
-                        if (ingredient.shopListStatus === ShopListStatus.NEED_TO_BUY) {
-                            newStatus = ShopListStatus.ALREADY_BOUGHT
-                        } else {
-                            newStatus = ShopListStatus.NEED_TO_BUY
-                        }
-                        presenter?.changeIngredientStatus(ingredient, newStatus)
+            val needToBuyRecyclerView = mainView?.findViewById<RecyclerView>(R.id.shop_list_by_dish_recycler)
+            needToBuyRecyclerView?.setHasFixedSize(true)
+            needToBuyRecyclerView?.isNestedScrollingEnabled = false
+            needToBuyRecyclerView?.layoutManager = LinearLayoutManager(activity)
 
-                    },
+            needToBuyRecyclerView?.adapter = ShopListByDishesRecyclerAdapter(newGroupList, newChildMap,
                     { recipe, ingredientList ->
                         AlertDialog.Builder(activity as Context, R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
                                 .setMessage(R.string.delete_recipe_from_shop_list_question)
@@ -94,11 +85,27 @@ class ShopListByDishesFragment : BaseFragment(), ShopListByDishesView {
                                 .setNegativeButton(android.R.string.no, null)
                                 .show()
                     })
-            expandableListView.setAdapter(needToBuyAdapter)
-            val count = needToBuyAdapter.groupCount
-            for (position in 0 until count) {
-                expandableListView.expandGroup(position)
-            }
+
+//            val expandableListView = mainView?.findViewById<View>(R.id.shop_list_by_dish_expListView) as ExpandableListView
+//            val needToBuyAdapter = ShopListExpandableListAdapter(
+//                    activity as Context,
+//                    newGroupList,
+//                    newChildMap,
+//                    { ingredient ->
+//                        val newStatus: ShopListStatus
+//                        if (ingredient.shopListStatus === ShopListStatus.NEED_TO_BUY) {
+//                            newStatus = ShopListStatus.ALREADY_BOUGHT
+//                        } else {
+//                            newStatus = ShopListStatus.NEED_TO_BUY
+//                        }
+//                        presenter?.changeIngredientStatus(ingredient, newStatus)
+//
+//                    }, )
+//            expandableListView.setAdapter(needToBuyAdapter)
+//            val count = needToBuyAdapter.groupCount
+//            for (position in 0 until count) {
+//                expandableListView.expandGroup(position)
+//            }
         }
     }
 
