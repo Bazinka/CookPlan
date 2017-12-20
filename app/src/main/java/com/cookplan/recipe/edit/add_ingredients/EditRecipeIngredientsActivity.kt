@@ -38,6 +38,7 @@ class EditRecipeIngredientsActivity : BaseActivity(), EditRecipeIngredientsView 
             recyclerView.setHasFixedSize(true)
 
             val layoutManager = LinearLayoutManager(this)
+            recyclerView.isNestedScrollingEnabled = false
             recyclerView.layoutManager = layoutManager
             recyclerView.itemAnimator = DefaultItemAnimator()
 
