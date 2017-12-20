@@ -61,9 +61,8 @@ class RecipeProviderImpl : RecipeProvider {
                 if (recipe.userId == uid) {
                     resultRecipes.add(recipe)
                 } else if (recipe.userId != null) {
-                    for ((_, ownerUserId, ownerUserName) in sharedInfoList) {
-                        if (ownerUserId?.contains(recipe.userId) ?: false) {
-                            recipe.userName = ownerUserName
+                    for ((_, ownerUserId, _) in sharedInfoList) {
+                        if (ownerUserId.contains(recipe.userId)) {
                             resultRecipes.add(recipe)
                         }
                     }

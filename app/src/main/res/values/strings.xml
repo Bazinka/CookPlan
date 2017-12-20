@@ -263,6 +263,8 @@
     <string name="add_all_ingredients_to_shop_list_title">Add all ingredients to shopping list</string>
     <string name="english_lan_string">eng</string>
     <string name="russian_lan_string">rus</string>
-    <string name="share_data_title">Поделиться информацией</string>
+    <string name="share_data_title">Share information</string>
+    <string name="my_recipe_title">My recipe</string>
+    <string name="impossible_remove_recipe_title">It\'s impossible to remove the recipe which not yours.</string>
 
 </resources>

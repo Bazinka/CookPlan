@@ -116,7 +116,7 @@ data class Ingredient(val userId: String? = FirebaseAuth.getInstance().currentUs
                 if (child.key == DatabaseConstants.DATABASE_USER_ID_FIELD) {
                     userId = child.value.toString()
                 }
-                if (child.key == DatabaseConstants.DATABASE_USER_NAME) {
+                if (child.key == DatabaseConstants.DATABASE_USER_NAME_FIELD) {
                     userName = child.value.toString()
                 }
                 if (child.key == DatabaseConstants.DATABASE_PRODUCT_ID_FIELD) {

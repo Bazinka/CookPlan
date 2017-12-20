@@ -197,6 +197,8 @@
     <string name="english_lan_string">eng</string>
     <string name="russian_lan_string">rus</string>
     <string name="share_data_title">Поделиться информацией</string>
+    <string name="my_recipe_title">Мой рецепт</string>
+    <string name="impossible_remove_recipe_title">Невозможно удалить чужой рецепт</string>
 
 
 </resources>

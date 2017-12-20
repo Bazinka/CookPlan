@@ -10,15 +10,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:indeterminate="true"/>
+        android:layout_height="match_parent"
+        android:background="@color/main_screen_back_color">
 
         <include
             layout="@layout/empty_recipe_list_view"
@@ -81,11 +74,17 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:clickable="true"-->
-    <!--app:fabSize="normal"/>-->
+    <RelativeLayout
+        android:id="@+id/progress_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparency_primary_the_lightest"
+        android:clickable="false">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 </RelativeLayout>

@@ -25,7 +25,8 @@ data class Recipe(var id: String,
     val recipeDB: RecipeDB
         get() {
             val auth = FirebaseAuth.getInstance()
-            return RecipeDB(id = String(), name = name, desc = desc, imageUrls = imageUrls, userId = auth.currentUser?.uid)
+            return RecipeDB(id = String(), name = name, desc = desc, imageUrls = imageUrls, userId = auth.currentUser?.uid,
+                    userName = auth.currentUser?.displayName)
         }
 
     val imageUrlArrayList: ArrayList<String>
@@ -35,6 +36,7 @@ data class Recipe(var id: String,
                         @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD) var name: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_DESCRIPTION_FIELD) var desc: String = String(),
                         @PropertyName(DatabaseConstants.DATABASE_USER_ID_FIELD) var userId: String? = null,
+                        @PropertyName(DatabaseConstants.DATABASE_USER_NAME_FIELD) var userName: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD) var imageUrls: List<String> = listOf()) {
     }
 
@@ -42,7 +44,12 @@ data class Recipe(var id: String,
 
         fun getRecipeFromDBObject(itemSnapshot: DataSnapshot): Recipe {
             val `object` = itemSnapshot.getValue(RecipeDB::class.java)
-            return Recipe(itemSnapshot.key, `object`.name, `object`.desc, `object`.imageUrls, `object`.userId)
+            return Recipe(id = itemSnapshot.key,
+                    name = `object`.name,
+                    desc = `object`.desc,
+                    imageUrls = `object`.imageUrls,
+                    userId = `object`.userId,
+                    userName = `object`.userName)
         }
     }
 }

@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import com.cookplan.BaseActivity
 import com.cookplan.BaseFragment
 import com.cookplan.R
@@ -22,6 +21,7 @@ import com.cookplan.recipe.view_item.RecipeViewActivity
 import com.cookplan.utils.GridSpacingItemDecoration
 import com.cookplan.utils.Utils
 import com.github.clans.fab.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 
 class RecipeGridFragment : BaseFragment(), RecipeGridView {
 
@@ -47,7 +47,7 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         mainView = inflater.inflate(R.layout.fragment_recipe_list, container, false) as ViewGroup
-        val progressBar = mainView?.findViewById<ProgressBar>(R.id.progress_bar)
+        val progressBar = mainView?.findViewById<View>(R.id.progress_bar_layout)
         progressBar?.visibility = View.VISIBLE
 
         // Set the adapter
@@ -66,15 +66,23 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
                     }
                 },
                 { longClickRecipe ->
-                    AlertDialog.Builder(activity as Context, R.style.AppCompatAlertDialogStyle)
-                            .setTitle(R.string.attention_title)
-                            .setMessage(R.string.are_you_sure_remove_recipe)
-                            .setPositiveButton(android.R.string.ok) { dialog, which ->
-                                mainView?.findViewById<ProgressBar>(R.id.progress_bar)?.visibility = View.VISIBLE
-                                presenter?.removeRecipe(longClickRecipe)
-                            }
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .show()
+                    if (longClickRecipe.userId == FirebaseAuth.getInstance().currentUser?.uid) {
+                        AlertDialog.Builder(activity as Context, R.style.AppCompatAlertDialogStyle)
+                                .setTitle(R.string.attention_title)
+                                .setMessage(R.string.are_you_sure_remove_recipe)
+                                .setPositiveButton(android.R.string.ok) { dialog, which ->
+                                    mainView?.findViewById<View>(R.id.progress_bar_layout)?.visibility = View.VISIBLE
+                                    presenter?.removeRecipe(longClickRecipe)
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show()
+                    } else {
+                        AlertDialog.Builder(activity as Context, R.style.AppCompatAlertDialogStyle)
+                                .setTitle(R.string.attention_title)
+                                .setMessage(getString(R.string.impossible_remove_recipe_title))
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show()
+                    }
                     true
                 }, activity as Context)
         recyclerView?.adapter = adapter
@@ -99,7 +107,7 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
     }
 
     override fun setEmptyView() {
-        val progressBar = mainView?.findViewById<ProgressBar>(R.id.progress_bar)
+        val progressBar = mainView?.findViewById<View>(R.id.progress_bar_layout)
         progressBar?.visibility = View.GONE
         setEmptyViewVisability(View.VISIBLE)
         setRecyclerViewVisability(View.GONE)
@@ -110,7 +118,7 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
     }
 
     override fun setRecipeList(recipeList: List<Recipe>) {
-        mainView?.findViewById<ProgressBar>(R.id.progress_bar)?.visibility = View.GONE
+        mainView?.findViewById<View>(R.id.progress_bar_layout)?.visibility = View.GONE
         setEmptyViewVisability(View.GONE)
         setRecyclerViewVisability(View.VISIBLE)
         adapter?.updateItems(recipeList)

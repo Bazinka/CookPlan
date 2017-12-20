@@ -184,7 +184,8 @@ class EditRecipeInfoPresenterImpl(private val mainView: EditRecipeInfoView?, pri
 
         var newRecipe = recipe
         if (newRecipe == null) {
-            newRecipe = Recipe(id = String(), name = newName, desc = newDesc, userId = FirebaseAuth.getInstance().currentUser?.uid)
+            newRecipe = Recipe(id = String(), name = newName, desc = newDesc, userId = FirebaseAuth.getInstance().currentUser?.uid,
+                    userName = FirebaseAuth.getInstance().currentUser?.displayName)
         } else {
             newRecipe.name = newName
             newRecipe.desc = newDesc

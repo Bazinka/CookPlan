@@ -31,9 +31,10 @@ class RecipeGridRecyclerViewAdapter(private val clicklistener: (Recipe) -> Any,
         val recipe = mValues[position]
 
         val uid = FirebaseAuth.getInstance().currentUser?.uid
+        val userName = holder.mainView.context.getString(R.string.my_recipe_title)
 
-        holder.authorNameLayout.visibility = if (recipe.userId == uid) View.GONE else View.VISIBLE
-        holder.authorNameView.text = if (recipe.userId == uid) recipe.userName else null
+//        holder.authorNameLayout.visibility = if (recipe.userId == uid) View.GONE else View.VISIBLE
+        holder.authorNameView.text = if (recipe.userId == uid) userName else recipe.userName
 
         holder.nameView.text = mValues[position].name
 
