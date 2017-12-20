@@ -67,4 +67,6 @@
 
     <color name="errorColor">#DD2C00</color>
     <color name="linkColor">#4285F4</color>
+
+    <color name="main_screen_back_color">@color/accent_color_lighter</color><!--50-->
 </resources>

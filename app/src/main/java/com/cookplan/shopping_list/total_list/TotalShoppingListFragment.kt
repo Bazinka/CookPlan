@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import com.cookplan.BaseFragment
 import com.cookplan.R
 import com.cookplan.add_ingredient_view.AddIngredientViewFragment
@@ -22,7 +21,7 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
 
     private var presenter: TotalShoppingListPresenter? = null
     private var needToBuyAdapter: TotalShopListRecyclerViewAdapter? = null
-    private var progressBar: ProgressBar? = null
+    private var progressBarLayout: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +34,7 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
                               savedInstanceState: Bundle?): View? {
         mainView = inflater.inflate(R.layout.fragment_total_shop_list, container, false) as ViewGroup
 
-        progressBar = mainView?.findViewById<ProgressBar>(R.id.progress_bar)
+        progressBarLayout = mainView?.findViewById<View>(R.id.progress_bar_layout)
 
         val needToBuyRecyclerView = mainView?.findViewById<RecyclerView>(R.id.total_need_to_buy_recycler)
         needToBuyRecyclerView?.setHasFixedSize(true)
@@ -72,12 +71,12 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
                                 ingredients.add(ingredient)
                             }
                         }
-                        progressBar?.visibility = View.VISIBLE
+                        progressBarLayout?.visibility = View.VISIBLE
                         presenter?.deleteIngredients(ingredients)
                     }
                     .setNeutralButton(android.R.string.cancel, null)
                     .setNegativeButton(R.string.delete_all_items_title) { dialog, which ->
-                        progressBar?.visibility = View.VISIBLE
+                        progressBarLayout?.visibility = View.VISIBLE
                         presenter?.deleteIngredients(needToBuyAdapter?.getIngredients() ?: listOf())
                     }
                     .show()
@@ -89,7 +88,7 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
         super.onStart()
         presenter?.getShoppingList()
         setEmptyView()
-        progressBar?.visibility = View.VISIBLE
+        progressBarLayout?.visibility = View.VISIBLE
     }
 
     override fun onStop() {
@@ -106,7 +105,7 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
     }
 
     override fun setEmptyView() {
-        progressBar?.visibility = View.GONE
+        progressBarLayout?.visibility = View.GONE
         setEmptyViewVisability(View.VISIBLE)
         setContentVisability(View.GONE)
     }
@@ -117,7 +116,7 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
     }
 
     override fun setIngredientLists(allIngredientList: List<Ingredient>) {
-        progressBar?.visibility = View.GONE
+        progressBarLayout?.visibility = View.GONE
         setEmptyViewVisability(View.GONE)
         setContentVisability(View.VISIBLE)
         val needToBuyLayout = mainView?.findViewById<ViewGroup>(R.id.need_to_buy_layout)

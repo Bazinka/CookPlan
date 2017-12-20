@@ -4,7 +4,7 @@
                 android:id="@+id/main_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/accent_color_lighter">
+                android:background="@color/main_screen_back_color">
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -12,9 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/card_view_margin"
-        android:layout_marginRight="@dimen/card_view_margin"
-        android:layout_marginTop="@dimen/card_view_margin"
         android:background="@color/accent_color_lighter"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="@dimen/card_recipe_elevation"

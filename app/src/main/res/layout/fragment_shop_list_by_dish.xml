@@ -3,7 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/accent_color_lighter"
+                android:background="@color/main_screen_back_color"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <include
@@ -16,7 +16,7 @@
         android:id="@+id/main_content_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/accent_color_lighter">
+        android:background="@color/main_screen_back_color">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/shop_list_by_dish_recycler"
