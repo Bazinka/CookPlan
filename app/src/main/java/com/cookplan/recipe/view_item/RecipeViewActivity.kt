@@ -117,16 +117,17 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
                 }
             }
             adapter?.updateItems(ingredientList)
+            val button = findViewById<Button>(R.id.add_shop_list_items_button)
+            button.setText(
+                    if (isAllIngredientsChecked) {
+                        R.string.remove_all_ingredients_from_shop_list_title
+                    } else {
+                        R.string.add_all_ingredients_to_shop_list_title
+                    })
         } else {
+            findViewById<View>(R.id.ingredient_content_card_view).visibility = View.GONE
             isAllIngredientsChecked = false
         }
-        val button = findViewById<Button>(R.id.add_shop_list_items_button)
-        button.setText(
-                if (isAllIngredientsChecked) {
-                    R.string.remove_all_ingredients_from_shop_list_title
-                } else {
-                    R.string.add_all_ingredients_to_shop_list_title
-                })
     }
 
 
