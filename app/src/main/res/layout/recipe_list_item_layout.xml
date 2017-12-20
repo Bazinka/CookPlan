@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_view_margin"
-        android:elevation="@dimen/card_recipe_elevation"
+        android:elevation="@dimen/card_view_elevation"
         card_view:cardCornerRadius="@dimen/card_recipe_radius">
 
         <RelativeLayout

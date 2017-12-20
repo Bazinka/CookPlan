@@ -16,10 +16,11 @@
     <dimen name="collapsing_app_bar_height">300dp</dimen>
 
     <dimen name="card_view_margin">10dp</dimen>
+    <dimen name="card_view_elevation">5dp</dimen>
+
     <dimen name="card_recipe_radius">5dp</dimen>
     <dimen name="card_recipe_image_height">150dp</dimen>
     <dimen name="card_recipe_name_padding">10dp</dimen>
-    <dimen name="card_recipe_elevation">5dp</dimen>
 
     <!--Text sizes-->
     <dimen name="display3_text_size">56sp</dimen>

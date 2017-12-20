@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="@dimen/card_recipe_elevation"
+            card_view:cardElevation="@dimen/card_view_elevation"
             card_view:cardUseCompatPadding="true">
 
 
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardElevation="@dimen/card_recipe_elevation"
+                card_view:cardElevation="@dimen/card_view_elevation"
                 card_view:cardUseCompatPadding="true">
 
                 <RelativeLayout
