@@ -266,5 +266,6 @@
     <string name="share_data_title">Share information</string>
     <string name="my_recipe_title">My recipe</string>
     <string name="impossible_remove_recipe_title">It\'s impossible to remove the recipe which not yours.</string>
+    <string name="remove_all_ingredients_from_shop_list_title">Remove all from shopping list</string>
 
 </resources>

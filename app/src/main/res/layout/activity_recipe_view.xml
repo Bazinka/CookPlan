@@ -28,6 +28,21 @@
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+                <RelativeLayout
+                    android:id="@+id/add_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true">
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_centerInParent="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/ic_photo"/>
+                </RelativeLayout>
+
                 <android.support.v4.view.ViewPager
                     android:id="@+id/recipe_images_viewpager"
                     android:layout_width="match_parent"

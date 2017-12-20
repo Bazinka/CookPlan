@@ -13,7 +13,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.cookplan.BaseActivity
@@ -63,8 +62,11 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
             val descTextView = findViewById<TextView>(R.id.description_body_textview)
             descTextView.text = reviewRecipe.desc
 
-            val openShopListLayout = findViewById<Button>(R.id.add_shop_list_items_button)
-            openShopListLayout.setOnClickListener {
+            val addToShopListButton = findViewById<Button>(R.id.add_shop_list_items_button)
+            addToShopListButton.setOnClickListener {
+                val progressBar = findViewById<View>(R.id.progress_bar_layout)
+                progressBar.visibility = View.VISIBLE
+
                 if (!isAllIngredientsChecked) {
                     isAllIngredientsChecked = true
                     presenter?.changeIngredListShopStatus(adapter?.getIngredients() ?: listOf(), NEED_TO_BUY)
@@ -104,7 +106,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
     }
 
     override fun setIngredientList(ingredientList: List<Ingredient>) {
-        val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        val progressBar = findViewById<View>(R.id.progress_bar_layout)
         progressBar.visibility = View.INVISIBLE
         if (!ingredientList.isEmpty()) {
             isAllIngredientsChecked = true
@@ -119,8 +121,12 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
             isAllIngredientsChecked = false
         }
         val button = findViewById<Button>(R.id.add_shop_list_items_button)
-        button.setCompoundDrawablesWithIntrinsicBounds(if (isAllIngredientsChecked) R.drawable.ic_remove_items_from_shop_list else R.drawable.ic_add_items_to_shop_list,
-                0, 0, 0)
+        button.setText(
+                if (isAllIngredientsChecked) {
+                    R.string.remove_all_ingredients_from_shop_list_title
+                } else {
+                    R.string.add_all_ingredients_to_shop_list_title
+                })
     }
 
 
@@ -129,6 +135,8 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
     }
 
     override fun ingredListChangedShoplistStatus(isRemoved: Boolean) {
+        val progressBar = findViewById<View>(R.id.progress_bar_layout)
+        progressBar.visibility = View.INVISIBLE
         val mainView = findViewById<View>(R.id.snackbar_layout)
         if (mainView != null) {
             val snackbar: Snackbar
