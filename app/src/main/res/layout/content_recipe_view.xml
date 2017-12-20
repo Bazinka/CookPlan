@@ -24,7 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@color/accent_color_lighter"
                 card_view:cardCornerRadius="4dp"
                 card_view:cardElevation="@dimen/card_view_elevation"
                 card_view:cardUseCompatPadding="true">
@@ -85,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ingredient_content_card_view"
                 android:layout_gravity="center"
-                android:background="@color/accent_color_lighter"
                 card_view:cardCornerRadius="4dp"
                 card_view:cardElevation="@dimen/card_view_elevation"
                 card_view:cardUseCompatPadding="true">

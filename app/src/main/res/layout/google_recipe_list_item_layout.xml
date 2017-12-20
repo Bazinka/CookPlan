@@ -9,9 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/select_item_background"
         card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="@dimen/main_item_padding"
+        card_view:cardElevation="@dimen/card_view_elevation"
         card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
