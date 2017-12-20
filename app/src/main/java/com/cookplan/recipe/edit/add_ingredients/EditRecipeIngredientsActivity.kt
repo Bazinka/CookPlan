@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.cookplan.BaseActivity
 import com.cookplan.R
@@ -81,7 +82,11 @@ class EditRecipeIngredientsActivity : BaseActivity(), EditRecipeIngredientsView 
 
 
     override fun setIngredientList(ingredientList: List<Ingredient>) {
-        adapter?.updateItems(ingredientList)
+        if (ingredientList.isEmpty()) {
+            findViewById<View>(R.id.list_card_view).visibility = View.GONE
+        } else {
+            adapter?.updateItems(ingredientList)
+        }
     }
 
     override fun setErrorToast(error: String) {

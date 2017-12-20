@@ -59,7 +59,6 @@
                 android:id="@+id/choosen_contacts_title_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/view"
                 android:gravity="center"
                 android:padding="@dimen/main_item_padding"
                 android:text="@string/chose_contact_title"

@@ -229,13 +229,13 @@ class EditRecipeInfoActivity : BaseActivity(), EditRecipeInfoView {
     }
 
     override fun showProgressBar() {
-        val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        val progressBar = findViewById<View>(R.id.progress_bar_layout)
         progressBar.visibility = View.VISIBLE
 
     }
 
     override fun hideProgressBar() {
-        val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        val progressBar = findViewById<View>(R.id.progress_bar_layout)
         progressBar.visibility = View.GONE
     }
 
