@@ -104,7 +104,7 @@ class ShareDataActivity : BaseActivity(), ShareDataView {
                 emails.add(textFromEditView)
             }
 
-            findViewById<ProgressBar>(R.id.progress_bar).visibility = View.VISIBLE
+            findViewById<View>(R.id.progress_bar_layout).visibility = View.VISIBLE
 
             if (emails.isEmpty()) {
                 presenter?.turnOffFamilyMode()
