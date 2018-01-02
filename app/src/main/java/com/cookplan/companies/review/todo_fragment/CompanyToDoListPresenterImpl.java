@@ -4,8 +4,8 @@ import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
+import com.cookplan.providers.ProviderFactory;
 import com.cookplan.providers.ToDoListProvider;
-import com.cookplan.providers.impl.ToDoListProviderImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class CompanyToDoListPresenterImpl implements CompanyToDoListPresenter {
 
     public CompanyToDoListPresenterImpl(CompanyToDoListView mainView) {
         this.mainView = mainView;
-        dataProvider = new ToDoListProviderImpl();
+        dataProvider = ProviderFactory.Companion.getToDoListProvider();
         disposables = new CompositeDisposable();
         categoryToDoList = new ArrayList<>();
     }

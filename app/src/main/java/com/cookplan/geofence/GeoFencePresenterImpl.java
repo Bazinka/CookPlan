@@ -11,7 +11,7 @@ import com.cookplan.geofence.responce.GeofenceTransitionsIntentService;
 import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.providers.CompanyProvider;
-import com.cookplan.providers.impl.CompanyProviderImpl;
+import com.cookplan.providers.ProviderFactory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -44,7 +44,7 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
     public GeoFencePresenterImpl(Context context, GeoFenceView mainView) {
         this.mainView = mainView;
         this.context = context;
-        dataProvider = new CompanyProviderImpl();
+        dataProvider = ProviderFactory.Companion.getCompanyProvider();
 
         mGeofencePendingIntent = null;
         buildGoogleApiClient();

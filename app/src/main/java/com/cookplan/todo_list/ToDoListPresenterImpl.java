@@ -3,8 +3,8 @@ package com.cookplan.todo_list;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
+import com.cookplan.providers.ProviderFactory;
 import com.cookplan.providers.ToDoListProvider;
-import com.cookplan.providers.impl.ToDoListProviderImpl;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class ToDoListPresenterImpl implements ToDoListPresenter {
 
     public ToDoListPresenterImpl(ToDoListView mainView) {
         this.mainView = mainView;
-        dataProvider = new ToDoListProviderImpl();
+        dataProvider = ProviderFactory.Companion.getToDoListProvider();
         disposables = new CompositeDisposable();
     }
 

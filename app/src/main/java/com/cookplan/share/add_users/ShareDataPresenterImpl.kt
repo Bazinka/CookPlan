@@ -5,7 +5,7 @@ import com.cookplan.models.Contact
 import com.cookplan.models.ShareUserInfo
 import com.cookplan.models.ShareUserInfoFactory
 import com.cookplan.providers.FamilyModeProvider
-import com.cookplan.providers.impl.FamilyModeProviderImpl
+import com.cookplan.providers.ProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.CompletableObserver
 import io.reactivex.MaybeObserver
@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
 
 class ShareDataPresenterImpl(private val mainView: ShareDataView?) : ShareDataPresenter {
 
-    private val familyModeProvider: FamilyModeProvider = FamilyModeProviderImpl()
+    private val familyModeProvider: FamilyModeProvider = ProviderFactory.Companion.familyModeProvider
 
     override fun getSharedUsers() {
         familyModeProvider.getDataSharedByMe()

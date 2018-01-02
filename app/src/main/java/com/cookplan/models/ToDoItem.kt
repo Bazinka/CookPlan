@@ -8,7 +8,7 @@ import java.io.Serializable
 
 data class ToDoItem(var id: String? = null,
                     var userId: String? = null,
-                    var name: String,
+                    var name: String = String(),
                     var comment: String? = null,
                     var companyId: String? = null,
                     var categoryId: String? = null,

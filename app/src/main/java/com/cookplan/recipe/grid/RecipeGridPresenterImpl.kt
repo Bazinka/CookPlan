@@ -1,15 +1,14 @@
 package com.cookplan.recipe.grid
 
 
+import android.util.Log
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.models.ShareUserInfo
 import com.cookplan.providers.FamilyModeProvider
 import com.cookplan.providers.IngredientProvider
+import com.cookplan.providers.ProviderFactory
 import com.cookplan.providers.RecipeProvider
-import com.cookplan.providers.impl.FamilyModeProviderImpl
-import com.cookplan.providers.impl.IngredientProviderImpl
-import com.cookplan.providers.impl.RecipeProviderImpl
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,9 +29,9 @@ class RecipeGridPresenterImpl(private val mainView: RecipeGridView) : RecipeGrid
 
     init {
         FirebaseAuth.getInstance().addAuthStateListener(this)
-        recipeDataProvider = RecipeProviderImpl()
-        ingredientDataProvider = IngredientProviderImpl()
-        familyModeProvider = FamilyModeProviderImpl()
+        recipeDataProvider = ProviderFactory.Companion.recipeProvider
+        ingredientDataProvider = ProviderFactory.Companion.ingredientProvider
+        familyModeProvider = ProviderFactory.Companion.familyModeProvider
         disposables = CompositeDisposable()
     }
 
@@ -131,9 +130,6 @@ class RecipeGridPresenterImpl(private val mainView: RecipeGridView) : RecipeGrid
     }
 
     override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
-        if (firebaseAuth.currentUser != null) {
-            getRecipeList()
-        }
     }
 
     override fun onStop() {

@@ -8,7 +8,7 @@ import com.cookplan.auth.provider.GoogleProvider
 import com.cookplan.auth.provider.IdpProvider
 import com.cookplan.models.ShareUserInfo
 import com.cookplan.providers.FamilyModeProvider
-import com.cookplan.providers.impl.FamilyModeProviderImpl
+import com.cookplan.providers.ProviderFactory
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -27,7 +27,7 @@ open class AuthPresenterImpl : AuthPresenter, IdpProvider.IdpCallback {
     protected var activity: FragmentActivity
     protected var provider: GoogleProvider? = null
 
-    private val familyModeProvider: FamilyModeProvider = FamilyModeProviderImpl()
+    private val familyModeProvider: FamilyModeProvider = ProviderFactory.Companion.familyModeProvider
 
     override val currentUser: FirebaseUser?
         get() = FirebaseAuth.getInstance().currentUser

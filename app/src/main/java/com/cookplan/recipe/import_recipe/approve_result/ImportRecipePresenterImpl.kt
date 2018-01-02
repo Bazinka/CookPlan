@@ -5,10 +5,8 @@ import com.cookplan.RApplication
 import com.cookplan.models.*
 import com.cookplan.providers.IngredientProvider
 import com.cookplan.providers.ProductProvider
+import com.cookplan.providers.ProviderFactory
 import com.cookplan.providers.RecipeProvider
-import com.cookplan.providers.impl.IngredientProviderImpl
-import com.cookplan.providers.impl.ProductProviderImpl
-import com.cookplan.providers.impl.RecipeProviderImpl
 import com.cookplan.recipe.import_recipe.parser.ParserFactory
 import com.cookplan.recipe.import_recipe.parser.ParserResultListener
 import com.cookplan.utils.Utils
@@ -33,9 +31,9 @@ class ImportRecipePresenterImpl(private val mainView: ImportRecipeView?) : Impor
     private var recipeId: String? = null
 
     init {
-        productDataProvider = ProductProviderImpl()
-        recipeDataProvider = RecipeProviderImpl()
-        ingredientDataProvider = IngredientProviderImpl()
+        productDataProvider = ProviderFactory.Companion.productProvider
+        recipeDataProvider = ProviderFactory.Companion.recipeProvider
+        ingredientDataProvider = ProviderFactory.Companion.ingredientProvider
         disposables = CompositeDisposable()
     }
 

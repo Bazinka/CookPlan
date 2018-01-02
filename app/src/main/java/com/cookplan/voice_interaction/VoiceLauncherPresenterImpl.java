@@ -13,10 +13,8 @@ import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 import com.cookplan.providers.IngredientProvider;
 import com.cookplan.providers.ProductProvider;
+import com.cookplan.providers.ProviderFactory;
 import com.cookplan.providers.ToDoListProvider;
-import com.cookplan.providers.impl.IngredientProviderImpl;
-import com.cookplan.providers.impl.ProductProviderImpl;
-import com.cookplan.providers.impl.ToDoListProviderImpl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -48,9 +46,9 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
 
     public VoiceLauncherPresenterImpl(VoiceLauncherView mainView) {
         this.mainView = mainView;
-        ingredientDataProvider = new IngredientProviderImpl();
-        productDataProvider = new ProductProviderImpl();
-        toDoListDataProvider = new ToDoListProviderImpl();
+        ingredientDataProvider = ProviderFactory.Companion.getIngredientProvider();
+        productDataProvider = ProviderFactory.Companion.getProductProvider();
+        toDoListDataProvider = ProviderFactory.Companion.getToDoListProvider();
         disposables = new CompositeDisposable();
     }
 

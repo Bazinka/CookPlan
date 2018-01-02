@@ -4,8 +4,7 @@ import com.cookplan.RApplication
 import com.cookplan.models.*
 import com.cookplan.providers.IngredientProvider
 import com.cookplan.providers.ProductProvider
-import com.cookplan.providers.impl.IngredientProviderImpl
-import com.cookplan.providers.impl.ProductProviderImpl
+import com.cookplan.providers.ProviderFactory
 import com.cookplan.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.CompletableObserver
@@ -32,8 +31,8 @@ class AddIngredientPresenterImpl(private val mainView: AddIngredientView?) : Add
 
 
     init {
-        ingredientDataProvider = IngredientProviderImpl()
-        productDataProvider = ProductProviderImpl()
+        ingredientDataProvider = ProviderFactory.Companion.ingredientProvider
+        productDataProvider = ProviderFactory.Companion.productProvider
         disposables = CompositeDisposable()
     }
 

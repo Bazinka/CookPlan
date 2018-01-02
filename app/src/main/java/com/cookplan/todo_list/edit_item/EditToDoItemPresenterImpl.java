@@ -4,8 +4,8 @@ import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
+import com.cookplan.providers.ProviderFactory;
 import com.cookplan.providers.ToDoListProvider;
-import com.cookplan.providers.impl.ToDoListProviderImpl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -30,7 +30,7 @@ public class EditToDoItemPresenterImpl implements EditToDoItemPresenter {
 
     public EditToDoItemPresenterImpl(EditToDoItemView mainView) {
         this.mainView = mainView;
-        dataProvider = new ToDoListProviderImpl();
+        dataProvider = ProviderFactory.Companion.getToDoListProvider();
         disposables = new CompositeDisposable();
     }
 

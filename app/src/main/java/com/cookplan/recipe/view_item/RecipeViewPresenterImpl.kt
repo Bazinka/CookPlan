@@ -5,8 +5,7 @@ import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.models.ShopListStatus
 import com.cookplan.providers.IngredientProvider
-import com.cookplan.providers.impl.IngredientProviderImpl
-
+import com.cookplan.providers.ProviderFactory
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -24,7 +23,7 @@ class RecipeViewPresenterImpl(private val mainView: RecipeView?, private val rec
     private val disposables: CompositeDisposable
 
     init {
-        this.dataProvider = IngredientProviderImpl()
+        this.dataProvider = ProviderFactory.Companion.ingredientProvider
         disposables = CompositeDisposable()
     }
 

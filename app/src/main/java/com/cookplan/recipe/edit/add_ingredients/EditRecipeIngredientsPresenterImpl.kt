@@ -4,6 +4,7 @@ package com.cookplan.recipe.edit.add_ingredients
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.providers.IngredientProvider
+import com.cookplan.providers.ProviderFactory
 import com.cookplan.providers.impl.IngredientProviderImpl
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,7 +23,7 @@ class EditRecipeIngredientsPresenterImpl internal constructor(private val mainVi
     private val disposables: CompositeDisposable
 
     init {
-        this.dataProvider = IngredientProviderImpl()
+        this.dataProvider = ProviderFactory.Companion.ingredientProvider
         disposables = CompositeDisposable()
     }
 

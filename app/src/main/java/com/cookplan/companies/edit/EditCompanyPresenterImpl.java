@@ -7,7 +7,7 @@ import com.cookplan.R;
 import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.providers.CompanyProvider;
-import com.cookplan.providers.impl.CompanyProviderImpl;
+import com.cookplan.providers.ProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -33,7 +33,7 @@ public class EditCompanyPresenterImpl implements EditCompanyPresenter {
     public EditCompanyPresenterImpl(Context contex, EditCompanyView mainView) {
         this.context = contex;
         this.mainView = mainView;
-        dataProvider = new CompanyProviderImpl();
+        dataProvider = ProviderFactory.Companion.getCompanyProvider();
     }
 
     @Override

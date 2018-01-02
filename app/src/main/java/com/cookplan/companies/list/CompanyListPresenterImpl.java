@@ -3,6 +3,7 @@ package com.cookplan.companies.list;
 import com.cookplan.models.Company;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.providers.CompanyProvider;
+import com.cookplan.providers.ProviderFactory;
 import com.cookplan.providers.impl.CompanyProviderImpl;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class CompanyListPresenterImpl implements CompanyListPresenter {
 
     public CompanyListPresenterImpl(CompanyListView mainView) {
         this.mainView = mainView;
-        this.dataProvider = new CompanyProviderImpl();
+        this.dataProvider = ProviderFactory.Companion.getCompanyProvider();
         disposables = new CompositeDisposable();
     }
 

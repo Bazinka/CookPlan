@@ -5,8 +5,7 @@ import com.cookplan.models.Ingredient
 import com.cookplan.models.ShareUserInfo
 import com.cookplan.providers.FamilyModeProvider
 import com.cookplan.providers.IngredientProvider
-import com.cookplan.providers.impl.FamilyModeProviderImpl
-import com.cookplan.providers.impl.IngredientProviderImpl
+import com.cookplan.providers.ProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -24,9 +23,9 @@ abstract class ShoppingListBasePresenterImpl : ShoppingListBasePresenter, Fireba
     private val disposables: CompositeDisposable
 
     init {
-        this.ingredientDataProvider = IngredientProviderImpl()
+        this.ingredientDataProvider = ProviderFactory.Companion.ingredientProvider
         FirebaseAuth.getInstance().addAuthStateListener(this)
-        familyModeProvider = FamilyModeProviderImpl()
+        familyModeProvider = ProviderFactory.Companion.familyModeProvider
         disposables = CompositeDisposable()
     }
 
@@ -76,6 +75,5 @@ abstract class ShoppingListBasePresenterImpl : ShoppingListBasePresenter, Fireba
     abstract fun sortIngredientList(userIngredients: List<Ingredient>)
 
     override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
-        getShoppingList()
     }
 }

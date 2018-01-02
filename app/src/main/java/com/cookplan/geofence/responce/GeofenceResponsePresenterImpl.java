@@ -2,7 +2,7 @@ package com.cookplan.geofence.responce;
 
 import com.cookplan.models.Company;
 import com.cookplan.providers.CompanyProvider;
-import com.cookplan.providers.impl.CompanyProviderImpl;
+import com.cookplan.providers.ProviderFactory;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -19,7 +19,7 @@ public class GeofenceResponsePresenterImpl implements GeofenceResponsePresenter 
 
     public GeofenceResponsePresenterImpl(GeofenceResponseView mainView) {
         this.mainView = mainView;
-        this.dataProvider = new CompanyProviderImpl();
+        this.dataProvider = ProviderFactory.Companion.getCompanyProvider();
     }
 
     @Override

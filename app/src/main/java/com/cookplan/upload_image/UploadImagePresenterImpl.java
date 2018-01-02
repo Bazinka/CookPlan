@@ -7,6 +7,7 @@ import android.support.v4.content.FileProvider;
 import com.cookplan.R;
 import com.cookplan.RApplication;
 import com.cookplan.providers.ImageProvider;
+import com.cookplan.providers.ProviderFactory;
 import com.cookplan.providers.impl.ImageProviderImpl;
 import com.cookplan.utils.Utils;
 
@@ -30,7 +31,7 @@ public class UploadImagePresenterImpl implements UploadImagePresenter {
     public UploadImagePresenterImpl(UploadImageView mainView, Activity context) {
         this.mainView = mainView;
         countPhotos = 0;
-        imageProvider = new ImageProviderImpl(context);
+//        imageProvider = ProviderFactory.Companion.getImageProvider();
     }
 
     @Override

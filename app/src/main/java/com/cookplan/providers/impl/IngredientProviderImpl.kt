@@ -1,7 +1,5 @@
 package com.cookplan.providers.impl
 
-import android.os.Looper
-import android.util.Log
 import com.cookplan.R
 import com.cookplan.RApplication
 import com.cookplan.models.CookPlanError
@@ -63,7 +61,7 @@ class IngredientProviderImpl : IngredientProvider {
                     resultIngredient.add(ingredient)
                 } else if (ingredient.userId != null && !shareUserInfos.isEmpty()) {
                     for ((_, ownerUserId, ownerUserName) in shareUserInfos) {
-                        if (ownerUserId?.contains(ingredient.userId) ?: false) {
+                        if (ownerUserId.contains(ingredient.userId)) {
                             ingredient.userName = ownerUserName
                             resultIngredient.add(ingredient)
                         }
@@ -174,11 +172,6 @@ class IngredientProviderImpl : IngredientProvider {
                                 .child(ingred.id)
                                 .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
                                 .value = ingred.shopListStatus
-                    }
-                    if (Looper.myLooper() == Looper.getMainLooper()) {
-                        Log.d("updateShopStatusList", "Main Thread")
-                    } else {
-                        Log.d("updateShopStatusList", "мы не в основном потоке")
                     }
                     return Transaction.success(mutableData)
                 }
