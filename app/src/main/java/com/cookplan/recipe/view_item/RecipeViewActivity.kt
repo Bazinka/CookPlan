@@ -5,26 +5,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
-import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.cookplan.BaseActivity
 import com.cookplan.R
-import com.cookplan.main.ImageViewPagerAdapter
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.models.ShopListStatus.NEED_TO_BUY
 import com.cookplan.models.ShopListStatus.NONE
 import com.cookplan.recipe.edit.add_info.EditRecipeInfoActivity
+import com.cookplan.recipe.edit.add_ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
-import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 class RecipeViewActivity : BaseActivity(), RecipeView {
@@ -80,6 +76,20 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
                 intent.putExtra(RecipeStepsViewActivity.RECIPE_OBJECT_KEY, reviewRecipe)
                 intent.putParcelableArrayListExtra(RecipeStepsViewActivity.INGREDIENT_LIST_OBJECT_KEY,
                         adapter?.getIngredients() as ArrayList<Ingredient>)
+                startActivityWithLeftAnimation(intent)
+            }
+
+            val editDescriptionButton = findViewById<ImageView>(R.id.edit_description_image_view)
+            editDescriptionButton.setOnClickListener {
+                val intent = Intent(this, EditRecipeInfoActivity::class.java)
+                intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, presenter?.getRecipeObject())
+                startActivityWithLeftAnimation(intent)
+            }
+
+            val editIngredientsButton = findViewById<ImageView>(R.id.edit_ingredients_image_view)
+            editIngredientsButton.setOnClickListener {
+                val intent = Intent(this, EditRecipeIngredientsActivity::class.java)
+                intent.putExtra(EditRecipeIngredientsActivity.RECIPE_OBJECT_KEY, presenter?.getRecipeObject())
                 startActivityWithLeftAnimation(intent)
             }
         }
@@ -148,30 +158,6 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
 
     override fun setErrorToast(error: String) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-    }
-
-    override fun onCreateOptionsMenu(_menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.recipe_view_menu, _menu)
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null && presenter?.getRecipeObject()?.userId == user.uid) {
-            _menu.findItem(R.id.app_bar_edit).isVisible = true
-        } else {
-            _menu.findItem(R.id.app_bar_edit).isVisible = false
-        }
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.app_bar_edit) {
-            val intent = Intent(this, EditRecipeInfoActivity::class.java)
-            intent.putExtra(EditRecipeInfoActivity.RECIPE_OBJECT_KEY, presenter?.getRecipeObject())
-            startActivityWithLeftAnimation(intent)
-            finish();
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     companion object {
