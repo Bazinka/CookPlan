@@ -62,8 +62,7 @@
             android:windowSoftInputMode="adjustNothing"/>
 
         <activity
-            android:name=".recipe.view_item.RecipeViewActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".recipe.view_item.RecipeViewActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

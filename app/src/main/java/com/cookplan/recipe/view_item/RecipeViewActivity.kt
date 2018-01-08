@@ -36,8 +36,6 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_view)
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
         setNavigationArrow()
 
         if (!intent.hasExtra(RECIPE_OBJECT_KEY)) {
@@ -83,14 +81,6 @@ class RecipeViewActivity : BaseActivity(), RecipeView {
                 intent.putParcelableArrayListExtra(RecipeStepsViewActivity.INGREDIENT_LIST_OBJECT_KEY,
                         adapter?.getIngredients() as ArrayList<Ingredient>)
                 startActivityWithLeftAnimation(intent)
-            }
-
-            val viewPager = findViewById<View>(R.id.recipe_images_viewpager) as ViewPager
-            if (reviewRecipe.imageUrls.isEmpty() ?: false) {
-                viewPager.adapter = ImageViewPagerAdapter(reviewRecipe.imageUrls ?: listOf(), this)
-                viewPager.visibility = View.VISIBLE
-            } else {
-                viewPager.visibility = View.GONE
             }
         }
     }
