@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
-import com.daimajia.swipe.SwipeLayout
 
 /**
  * Created by DariaEfimova on 18.03.17.
@@ -36,14 +35,6 @@ class EditRecipeInrgedientsAdapter(private val removelistener: (Ingredient) -> U
         holder.removeButtonLayout.setBackgroundResource(ingredient.category.colorId)
         holder.categoryView.setBackgroundResource(ingredient.category.colorId)
 
-        //set show mode.
-        holder.mainView.showMode = SwipeLayout.ShowMode.PullOut
-
-        //add drag edge.(If the BottomView has 'layout_gravity' attribute, this line is unnecessary)
-        holder.mainView.addDrag(SwipeLayout.DragEdge.Left, holder.mainRemoveLayout)
-        holder.mainView.addDrag(SwipeLayout.DragEdge.Right, null)
-
-
         with(holder.mainRemoveLayout) {
             tag = ingredient
             setOnClickListener { removelistener(ingredient) }
@@ -58,7 +49,6 @@ class EditRecipeInrgedientsAdapter(private val removelistener: (Ingredient) -> U
         var mainRemoveLayout: ViewGroup
         var removeButtonLayout: ViewGroup
         var categoryView: View
-        var mainView: SwipeLayout
 
         init {
             nameTextView = v.findViewById<TextView>(R.id.ingredient_item_name)
@@ -66,7 +56,6 @@ class EditRecipeInrgedientsAdapter(private val removelistener: (Ingredient) -> U
             mainRemoveLayout = v.findViewById<ViewGroup>(R.id.ingredient_remove_layout)
             removeButtonLayout = v.findViewById<ViewGroup>(R.id.ingredient_remove_button_layout)
             categoryView = v.findViewById(R.id.category_view)
-            mainView = v.findViewById<SwipeLayout>(R.id.main_view)
         }
     }
 

@@ -102,7 +102,6 @@ dependencies {
         transitive = true;
     }
 
-    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.rmtheis:tess-two:5.4.1'
     compile 'net.danlew:android.joda:2.9.4.1'
 //    compile 'com.bettervectordrawable:lib:0.8'

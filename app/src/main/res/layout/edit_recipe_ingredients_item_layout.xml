@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.daimajia.swipe.SwipeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <!-- Bottom View Start-->
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
     <RelativeLayout
         android:id="@+id/ingredient_remove_layout"
         android:layout_width="50dp"
@@ -30,9 +31,7 @@
                 app:srcCompat="@drawable/ic_remove_item"/>
         </RelativeLayout>
     </RelativeLayout>
-    <!-- Bottom View End-->
 
-    <!-- Surface View Start -->
     <LinearLayout
         android:id="@+id/ingredient_content_layout"
         android:layout_width="match_parent"
@@ -91,5 +90,4 @@
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
-    <!-- Surface View End -->
-</com.daimajia.swipe.SwipeLayout>
+</LinearLayout>
