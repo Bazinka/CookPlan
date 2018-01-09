@@ -5,13 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.*
 import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.models.Ingredient
@@ -25,6 +25,7 @@ import com.cookplan.recipe.edit.add_ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
 import java.util.*
+
 
 class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
 
@@ -44,7 +45,11 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         } else {
             var recipe = intent.getSerializableExtra(RECIPE_OBJECT_KEY) as Recipe
 
-            setTitle(recipe.name)
+            val backImageView = findViewById<ImageView>(R.id.back_image_view)
+            backImageView.setOnClickListener {
+                onBackPressed()
+            }
+            setName(recipe.name)
 
             val recyclerView = findViewById<RecyclerView>(R.id.ingredients_recycler_view)
             recyclerView.setHasFixedSize(true)
@@ -58,8 +63,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
 
             viewPresenter = RecipeViewPresenterImpl(this, recipe)
 
-            val descTextView = findViewById<TextView>(R.id.description_body_textview)
-            descTextView.text = recipe.desc
+            setDescription(recipe.desc)
 
             val addToShopListButton = findViewById<Button>(R.id.add_shop_list_items_button)
             addToShopListButton.setOnClickListener {
@@ -83,6 +87,27 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
                         adapter?.getIngredients() as ArrayList<Ingredient>)
                 startActivityWithLeftAnimation(intent)
             }
+            val editNameLayout = findViewById<ViewGroup>(R.id.name_recipe_layout)
+            editNameLayout.setOnClickListener {
+                val contentDialogView = LayoutInflater.from(this).inflate(R.layout.name_edit_dialog_layout, null)
+                val nameEditTextView = contentDialogView.findViewById<EditText>(R.id.recipe_name_edit_text)
+                val nameTextView = findViewById<TextView>(R.id.name_recipe_textview)
+                nameEditTextView.setText(nameTextView.text)
+
+                AlertDialog.Builder(this)
+                        .setView(contentDialogView)
+                        .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                            dialog.dismiss()
+                            val text = nameEditTextView.text.toString()
+                            if (!text.isEmpty()) {
+                                setName(text)
+                                editPresenter?.saveRecipe(recipe = viewPresenter?.getRecipe(), newName = text,
+                                        newDesc = viewPresenter?.getRecipe()?.desc)
+                            }
+                        }
+                        .setNegativeButton(android.R.string.cancel) { dialog, which -> dialog.cancel() }
+                        .show()
+            }
 
             val editDescriptionButton = findViewById<ImageView>(R.id.edit_description_image_view)
             editDescriptionButton.setOnClickListener {
@@ -100,6 +125,16 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
 
             editPresenter = EditRecipePresenterImpl(this)
         }
+    }
+
+    private fun setDescription(desc: String) {
+        val descTextView = findViewById<TextView>(R.id.description_body_textview)
+        descTextView.text = desc
+    }
+
+    private fun setName(name: String?) {
+        val nameTextView = findViewById<TextView>(R.id.name_recipe_textview)
+        nameTextView.text = name
     }
 
     override fun onStart() {
@@ -179,9 +214,8 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
     }
 
     override fun recipeSavedSuccessfully(recipe: Recipe) {
-        setTitle(recipe.name)
-        val descTextView = findViewById<TextView>(R.id.description_body_textview)
-        descTextView.text = recipe.desc
+        setName(recipe.name)
+        setDescription(recipe.desc)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int,
@@ -189,9 +223,8 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 CHANGE_DESCRIPTION_REQUEST -> {
-                    val descTextView = findViewById<TextView>(R.id.description_body_textview)
                     var text = data?.getStringExtra(CHANGE_DESCRIPTION_KEY) ?: getString(R.string.recipe_desc_is_not_needed_title)
-                    descTextView.text = text
+                    setDescription(text)
 
                     editPresenter?.saveRecipe(recipe = viewPresenter?.getRecipe(), newDesc = text)
                 }

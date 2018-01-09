@@ -8,5 +8,5 @@ import com.cookplan.models.Recipe
 
 interface EditRecipePresenter {
 
-    fun saveRecipe(recipe: Recipe?, newName: String = String(), newDesc: String)
+    fun saveRecipe(recipe: Recipe?, newName: String = String(), newDesc: String?)
 }

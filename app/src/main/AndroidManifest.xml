@@ -58,7 +58,9 @@
         <activity
             android:name=".recipe.edit.add_ingredients.EditRecipeIngredientsActivity"
             android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".recipe.view_item.RecipeViewActivity"/>
+        <activity
+            android:name=".recipe.view_item.RecipeViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

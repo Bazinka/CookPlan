@@ -17,16 +17,16 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
 
     private val dataProvider: RecipeProvider = RecipeProviderImpl()
 
-    override fun saveRecipe(recipe: Recipe?, newName: String, newDesc: String) {
+    override fun saveRecipe(recipe: Recipe?, newName: String, newDesc: String?) {
         mainView?.showProgressBar()
 
         var newRecipe = recipe
         if (newRecipe == null) {
-            newRecipe = Recipe(id = String(), name = newName, desc = newDesc, userId = FirebaseAuth.getInstance().currentUser?.uid,
+            newRecipe = Recipe(id = String(), name = newName, desc = newDesc ?: String(), userId = FirebaseAuth.getInstance().currentUser?.uid,
                     userName = FirebaseAuth.getInstance().currentUser?.displayName)
         } else {
             newRecipe.name = if (!newName.isEmpty()) newName else newRecipe.name
-            newRecipe.desc = newDesc
+            newRecipe.desc = newDesc ?: newRecipe.desc
         }
         if (newRecipe.id.isEmpty()) {
             dataProvider.createRecipe(newRecipe)

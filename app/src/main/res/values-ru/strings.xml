@@ -201,6 +201,7 @@
     <string name="impossible_remove_recipe_title">Невозможно удалить чужой рецепт</string>
     <string name="remove_all_ingredients_from_shop_list_title">Remove all from shopping list</string>
     <string name="edit_recipe_title">Редактирование рецепта</string>
+    <string name="change_name_title">Изменить название</string>
 
 
 </resources>
