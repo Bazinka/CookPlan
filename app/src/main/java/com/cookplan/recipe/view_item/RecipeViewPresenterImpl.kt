@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers
  * Created by DariaEfimova on 23.03.17.
  */
 
-class RecipeViewPresenterImpl(private val mainView: RecipeView?, private val recipe: Recipe) : RecipeViewPresenter {
+class RecipeViewPresenterImpl(private val mainView: RecipeView?, private var recipe: Recipe) : RecipeViewPresenter {
 
     private val dataProvider: IngredientProvider
     private val disposables: CompositeDisposable
@@ -101,8 +101,7 @@ class RecipeViewPresenterImpl(private val mainView: RecipeView?, private val rec
         disposables.clear()
     }
 
-    override fun getRecipeObject(): Recipe {
+    override fun getRecipe(): Recipe {
         return recipe
     }
-
 }

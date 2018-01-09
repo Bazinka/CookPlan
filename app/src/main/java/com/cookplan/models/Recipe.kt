@@ -29,9 +29,6 @@ data class Recipe(var id: String,
                     userName = auth.currentUser?.displayName)
         }
 
-    val imageUrlArrayList: ArrayList<String>
-        get() = ArrayList(imageUrls)
-
     data class RecipeDB(var id: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_NAME_FIELD) var name: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_DESCRIPTION_FIELD) var desc: String = String(),

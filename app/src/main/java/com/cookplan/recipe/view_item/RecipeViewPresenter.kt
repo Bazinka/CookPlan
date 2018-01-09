@@ -10,7 +10,7 @@ import com.cookplan.models.ShopListStatus
 
 interface RecipeViewPresenter {
 
-    fun getRecipeObject(): Recipe
+    fun getRecipe(): Recipe
 
     fun getIngredientList()
 

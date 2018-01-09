@@ -7,6 +7,7 @@ import com.cookplan.models.Ingredient
  */
 
 interface RecipeView {
+
     fun setErrorToast(error: String)
 
     fun setIngredientList(ingredientList: List<Ingredient>)

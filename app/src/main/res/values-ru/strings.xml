@@ -35,7 +35,7 @@
     <string name="enter_product_title">Введите продукт</string>
     <string name="amount_product_title">Количество</string>
     <string name="product_amount_not_exist">Продукты без указания количества не смогут суммироваться в списке покупок</string>
-    <string name="recipe_desc_is_not_needed_title">Описание не нужно, все и так понятно...</string>
+    <string name="recipe_desc_is_not_needed_title">Описания пока нет.</string>
     <string name="attention_title">Внимание</string>
     <string name="whats_cooking_title">Что готовим?</string>
     <string name="ingredients">Ингредиенты:</string>
@@ -200,6 +200,7 @@
     <string name="my_recipe_title">Мой рецепт</string>
     <string name="impossible_remove_recipe_title">Невозможно удалить чужой рецепт</string>
     <string name="remove_all_ingredients_from_shop_list_title">Remove all from shopping list</string>
+    <string name="edit_recipe_title">Редактирование рецепта</string>
 
 
 </resources>

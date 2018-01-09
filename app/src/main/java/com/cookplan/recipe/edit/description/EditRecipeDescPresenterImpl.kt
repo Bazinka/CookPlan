@@ -1,4 +1,4 @@
-package com.cookplan.recipe.edit.add_info
+package com.cookplan.recipe.edit.description
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,16 +8,8 @@ import android.net.Uri
 import android.os.Environment
 import android.support.v4.content.FileProvider
 import com.cookplan.R
-import com.cookplan.models.Recipe
-import com.cookplan.providers.RecipeProvider
-import com.cookplan.providers.impl.RecipeProviderImpl
 import com.cookplan.utils.Utils
-import com.google.firebase.auth.FirebaseAuth
 import com.googlecode.tesseract.android.TessBaseAPI
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -26,10 +18,9 @@ import java.io.IOException
  * Created by DariaEfimova on 16.03.17.
  */
 
-class EditRecipeInfoPresenterImpl(private val mainView: EditRecipeInfoView?, private val context: Context) : EditRecipeInfoPresenter {
+class EditRecipeDescPresenterImpl(private val mainView: EditRecipeDescView?, private val context: Context) : EditRecipeDescPresenter {
 
     private var tessBaseApi: TessBaseAPI? = null
-    private val dataProvider: RecipeProvider = RecipeProviderImpl()
 
     override fun getOutputImagePath(): Uri? {
         var outputUri: Uri? = null
@@ -179,60 +170,8 @@ class EditRecipeInfoPresenterImpl(private val mainView: EditRecipeInfoView?, pri
         }.start()
     }
 
-    override fun saveRecipe(recipe: Recipe?, newName: String, newDesc: String) {
-        mainView?.showProgressBar()
-
-        var newRecipe = recipe
-        if (newRecipe == null) {
-            newRecipe = Recipe(id = String(), name = newName, desc = newDesc, userId = FirebaseAuth.getInstance().currentUser?.uid,
-                    userName = FirebaseAuth.getInstance().currentUser?.displayName)
-        } else {
-            newRecipe.name = newName
-            newRecipe.desc = newDesc
-        }
-        if (newRecipe.id.isEmpty()) {
-            dataProvider.createRecipe(newRecipe)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : SingleObserver<Recipe> {
-                        override fun onSubscribe(d: Disposable) {
-
-                        }
-
-                        override fun onSuccess(recipe: Recipe) {
-                            mainView?.hideProgressBar()
-                            mainView?.setNextActivity(recipe)
-                        }
-
-                        override fun onError(e: Throwable) {
-                            mainView?.hideProgressBar()
-                            mainView?.setErrorToast(e.message ?: String())
-                        }
-                    })
-        } else {
-            dataProvider.update(newRecipe)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : SingleObserver<Recipe> {
-                        override fun onSubscribe(d: Disposable) {
-
-                        }
-
-                        override fun onSuccess(recipe: Recipe) {
-                            mainView?.hideProgressBar()
-                            mainView?.setNextActivity(recipe)
-                        }
-
-                        override fun onError(e: Throwable) {
-                            mainView?.hideProgressBar()
-                            mainView?.setErrorToast(e.message ?: String())
-                        }
-                    })
-        }
-    }
-
     companion object {
-        private val tag = EditRecipeInfoPresenterImpl::class.java.simpleName
+        private val tag = EditRecipeDescPresenterImpl::class.java.simpleName
         private val DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/CookPlanImages/"
         private val TESSDATA = "tessdata"
     }

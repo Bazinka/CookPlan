@@ -53,16 +53,12 @@
             android:value="106104ec1cff9417dfad0a211e594bc4c3582d55"/>
 
         <activity
-            android:name=".recipe.edit.add_info.EditRecipeInfoActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".recipe.edit.description.EditRecipeDescActivity"
             android:windowSoftInputMode="adjustPan|stateVisible"/>
-
         <activity
             android:name=".recipe.edit.add_ingredients.EditRecipeIngredientsActivity"
             android:windowSoftInputMode="adjustNothing"/>
-
-        <activity
-            android:name=".recipe.view_item.RecipeViewActivity"/>
+        <activity android:name=".recipe.view_item.RecipeViewActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -1,12 +1,10 @@
-package com.cookplan.recipe.edit.add_info
-
-import com.cookplan.models.Recipe
+package com.cookplan.recipe.edit.description
 
 /**
  * Created by DariaEfimova on 16.03.17.
  */
 
-interface EditRecipeInfoView {
+interface EditRecipeDescView {
 
     fun setErrorToSnackBar(error: String)
 
@@ -15,10 +13,4 @@ interface EditRecipeInfoView {
     fun setErrorToast(error: String)
 
     fun setAsyncTextResult(result: String)
-
-    fun showProgressBar()
-
-    fun hideProgressBar()
-
-    fun setNextActivity(recipe: Recipe)
 }

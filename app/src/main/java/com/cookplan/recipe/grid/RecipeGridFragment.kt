@@ -15,7 +15,6 @@ import com.cookplan.BaseFragment
 import com.cookplan.R
 import com.cookplan.main.MainActivity
 import com.cookplan.models.Recipe
-import com.cookplan.recipe.edit.add_info.EditRecipeInfoActivity
 import com.cookplan.recipe.import_recipe.search_url.SearchRecipeUrlActivity
 import com.cookplan.recipe.view_item.RecipeViewActivity
 import com.cookplan.utils.GridSpacingItemDecoration
@@ -102,8 +101,9 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
     }
 
     internal fun startNewRecipeActivity() {
-        val intent = Intent(activity, EditRecipeInfoActivity::class.java)
-        (activity as BaseActivity).startActivityWithLeftAnimation(intent)
+        setErrorToast("Пока создание рецептов не работает")
+//        val intent = Intent(activity, EditRecipeDescActivity::class.java)
+//        (activity as BaseActivity).startActivityWithLeftAnimation(intent)
     }
 
     override fun setEmptyView() {
