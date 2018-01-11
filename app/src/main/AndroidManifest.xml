@@ -71,8 +71,6 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.Fullscreen">
         </activity>
-        <activity android:name=".share.add_users.ShareDataActivity">
-        </activity>
         <activity android:name=".share.contact_list.ContactListActivity">
         </activity>
         <activity android:name=".product_list.update_database.UpdateProductDatabaseActivity">

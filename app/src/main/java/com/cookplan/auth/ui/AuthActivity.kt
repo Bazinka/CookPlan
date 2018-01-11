@@ -34,7 +34,10 @@ class AuthActivity : BaseActivity(), AuthView {
     }
 
     override fun signedInWithGoogle() {
-        presenter?.isFamilyModeTurnOnRequest()
+        val intent = Intent()
+        intent.setClass(this, MainActivity::class.java)
+        startActivityWithLeftAnimation(intent)
+        finish()
     }
 
     override fun signedInFailed() {
@@ -45,14 +48,6 @@ class AuthActivity : BaseActivity(), AuthView {
         signInButton.setOnClickListener { v ->
             presenter?.firstAuthSignIn()
         }
-    }
-
-    override fun goToNextScreen(isFamilyModeTurnOn: Boolean) {
-        val intent = Intent()
-        intent.setClass(this, MainActivity::class.java)
-        intent.putExtra(MainActivity.FAMILY_TURNED_ON_KEY, isFamilyModeTurnOn)
-        startActivityWithLeftAnimation(intent)
-        finish()
     }
 
     override fun setError(errorResourceId: Int) {

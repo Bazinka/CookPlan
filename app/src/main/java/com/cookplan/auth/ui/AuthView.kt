@@ -12,7 +12,5 @@ interface AuthView {
 
     fun signedInFailed()
 
-    fun goToNextScreen(isFamilyModeTurnOn: Boolean)
-
     fun setError(errorResourceId: Int)
 }

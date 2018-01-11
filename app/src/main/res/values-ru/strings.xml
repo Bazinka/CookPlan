@@ -179,7 +179,7 @@
     <string name="import_title">Импортировать</string>
     <string name="create_recipe_button_title">Создать</string>
     <string name="or_text">или</string>
-    <string name="chose_contact_title">Вы выбрали контакты:</string>
+    <string name="chose_contact_title">Пользователи, кто видят ваши рецепты и список покупок:</string>
     <string name="search_title">Поиск</string>
     <string name="database_is_updating">База данных обновляется</string>
     <string name="processing_data_text">Обработка информации...</string>
@@ -202,6 +202,7 @@
     <string name="remove_all_ingredients_from_shop_list_title">Remove all from shopping list</string>
     <string name="edit_recipe_title">Редактирование рецепта</string>
     <string name="change_name_title">Изменить название</string>
+    <string name="empty_share_users_title">Пока никто не видит ваши данные</string>
 
 
 </resources>

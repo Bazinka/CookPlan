@@ -1,7 +1,5 @@
 package com.cookplan.main
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
@@ -21,7 +19,7 @@ import com.cookplan.R
 import com.cookplan.companies.MainCompaniesFragment
 import com.cookplan.product_list.ProductListFragment
 import com.cookplan.recipe.grid.RecipeGridFragment
-import com.cookplan.share.add_users.ShareDataActivity
+import com.cookplan.share.add_users.ShareDataFragment
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment
 import com.cookplan.todo_list.ToDoListFragment
@@ -51,6 +49,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         fillNavHeader()
         navigationView.setNavigationItemSelectedListener(this)
         navigationView.setCheckedItem(R.id.nav_shopping_list)
+        menu = navigationView.menu
         setShoppingListFragment()
     }
 
@@ -78,24 +77,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         val itemId = item.itemId
 
-        if (itemId == R.id.nav_recipe_list) {
-            setRecipeListFragment()
-        } else if (itemId == R.id.nav_shopping_list) {
-            setShoppingListFragment()
-        } else if (itemId == R.id.nav_vocabulary) {
-            setProductListFragment()
-        } else if (itemId == R.id.nav_todo_list) {
-            setTODOListFragment()
-        } else if (itemId == R.id.nav_companies) {
-            setCompaniesListFragment()
+        when (itemId) {
+            R.id.nav_recipe_list -> setRecipeListFragment()
+            R.id.nav_shopping_list -> setShoppingListFragment()
+            R.id.nav_vocabulary -> setProductListFragment()
+            R.id.nav_todo_list -> setTODOListFragment()
+            R.id.nav_companies -> setCompaniesListFragment()
+            R.id.nav_share -> setShareDataFragment()
         }
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -103,7 +95,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    internal fun setRecipeListFragment() {
+    private fun setRecipeListFragment() {
         val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
         val viewPager = findViewById<ViewPager>(R.id.main_tabs_viewpager)
@@ -123,7 +115,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         transaction.commit()
     }
 
-    internal fun setShoppingListFragment() {
+    private fun setShoppingListFragment() {
 
         val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.VISIBLE
@@ -141,7 +133,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setTitle(getString(R.string.shopping_list_title))
     }
 
-    internal fun setProductListFragment() {
+    private fun setProductListFragment() {
 
         val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
@@ -163,9 +155,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         transaction.commit()
     }
 
-    internal fun setTODOListFragment() {
-        menu?.findItem(R.id.app_bar_share_on)?.isVisible = false
-        menu?.findItem(R.id.app_bar_share_off)?.isVisible = false
+    private fun setTODOListFragment() {
 
         val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
@@ -187,9 +177,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         transaction.commit()
     }
 
-    internal fun setCompaniesListFragment() {
-        menu?.findItem(R.id.app_bar_share_on)?.isVisible = false
-        menu?.findItem(R.id.app_bar_share_off)?.isVisible = false
+    private fun setCompaniesListFragment() {
 
         val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
         tabsLayout.visibility = View.GONE
@@ -208,44 +196,24 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         transaction.commit()
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == OPEN_SHOP_LIST_REQUEST) {
-            if (resultCode == Activity.RESULT_OK) {
-                setShoppingListFragment()
-                val navigationView = findViewById<NavigationView>(R.id.nav_view)
-                navigationView.setCheckedItem(R.id.nav_shopping_list)
-            }
-        } else if (requestCode == SHARE_USER_LIST_REQUEST && resultCode == Activity.RESULT_OK) {
-            setFamilyModeMenuOptions(data?.getBooleanExtra(FAMILY_TURNED_ON_KEY, false) ?: false)
+    private fun setShareDataFragment() {
+        val tabsLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
+        tabsLayout.visibility = View.GONE
+        val viewPager = findViewById<ViewPager>(R.id.main_tabs_viewpager)
+        viewPager.visibility = View.GONE
+
+        setTitle(getString(R.string.share_data_title))
+        val fragment = ShareDataFragment.newInstance()
+        val transaction = supportFragmentManager.beginTransaction()
+        if (supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
+            transaction.add(R.id.fragment_container, fragment)
+        } else {
+            transaction.replace(R.id.fragment_container, fragment)
         }
-    }
-
-    override fun onCreateOptionsMenu(_menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_menu, _menu)
-        menu = _menu
-        setFamilyModeMenuOptions(intent.getBooleanExtra(FAMILY_TURNED_ON_KEY, false))
-        return super.onCreateOptionsMenu(_menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.app_bar_share_off || id == R.id.app_bar_share_on) {
-            val intent = Intent(this, ShareDataActivity::class.java)
-            startActivityForResultWithLeftAnimation(intent, SHARE_USER_LIST_REQUEST)
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun setFamilyModeMenuOptions(isFamilyModeTurnOn: Boolean) {
-        menu?.findItem(R.id.app_bar_share_on)?.isVisible = isFamilyModeTurnOn
-        menu?.findItem(R.id.app_bar_share_off)?.isVisible = !isFamilyModeTurnOn
+        transaction.commit()
     }
 
     companion object {
         val OPEN_SHOP_LIST_REQUEST = 10
-        val SHARE_USER_LIST_REQUEST = 11
-
-        val FAMILY_TURNED_ON_KEY = "FAMILY_TURNED_ON_REQUEST"
     }
 }

@@ -30,16 +30,18 @@ class ShareDataPresenterImpl(private val mainView: ShareDataView?) : ShareDataPr
 
                     override fun onSubscribe(d: Disposable) {}
 
-                    override fun onSuccess(shareUserInfo: ShareUserInfo) {
+                    override fun onSuccess(item: ShareUserInfo) {
                         val contactList = mutableListOf<Contact>()
-                        shareUserInfo.clientUserEmailList.mapTo(contactList) { Contact(it) }
+                        item.clientUserEmailList.mapTo(contactList) { Contact(it) }
                         mainView?.setContactList(contactList)
                     }
 
-                    override fun onComplete() {}
+                    override fun onComplete() {
+                        mainView?.setContactList(mutableListOf())
+                    }
 
                     override fun onError(e: Throwable) {
-                        mainView?.setError(e.message ?: String())
+                        mainView?.setError(R.string.error_share_title)
                     }
                 })
     }
@@ -64,11 +66,10 @@ class ShareDataPresenterImpl(private val mainView: ShareDataView?) : ShareDataPr
                                     override fun onSubscribe(d: Disposable) {}
 
                                     override fun onSuccess(shareUserInfo: ShareUserInfo) {
-                                        mainView?.setShareSuccess(true)
                                     }
 
                                     override fun onError(e: Throwable) {
-                                        mainView?.setShareError(R.string.error_share_title)
+                                        mainView?.setError(R.string.error_share_title)
                                     }
                                 })
                     }
@@ -87,18 +88,17 @@ class ShareDataPresenterImpl(private val mainView: ShareDataView?) : ShareDataPr
                                         override fun onSubscribe(d: Disposable) {}
 
                                         override fun onSuccess(shareUserInfo: ShareUserInfo) {
-                                            mainView?.setShareSuccess(true)
                                         }
 
                                         override fun onError(e: Throwable) {
-                                            mainView?.setShareError(R.string.error_share_title)
+                                            mainView?.setError(R.string.error_share_title)
                                         }
                                     })
                         }
                     }
 
                     override fun onError(e: Throwable) {
-                        mainView?.setShareError(R.string.shared_data_error)
+                        mainView?.setError(R.string.shared_data_error)
                     }
                 })
     }
@@ -113,11 +113,10 @@ class ShareDataPresenterImpl(private val mainView: ShareDataView?) : ShareDataPr
                     }
 
                     override fun onComplete() {
-                        mainView?.setShareSuccess(false)
                     }
 
                     override fun onError(e: Throwable) {
-                        mainView?.setShareError(R.string.error_share_title)
+                        mainView?.setError(R.string.error_share_title)
                     }
                 })
     }

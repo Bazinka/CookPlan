@@ -14,8 +14,9 @@ import com.cookplan.share.add_users.ShareDataAdapter.MainViewHolder
  * Created by DariaEfimova on 18.03.17.
  */
 
-class ShareDataAdapter(val contactList: MutableList<Contact> = mutableListOf()) : RecyclerView.Adapter<MainViewHolder>() {
+class ShareDataAdapter(private val changeListListener: () -> Unit) : RecyclerView.Adapter<MainViewHolder>() {
 
+    val contactList: MutableList<Contact> = mutableListOf()
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): MainViewHolder =
             MainViewHolder(LayoutInflater.from(parent.context)
@@ -31,6 +32,7 @@ class ShareDataAdapter(val contactList: MutableList<Contact> = mutableListOf()) 
             setOnClickListener {
                 contactList.remove(contact)
                 notifyDataSetChanged()
+                changeListListener()
             }
         }
     }
@@ -50,22 +52,7 @@ class ShareDataAdapter(val contactList: MutableList<Contact> = mutableListOf()) 
     fun addItem(contact: Contact) {
         contactList.add(contact)
         notifyDataSetChanged()
-    }
-
-    fun addItemList(contacts: List<Contact>) {
-        for (newContact in contacts) {
-            var isContactAlreadyAdded = false
-            for ((email) in contactList) {
-                if (email == newContact.email) {
-                    isContactAlreadyAdded = true
-                    break
-                }
-            }
-            if (!isContactAlreadyAdded) {
-                contactList.add(newContact)
-            }
-        }
-        notifyDataSetChanged()
+        changeListListener()
     }
 
     fun updateList(contacts: List<Contact>) {

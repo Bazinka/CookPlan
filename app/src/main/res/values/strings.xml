@@ -246,7 +246,7 @@
     <string name="create_recipe_button_title">Create</string>
 
     <string name="or_text">or</string>
-    <string name="chose_contact_title">You chose this contacts:</string>
+    <string name="chose_contact_title">Users who can see you recipes and shopping list:</string>
     <string name="search_title">Search</string>
     <string name="database_is_updating">Please, wait. Database is uploading...</string>
     <string name="processing_data_text">Data processing...</string>
@@ -269,5 +269,9 @@
     <string name="remove_all_ingredients_from_shop_list_title">Remove all from shopping list</string>
     <string name="edit_recipe_title">Changing recipe</string>
     <string name="change_name_title">Change the title</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_share_users_title">Nobody hasn\'t seen you data yet.</string>
 
 </resources>

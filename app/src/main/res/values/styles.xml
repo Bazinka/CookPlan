@@ -111,4 +111,5 @@
         <item name="android:textColorHighlight">@color/accent_color_light</item>
         <item name="android:textColorHintInverse">@color/accent_color_light</item>
     </style>
+
 </resources>

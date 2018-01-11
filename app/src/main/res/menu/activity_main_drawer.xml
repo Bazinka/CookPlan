@@ -40,5 +40,10 @@
             android:title="@string/companies_list_title"
             android:visible="false"/>
 
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share_users"
+            android:title="@string/share_data_title"/>
     </group>
+
 </menu>
