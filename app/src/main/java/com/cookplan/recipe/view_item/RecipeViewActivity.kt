@@ -189,8 +189,6 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
     }
 
     override fun ingredListChangedShoplistStatus(isRemoved: Boolean) {
-        val progressBar = findViewById<View>(R.id.progress_bar_layout)
-        progressBar.visibility = View.INVISIBLE
         val mainView = findViewById<View>(R.id.snackbar_layout)
         if (mainView != null) {
             val snackbar: Snackbar
@@ -206,7 +204,9 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
             }
             snackbar.show()
         }
-        //        adapter.notifyDataSetChanged();
+        val progressBar = findViewById<View>(R.id.progress_bar_layout)
+        progressBar.visibility = View.INVISIBLE
+
     }
 
     override fun setErrorToast(error: String) {

@@ -1,5 +1,7 @@
 package com.cookplan.main
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
@@ -211,6 +213,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             transaction.replace(R.id.fragment_container, fragment)
         }
         transaction.commit()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == OPEN_SHOP_LIST_REQUEST) {
+            setShoppingListFragment()
+            val navigationView = findViewById<NavigationView>(R.id.nav_view)
+            navigationView.setCheckedItem(R.id.nav_shopping_list)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     companion object {
