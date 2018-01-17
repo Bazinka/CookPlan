@@ -56,7 +56,7 @@
             android:name=".recipe.edit.description.EditRecipeDescActivity"
             android:windowSoftInputMode="adjustPan|stateVisible"/>
         <activity
-            android:name=".recipe.edit.add_ingredients.EditRecipeIngredientsActivity"
+            android:name=".recipe.edit.ingredients.EditRecipeIngredientsActivity"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".recipe.view_item.RecipeViewActivity"

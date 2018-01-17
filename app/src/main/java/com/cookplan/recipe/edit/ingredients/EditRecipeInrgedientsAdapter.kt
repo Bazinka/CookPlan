@@ -1,4 +1,4 @@
-package com.cookplan.recipe.edit.add_ingredients
+package com.cookplan.recipe.edit.ingredients
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

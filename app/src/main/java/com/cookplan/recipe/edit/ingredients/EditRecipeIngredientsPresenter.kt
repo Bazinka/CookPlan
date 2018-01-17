@@ -1,4 +1,4 @@
-package com.cookplan.recipe.edit.add_ingredients
+package com.cookplan.recipe.edit.ingredients
 
 import com.cookplan.models.Ingredient
 
@@ -7,9 +7,10 @@ import com.cookplan.models.Ingredient
  */
 
 interface EditRecipeIngredientsPresenter {
+
     fun getAsyncIngredientList()
 
     fun removeIngredient(ingredient: Ingredient)
 
-    fun onStop()
+    fun onDestroy()
 }

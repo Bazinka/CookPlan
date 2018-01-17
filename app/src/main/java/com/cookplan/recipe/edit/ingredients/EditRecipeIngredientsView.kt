@@ -1,4 +1,4 @@
-package com.cookplan.recipe.edit.add_ingredients
+package com.cookplan.recipe.edit.ingredients
 
 import com.cookplan.models.Ingredient
 

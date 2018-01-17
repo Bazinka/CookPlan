@@ -1,11 +1,10 @@
-package com.cookplan.recipe.edit.add_ingredients
+package com.cookplan.recipe.edit.ingredients
 
 
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.providers.IngredientProvider
 import com.cookplan.providers.ProviderFactory
-import com.cookplan.providers.impl.IngredientProviderImpl
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,18 +16,13 @@ import io.reactivex.schedulers.Schedulers
  * Created by DariaEfimova on 21.03.17.
  */
 
-class EditRecipeIngredientsPresenterImpl internal constructor(private val mainView: EditRecipeIngredientsView?, private val recipe: Recipe) : EditRecipeIngredientsPresenter {
+class EditRecipeIngredientsPresenterImpl internal constructor(private val mainView: EditRecipeIngredientsView?, private val recipe: Recipe?) : EditRecipeIngredientsPresenter {
 
-    private val dataProvider: IngredientProvider
-    private val disposables: CompositeDisposable
-
-    init {
-        this.dataProvider = ProviderFactory.Companion.ingredientProvider
-        disposables = CompositeDisposable()
-    }
+    private val dataProvider: IngredientProvider = ProviderFactory.Companion.ingredientProvider
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun getAsyncIngredientList() {
-        disposables.add(dataProvider.getIngredientListByRecipeId(recipe.id)
+        disposables.add(dataProvider.getIngredientListByRecipeId(recipe?.id ?: String())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<List<Ingredient>>() {
@@ -66,7 +60,7 @@ class EditRecipeIngredientsPresenterImpl internal constructor(private val mainVi
                 })
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         disposables.clear()
     }
 }

@@ -21,7 +21,7 @@ import com.cookplan.models.ShopListStatus.NONE
 import com.cookplan.recipe.edit.EditRecipePresenter
 import com.cookplan.recipe.edit.EditRecipePresenterImpl
 import com.cookplan.recipe.edit.EditRecipeView
-import com.cookplan.recipe.edit.add_ingredients.EditRecipeIngredientsActivity
+import com.cookplan.recipe.edit.ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
 import java.util.*
