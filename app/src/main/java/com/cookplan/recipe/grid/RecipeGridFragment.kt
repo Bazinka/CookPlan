@@ -63,26 +63,6 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
                         (activity as BaseActivity).startActivityForResultWithLeftAnimation(intent,
                                 MainActivity.OPEN_SHOP_LIST_REQUEST)
                     }
-                },
-                { longClickRecipe ->
-                    if (longClickRecipe.userId == FirebaseAuth.getInstance().currentUser?.uid) {
-                        AlertDialog.Builder(activity as Context, R.style.AppCompatAlertDialogStyle)
-                                .setTitle(R.string.attention_title)
-                                .setMessage(R.string.are_you_sure_remove_recipe)
-                                .setPositiveButton(android.R.string.ok) { dialog, which ->
-                                    mainView?.findViewById<View>(R.id.progress_bar_layout)?.visibility = View.VISIBLE
-                                    presenter?.removeRecipe(longClickRecipe)
-                                }
-                                .setNegativeButton(android.R.string.cancel, null)
-                                .show()
-                    } else {
-                        AlertDialog.Builder(activity as Context, R.style.AppCompatAlertDialogStyle)
-                                .setTitle(R.string.attention_title)
-                                .setMessage(getString(R.string.impossible_remove_recipe_title))
-                                .setPositiveButton(android.R.string.ok, null)
-                                .show()
-                    }
-                    true
                 }, activity as Context)
         recyclerView?.adapter = adapter
 

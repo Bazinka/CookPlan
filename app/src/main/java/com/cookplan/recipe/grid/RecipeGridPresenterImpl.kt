@@ -73,62 +73,6 @@ class RecipeGridPresenterImpl(private val mainView: RecipeGridView) : RecipeGrid
                 }))
     }
 
-    override fun removeRecipe(recipe: Recipe) {
-        disposables.add(ingredientDataProvider.getIngredientListByRecipeId(recipe.id ?: String())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<List<Ingredient>>() {
-
-                    override fun onNext(ingredients: List<Ingredient>) {
-                        for (ingredient in ingredients) {
-                            removeIngredient(ingredient)
-                        }
-                        recipeDataProvider.removeRecipe(recipe)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(object : CompletableObserver {
-                                    override fun onSubscribe(d: Disposable) {
-
-                                    }
-
-                                    override fun onComplete() {
-                                    }
-
-                                    override fun onError(e: Throwable) {
-                                        mainView.setErrorToast(e.message ?: String())
-                                    }
-                                })
-                    }
-
-                    override fun onError(e: Throwable) {
-                        mainView.setErrorToast(e.message ?: String())
-                    }
-
-                    override fun onComplete() {
-
-                    }
-                }))
-    }
-
-    private fun removeIngredient(ingredient: Ingredient) {
-        ingredientDataProvider.removeIngredient(ingredient)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : CompletableObserver {
-                    override fun onSubscribe(d: Disposable) {
-
-                    }
-
-                    override fun onComplete() {
-
-                    }
-
-                    override fun onError(e: Throwable) {
-                        mainView.setErrorToast(e.message ?: String())
-                    }
-                })
-    }
-
     override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
     }
 

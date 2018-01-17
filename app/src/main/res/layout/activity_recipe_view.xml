@@ -27,7 +27,7 @@
             android:id="@+id/name_recipe_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/left_view"
+            android:layout_toLeftOf="@id/remove_recipe_image_view"
             android:layout_toRightOf="@id/back_image_view"
             android:orientation="vertical"
             android:padding="@dimen/small_item_padding">
@@ -60,7 +60,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/left_view"
+            android:id="@+id/remove_recipe_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -68,14 +68,8 @@
             android:background="@drawable/action_button_back"
             android:padding="@dimen/main_margin_left"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_back_arrow"/>
+            app:srcCompat="@drawable/ic_remove_item_accent_color"/>
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/left_view"
-            android:layout_alignLeft="@id/left_view"
-            android:background="@color/main_screen_back_color"/>
     </RelativeLayout>
 
     <android.support.v4.widget.NestedScrollView

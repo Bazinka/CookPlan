@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
 class RecipeGridRecyclerViewAdapter(private val clicklistener: (Recipe) -> Any,
-                                    private val longClicklistener: (Recipe) -> Boolean,
                                     private val context: Context) : Adapter<ViewHolder>() {
 
     private val mValues: MutableList<Recipe> = mutableListOf()
@@ -62,7 +61,6 @@ class RecipeGridRecyclerViewAdapter(private val clicklistener: (Recipe) -> Any,
         with(holder.mainView) {
             tag = recipe
             setOnClickListener { clicklistener(recipe) }
-            setOnLongClickListener { longClicklistener(recipe) }
         }
     }
 

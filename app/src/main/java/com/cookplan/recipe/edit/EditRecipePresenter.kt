@@ -1,5 +1,6 @@
 package com.cookplan.recipe.edit
 
+import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 
 /**
@@ -9,4 +10,6 @@ import com.cookplan.models.Recipe
 interface EditRecipePresenter {
 
     fun saveRecipe(recipe: Recipe?, newName: String = String(), newDesc: String?)
+
+    fun removeRecipe(recipe: Recipe, ingredients: List<Ingredient>)
 }

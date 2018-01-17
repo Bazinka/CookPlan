@@ -12,7 +12,7 @@ class EditRecipeIngredientsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_recipe_ingredients)
+        setContentView(R.layout.activity_edit_recipe_ingredients)
         setNavigationArrow()
 
         if (intent.hasExtra(RECIPE_OBJECT_KEY)) {

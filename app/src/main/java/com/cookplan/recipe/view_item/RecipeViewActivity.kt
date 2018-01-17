@@ -1,5 +1,6 @@
 package com.cookplan.recipe.view_item
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import com.cookplan.BaseActivity
@@ -21,9 +24,10 @@ import com.cookplan.models.ShopListStatus.NONE
 import com.cookplan.recipe.edit.EditRecipePresenter
 import com.cookplan.recipe.edit.EditRecipePresenterImpl
 import com.cookplan.recipe.edit.EditRecipeView
-import com.cookplan.recipe.edit.ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity
+import com.cookplan.recipe.edit.ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 
@@ -35,6 +39,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
     private var editPresenter: EditRecipePresenter? = null
 
 
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_view)
@@ -43,7 +48,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         if (!intent.hasExtra(RECIPE_OBJECT_KEY)) {
             finish()
         } else {
-            var recipe = intent.getSerializableExtra(RECIPE_OBJECT_KEY) as Recipe
+            val recipe = intent.getSerializableExtra(RECIPE_OBJECT_KEY) as Recipe
 
             val backImageView = findViewById<ImageView>(R.id.back_image_view)
             backImageView.setOnClickListener {
@@ -105,7 +110,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
                                         newDesc = viewPresenter?.getRecipe()?.desc)
                             }
                         }
-                        .setNegativeButton(android.R.string.cancel) { dialog, which -> dialog.cancel() }
+                        .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
                         .show()
             }
 
@@ -121,6 +126,23 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
                 val intent = Intent(this, EditRecipeIngredientsActivity::class.java)
                 intent.putExtra(EditRecipeIngredientsActivity.RECIPE_OBJECT_KEY, viewPresenter?.getRecipe())
                 startActivityWithLeftAnimation(intent)
+            }
+            val removeRecipeImageView = findViewById<ImageView>(R.id.remove_recipe_image_view)
+            if (recipe.userId == FirebaseAuth.getInstance().currentUser?.uid) {
+                removeRecipeImageView.visibility = VISIBLE
+                removeRecipeImageView.setOnClickListener {
+                    AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                            .setTitle(R.string.attention_title)
+                            .setMessage(R.string.are_you_sure_remove_recipe)
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                findViewById<View>(R.id.progress_bar_layout)?.visibility = View.VISIBLE
+                                editPresenter?.removeRecipe(recipe, adapter?.getIngredients() ?: listOf())
+                            }
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show()
+                }
+            } else {
+                removeRecipeImageView.visibility = GONE
             }
 
             editPresenter = EditRecipePresenterImpl(this)
@@ -151,13 +173,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         val progressBar = findViewById<View>(R.id.progress_bar_layout)
         progressBar.visibility = View.INVISIBLE
         if (!ingredientList.isEmpty()) {
-            isAllIngredientsChecked = true
-            for (ingredient in ingredientList) {
-                if (ingredient.shopListStatus !== NEED_TO_BUY) {
-                    isAllIngredientsChecked = false
-                    break
-                }
-            }
+            isAllIngredientsChecked = ingredientList.none { it.shopListStatus !== NEED_TO_BUY }
             adapter?.updateItems(ingredientList)
             val button = findViewById<Button>(R.id.add_shop_list_items_button)
             button.setText(
@@ -191,12 +207,11 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
     override fun ingredListChangedShoplistStatus(isRemoved: Boolean) {
         val mainView = findViewById<View>(R.id.snackbar_layout)
         if (mainView != null) {
-            val snackbar: Snackbar
-            if (isRemoved) {
-                snackbar = Snackbar.make(mainView, "Продукты успешно удалены из списка покупок", Snackbar.LENGTH_LONG)
+            val snackbar: Snackbar = if (isRemoved) {
+                Snackbar.make(mainView, "Продукты успешно удалены из списка покупок", Snackbar.LENGTH_LONG)
             } else {
-                snackbar = Snackbar.make(mainView, "Продукты успешно добавлены в список покупок", Snackbar.LENGTH_LONG)
-                        .setAction("Открыть список покупок") { view ->
+                Snackbar.make(mainView, "Продукты успешно добавлены в список покупок", Snackbar.LENGTH_LONG)
+                        .setAction("Открыть список покупок") {
                             setResult(Activity.RESULT_OK)
                             finish()
                         }
@@ -223,13 +238,17 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 CHANGE_DESCRIPTION_REQUEST -> {
-                    var text = data?.getStringExtra(CHANGE_DESCRIPTION_KEY) ?: getString(R.string.recipe_desc_is_not_needed_title)
+                    val text = data?.getStringExtra(CHANGE_DESCRIPTION_KEY) ?: getString(R.string.recipe_desc_is_not_needed_title)
                     setDescription(text)
 
                     editPresenter?.saveRecipe(recipe = viewPresenter?.getRecipe(), newDesc = text)
                 }
             }
         }
+    }
+
+    override fun recipeRemovedSuccessfully() {
+        finish()
     }
 
     companion object {

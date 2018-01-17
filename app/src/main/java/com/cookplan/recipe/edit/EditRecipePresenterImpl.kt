@@ -1,9 +1,12 @@
 package com.cookplan.recipe.edit
 
+import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
+import com.cookplan.providers.IngredientProvider
+import com.cookplan.providers.ProviderFactory
 import com.cookplan.providers.RecipeProvider
-import com.cookplan.providers.impl.RecipeProviderImpl
 import com.google.firebase.auth.FirebaseAuth
+import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -15,7 +18,8 @@ import io.reactivex.schedulers.Schedulers
 
 open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : EditRecipePresenter {
 
-    private val dataProvider: RecipeProvider = RecipeProviderImpl()
+    private val recipeDataProvider: RecipeProvider = ProviderFactory.recipeProvider
+    private val ingredientDataProvider: IngredientProvider = ProviderFactory.ingredientProvider
 
     override fun saveRecipe(recipe: Recipe?, newName: String, newDesc: String?) {
         mainView?.showProgressBar()
@@ -29,7 +33,7 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
             newRecipe.desc = newDesc ?: newRecipe.desc
         }
         if (newRecipe.id.isEmpty()) {
-            dataProvider.createRecipe(newRecipe)
+            recipeDataProvider.createRecipe(newRecipe)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : SingleObserver<Recipe> {
@@ -48,7 +52,7 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
                         }
                     })
         } else {
-            dataProvider.update(newRecipe)
+            recipeDataProvider.update(newRecipe)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : SingleObserver<Recipe> {
@@ -67,5 +71,48 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
                         }
                     })
         }
+    }
+
+    override fun removeRecipe(recipe: Recipe, ingredients: List<Ingredient>) {
+        for (ingredient in ingredients) {
+            removeIngredient(ingredient)
+        }
+
+        recipeDataProvider.removeRecipe(recipe)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : CompletableObserver {
+                    override fun onSubscribe(d: Disposable) {
+
+                    }
+
+                    override fun onComplete() {
+                        mainView?.recipeRemovedSuccessfully()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        mainView?.setErrorToast(e.message ?: String())
+                    }
+                })
+    }
+
+
+    private fun removeIngredient(ingredient: Ingredient) {
+        ingredientDataProvider.removeIngredient(ingredient)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : CompletableObserver {
+                    override fun onSubscribe(d: Disposable) {
+
+                    }
+
+                    override fun onComplete() {
+
+                    }
+
+                    override fun onError(e: Throwable) {
+                        mainView?.setErrorToast(e.message ?: String())
+                    }
+                })
     }
 }

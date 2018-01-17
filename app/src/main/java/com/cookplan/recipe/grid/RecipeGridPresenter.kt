@@ -10,7 +10,5 @@ interface RecipeGridPresenter {
 
     fun getRecipeList()
 
-    fun removeRecipe(recipe: Recipe)
-
     fun onStop()
 }

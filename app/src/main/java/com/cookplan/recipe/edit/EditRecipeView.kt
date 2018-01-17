@@ -15,4 +15,6 @@ interface EditRecipeView {
     fun hideProgressBar()
 
     fun recipeSavedSuccessfully(recipe: Recipe)
+
+    fun recipeRemovedSuccessfully()
 }
