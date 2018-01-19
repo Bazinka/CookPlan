@@ -3,52 +3,14 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/empty_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/main_item_padding"
-                android:visibility="gone">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/empty_picture_layout"
+        android:id="@+id/text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="@dimen/empty_view_circle_size"
-                android:layout_height="@dimen/empty_view_circle_size"
-                android:layout_marginBottom="15dp"
-                android:adjustViewBounds="true"
-                android:padding="10dp"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_circle_primary_light"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="@dimen/empty_view_icon_size"
-                android:layout_height="@dimen/empty_view_icon_size"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_share_users_white"/>
-        </RelativeLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/empty_picture_layout"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <TextView
@@ -62,5 +24,41 @@
             android:textColor="@color/primary_light"
             android:textSize="@dimen/headline_text_size"
             android:textStyle="bold"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/text_layout"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/empty_view_circle_size"
+                android:layout_height="@dimen/empty_view_circle_size"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_circle_primary_light"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/empty_view_icon_size"
+                android:layout_height="@dimen/empty_view_icon_size"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_share_users_white"/>
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

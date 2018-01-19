@@ -3,9 +3,8 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/empty_view"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:visibility="gone">
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,7 +23,7 @@
                 android:layout_height="@dimen/empty_view_circle_size"
                 android:adjustViewBounds="true"
                 android:padding="10dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_circle_primary_light"/>
         </RelativeLayout>
 
@@ -38,7 +37,7 @@
                 android:layout_width="@dimen/empty_view_icon_size"
                 android:layout_height="@dimen/empty_view_icon_size"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_company_white"/>
         </RelativeLayout>
     </RelativeLayout>
