@@ -203,6 +203,9 @@
     <string name="edit_recipe_title">Редактирование рецепта</string>
     <string name="change_name_title">Изменить название</string>
     <string name="empty_share_users_title">Пока никто не видит ваши данные</string>
+    <string name="step1_ingregients_title">Шаг 1</string>
+    <string name="lets_start_ingredients">Давайте начнем с ингредиентов!</string>
+    <string name="what_will_you_use_title">Что вы будете использовать в этом рецепте?</string>
 
 
 </resources>

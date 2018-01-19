@@ -3,7 +3,6 @@ package com.cookplan.recipe.grid
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,12 +14,12 @@ import com.cookplan.BaseFragment
 import com.cookplan.R
 import com.cookplan.main.MainActivity
 import com.cookplan.models.Recipe
+import com.cookplan.recipe.create.IngredientsToRecipeActivity
 import com.cookplan.recipe.import_recipe.search_url.SearchRecipeUrlActivity
 import com.cookplan.recipe.view_item.RecipeViewActivity
 import com.cookplan.utils.GridSpacingItemDecoration
 import com.cookplan.utils.Utils
 import com.github.clans.fab.FloatingActionButton
-import com.google.firebase.auth.FirebaseAuth
 
 class RecipeGridFragment : BaseFragment(), RecipeGridView {
 
@@ -81,9 +80,8 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
     }
 
     internal fun startNewRecipeActivity() {
-        setErrorToast("Пока создание рецептов не работает")
-//        val intent = Intent(activity, EditRecipeDescActivity::class.java)
-//        (activity as BaseActivity).startActivityWithLeftAnimation(intent)
+        val intent = Intent(activity, IngredientsToRecipeActivity::class.java)
+        (activity as BaseActivity).startActivityWithLeftAnimation(intent)
     }
 
     override fun setEmptyView() {

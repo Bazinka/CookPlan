@@ -273,5 +273,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_share_users_title">Nobody hasn\'t seen you data yet.</string>
+    <string name="step1_ingregients_title">Step 1</string>
+    <string name="lets_start_ingredients">Let\'s start with the ingredients!</string>
+    <string name="what_will_you_use_title">What are you going to use in this recipe?</string>
 
 </resources>

@@ -60,15 +60,20 @@ class EditRecipeIngredientsFragment : BaseFragment(), EditRecipeIngredientsView 
     }
 
     override fun setIngredientList(ingredientList: List<Ingredient>) {
+        adapter?.updateItems(ingredientList)
         if (ingredientList.isEmpty()) {
             mainView?.findViewById<View>(R.id.list_card_view)?.visibility = View.GONE
         } else {
-            adapter?.updateItems(ingredientList)
+            mainView?.findViewById<View>(R.id.list_card_view)?.visibility = View.VISIBLE
         }
     }
 
     override fun setErrorToast(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
+    }
+
+    fun getIngredientsList(): List<Ingredient> {
+        return adapter?.getItems() ?: listOf()
     }
 
     companion object {

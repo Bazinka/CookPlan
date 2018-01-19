@@ -70,4 +70,8 @@ class EditRecipeInrgedientsAdapter(private val removelistener: (Ingredient) -> U
         ingredients.addAll(ingredientList)
         notifyDataSetChanged()
     }
+
+    fun getItems(): List<Ingredient> {
+        return ingredients
+    }
 }

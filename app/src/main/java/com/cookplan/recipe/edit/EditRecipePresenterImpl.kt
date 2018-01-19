@@ -74,26 +74,29 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
     }
 
     override fun removeRecipe(recipe: Recipe, ingredients: List<Ingredient>) {
-        for (ingredient in ingredients) {
-            removeIngredient(ingredient)
+
+        if (recipe.id!= null) {
+            for (ingredient in ingredients) {
+                removeIngredient(ingredient)
+            }
+
+            recipeDataProvider.removeRecipe(recipe)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : CompletableObserver {
+                        override fun onSubscribe(d: Disposable) {
+
+                        }
+
+                        override fun onComplete() {
+                            mainView?.recipeRemovedSuccessfully()
+                        }
+
+                        override fun onError(e: Throwable) {
+                            mainView?.setErrorToast(e.message ?: String())
+                        }
+                    })
         }
-
-        recipeDataProvider.removeRecipe(recipe)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : CompletableObserver {
-                    override fun onSubscribe(d: Disposable) {
-
-                    }
-
-                    override fun onComplete() {
-                        mainView?.recipeRemovedSuccessfully()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        mainView?.setErrorToast(e.message ?: String())
-                    }
-                })
     }
 
 
