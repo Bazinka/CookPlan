@@ -102,7 +102,7 @@ class EditRecipeDescPresenterImpl(private val mainView: EditRecipeDescView?, pri
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            mainView?.setErrorToast(context.getString(R.string.unable_to_copy_files) + e.toString())
+            mainView?.setErrorToSnackBar(context.getString(R.string.unable_to_copy_files) + e.toString())
         }
 
     }

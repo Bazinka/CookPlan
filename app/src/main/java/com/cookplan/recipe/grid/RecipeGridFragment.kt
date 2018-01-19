@@ -14,7 +14,7 @@ import com.cookplan.BaseFragment
 import com.cookplan.R
 import com.cookplan.main.MainActivity
 import com.cookplan.models.Recipe
-import com.cookplan.recipe.create.IngredientsToRecipeActivity
+import com.cookplan.recipe.create.ingredients.IngredientsToRecipeActivity
 import com.cookplan.recipe.import_recipe.search_url.SearchRecipeUrlActivity
 import com.cookplan.recipe.view_item.RecipeViewActivity
 import com.cookplan.utils.GridSpacingItemDecoration
@@ -81,7 +81,7 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
 
     internal fun startNewRecipeActivity() {
         val intent = Intent(activity, IngredientsToRecipeActivity::class.java)
-        (activity as BaseActivity).startActivityWithLeftAnimation(intent)
+        (activity as BaseActivity).startActivityForResultWithLeftAnimation(intent, CREATE_RECIPE_REQUEST)
     }
 
     override fun setEmptyView() {
@@ -103,6 +103,8 @@ class RecipeGridFragment : BaseFragment(), RecipeGridView {
     }
 
     companion object {
+
+        val CREATE_RECIPE_REQUEST = 12
 
         @JvmStatic
         fun newInstance(): RecipeGridFragment {

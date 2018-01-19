@@ -25,6 +25,7 @@ import com.cookplan.recipe.edit.EditRecipePresenter
 import com.cookplan.recipe.edit.EditRecipePresenterImpl
 import com.cookplan.recipe.edit.EditRecipeView
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity
+import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.RECIPE_DESCRIPTION_KEY
 import com.cookplan.recipe.edit.ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -117,7 +118,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
             val editDescriptionButton = findViewById<ImageView>(R.id.edit_description_image_view)
             editDescriptionButton.setOnClickListener {
                 val intent = Intent(this, EditRecipeDescActivity::class.java)
-                intent.putExtra(EditRecipeDescActivity.RECIPE_DESCRIPTION_KEY, viewPresenter?.getRecipe()?.desc)
+                intent.putExtra(RECIPE_DESCRIPTION_KEY, viewPresenter?.getRecipe()?.desc)
                 startActivityForResultWithLeftAnimation(intent, CHANGE_DESCRIPTION_REQUEST)
             }
 
@@ -254,6 +255,6 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
     companion object {
         val RECIPE_OBJECT_KEY = "recipe_name"
         val CHANGE_DESCRIPTION_KEY = "CHANGE_DESCRIPTION_KEY"
-        val CHANGE_DESCRIPTION_REQUEST = 21
+        val CHANGE_DESCRIPTION_REQUEST = 11
     }
 }

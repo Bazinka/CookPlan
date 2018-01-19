@@ -17,7 +17,7 @@
     <string name="choose_recipe_language">Please choose the language</string>
     <string name="english_lan_title">English</string>
     <string name="russian_lan_title">Russian</string>
-    <string name="add_recipe_first_screen_title">Новый рецепт</string>
+    <string name="new_recipe_title">Новый рецепт</string>
     <string name="add_recipe_second_screen_title">Ингредиенты для </string>
     <string name="recognize_button_title">Распознать</string>
     <string name="recipe_desc_hint">Процесс приготовления</string>
@@ -206,6 +206,13 @@
     <string name="step1_ingregients_title">Шаг 1</string>
     <string name="lets_start_ingredients">Давайте начнем с ингредиентов!</string>
     <string name="what_will_you_use_title">Что вы будете использовать в этом рецепте?</string>
+    <string name="step2_description_title">Шаг 2</string>
+    <string name="explain_description_title">Теперь опишите, как будете готовить это блюдо?</string>
+    <string name="help_buttons_descr_title">Кнопки Распознать для сканирования из другого источника и Микрофончик для начитки голосом вам в помощь.</string>
+    <string name="what_is_the_name_title">Как назовем?</string>
+    <string name="example_recipe_name_title">Можно, например:</string>
+    <string name="and_recipe_name_separator">и</string>
+    <string name="second_name_separator">,</string>
 
 
 </resources>

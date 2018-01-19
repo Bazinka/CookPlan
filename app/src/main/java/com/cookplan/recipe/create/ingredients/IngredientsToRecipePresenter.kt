@@ -1,4 +1,4 @@
-package com.cookplan.recipe.create
+package com.cookplan.recipe.create.ingredients
 
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe

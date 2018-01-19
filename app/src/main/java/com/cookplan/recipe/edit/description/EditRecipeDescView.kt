@@ -10,7 +10,5 @@ interface EditRecipeDescView {
 
     fun setAsyncErrorToSnackBar(error: String)
 
-    fun setErrorToast(error: String)
-
     fun setAsyncTextResult(result: String)
 }

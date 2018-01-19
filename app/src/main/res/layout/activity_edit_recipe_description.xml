@@ -1,52 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/main_screen_back_color">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"/>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/recipe_process_edit_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/recipe_desc_hint"
-                android:padding="@dimen/main_item_padding"
-                android:scrollbars="vertical"
-                android:theme="@style/CookPlanTextInputLayoutStyle"
-                app:hintTextAppearance="@style/CookPlanHitInputStyle">
-
-                <EditText
-                    android:id="@+id/recipe_process_edit_text"
-                    style="@style/CookPlanEditTextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:lines="10"
-                    android:maxLines="10"
-                    android:scrollbars="vertical"/>
-            </android.support.design.widget.TextInputLayout>
-
-            <Button
-                android:id="@+id/ocr_desc_btn"
-                style="@style/CookplanButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/button_margin_top"
-                android:layout_marginLeft="@dimen/button_margin_left"
-                android:layout_marginRight="@dimen/button_margin_left"
-                android:layout_marginTop="@dimen/button_margin_top"
-                android:text="@string/recognize_button_title"/>
-        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>
