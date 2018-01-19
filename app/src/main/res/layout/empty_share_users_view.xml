@@ -1,35 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/empty_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/empty_view"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/text_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/empty_list_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/main_margin_left"
-            android:gravity="center"
-            android:text="@string/empty_share_users_title"
-            android:textColor="@color/primary_light"
-            android:textSize="@dimen/headline_text_size"
-            android:textStyle="bold"/>
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/text_layout"
         android:layout_margin="10dp"
         android:orientation="vertical">
 
@@ -61,4 +41,23 @@
                 app:srcCompat="@drawable/ic_share_users_white"/>
         </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/empty_list_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/main_margin_left"
+            android:gravity="center"
+            android:text="@string/empty_share_users_title"
+            android:textColor="@color/primary_light"
+            android:textSize="@dimen/headline_text_size"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+</LinearLayout>

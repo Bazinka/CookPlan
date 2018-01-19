@@ -176,17 +176,24 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         if (!ingredientList.isEmpty()) {
             isAllIngredientsChecked = ingredientList.none { it.shopListStatus !== NEED_TO_BUY }
             adapter?.updateItems(ingredientList)
-            val button = findViewById<Button>(R.id.add_shop_list_items_button)
-            button.setText(
+
+            val ingredientListButton = findViewById<Button>(R.id.add_shop_list_items_button)
+            ingredientListButton.setText(
                     if (isAllIngredientsChecked) {
                         R.string.remove_all_ingredients_from_shop_list_title
                     } else {
                         R.string.add_all_ingredients_to_shop_list_title
                     })
         } else {
-            findViewById<View>(R.id.ingredient_content_card_view).visibility = View.GONE
             isAllIngredientsChecked = false
         }
+
+        val nonEmptyIngredientsLayout = findViewById<View>(R.id.non_empty_ingredients_layout)
+        nonEmptyIngredientsLayout.visibility = if (!ingredientList.isEmpty()) VISIBLE else GONE
+
+
+        val emptyIngredientsLayout = findViewById<View>(R.id.empty_ingredients_layout)
+        emptyIngredientsLayout.visibility = if (ingredientList.isEmpty()) VISIBLE else GONE
     }
 
 
