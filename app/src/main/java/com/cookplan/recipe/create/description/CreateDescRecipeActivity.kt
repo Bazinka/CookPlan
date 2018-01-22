@@ -114,7 +114,6 @@ class CreateDescRecipeActivity : BaseActivity(), EditRecipeView {
 
         val RECIPE_ID_KEY = "RECIPE_ID_KEY"
         val RECIPE_EXAMPLE_NAME_KEY = "RECIPE_EXAMPLE_NAME_KEY"
-        val CREATE_DESC_RECIPE_REQUEST = 13
     }
 
 

@@ -114,6 +114,6 @@ class IngredientsToRecipeActivity : BaseActivity(), EditRecipeView {
 
     companion object {
 
-        val CREATE_DESC_RECIPE_REQUEST = 13
+        val CREATE_DESC_RECIPE_REQUEST = 16
     }
 }
