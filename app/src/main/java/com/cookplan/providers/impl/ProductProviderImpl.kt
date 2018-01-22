@@ -39,6 +39,7 @@ class ProductProviderImpl : ProductProvider {
                             (it.userId == null
                                     || it.userId == FirebaseAuth.getInstance().currentUser?.uid)
                         }
+                        .sortedByDescending { it.countUsing }
                 subjectProductList.onNext(products)
             }
 

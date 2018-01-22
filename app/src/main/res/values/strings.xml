@@ -283,5 +283,6 @@
     <string name="example_recipe_name_title">For example:</string>
     <string name="and_recipe_name_separator">with</string>
     <string name="second_name_separator">,</string>
+    <string name="product_for_ingredient_title">Add ingredient</string>
 
 </resources>

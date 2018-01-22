@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.*
 import com.cookplan.R
 import com.cookplan.add_ingredient_view.ProductCategoriesSpinnerAdapter
-import com.cookplan.add_ingredient_view.ProductListAdapter
 import com.cookplan.models.*
 import com.cookplan.recipe.import_recipe.approve_result.ApproveIngredientsRecyclerAdapter.ItemType.INGREDIENT
 import com.cookplan.recipe.import_recipe.approve_result.ApproveIngredientsRecyclerAdapter.ItemType.RECIPE

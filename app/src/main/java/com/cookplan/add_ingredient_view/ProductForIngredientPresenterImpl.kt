@@ -20,21 +20,16 @@ import java.util.*
  * Created by DariaEfimova on 20.03.17.
  */
 
-class AddIngredientPresenterImpl(private val mainView: AddIngredientView?) : AddIngredientPresenter {
-    //    private DatabaseReference database;
-    private var recipe: Recipe? = null
+class ProductForIngredientPresenterImpl(private val mainView: ProductForIngredientView?) : ProductForIngredientPresenter {
+
+    override var productList: List<Product> = listOf()
+
+    private var recipeId: String? = null
     override var isNeedToBuy: Boolean = false
 
-    private val productDataProvider: ProductProvider
-    private val ingredientDataProvider: IngredientProvider
-    private val disposables: CompositeDisposable
-
-
-    init {
-        ingredientDataProvider = ProviderFactory.Companion.ingredientProvider
-        productDataProvider = ProviderFactory.Companion.productProvider
-        disposables = CompositeDisposable()
-    }
+    private val productDataProvider: ProductProvider = ProviderFactory.Companion.productProvider
+    private val ingredientDataProvider: IngredientProvider = ProviderFactory.Companion.ingredientProvider
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun getAsyncProductList() {
         disposables.add(
@@ -43,9 +38,8 @@ class AddIngredientPresenterImpl(private val mainView: AddIngredientView?) : Add
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(object : DisposableObserver<List<Product>>() {
                             override fun onNext(products: List<Product>) {
-                                if (mainView?.isAddedToActivity ?: false) {
-                                    mainView?.setProductsList(products)
-                                }
+                                productList = products.toList()
+                                mainView?.setProductsList(products)
                             }
 
                             override fun onError(e: Throwable) {
@@ -58,45 +52,47 @@ class AddIngredientPresenterImpl(private val mainView: AddIngredientView?) : Add
                         }))
     }
 
-    override fun saveIngredient(product: Product, amount: Double, measureUnit: MeasureUnit) {
-        productDataProvider.increaseCountUsages(product)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : CompletableObserver {
-                    override fun onSubscribe(d: Disposable) {
-                    }
+    override fun saveIngredient(product: Product?, amount: Double, measureUnit: MeasureUnit) {
+        if (product != null) {
+            productDataProvider.increaseCountUsages(product)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : CompletableObserver {
+                        override fun onSubscribe(d: Disposable) {
+                        }
 
-                    override fun onComplete() {
-                    }
+                        override fun onComplete() {
+                        }
 
-                    override fun onError(e: Throwable) {
-                        mainView?.setErrorToast(e.message ?: String())
-                    }
-                })
-        //save ingredient
-        val ingredient = Ingredient(null,
-                product.toStringName(),
-                product,
-                recipe?.id,
-                measureUnit,
-                amount,
-                if (isNeedToBuy) ShopListStatus.NEED_TO_BUY else ShopListStatus.NONE)
+                        override fun onError(e: Throwable) {
+                            mainView?.setErrorToast(e.message ?: String())
+                        }
+                    })
+            //save ingredient
+            val ingredient = Ingredient(null,
+                    product.toStringName(),
+                    product,
+                    recipeId,
+                    measureUnit,
+                    amount,
+                    if (isNeedToBuy) ShopListStatus.NEED_TO_BUY else ShopListStatus.NONE)
 
-        ingredientDataProvider.createIngredient(ingredient)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : SingleObserver<Ingredient> {
-                    override fun onSubscribe(d: Disposable) {
-                    }
+            ingredientDataProvider.createIngredient(ingredient)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : SingleObserver<Ingredient> {
+                        override fun onSubscribe(d: Disposable) {
+                        }
 
-                    override fun onSuccess(ingredient: Ingredient) {
-                        mainView?.setSuccessSaveIngredient()
-                    }
+                        override fun onSuccess(ingredient: Ingredient) {
+                            mainView?.setSuccessSaveIngredient()
+                        }
 
-                    override fun onError(e: Throwable) {
-                        mainView?.setErrorToast(e.message ?: String())
-                    }
-                })
+                        override fun onError(e: Throwable) {
+                            mainView?.setErrorToast(e.message ?: String())
+                        }
+                    })
+        }
     }
 
     override fun saveProductAndIngredient(category: ProductCategory, name: String, amount: Double, measureUnit: MeasureUnit) {
@@ -142,7 +138,7 @@ class AddIngredientPresenterImpl(private val mainView: AddIngredientView?) : Add
         disposables.clear()
     }
 
-    override fun setRecipe(recipe: Recipe) {
-        this.recipe = recipe
+    override fun setRecipeId(recipeId: String?) {
+        this.recipeId = recipeId
     }
 }

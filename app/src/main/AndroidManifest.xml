@@ -118,6 +118,8 @@
         </activity>
         <activity android:name=".recipe.create.description.CreateDescRecipeActivity">
         </activity>
+        <activity android:name=".add_ingredient_view.ProductForIngredientActivity">
+        </activity>
     </application>
 
 </manifest>

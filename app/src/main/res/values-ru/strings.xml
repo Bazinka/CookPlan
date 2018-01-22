@@ -213,6 +213,7 @@
     <string name="example_recipe_name_title">Можно, например:</string>
     <string name="and_recipe_name_separator">и</string>
     <string name="second_name_separator">,</string>
+    <string name="product_for_ingredient_title">Добавление ингредиента</string>
 
 
 </resources>

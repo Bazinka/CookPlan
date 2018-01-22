@@ -1,7 +1,8 @@
-package com.cookplan.add_ingredient_view
+package com.cookplan.recipe.import_recipe.approve_result
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import android.widget.Filter
 import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Product
-import java.util.*
+import java.util.ArrayList
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**

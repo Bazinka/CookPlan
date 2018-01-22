@@ -9,15 +9,17 @@ import com.cookplan.models.Recipe
  * Created by DariaEfimova on 20.03.17.
  */
 
-interface AddIngredientPresenter {
+interface ProductForIngredientPresenter {
 
     var isNeedToBuy: Boolean
 
-    fun setRecipe(recipe: Recipe)
+    fun setRecipeId(recipe: String?)
 
     fun getAsyncProductList()
 
-    fun saveIngredient(product: Product, amount: Double, measureUnit: MeasureUnit)
+    var productList: List<Product>
+
+    fun saveIngredient(product: Product?, amount: Double, measureUnit: MeasureUnit)
 
     fun saveProductAndIngredient(category: ProductCategory, name: String,
                                  amount: Double, measureUnit: MeasureUnit)

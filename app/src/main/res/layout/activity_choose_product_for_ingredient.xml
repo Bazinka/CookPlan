@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/main_screen_back_color">
+
+    <RelativeLayout
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/input_text_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="@dimen/card_view_elevation"
+            card_view:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:id="@+id/input_text_main_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/speak_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/action_button_back"
+                    android:padding="@dimen/main_margin_left"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/ic_microphone"/>
+
+                <LinearLayout
+                    android:id="@+id/product_name_text_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="15dp"
+                    android:layout_toLeftOf="@id/speak_image_view"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/product_name_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enter_product_title"
+                        android:textColor="@color/accent_color"
+                        android:textSize="@dimen/title_text_size"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/accent_color"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/input_text_card_view"
+            android:layout_gravity="center"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="@dimen/card_view_elevation"
+            card_view:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:id="@+id/unit_amount_main_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/unit_amount_linear_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/unit_amount_edit_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/small_item_padding"
+                            android:layout_marginRight="@dimen/small_item_padding"
+                            android:layout_marginTop="@dimen/small_item_padding"
+                            android:layout_weight="1"
+                            android:hint="@string/amount_product_title"
+                            android:theme="@style/CookPlanTextInputLayoutStyle"
+                            app:hintTextAppearance="@style/CookPlanHitInputStyle">
+
+                            <EditText
+                                android:id="@+id/unit_amount_edit_text"
+                                style="@style/CookPlanEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal"
+                                android:lines="1"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                        <Spinner
+                            android:id="@+id/measure_list_spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/small_item_padding"
+                            android:layout_marginLeft="@dimen/small_item_padding"
+                            android:layout_marginTop="@dimen/small_item_padding"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+
+                    <Spinner
+                        android:id="@+id/category_list_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/unit_amount_linear_layout"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/small_item_padding"/>
+                </RelativeLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/main_choose_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparency_more_grey">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/input_text_choosing_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="@dimen/card_view_elevation"
+            card_view:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:id="@+id/input_text_choosing_main_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/speak_choosing_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/action_button_back"
+                    android:padding="@dimen/main_margin_left"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/ic_microphone"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/product_choosing_name_edit_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toLeftOf="@id/speak_choosing_image_view"
+                    android:hint="@string/enter_product_title"
+                    android:theme="@style/CookPlanTextInputLayoutStyle"
+                    app:hintTextAppearance="@style/CookPlanHitInputStyle">
+
+                    <EditText
+                        android:id="@+id/product_choosing_name_text"
+                        style="@style/CookPlanEditTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nextFocusForward="@id/unit_amount_edit_text"
+                        android:inputType="textCapSentences"
+                        android:lines="1"/>
+
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/products_list_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/input_text_choosing_card_view"
+            app:layoutManager="LinearLayoutManager"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/progress_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparency_primary_the_lightest"
+        android:clickable="false"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+</RelativeLayout>
