@@ -149,6 +149,8 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
                     selectedProduct = null
                     findViewById<TextView>(R.id.product_name_text).text = name
                 }
+                setMeasureSpinnerValues()
+                setCategorySpinnerValues()
             }
         }
 
