@@ -94,6 +94,7 @@
                             android:layout_marginBottom="@dimen/small_item_padding"
                             android:layout_marginRight="@dimen/small_item_padding"
                             android:layout_marginTop="@dimen/small_item_padding"
+                            android:layout_marginLeft="15dp"
                             android:layout_weight="1"
                             android:hint="@string/amount_product_title"
                             android:theme="@style/CookPlanTextInputLayoutStyle"

@@ -1,5 +1,8 @@
 package com.cookplan.add_ingredient_view
 
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -27,10 +30,16 @@ class ProductForIngredientListAdapter(private val productList: MutableList<Produ
         holder.productNameTextView.text = product.toStringName()
 
         holder.categoryNameTextView.text = product.category.toString()
-        holder.categoryNameTextView.setTextColor(ContextCompat.getColor(holder.mainView.context, product.category.colorId))
 
-        holder.categoryView.setBackgroundResource(product.category.colorId)
 
+        val background = holder.categoryView.background
+        if (background is ShapeDrawable) {
+            background.paint.color = ContextCompat.getColor(holder.mainView.context, product.category.colorId)
+        } else if (background is GradientDrawable) {
+            background.setColor(ContextCompat.getColor(holder.mainView.context, product.category.colorId))
+        } else if (background is ColorDrawable) {
+            background.color = ContextCompat.getColor(holder.mainView.context, product.category.colorId)
+        }
 
         with(holder.mainView) {
             tag = product
@@ -49,15 +58,9 @@ class ProductForIngredientListAdapter(private val productList: MutableList<Produ
     }
 
     inner class ViewHolder(val mainView: View) : RecyclerView.ViewHolder(mainView) {
-        val productNameTextView: TextView
-        val categoryNameTextView: TextView
-        val categoryView: View
-
-        init {
-            productNameTextView = mainView.findViewById<TextView>(R.id.product_item_name)
-            categoryNameTextView = mainView.findViewById<TextView>(R.id.category_product_item_name)
-            categoryView = mainView.findViewById<View>(R.id.category_view)
-        }
+        val productNameTextView: TextView = mainView.findViewById<TextView>(R.id.product_item_name)
+        val categoryNameTextView: TextView = mainView.findViewById<TextView>(R.id.category_product_item_name)
+        val categoryView: View = mainView.findViewById<View>(R.id.category_view)
 
     }
 }

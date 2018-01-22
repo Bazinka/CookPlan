@@ -1,54 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/transparency_grey">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/main_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/small_item_padding">
 
         <View
             android:id="@+id/category_view"
-            android:layout_width="5dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/accent_color" />
-
-        <LinearLayout
-            android:id="@+id/text_layout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/margin_glutter"
-            android:paddingLeft="@dimen/main_margin_left"
-            android:paddingRight="@dimen/main_margin_left"
-            android:paddingTop="@dimen/margin_top_glutter">
+            android:layout_alignBottom="@+id/main_content_layout"
+            android:layout_alignLeft="@+id/main_content_layout"
+            android:layout_alignRight="@+id/main_content_layout"
+            android:layout_alignTop="@+id/main_content_layout"
+            android:background="@drawable/shop_list_by_dish_rounded_back"/>
 
-            <TextView
-                android:id="@+id/product_item_name"
+        <RelativeLayout
+            android:id="@+id/main_content_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/small_item_padding">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:text="@string/name_title"
-                android:textColor="@color/white"
-                android:textSize="@dimen/subheding_text_size" />
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/category_product_item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:text="@string/name_title"
-                android:textColor="@color/hint_or_disabled_text_color"
-                android:textSize="@dimen/body_text_size" />
+                <TextView
+                    android:id="@+id/product_item_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:paddingRight="@dimen/small_inrgedient_padding"
+                    android:text="@string/name_title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/subheding_text_size"
+                    android:textStyle="bold"/>
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/category_product_item_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:lines="1"
+                    android:text="Категория продукта"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/body_text_size"/>
 
-
-    </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>
