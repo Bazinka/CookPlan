@@ -3,7 +3,6 @@ package com.cookplan.add_ingredient_view
 import com.cookplan.models.MeasureUnit
 import com.cookplan.models.Product
 import com.cookplan.models.ProductCategory
-import com.cookplan.models.Recipe
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -25,4 +24,14 @@ interface ProductForIngredientPresenter {
                                  amount: Double, measureUnit: MeasureUnit)
 
     fun onStop()
+
+    fun filterProducts(string: CharSequence): List<Product>
+
+    fun isIngredientString(string: String): Boolean
+
+    fun parseProductNameFromString(string: String): String
+
+    fun parseAmountFromString(string: String): Double?
+
+    fun parseMeasureUnitFromString(string: String): MeasureUnit
 }

@@ -15,6 +15,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import java.util.regex.Pattern
 
 /**
  * Created by DariaEfimova on 20.03.17.
@@ -140,5 +141,59 @@ class ProductForIngredientPresenterImpl(private val mainView: ProductForIngredie
 
     override fun setRecipeId(recipeId: String?) {
         this.recipeId = recipeId
+    }
+
+
+    override fun parseProductNameFromString(string: String): String {
+        val ingredNameMatcher = Pattern.compile(INGRIDIENT_NAME_PATTERN).matcher(string)
+        return if (ingredNameMatcher.find()) {
+            val ingredient = ingredNameMatcher.group().toString()
+            ingredient
+        } else {
+            String()
+        }
+    }
+
+    override fun parseAmountFromString(string: String): Double? {
+        val amountMatcher = Pattern.compile(INGRIDIENT_AMOUNT_PATTERN).matcher(string)
+        return if (amountMatcher.find()) {
+            val ingredient = amountMatcher.group().toString()
+            ingredient.toDoubleOrNull()
+        } else {
+            null
+        }
+    }
+
+    override fun parseMeasureUnitFromString(string: String): MeasureUnit {
+        val measureMatcher = Pattern.compile(INGRIDIENT_MEASURE_PATTERN).matcher(string)
+        var unit = MeasureUnit.UNITS
+        if (measureMatcher.find()) {
+            unit = MeasureUnit.parseUnit(measureMatcher.group().toString())
+        }
+        return unit
+    }
+
+    override fun isIngredientString(string: String): Boolean {
+        val ingredNameMatcher = Pattern.compile(INGRIDIENT_AMOUNT_MEASURE_PATTERN).matcher(string)
+        return ingredNameMatcher.find()
+    }
+
+    override fun filterProducts(string: CharSequence): List<Product> {
+        val productList = productList.toList()
+        return productList
+                .filter { it.toStringName().toLowerCase().contains(string.toString().toLowerCase()) }
+                .toMutableList()
+    }
+
+    companion object {
+
+        private val INGRIDIENT_NAME_PATTERN = "^(\\p{InCyrillic}+)(\\s\\p{InCyrillic}+)*"
+
+        private val INGRIDIENT_AMOUNT_PATTERN = "([\\d½¾¼.,]+)"
+
+        private val INGRIDIENT_MEASURE_PATTERN = "(\\s[\\p{InCyrillic}.]+)+$"
+
+        private val INGRIDIENT_AMOUNT_MEASURE_PATTERN = "^(\\p{InCyrillic}+)(\\s\\p{InCyrillic}+)*\\s([\\d½¾¼.,]+)(\\s[\\p{InCyrillic}.]+)+$"
+
     }
 }

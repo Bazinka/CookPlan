@@ -16,9 +16,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.cookplan.BaseActivity
 import com.cookplan.R
+import com.cookplan.RApplication
 import com.cookplan.models.MeasureUnit
 import com.cookplan.models.Product
 import com.cookplan.models.ProductCategory
@@ -29,6 +31,10 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
     private var adapter: ProductForIngredientListAdapter? = null
 
     private var selectedProduct: Product? = null
+
+    private var parsedAmount: Double? = null
+
+    private var parsedMeasure: MeasureUnit? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +53,9 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
                 selectedProduct = null
                 findViewById<TextView>(R.id.product_name_text).text = getString(R.string.enter_product_title)
 
-                findViewById<ViewGroup>(R.id.main_choose_view).visibility = VISIBLE
-
+                setMainChooseViewVisability(VISIBLE)
+                parsedMeasure = null
+                parsedAmount = null
                 val unitNameChooseEditText = findViewById<EditText>(R.id.product_choosing_name_text)
                 unitNameChooseEditText.requestFocus()
             }
@@ -76,19 +83,28 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
     }
 
     private fun runSpeakAction() {
-        android.app.AlertDialog.Builder(this)
-                .setMessage("ПРоизносите ингредиенты в формате Сметана 1 килограмм")
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                    intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice recognition Demo...")
-                    startActivityForResult(intent, SPEAK_VOICE_REQUEST_CODE)
-                }
-                .setNegativeButton(android.R.string.cancel) { dialog, _ ->
-                    dialog.cancel()
-                }
-                .show()
+        if (!RApplication.Companion.isUserSawVoiceAlert()) {
+            RApplication.Companion.saveUserSawVoiceAlert(true)
+            android.app.AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.format_voise_recognition_message))
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        runVoiceActivity()
+                    }
+                    .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .show()
+        } else {
+            runVoiceActivity()
+        }
+    }
+
+    private fun runVoiceActivity() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voise_recognition_example))
+        startActivityForResult(intent, SPEAK_VOICE_REQUEST_CODE)
     }
 
     override fun onStart() {
@@ -108,6 +124,13 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
 
     private fun hideProgressBar() {
         findViewById<ViewGroup>(R.id.progress_bar_layout)?.visibility = View.GONE
+    }
+
+    private fun setMainChooseViewVisability(visibility: Int) {
+        findViewById<ViewGroup>(R.id.main_choose_view).visibility = visibility
+        if (visibility == VISIBLE) {
+            findViewById<View>(R.id.product_choosing_name_text).requestFocus()
+        }
     }
 
     override fun setErrorToast(error: String) {
@@ -137,44 +160,48 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
                 showProgressBar()
-                adapter?.updateItems(filterProducts(s))
+                adapter?.updateItems(presenter?.filterProducts(s) ?: listOf())
                 hideProgressBar()
             }
         })
-        unitNameChooseEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                findViewById<ViewGroup>(R.id.main_choose_view).visibility = GONE
+        unitNameChooseEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                setMainChooseViewVisability(GONE)
                 val name = unitNameChooseEditText.text.toString()
                 if (!name.isEmpty()) {
                     selectedProduct = null
                     findViewById<TextView>(R.id.product_name_text).text = name
                 }
-                setMeasureSpinnerValues()
+                if (parsedMeasure == null && parsedAmount == null) {
+                    setMeasureSpinnerValues()
+                    findViewById<EditText>(R.id.unit_amount_edit_text).text = null
+                }
                 setCategorySpinnerValues()
+                true
             }
+            false
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.products_list_recycler)
         recyclerView?.layoutManager = LinearLayoutManager(this)
         recyclerView?.itemAnimator = DefaultItemAnimator()
         adapter = ProductForIngredientListAdapter(productsList.toMutableList()) { product ->
-            findViewById<ViewGroup>(R.id.main_choose_view).visibility = GONE
+            setMainChooseViewVisability(GONE)
             selectedProduct = product
             unitNameChooseEditText.text = null
             findViewById<TextView>(R.id.product_name_text).text = product.toStringName()
-            setMeasureSpinnerValues()
+            /*
+                if we choose a product after parsing voice we don't need to reload measure spinner values
+                because it's already loaded
+            */
+            if (parsedMeasure == null && parsedAmount == null) {
+                setMeasureSpinnerValues()
+                findViewById<EditText>(R.id.unit_amount_edit_text).text = null
+            }
             setCategorySpinnerValues()
         }
         recyclerView?.adapter = adapter
         hideProgressBar()
-    }
-
-    private fun filterProducts(string: CharSequence): List<Product> {
-        val productList = presenter?.productList?.toList() ?: listOf()
-        val suggestions: MutableList<Product> = productList
-                .filter { it.toStringName().toLowerCase().contains(string.toString().toLowerCase()) }
-                .toMutableList()
-        return suggestions
     }
 
 
@@ -221,11 +248,69 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SPEAK_VOICE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            findViewById<ViewGroup>(R.id.main_choose_view).visibility = VISIBLE
             val matches = data?.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS) ?: listOf<String>()
-//            val unitNameEditText = findViewById<AutoCompleteTextView>(R.id.product_name_text)
-//            unitNameEditText.setText(matches.get(0) ?: String())
+            var ingredientString = String()
+            matches
+                    .filter { presenter?.isIngredientString(it) == true }
+                    .forEach { ingredientString = it }
+            if (!ingredientString.isEmpty()) {
+
+                setErrorToast(ingredientString)//TODO: убрать
+
+                val productName = presenter?.parseProductNameFromString(ingredientString) ?: String()
+                val unitNameChoosingEditText = findViewById<EditText>(R.id.product_choosing_name_text)
+
+                val products = presenter?.filterProducts(productName) ?: listOf()
+                when {
+                    products.size == 1 -> {
+                        selectedProduct = products[0]
+                        unitNameChoosingEditText.text = null
+                        findViewById<TextView>(R.id.product_name_text).text = selectedProduct?.toStringName()
+                        setMainChooseViewVisability(GONE)
+                    }
+                    products.isEmpty() -> {
+                        selectedProduct = null
+                        unitNameChoosingEditText.text = null
+                        findViewById<TextView>(R.id.product_name_text).text = productName
+                        setMainChooseViewVisability(GONE)
+                    }
+                    else -> {
+                        selectedProduct = null
+                        findViewById<TextView>(R.id.product_name_text).text = productName
+                        unitNameChoosingEditText.setText(productName)
+                        setMainChooseViewVisability(VISIBLE)
+                    }
+                }
+
+                setMeasureSpinnerValues()
+                setCategorySpinnerValues()
+
+                val measureSpinner = findViewById<Spinner>(R.id.measure_list_spinner)
+                val unitAmountEditText = findViewById<EditText>(R.id.unit_amount_edit_text)
+
+                parsedMeasure = presenter?.parseMeasureUnitFromString(ingredientString)
+                var position = 0
+                while (position < measureSpinner.count) {
+                    val measureUnitAtPos = measureSpinner.getItemAtPosition(position) as MeasureUnit
+                    if (measureUnitAtPos == parsedMeasure) {
+                        break
+                    } else {
+                        position++
+                    }
+                }
+                if (position < measureSpinner.count) {
+                    measureSpinner.setSelection(position)
+                } else {
+                    setErrorToast(getString(R.string.unexisting_measure_for_product_title))
+                }
+
+                parsedAmount = presenter?.parseAmountFromString(ingredientString)
+                unitAmountEditText.setText(parsedMeasure?.getStringOfValue(parsedAmount ?: 0.toDouble()) ?: String())
+
+            } else {
+                setErrorToast(getString(R.string.voise_recognition_error))
+            }
         }
     }
 

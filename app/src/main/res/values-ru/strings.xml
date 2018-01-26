@@ -24,14 +24,144 @@
     <string name="error_required_field">Recipe name is required</string>
     <string name="product_vocabulary_title">Словарь продуктов питания</string>
     <string name="shopping_list_title">Список покупок</string>
-    <string name="gramm_title">гр.</string>
-    <string name="unit_title">шт.</string>
-    <string name="kilogramm_title">кг.</string>
-    <string name="litre_title">л.</string>
-    <string name="mililitre_title">мл.</string>
-    <string name="cup_title">ст.</string>
-    <string name="teaspoon_title">ч.л.</string>
-    <string name="tablespoon_title">ст.л.</string>
+
+    <string name="unit_title_main">шт\.</string>
+    <string name="unit_title_1">шт</string>
+    <string name="unit_title_2">штука</string>
+    <string name="unit_title_3">штук</string>
+    <string name="unit_title_4">штуки</string>
+    <string-array name="unit_title_array">
+        <item>@string/unit_title_main</item>
+        <item>@string/unit_title_1</item>
+        <item>@string/unit_title_2</item>
+        <item>@string/unit_title_3</item>
+        <item>@string/unit_title_4</item>
+    </string-array>
+
+    <string name="gramm_title_main">гр\.</string>
+    <string name="gramm_title_1">грамм</string>
+    <string name="gramm_title_2">грамма</string>
+    <string name="gramm_title_3">граммов</string>
+    <string name="gramm_title_4">гр</string>
+    <string-array name="gramm_title_array">
+        <item>@string/gramm_title_main</item>
+        <item>@string/gramm_title_1</item>
+        <item>@string/gramm_title_2</item>
+        <item>@string/gramm_title_3</item>
+        <item>@string/gramm_title_4</item>
+    </string-array>
+
+    <string name="kilogramm_title_main">кг\.</string>
+    <string name="kilogramm_title_1">килограмм</string>
+    <string name="kilogramm_title_2">килограмма</string>
+    <string name="kilogramm_title_3">килограммов</string>
+    <string name="kilogramm_title_4">кг</string>
+    <string-array name="kilogramm_title_array">
+        <item>@string/kilogramm_title_main</item>
+        <item>@string/kilogramm_title_1</item>
+        <item>@string/kilogramm_title_2</item>
+        <item>@string/kilogramm_title_3</item>
+        <item>@string/kilogramm_title_4</item>
+    </string-array>
+
+    <string name="litre_title_main">л\.</string>
+    <string name="litre_title_1">литр</string>
+    <string name="litre_title_2">литра</string>
+    <string name="litre_title_3">литров</string>
+    <string name="litre_title_4">л</string>
+    <string-array name="litre_title_array">
+        <item>@string/litre_title_main</item>
+        <item>@string/litre_title_1</item>
+        <item>@string/litre_title_2</item>
+        <item>@string/litre_title_3</item>
+        <item>@string/litre_title_4</item>
+    </string-array>
+
+
+    <string name="mililitre_title_main">мл\.</string>
+    <string name="mililitre_title_1">миллилитр</string>
+    <string name="mililitre_title_2">миллилитра</string>
+    <string name="mililitre_title_3">миллилитров</string>
+    <string name="mililitre_title_4">мл</string>
+    <string-array name="mililitre_title_array">
+        <item>@string/mililitre_title_main</item>
+        <item>@string/mililitre_title_1</item>
+        <item>@string/mililitre_title_2</item>
+        <item>@string/mililitre_title_3</item>
+        <item>@string/mililitre_title_4</item>
+    </string-array>
+
+    <string name="cup_title_main">ст\.</string>
+    <string name="cup_title_1">стакан</string>
+    <string name="cup_title_2">стакана</string>
+    <string name="cup_title_3">стаканов</string>
+    <string name="cup_title_4">ч\.</string>
+    <string name="cup_title_5">чашка</string>
+    <string name="cup_title_6">чашек</string>
+    <string name="cup_title_7">чашки</string>
+    <string name="cup_title_8">ст</string>
+    <string-array name="cup_title_array">
+        <item>@string/cup_title_main</item>
+        <item>@string/cup_title_1</item>
+        <item>@string/cup_title_2</item>
+        <item>@string/cup_title_3</item>
+        <item>@string/cup_title_4</item>
+        <item>@string/cup_title_5</item>
+        <item>@string/cup_title_6</item>
+        <item>@string/cup_title_7</item>
+        <item>@string/cup_title_8</item>
+    </string-array>
+
+    <string name="package_title_main">уп\.</string>
+    <string name="package_title_1">упаковка</string>
+    <string name="package_title_2">упаковки</string>
+    <string name="package_title_3">упаковок</string>
+    <string-array name="package_title_array">
+        <item>@string/package_title_main</item>
+        <item>@string/package_title_1</item>
+        <item>@string/package_title_2</item>
+        <item>@string/package_title_3</item>
+    </string-array>
+
+    <string name="teaspoon_title_main">ч\.л\.</string>
+    <string name="teaspoon_title_1">чайная ложка</string>
+    <string name="teaspoon_title_2">чайной ложки</string>
+    <string name="teaspoon_title_3">чайных ложек</string>
+    <string-array name="teaspoon_title_array">
+        <item>@string/teaspoon_title_main</item>
+        <item>@string/teaspoon_title_1</item>
+        <item>@string/teaspoon_title_2</item>
+        <item>@string/teaspoon_title_3</item>
+    </string-array>
+
+
+    <string name="tablespoon_title_main">ст\.л\.</string>
+    <string name="tablespoon_title_1">столовая ложка</string>
+    <string name="tablespoon_title_2">столовой ложки</string>
+    <string name="tablespoon_title_3">столовых ложек</string>
+    <string name="tablespoon_title_4">стол\.л\.</string>
+    <string-array name="tablespoon_title_array">
+        <item>@string/tablespoon_title_main</item>
+        <item>@string/tablespoon_title_1</item>
+        <item>@string/tablespoon_title_2</item>
+        <item>@string/tablespoon_title_3</item>
+        <item>@string/tablespoon_title_4</item>
+    </string-array>
+
+
+    <string name="bottle_title_main">бут</string>
+    <string name="bottle_title_1">бутылка</string>
+    <string name="bottle_title_2">бутылки</string>
+    <string name="bottle_title_3">бутылок</string>
+    <string-array name="bottle_title_array">
+        <item>@string/bottle_title_main</item>
+        <item>@string/bottle_title_1</item>
+        <item>@string/bottle_title_2</item>
+        <item>@string/bottle_title_3</item>
+    </string-array>
+
+
+
     <string name="enter_product_title">Введите продукт</string>
     <string name="amount_product_title">Количество</string>
     <string name="product_amount_not_exist">Продукты без указания количества не смогут суммироваться в списке покупок</string>
@@ -48,8 +178,6 @@
     <string name="empty_shopping_list_title">Список покупок пуст</string>
     <string name="empty_recipe_list_title">Рецептов пока нет</string>
     <string name="empty_product_list_title">Продуктов пока нет</string>
-    <string name="bottle_title">бут</string>
-    <string name="package_title">уп.</string>
     <string name="without_category_title">Без категории</string>
     <string name="alcohol_drinks_title">Алкогольные напитки</string>
     <string name="milk_product_title">Молочные продукты</string>
@@ -214,6 +342,10 @@
     <string name="and_recipe_name_separator">и</string>
     <string name="second_name_separator">,</string>
     <string name="product_for_ingredient_title">Добавление ингредиента</string>
+    <string name="voise_recognition_example">Например, Сметана 100 грамм</string>
+    <string name="format_voise_recognition_message">CookPlan распознает фразы в формате Сметана 100 грамм</string>
+    <string name="voise_recognition_error">Не удалость распознать строчку. Попробуйте еще раз</string>
+    <string name="unexisting_measure_for_product_title">Для этого продукта нельзя задать количество в данных единицах измерения</string>
 
 
 </resources>

@@ -11,16 +11,16 @@ import java.util.regex.Pattern
  */
 
 enum class MeasureUnit private constructor(val id: Int, private val nameRecourseId: Int, private val isItIntValue: Boolean) : Serializable {
-    UNITS(0, R.string.unit_title, false),
-    GRAMM(1, R.string.gramm_title, true),
-    KILOGRAMM(2, R.string.kilogramm_title, false),
-    LITRE(3, R.string.litre_title, false),
-    MILILITRE(4, R.string.mililitre_title, true),
-    CUP(5, R.string.cup_title, false),
-    TEASPOON(6, R.string.teaspoon_title, false),
-    TABLESPOON(7, R.string.tablespoon_title, true),
-    BOTTLE(8, R.string.bottle_title, false),
-    PACKAGE(9, R.string.package_title, false);
+    UNITS(0, R.string.unit_title_main, false),
+    GRAMM(1, R.string.gramm_title_main, true),
+    KILOGRAMM(2, R.string.kilogramm_title_main, false),
+    LITRE(3, R.string.litre_title_main, false),
+    MILILITRE(4, R.string.mililitre_title_main, true),
+    CUP(5, R.string.cup_title_main, false),
+    TEASPOON(6, R.string.teaspoon_title_main, false),
+    TABLESPOON(7, R.string.tablespoon_title_main, true),
+    BOTTLE(8, R.string.bottle_title_main, false),
+    PACKAGE(9, R.string.package_title_main, false);
 
     override fun toString(): String {
         return RApplication.appContext?.getString(nameRecourseId) ?: ""
@@ -33,15 +33,15 @@ enum class MeasureUnit private constructor(val id: Int, private val nameRecourse
         }
 
         if (this == KILOGRAMM && value < 1.0) {
-            valueString = getIntOrDoubleValueString(value * 1000) + " " + GRAMM.toString()
+            valueString = getStringOfValue(value * 1000) + " " + GRAMM.toString()
         } else if (this == GRAMM && value > 1000.0) {
-            valueString = getIntOrDoubleValueString(value / 1000) + " " + KILOGRAMM.toString()
+            valueString = getStringOfValue(value / 1000) + " " + KILOGRAMM.toString()
         } else if (this == LITRE && value < 1.0) {
-            valueString = getIntOrDoubleValueString(value * 1000) + " " + MILILITRE.toString()
+            valueString = getStringOfValue(value * 1000) + " " + MILILITRE.toString()
         } else if (this == MILILITRE && value > 1000.0) {
-            valueString = getIntOrDoubleValueString(value / 1000) + " " + LITRE.toString()
+            valueString = getStringOfValue(value / 1000) + " " + LITRE.toString()
         } else {
-            valueString = getIntOrDoubleValueString(value) + " " + toString()
+            valueString = getStringOfValue(value) + " " + toString()
         }
         return valueString
     }
@@ -53,20 +53,20 @@ enum class MeasureUnit private constructor(val id: Int, private val nameRecourse
         }
 
         if (this == KILOGRAMM && value < 1.0) {
-            valueString = getIntOrDoubleValueString(value * 1000) + " " + GRAMM.toString()
+            valueString = getStringOfValue(value * 1000) + " " + GRAMM.toString()
         } else if (this == GRAMM && value > 1000.0) {
-            valueString = getIntOrDoubleValueString(value / 1000) + " " + KILOGRAMM.toString()
+            valueString = getStringOfValue(value / 1000) + " " + KILOGRAMM.toString()
         } else if (this == LITRE && value < 1.0) {
-            valueString = getIntOrDoubleValueString(value * 1000) + " " + MILILITRE.toString()
+            valueString = getStringOfValue(value * 1000) + " " + MILILITRE.toString()
         } else if (this == MILILITRE && value > 1000.0) {
-            valueString = getIntOrDoubleValueString(value / 1000) + " " + LITRE.toString()
+            valueString = getStringOfValue(value / 1000) + " " + LITRE.toString()
         } else {
-            valueString = getIntOrDoubleValueString(value) + " " + toString()
+            valueString = getStringOfValue(value) + " " + toString()
         }
         return valueString
     }
 
-    private fun getIntOrDoubleValueString(value: Double): String {
+    fun getStringOfValue(value: Double): String {
         val valueString: String
         if (isItIntValue(value)) {
             valueString = Math.round(value).toString()
@@ -216,86 +216,81 @@ enum class MeasureUnit private constructor(val id: Int, private val nameRecourse
             var unit = UNITS
 
             //try to find UNIT
-            var unitTitle = RApplication.appContext?.getString(R.string.unit_title)
-            unitTitle = unitTitle?.replace(".", "")
-            val regExString = unitTitle + "\\.*"
-            var matcher = Pattern.compile(regExString).matcher(unitString)
+            val unitsArray = RApplication.appContext?.resources?.getStringArray(R.array.unit_title_array)
+            var matcher = Pattern.compile(getUnitRegex(unitsArray)).matcher(unitString)
             if (matcher.find()) {
                 unit = UNITS
             }
+
             //try to find GRAMM
-            var grammTitle = RApplication.appContext?.getString(R.string.gramm_title)
-            grammTitle = ("(\\b" + RApplication.appContext?.getString(R.string.short_gramm_title)
-                    + ".*\\b|\\b" + grammTitle + ")")
-            matcher = Pattern.compile(grammTitle).matcher(unitString)
+            val grammArray = RApplication.appContext?.resources?.getStringArray(R.array.gramm_title_array)
+            matcher = Pattern.compile(getUnitRegex(grammArray)).matcher(unitString)
             if (matcher.find()) {
                 unit = GRAMM
             }
 
             //try to find KILOGRAMM
-            var kilogrammTitle = RApplication.appContext?.getString(R.string.kilogramm_title)
-            kilogrammTitle = "(\\b$kilogrammTitle*\\b)"
-            matcher = Pattern.compile(kilogrammTitle).matcher(unitString)
+            val kilogrammTitle = RApplication.appContext?.resources?.getStringArray(R.array.kilogramm_title_array)
+            matcher = Pattern.compile(getUnitRegex(kilogrammTitle)).matcher(unitString)
             if (matcher.find()) {
                 unit = KILOGRAMM
             }
 
             //try to find LITRE
-            var litreTitle = RApplication.appContext?.getString(R.string.litre_title)
-            litreTitle = "(\\b$litreTitle*\\b)"
-            matcher = Pattern.compile(litreTitle).matcher(unitString)
+            val litreTitle = RApplication.appContext?.resources?.getStringArray(R.array.litre_title_array)
+            matcher = Pattern.compile(getUnitRegex(litreTitle)).matcher(unitString)
             if (matcher.find()) {
                 unit = LITRE
             }
 
             //try to find MILILITRE
-            var mililitreTitle = RApplication.appContext?.getString(R.string.mililitre_title)
-            mililitreTitle = "(\\b$mililitreTitle*\\b)"
-            matcher = Pattern.compile(mililitreTitle).matcher(unitString)
+            val mililitreTitle = RApplication.appContext?.resources?.getStringArray(R.array.mililitre_title_array)
+            matcher = Pattern.compile(getUnitRegex(mililitreTitle)).matcher(unitString)
             if (matcher.find()) {
                 unit = MILILITRE
             }
 
             //try to find CUP
-            var cupTitle = RApplication.appContext?.getString(R.string.cup_title)
-            cupTitle = "(\\b$cupTitle*\\b)"
-            matcher = Pattern.compile(cupTitle).matcher(unitString)
+            val cupTitle = RApplication.appContext?.resources?.getStringArray(R.array.cup_title_array)
+            matcher = Pattern.compile(getUnitRegex(cupTitle)).matcher(unitString)
             if (matcher.find()) {
                 unit = CUP
             }
 
+            //try to find PACKAGE
+            val packageTitle = RApplication.appContext?.resources?.getStringArray(R.array.package_title_array)
+            matcher = Pattern.compile(getUnitRegex(packageTitle)).matcher(unitString)
+            if (matcher.find()) {
+                unit = PACKAGE
+            }
+
             //try to find TEASPOON
-            var teaspoonTitle = RApplication.appContext?.getString(R.string.teaspoon_title)
-            teaspoonTitle = "(\\b" + teaspoonTitle?.replace(".", ".*") + "\\b)"
-            matcher = Pattern.compile(teaspoonTitle).matcher(unitString)
+            val teaspoonTitle = RApplication.appContext?.resources?.getStringArray(R.array.teaspoon_title_array)
+            matcher = Pattern.compile(getUnitRegex(teaspoonTitle)).matcher(unitString)
             if (matcher.find()) {
                 unit = TEASPOON
             }
 
             //try to find TABLESPOON
-            var tablespoonTitle = RApplication.appContext?.getString(R.string.tablespoon_title)
-            tablespoonTitle = "(\\b" + tablespoonTitle?.replace(".", ".*") + "\\b)"
-            matcher = Pattern.compile(tablespoonTitle).matcher(unitString)
+            val tablespoonTitle = RApplication.appContext?.resources?.getStringArray(R.array.tablespoon_title_array)
+            matcher = Pattern.compile(getUnitRegex(tablespoonTitle)).matcher(unitString)
             if (matcher.find()) {
                 unit = TABLESPOON
             }
 
             //try to find BOTTLE
-            var bottleTitle = RApplication.appContext?.getString(R.string.bottle_title)
-            bottleTitle = "(\\b$bottleTitle.*\\b)"
-            matcher = Pattern.compile(bottleTitle).matcher(unitString)
+            val bottleTitle = RApplication.appContext?.resources?.getStringArray(R.array.bottle_title_array)
+            matcher = Pattern.compile(getUnitRegex(bottleTitle)).matcher(unitString)
             if (matcher.find()) {
                 unit = BOTTLE
             }
-
-            //try to find PACKAGE
-            var packageTitle = RApplication.appContext?.getString(R.string.package_title)
-            packageTitle = "(\\b$packageTitle*\\b)"
-            matcher = Pattern.compile(packageTitle).matcher(unitString)
-            if (matcher.find()) {
-                unit = PACKAGE
-            }
             return unit
+        }
+
+        private fun getUnitRegex(unitsArray: Array<String>?): String {
+            val unitsArrayString = unitsArray?.joinToString("|", "(", ")") { it }
+
+            return "" + unitsArrayString + "\\.*"
         }
     }
 }

@@ -43,6 +43,7 @@ class RApplication : Application() {
 
         val PREFS_NAME = "COOK_PLAN_APP"
         private val CATEGORY_PRIORITY_PREFS_NAME = "CATEGORY_PRIORITY_PREFS_NAME"
+        private val USER_SAW_VOICE_RECOGNITION_ALERT_PREFS_NAME = "USER_SAW_VOICE_RECOGNITION_ALERT_PREFS_NAME"
 
         var appContext: Context? = null
             private set
@@ -59,37 +60,30 @@ class RApplication : Application() {
             get() {
                 val currentLanguage = RApplication.currentLocale.displayLanguage
                 val russianLanguage = RApplication.appContext!!.getString(R.string.russian_language)
-                return if (currentLanguage == russianLanguage) {
-                    true
-                } else {
-                    false
-                }
+                return currentLanguage == russianLanguage
             }
 
         fun savePriorityList(priorityOfCategories: List<ProductCategory>) {
-            val settings: SharedPreferences
-            val editor: SharedPreferences.Editor
-
-            settings = appContext!!.getSharedPreferences(PREFS_NAME,
+            val settings: SharedPreferences? = appContext?.getSharedPreferences(PREFS_NAME,
                     Context.MODE_PRIVATE)
-            editor = settings.edit()
+            val editor: SharedPreferences.Editor?
+
+            editor = settings?.edit()
 
             val gson = Gson()
             val jsonFavorites = gson.toJson(priorityOfCategories)
 
-            editor.putString(CATEGORY_PRIORITY_PREFS_NAME, jsonFavorites)
+            editor?.putString(CATEGORY_PRIORITY_PREFS_NAME, jsonFavorites)
 
-            editor.commit()
+            editor?.commit()
         }
 
         fun getPriorityList(): List<ProductCategory> {
-            val settings: SharedPreferences
+            val settings: SharedPreferences? = appContext?.getSharedPreferences(PREFS_NAME,
+                    Context.MODE_PRIVATE)
             var priorityList: List<ProductCategory> = arrayListOf()
 
-            settings = appContext!!.getSharedPreferences(PREFS_NAME,
-                    Context.MODE_PRIVATE)
-
-            if (settings.contains(CATEGORY_PRIORITY_PREFS_NAME)) {
+            if (settings?.contains(CATEGORY_PRIORITY_PREFS_NAME) == true) {
                 val json = settings.getString(CATEGORY_PRIORITY_PREFS_NAME, null)
                 val gson = Gson()
                 val items = gson.fromJson(json,
@@ -99,6 +93,25 @@ class RApplication : Application() {
             }
 
             return priorityList
+        }
+
+        fun saveUserSawVoiceAlert(isUserSawVoiceAlert: Boolean) {
+            val settings: SharedPreferences? = appContext?.getSharedPreferences(PREFS_NAME,
+                    Context.MODE_PRIVATE)
+            val editor: SharedPreferences.Editor?
+
+            editor = settings?.edit()
+
+            editor?.putBoolean(USER_SAW_VOICE_RECOGNITION_ALERT_PREFS_NAME, isUserSawVoiceAlert)
+
+            editor?.commit()
+        }
+
+        fun isUserSawVoiceAlert(): Boolean {
+            val settings: SharedPreferences? = appContext?.getSharedPreferences(PREFS_NAME,
+                    Context.MODE_PRIVATE)
+
+            return settings?.getBoolean(USER_SAW_VOICE_RECOGNITION_ALERT_PREFS_NAME, false) ?: false
         }
     }
 }

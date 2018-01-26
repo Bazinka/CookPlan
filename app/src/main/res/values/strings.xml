@@ -24,14 +24,18 @@
     <string name="error_required_field">Recipe name is required</string>
     <string name="product_vocabulary_title">Products</string>
     <string name="shopping_list_title">Shopping list</string>
-    <string name="gramm_title">gr.</string>
-    <string name="unit_title">units</string>
-    <string name="kilogramm_title">kg.</string>
-    <string name="litre_title">litre</string>
-    <string name="mililitre_title">ml.</string>
-    <string name="cup_title">cups</string>
-    <string name="teaspoon_title">teaspoon</string>
-    <string name="tablespoon_title">tablespoon</string>
+
+    <!--<string name="gramm_title_main">gr.</string>-->
+    <!--<string name="unit_title_main">units</string>-->
+    <!--<string name="kilogramm_title_main">kg.</string>-->
+    <!--<string name="litre_title_main">litre</string>-->
+    <!--<string name="mililitre_title_main">ml.</string>-->
+    <!--<string name="cup_title_main">cups</string>-->
+    <!--<string name="teaspoon_title_main">teaspoon</string>-->
+    <!--<string name="tablespoon_title_main">tablespoon</string>-->
+    <!--<string name="bottle_title_main">bottle</string>-->
+    <!--<string name="package_title_main">package</string>-->
+
     <string name="enter_product_title">Enter a product</string>
     <string name="amount_product_title">Amount</string>
     <string name="product_amount_not_exist">Products without amout cannot be summed in shopping list</string>
@@ -47,8 +51,6 @@
     <string name="empty_shopping_list_title">Shopping list is empty</string>
     <string name="empty_recipe_list_title">You haven\'t had recipes yet</string>
     <string name="empty_product_list_title">You haven\'t had products yet</string>
-    <string name="bottle_title">bottle</string>
-    <string name="package_title">package</string>
     <string name="without_category_title">Without category</string>
     <string name="alcohol_drinks_title">Alcohol drinks</string>
     <string name="milk_product_title">Milk products</string>
@@ -284,5 +286,9 @@
     <string name="and_recipe_name_separator">with</string>
     <string name="second_name_separator">,</string>
     <string name="product_for_ingredient_title">Add ingredient</string>
+    <string name="voise_recognition_example">Please, speak sentance like \'Сметана 100 грамм\' in russian </string>
+    <string name="format_voise_recognition_message">This works only for russian language</string>
+    <string name="voise_recognition_error">We couldn\'t recognize this string. Please, try again.</string>
+    <string name="unexisting_measure_for_product_title">Selected product cannot be measured in this units</string>
 
 </resources>
