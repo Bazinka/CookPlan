@@ -325,15 +325,14 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
         if (id == R.id.app_bar_done) {
 
             val name = findViewById<TextView>(R.id.product_name_text).text.toString()
-            if (!name.isEmpty()) {
+            if (!name.isEmpty() || name == getString(R.string.enter_product_title)) {
                 val text = findViewById<EditText>(R.id.unit_amount_edit_text).text.toString()
                 if (!text.isEmpty()) {
                     saveInrgedient(text.toDouble())
                 } else {
                     AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
-                            .setMessage(R.string.product_amount_not_exist)
-                            .setPositiveButton(android.R.string.ok) { dialog, which -> saveInrgedient(0.toDouble()) }
-                            .setNegativeButton(android.R.string.cancel, null)
+                            .setMessage(R.string.product_required_field)
+                            .setPositiveButton(android.R.string.ok, null)
                             .show()
                 }
             }
