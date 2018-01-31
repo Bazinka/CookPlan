@@ -95,6 +95,8 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
             if (restMap.isEmpty() && shopMap.isEmpty()) {
                 return null
             }
+            val category = ingredients.get(0).category
+
             var shopAmountString = ""
             for ((key, value) in shopMap) {
                 val string = key.toStringForShopList(value)
@@ -109,10 +111,14 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
                 val string = key.toStringForShopList(value)
                 restAmountString = if (restAmountString.isEmpty()) string else restAmountString + " + " + string
             }
-            if (!restAmountString.isEmpty()) {
-                shopAmountString = shopAmountString + " + " + restAmountString
+            when{
+                !restAmountString.isEmpty() && !shopAmountString.isEmpty()->{
+                    shopAmountString = shopAmountString + " + " + restAmountString
+                }
+                !restAmountString.isEmpty() && shopAmountString.isEmpty()->{
+                    shopAmountString = restAmountString
+                }
             }
-            val category = ingredients.get(0).category
             return Ingredient(productName, shopAmountString, status, category)
         } else {
             return null
