@@ -346,6 +346,7 @@
     <string name="format_voise_recognition_message">CookPlan распознает фразы в формате Сметана 100 грамм</string>
     <string name="voise_recognition_error">Не удалость распознать строчку. Попробуйте еще раз</string>
     <string name="unexisting_measure_for_product_title">Для этого продукта нельзя задать количество в данных единицах измерения</string>
+    <string name="add_product_buttom_title">Добавить продукт</string>
 
 
 </resources>

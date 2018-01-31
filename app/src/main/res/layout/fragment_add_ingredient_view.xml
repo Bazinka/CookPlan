@@ -11,6 +11,6 @@
         android:layout_below="@id/logo_textView"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
-        android:text="Добавить продукт"/>
+        android:text="@string/add_product_buttom_title"/>
 
 </RelativeLayout>

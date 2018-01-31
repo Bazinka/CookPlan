@@ -290,5 +290,6 @@
     <string name="format_voise_recognition_message">This works only for russian language</string>
     <string name="voise_recognition_error">We couldn\'t recognize this string. Please, try again.</string>
     <string name="unexisting_measure_for_product_title">Selected product cannot be measured in this units</string>
+    <string name="add_product_buttom_title">Add product</string>
 
 </resources>

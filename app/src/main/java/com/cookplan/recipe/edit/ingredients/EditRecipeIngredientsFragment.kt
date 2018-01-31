@@ -1,6 +1,7 @@
 package com.cookplan.recipe.edit.ingredients
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -8,10 +9,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.Button
+import android.widget.RelativeLayout
+import android.widget.RelativeLayout.LayoutParams
 import android.widget.Toast
+import com.cookplan.BaseActivity
 import com.cookplan.BaseFragment
 import com.cookplan.R
-import com.cookplan.add_ingredient_view.AddIngredientViewFragment
+import com.cookplan.add_ingredient_view.ProductForIngredientActivity
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 
@@ -30,12 +37,15 @@ class EditRecipeIngredientsFragment : BaseFragment(), EditRecipeIngredientsView 
                               savedInstanceState: Bundle?): View? {
         mainView = inflater.inflate(R.layout.fragment_edit_recipe_ingredients, container, false) as ViewGroup
 
-        val fragment = AddIngredientViewFragment.newInstance(recipe, false)
-        val transaction = fragmentManager?.beginTransaction()
-        transaction?.replace(R.id.add_ingredient_fragment_container, fragment)
-        transaction?.commit()
-
-
+        val chooseButton = mainView?.findViewById<Button>(R.id.add_shop_list_items_button)
+        chooseButton?.setOnClickListener {
+            val intent = Intent(activity, ProductForIngredientActivity::class.java)
+            intent.putExtra(ProductForIngredientActivity.RECIPE_ID_KEY, recipe?.id)
+            intent.putExtra(ProductForIngredientActivity.RECIPE_NEED_TO_BUY_KEY, false)
+            if (activity is BaseActivity) {
+                (activity as BaseActivity).startActivityWithLeftAnimation(intent)
+            }
+        }
         val recyclerView = mainView?.findViewById<RecyclerView>(R.id.ingredients_recycler_view)
         recyclerView?.setHasFixedSize(true)
 
@@ -63,8 +73,14 @@ class EditRecipeIngredientsFragment : BaseFragment(), EditRecipeIngredientsView 
         adapter?.updateItems(ingredientList)
         if (ingredientList.isEmpty()) {
             mainView?.findViewById<View>(R.id.list_card_view)?.visibility = View.GONE
+            val layoutparams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            layoutparams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+            mainView?.findViewById<View>(R.id.add_product_card_view)?.layoutParams = layoutparams
         } else {
             mainView?.findViewById<View>(R.id.list_card_view)?.visibility = View.VISIBLE
+            val layoutparams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            layoutparams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+            mainView?.findViewById<View>(R.id.add_product_card_view)?.layoutParams = layoutparams
         }
     }
 

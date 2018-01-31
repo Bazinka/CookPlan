@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
@@ -32,10 +33,9 @@ class EditRecipeInrgedientsAdapter(private val removelistener: (Ingredient) -> U
             holder.amountTextView.visibility = View.GONE
         }
 
-        holder.removeButtonLayout.setBackgroundResource(ingredient.category.colorId)
         holder.categoryView.setBackgroundResource(ingredient.category.colorId)
 
-        with(holder.mainRemoveLayout) {
+        with(holder.mainRemoveImageButton) {
             tag = ingredient
             setOnClickListener { removelistener(ingredient) }
         }
@@ -46,15 +46,13 @@ class EditRecipeInrgedientsAdapter(private val removelistener: (Ingredient) -> U
     class MainViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         var nameTextView: TextView
         var amountTextView: TextView
-        var mainRemoveLayout: ViewGroup
-        var removeButtonLayout: ViewGroup
+        var mainRemoveImageButton: ImageButton
         var categoryView: View
 
         init {
             nameTextView = v.findViewById<TextView>(R.id.ingredient_item_name)
             amountTextView = v.findViewById<TextView>(R.id.ingredient_item_amount)
-            mainRemoveLayout = v.findViewById<ViewGroup>(R.id.ingredient_remove_layout)
-            removeButtonLayout = v.findViewById<ViewGroup>(R.id.ingredient_remove_button_layout)
+            mainRemoveImageButton = v.findViewById<ImageButton>(R.id.ingredient_remove_button)
             categoryView = v.findViewById(R.id.category_view)
         }
     }

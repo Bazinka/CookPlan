@@ -15,7 +15,7 @@
 
         <View
             android:id="@+id/category_view"
-            android:layout_width="5dp"
+            android:layout_width="@dimen/category_view_width"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp"

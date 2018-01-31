@@ -1,53 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:paddingTop="1dp"
+    android:paddingBottom="1dp">
 
     <RelativeLayout
         android:id="@+id/ingredient_remove_layout"
-        android:layout_width="50dp"
-        android:layout_height="60dp"
-        android:clickable="true">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true">
 
-        <RelativeLayout
-            android:id="@+id/ingredient_remove_button_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/accent_color"
-            android:clickable="false">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:adjustViewBounds="true"
-                android:padding="10dp"
-                app:srcCompat="@drawable/ic_remove_item"/>
-        </RelativeLayout>
+        <ImageButton
+            android:id="@+id/ingredient_remove_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_centerInParent="true"
+            android:background="@drawable/action_button_back"
+            android:padding="@dimen/main_margin_left"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_remove_shop_list"/>
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ingredient_content_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/ingredient_remove_layout"
+        android:orientation="horizontal">
 
         <View
             android:id="@+id/category_view"
-            android:layout_width="5dp"
+            android:layout_width="@dimen/category_view_width"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
             android:background="@color/accent_color"/>
 
         <RelativeLayout
+            android:id="@+id/name_main_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clickable="false"
             android:paddingBottom="@dimen/margin_glutter"
             android:paddingLeft="@dimen/main_margin_left"
@@ -90,4 +86,5 @@
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>
