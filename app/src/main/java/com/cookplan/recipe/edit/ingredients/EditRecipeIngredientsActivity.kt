@@ -38,9 +38,6 @@ class EditRecipeIngredientsActivity : BaseActivity() {
         val id = item.itemId
 
         if (id == R.id.app_bar_done) {
-            //TODO: saving data
-            //            Intent intent = new Intent(this, MainActivity.class);
-            //            startActivityWithLeftAnimation(intent);
             finish()
             return true
         }

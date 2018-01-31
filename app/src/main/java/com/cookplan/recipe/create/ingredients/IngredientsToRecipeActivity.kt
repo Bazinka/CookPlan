@@ -25,7 +25,7 @@ class IngredientsToRecipeActivity : BaseActivity(), EditRecipeView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_recipe_ingredients)
+        setContentView(R.layout.activity_create_recipe_ingredients)
         setNavigationArrow()
         setTitle(getString(R.string.step1_ingregients_title))
 
