@@ -1,17 +1,22 @@
 package com.cookplan.shopping_list.total_list
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.RelativeLayout
+import com.cookplan.BaseActivity
 import com.cookplan.BaseFragment
 import com.cookplan.R
-import com.cookplan.add_ingredient_view.AddIngredientViewFragment
+import com.cookplan.add_ingredient_view.ProductForIngredientActivity
 import com.cookplan.models.Ingredient
 import com.cookplan.models.ShopListStatus
 import java.util.*
@@ -54,10 +59,15 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
         }
         needToBuyRecyclerView?.adapter = needToBuyAdapter
 
-        val fragment = AddIngredientViewFragment.newInstance(true)
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.commit()
+        val chooseButton = mainView?.findViewById<Button>(R.id.add_shop_list_items_button)
+        chooseButton?.setOnClickListener {
+            val intent = Intent(activity, ProductForIngredientActivity::class.java)
+            intent.putExtra(ProductForIngredientActivity.RECIPE_NEED_TO_BUY_KEY, true)
+            intent.putExtra(ProductForIngredientActivity.RECIPE_ID_KEY, String())
+            if (activity is BaseActivity) {
+                (activity as BaseActivity).startActivityWithLeftAnimation(intent)
+            }
+        }
 
         val deleteImageButton = mainView?.findViewById<ImageView>(R.id.delete_image_view)
         deleteImageButton?.setOnClickListener { v ->
@@ -71,12 +81,12 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
                                 ingredients.add(ingredient)
                             }
                         }
-                        progressBarLayout?.visibility = View.VISIBLE
+                        progressBarLayout?.visibility = VISIBLE
                         presenter?.deleteIngredients(ingredients)
                     }
                     .setNeutralButton(android.R.string.cancel, null)
                     .setNegativeButton(R.string.delete_all_items_title) { dialog, which ->
-                        progressBarLayout?.visibility = View.VISIBLE
+                        progressBarLayout?.visibility = VISIBLE
                         presenter?.deleteIngredients(needToBuyAdapter?.getIngredients() ?: listOf())
                     }
                     .show()
@@ -88,7 +98,7 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
         super.onStart()
         presenter?.getShoppingList()
         setEmptyView()
-        progressBarLayout?.visibility = View.VISIBLE
+        progressBarLayout?.visibility = VISIBLE
     }
 
     override fun onStop() {
@@ -105,9 +115,8 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
     }
 
     override fun setEmptyView() {
-        progressBarLayout?.visibility = View.GONE
-        setEmptyViewVisability(View.VISIBLE)
-        setContentVisability(View.GONE)
+        setEmptyViewVisability(VISIBLE)
+        setContentVisability(GONE)
     }
 
     private fun setContentVisability(visability: Int) {
@@ -115,22 +124,22 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
         contentLayout?.visibility = visability
     }
 
-    override fun setIngredientLists(allIngredientList: List<Ingredient>) {
-        progressBarLayout?.visibility = View.GONE
-        setEmptyViewVisability(View.GONE)
-        setContentVisability(View.VISIBLE)
-        val needToBuyLayout = mainView?.findViewById<ViewGroup>(R.id.need_to_buy_layout)
-        if (!allIngredientList.isEmpty()) {
-            setLayoutVisability(needToBuyLayout, View.VISIBLE)
-            needToBuyAdapter?.update(allIngredientList)
+    override fun setIngredientLists(allIngredientsList: List<Ingredient>) {
+        progressBarLayout?.visibility = GONE
+        if (!allIngredientsList.isEmpty()) {
+            needToBuyAdapter?.update(allIngredientsList)
+            val layoutparams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            layoutparams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+            mainView?.findViewById<View>(R.id.add_product_card_view)?.layoutParams = layoutparams
+            setEmptyViewVisability(GONE)
+            setContentVisability(VISIBLE)
         } else {
-            setLayoutVisability(needToBuyLayout, View.GONE)
+            val layoutparams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            layoutparams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+            mainView?.findViewById<View>(R.id.add_product_card_view)?.layoutParams = layoutparams
             setEmptyView()
         }
-    }
-
-    private fun setLayoutVisability(layoutView: ViewGroup?, visability: Int) {
-        layoutView?.visibility = visability
+        mainView?.requestLayout();
     }
 
     companion object {

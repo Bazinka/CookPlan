@@ -9,5 +9,5 @@ import com.cookplan.shopping_list.ShoppingListView
 
 interface TotalShoppingListView : ShoppingListView {
 
-    fun setIngredientLists(AllIngredientsList: List<Ingredient>)
+    fun setIngredientLists(allIngredientsList: List<Ingredient>)
 }
