@@ -70,7 +70,7 @@
                 android:layout_below="@id/title_layout"
                 android:paddingTop="@dimen/group_item_margin">
 
-                <android.support.v7.widget.RecyclerView
+                <com.cookplan.views.dynamic_grid.DynamicGridView
                     android:id="@+id/local_ingredients_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
+import com.cookplan.views.dynamic_grid.DynamicGridView
 
 
 class ShopListByDishesRecyclerAdapter(private val recipeList: MutableList<Recipe>,
@@ -26,15 +27,19 @@ class ShopListByDishesRecyclerAdapter(private val recipeList: MutableList<Recipe
 
         holder.nameTextView.text = recipe.name
 
-        val adapter = DishIngredientsAdapter(
-                recipeIdsToIngredientMap[recipe.id] ?: listOf()
+        val adapter = DishIngredientsGridAdapter(
+                recipeIdsToIngredientMap[recipe.id] ?: listOf(),
+                holder.mainView.context
         )
 
-        holder.ingredientsRecyclerView.setHasFixedSize(true)
-        holder.ingredientsRecyclerView.isNestedScrollingEnabled = false
-        holder.ingredientsRecyclerView.layoutManager = LinearLayoutManager(holder.mainView.context)
-        holder.ingredientsRecyclerView.itemAnimator = DefaultItemAnimator()
-        holder.ingredientsRecyclerView.adapter = adapter
+//        holder.ingredientsDynamicGridView.setHasFixedSize(true)
+//        holder.ingredientsDynamicGridView.isNestedScrollingEnabled = false
+//        holder.ingredientsDynamicGridView.layoutManager = LinearLayoutManager(holder.mainView.context)
+//        holder.ingredientsDynamicGridView.itemAnimator = DefaultItemAnimator()
+//        holder.ingredientsDynamicGridView.adapter = adapter
+
+        holder.ingredientsDynamicGridView.setAdapter(adapter)
+
         with(holder.deleteImageView) {
             tag = recipe
             setOnClickListener {
@@ -60,7 +65,7 @@ class ShopListByDishesRecyclerAdapter(private val recipeList: MutableList<Recipe
 
     inner class ViewHolderShopList(v: View) : RecyclerView.ViewHolder(v) {
         var nameTextView = v.findViewById<TextView>(R.id.recipe_item_name)
-        var ingredientsRecyclerView = v.findViewById<RecyclerView>(R.id.local_ingredients_recycler_view)
+        var ingredientsDynamicGridView = v.findViewById<DynamicGridView>(R.id.local_ingredients_recycler_view)
         var mainView = v.findViewById<View>(R.id.main_view)
         val deleteImageView = v.findViewById<ImageView>(R.id.delete_group_image_view)
 
