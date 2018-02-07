@@ -31,13 +31,6 @@ class ShopListByDishesRecyclerAdapter(private val recipeList: MutableList<Recipe
                 recipeIdsToIngredientMap[recipe.id] ?: listOf(),
                 holder.mainView.context
         )
-
-//        holder.ingredientsDynamicGridView.setHasFixedSize(true)
-//        holder.ingredientsDynamicGridView.isNestedScrollingEnabled = false
-//        holder.ingredientsDynamicGridView.layoutManager = LinearLayoutManager(holder.mainView.context)
-//        holder.ingredientsDynamicGridView.itemAnimator = DefaultItemAnimator()
-//        holder.ingredientsDynamicGridView.adapter = adapter
-
         holder.ingredientsDynamicGridView.setAdapter(adapter)
 
         with(holder.deleteImageView) {
