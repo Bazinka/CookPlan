@@ -40,7 +40,10 @@ class ShopListByDishesPresenterImpl(private val mainView: ShopListByDishesView?,
         recipeIdToIngredientMap.clear()
         for (ingredient in userIngredients) {
             if (ingredient.shopListStatus != ShopListStatus.NONE) {
-                val key = ingredient.recipeId ?: WITHOUT_RECIPE_KEY
+                var key = ingredient.recipeId
+                if (key?.isEmpty() != false) {
+                    key = WITHOUT_RECIPE_KEY
+                }
                 val ingredients = (recipeIdToIngredientMap[key] ?: arrayListOf()) as ArrayList<Ingredient>
                 ingredients.add(ingredient)
                 recipeIdToIngredientMap.put(key, ingredients)
