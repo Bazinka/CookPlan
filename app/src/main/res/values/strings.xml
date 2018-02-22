@@ -19,7 +19,7 @@
     <string name="russian_lan_title">Russian</string>
     <string name="new_recipe_title">New recipe</string>
     <string name="add_recipe_second_screen_title">Ingredients for </string>
-    <string name="recognize_button_title">Recognize</string>
+    <string name="recognize_button_title">Recognize\n text</string>
     <string name="recipe_desc_hint">The cooking process</string>
     <string name="error_required_field">Recipe name is required</string>
     <string name="product_vocabulary_title">Products</string>
@@ -291,5 +291,10 @@
     <string name="voise_recognition_error">We couldn\'t recognize this string. Please, try again.</string>
     <string name="unexisting_measure_for_product_title">Selected product cannot be measured in this units</string>
     <string name="add_product_buttom_title">Add product</string>
+    <string name="add_photo_title">Add \n photo</string>
+    <string name="reading_text_title">Voice \n typing</string>
+    <string name="next_vioce_typing_question">Do you want to voice type next part of description?</string>
+    <string name="speak_please_title">Speak, please</string>
+    <string name="desc_will_be_reload_title">Description will be re-recorded.</string>
 
 </resources>

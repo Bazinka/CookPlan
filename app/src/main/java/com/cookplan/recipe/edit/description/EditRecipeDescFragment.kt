@@ -10,15 +10,17 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.speech.RecognizerIntent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import com.cookplan.BaseFragment
 import com.cookplan.R
 import com.cookplan.utils.PermissionUtils
+import java.util.*
+
 
 /**
  * Created by DariaEfimova on 19.01.2018.
@@ -31,6 +33,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
     private var language: String = String()
 
     private var description: String = String()
+    private var isTextNeedsToReload: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +56,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
         }
         recipeDescEditText?.setText(description)
 
-        val recognizeButton = mainView?.findViewById<Button>(R.id.ocr_desc_btn)
+        val recognizeButton = mainView?.findViewById<View>(R.id.recognize_card_view)
         recognizeButton?.setOnClickListener {
             AlertDialog.Builder(activity)
                     .setMessage(R.string.choose_recipe_language)
@@ -68,8 +71,32 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
                     .show()
 
         }
+
+        val voiceTypingButton = mainView?.findViewById<View>(R.id.micro_card_view)
+        voiceTypingButton?.setOnClickListener {
+            AlertDialog.Builder(activity)
+                    .setMessage(getString(R.string.desc_will_be_reload_title))
+                    .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                        dialog.dismiss()
+                        startSpeechRecognitionActivity()
+                    }
+                    .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+        }
         presenter = EditRecipeDescPresenterImpl(this, activity as Context)
         return mainView
+    }
+
+    private fun startSpeechRecognitionActivity() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                getString(R.string.speak_please_title))
+        startActivityForResult(intent, VOICE_TYPE_CHECK_CODE)
     }
 
     private fun startCameraWithPermCheck() {
@@ -101,18 +128,41 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int,
-                                         data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int,
+                                  data: Intent?) {
         //making photo
-        if (resultCode == Activity.RESULT_OK && presenter != null) {
-            if (requestCode == PHOTO_REQUEST_CODE) {
-                if (mProgressDialog == null) {
-                    mProgressDialog = ProgressDialog.show(activity, getString(R.string.processing_title),
-                            getString(R.string.processing_ocr_message), true)
-                } else {
-                    mProgressDialog?.show()
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                VOICE_TYPE_CHECK_CODE -> {
+                    if (resultCode == Activity.RESULT_OK) {
+                        val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                        val recipeDescEditText = mainView?.findViewById<EditText>(R.id.recipe_process_edit_text)
+                        var string = result?.get(0) ?: String()
+                        if (!isTextNeedsToReload) {
+                            string = recipeDescEditText?.text.toString() + "\n " + string
+                        }
+                        recipeDescEditText?.setText(string)
+                        AlertDialog.Builder(activity)
+                                .setMessage(getString(R.string.next_vioce_typing_question))
+                                .setPositiveButton(android.R.string.yes) { _, _ ->
+                                    isTextNeedsToReload = false
+                                    startSpeechRecognitionActivity()
+                                }
+                                .setNegativeButton(android.R.string.no) { _, _ ->
+                                    isTextNeedsToReload = true
+                                }
+                                .show()
+                    }
                 }
-                presenter?.doOCR(language)
+                PHOTO_REQUEST_CODE -> {
+                    if (mProgressDialog == null) {
+                        mProgressDialog = ProgressDialog.show(activity, getString(R.string.processing_title),
+                                getString(R.string.processing_ocr_message), true)
+                    } else {
+                        mProgressDialog?.show()
+                    }
+                    presenter?.doOCR(language)
+                }
             }
         }
     }
@@ -162,6 +212,9 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
 
         private val PHOTO_REQUEST_CODE = 101
         val RC_IMAGE_PERMS = 102
+
+        private val VOICE_TYPE_CHECK_CODE = 104
+
         private val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
 
         @JvmStatic

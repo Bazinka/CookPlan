@@ -11,6 +11,7 @@
     <dimen name="margin_glutter">18dp</dimen>
     <dimen name="margin_top_glutter">18dp</dimen>
     <dimen name="main_item_padding">10dp</dimen>
+    <dimen name="big_main_item_padding">20dp</dimen>
     <dimen name="spinner_separator_height">1dp</dimen>
 
     <dimen name="collapsing_app_bar_height">250dp</dimen>
