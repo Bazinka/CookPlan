@@ -18,6 +18,9 @@ import android.view.ViewGroup
 import android.widget.EditText
 import com.cookplan.BaseFragment
 import com.cookplan.R
+import com.cookplan.upload_image.UploadImagePresenter
+import com.cookplan.upload_image.UploadImagePresenterImpl
+import com.cookplan.upload_image.UploadImageView
 import com.cookplan.utils.PermissionUtils
 import java.util.*
 
@@ -25,15 +28,19 @@ import java.util.*
 /**
  * Created by DariaEfimova on 19.01.2018.
  */
-class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
+class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageView {
 
     private var mProgressDialog: ProgressDialog? = null
     private var presenter: EditRecipeDescPresenter? = null
+
+    private var photoPresenter: UploadImagePresenter? = null
 
     private var language: String = String()
 
     private var description: String = String()
     private var isTextNeedsToReload: Boolean = true
+
+    private var takePhotoForOCR: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +65,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
 
         val recognizeButton = mainView?.findViewById<View>(R.id.recognize_card_view)
         recognizeButton?.setOnClickListener {
+            takePhotoForOCR = true
             AlertDialog.Builder(activity)
                     .setMessage(R.string.choose_recipe_language)
                     .setPositiveButton(R.string.english_lan_title) { dialog, which ->
@@ -85,7 +93,15 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
                     }
                     .show()
         }
+
+        val addPhotoButton = mainView?.findViewById<View>(R.id.add_photo_card_view)
+        addPhotoButton?.setOnClickListener {
+            takePhotoForOCR = false
+            startCameraWithPermCheck()
+        }
+
         presenter = EditRecipeDescPresenterImpl(this, activity as Context)
+        photoPresenter = UploadImagePresenterImpl(this, activity as Activity)
         return mainView
     }
 
@@ -114,7 +130,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
      */
     private fun startCameraActivity() {
         if (PermissionUtils.isPermissionsGranted(activity, permission)) {
-            val outputFileUri = presenter?.getOutputImagePath()
+            val outputFileUri = if (takePhotoForOCR) presenter?.getOutputImagePath() else photoPresenter?.getOutputImagePath()
             if (outputFileUri != null) {
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
@@ -124,7 +140,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
                 setErrorToast(getString(R.string.error_generate_image_path))
             }
         } else {
-            setErrorToSnackBar(getString(R.string.permission_denied))
+            setError(getString(R.string.permission_denied))
         }
     }
 
@@ -156,26 +172,32 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
                 }
                 PHOTO_REQUEST_CODE -> {
                     if (mProgressDialog == null) {
-                        mProgressDialog = ProgressDialog.show(activity, getString(R.string.processing_title),
-                                getString(R.string.processing_ocr_message), true)
+                        mProgressDialog = ProgressDialog.show(activity,
+                                getString(R.string.processing_title),
+                                getString(if (takePhotoForOCR) R.string.processing_ocr_message else R.string.processing_upload_picture_message),
+                                true)
                     } else {
                         mProgressDialog?.show()
                     }
-                    presenter?.doOCR(language)
+                    if (takePhotoForOCR) {
+                        presenter?.doOCR(language)
+                    } else {
+                        photoPresenter?.uploadPhoto()
+                    }
                 }
             }
         }
     }
 
 
-    override fun setErrorToSnackBar(error: String) {
+    override fun setError(error: String) {
         super.setErrorToast(error)
     }
 
 
     override fun setAsyncTextResult(result: String) {
         activity?.runOnUiThread {
-            if (result != "") {
+            if (!result.isEmpty()) {
                 val textView = mainView?.findViewById<EditText>(R.id.recipe_process_edit_text)
                 textView?.setText(result)
             }
@@ -188,6 +210,16 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
             setErrorToast(error)
             mProgressDialog?.dismiss()
         }
+    }
+
+    override fun setImageSaved(url: String?) {
+        //TODO: доделать сохранение url в базу к этому рецепту и загрузку этой картиночки
+        mProgressDialog?.dismiss()
+    }
+
+    override fun setImageRemoved(imageId: String?) {
+        //TODO: доделать удаление url из базу этого рецепта и перезагрузить картинки
+        mProgressDialog?.dismiss()
     }
 
     fun getDescription(): String? {
@@ -203,7 +235,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView {
         if (grantResults.size == permission.size && permGranded) {
             startCameraActivity()
         } else {
-            setErrorToSnackBar(getString(R.string.permission_denied))
+            setError(getString(R.string.permission_denied))
         }
     }
 

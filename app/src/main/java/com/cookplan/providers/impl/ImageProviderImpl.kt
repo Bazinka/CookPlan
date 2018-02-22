@@ -12,14 +12,14 @@ import java.util.*
  * Created by DariaEfimova on 13.06.17.
  */
 
-class ImageProviderImpl(private val context: Activity) : ImageProvider {
+class ImageProviderImpl() : ImageProvider {
 
-    override fun saveImage(uri: Uri): Single<String> {
+    override fun saveImage(uri: Uri, context: Activity): Single<String> {
         return Single.create { emitter ->
             val uuid = UUID.randomUUID().toString()
             val imageRef = FirebaseStorage.getInstance().getReference(uuid)
             imageRef.putFile(uri)
-                    .addOnSuccessListener(context) { taskSnapshot -> emitter.onSuccess(uuid) }
+                    .addOnSuccessListener(context) { _ -> emitter.onSuccess(uuid) }
                     .addOnFailureListener(context, { emitter.onError(it) })
         }
     }

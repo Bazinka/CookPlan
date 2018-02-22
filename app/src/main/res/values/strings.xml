@@ -12,8 +12,9 @@
     <string name="permission_denied">Permission denied, We\'re sorry, you can\'t choose the picture</string>
     <string name="unable_to_copy_files">Unable to copy files to tessdata</string>
     <string name="text_wasnt_recognize">Something went wrong. Text wasn\'t recognized</string>
-    <string name="processing_title">Processing</string>
+    <string name="processing_title">Wait a minute, please</string>
     <string name="processing_ocr_message">Doing OCR...</string>
+    <string name="processing_upload_picture_message">Loading picture to server...</string>
     <string name="choose_recipe_language">Please choose the language</string>
     <string name="english_lan_title">English</string>
     <string name="russian_lan_title">Russian</string>

@@ -155,7 +155,7 @@ public class UploadImageActivity extends BaseActivity implements UploadImageView
             if (selectedImage != null) {
                 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.VISIBLE);
-                presenter.uploadPhoto(selectedImage);
+                presenter.uploadPhoto();
             }
         } else {
             Toast.makeText(this, "No image chosen", Toast.LENGTH_SHORT).show();

@@ -32,7 +32,7 @@ class EditRecipeDescPresenterImpl(private val mainView: EditRecipeDescView?, pri
                     file)
         } catch (e: Exception) {
             e.printStackTrace()
-            mainView?.setErrorToSnackBar(context.getString(R.string.text_wasnt_recognize))
+            mainView?.setError(context.getString(R.string.text_wasnt_recognize))
         } finally {
             return outputUri
         }
@@ -102,7 +102,7 @@ class EditRecipeDescPresenterImpl(private val mainView: EditRecipeDescView?, pri
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            mainView?.setErrorToSnackBar(context.getString(R.string.unable_to_copy_files) + e.toString())
+            mainView?.setError(context.getString(R.string.unable_to_copy_files) + e.toString())
         }
 
     }
@@ -140,7 +140,7 @@ class EditRecipeDescPresenterImpl(private val mainView: EditRecipeDescView?, pri
                 Utils.log(tag, "TessBaseAPI is null. TessFactory not returning tess object.")
             }
             e.printStackTrace()
-            mainView?.setErrorToSnackBar(context.getString(R.string.text_wasnt_recognize))
+            mainView?.setError(context.getString(R.string.text_wasnt_recognize))
         }
 
         tessBaseApi?.pageSegMode = TessBaseAPI.PageSegMode.PSM_AUTO_OSD

@@ -1,5 +1,6 @@
 package com.cookplan.providers
 
+import android.app.Activity
 import android.net.Uri
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -14,7 +15,7 @@ interface ImageProvider {
 //
 //    fun getDataSharedByMe(): Maybe<ShareUserInfo>
 
-    fun saveImage(uri: Uri): Single<String>
+    fun saveImage(uri: Uri, context: Activity): Single<String>
 
     fun removeImage(imageId: String): Completable
 }

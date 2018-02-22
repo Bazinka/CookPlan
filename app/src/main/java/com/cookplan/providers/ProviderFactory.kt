@@ -9,7 +9,7 @@ class ProviderFactory {
     companion object {
         var companyProvider: CompanyProvider? = null//CompanyProviderImpl()
         var familyModeProvider: FamilyModeProvider = FamilyModeProviderImpl()
-        //        var imageProvider: ImageProvider = ImageProviderImpl()
+        var imageProvider: ImageProvider = ImageProviderImpl()
         var ingredientProvider: IngredientProvider = IngredientProviderImpl()
         var productProvider: ProductProvider = ProductProviderImpl()
         var recipeProvider: RecipeProvider = RecipeProviderImpl()

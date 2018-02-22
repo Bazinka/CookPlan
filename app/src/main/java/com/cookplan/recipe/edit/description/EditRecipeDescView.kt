@@ -6,7 +6,7 @@ package com.cookplan.recipe.edit.description
 
 interface EditRecipeDescView {
 
-    fun setErrorToSnackBar(error: String)
+    fun setError(error: String)
 
     fun setAsyncErrorToSnackBar(error: String)
 

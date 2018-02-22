@@ -14,6 +14,7 @@ import com.cookplan.utils.Utils;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UploadImagesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -23,7 +24,7 @@ public class UploadImagesRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     private Context context;
 
     public UploadImagesRecyclerViewAdapter(List<String> items, UploadImagesEventListener listener, Context context) {
-        values = items;
+        values = items != null ? items : new ArrayList<>();
         this.listener = listener;
         this.context = context;
     }
