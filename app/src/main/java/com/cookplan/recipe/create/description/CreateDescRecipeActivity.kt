@@ -66,9 +66,9 @@ class CreateDescRecipeActivity : BaseActivity(), EditRecipeView {
                     .setPositiveButton(android.R.string.ok) { dialog, _ ->
                         dialog.dismiss()
                         editRecipePresenter?.saveRecipe(
-                                recipe = Recipe(id = recipeId ?: String()),
-                                newName = nameEditTextView.text.toString(),
-                                newDesc = fragment?.getDescription() ?: String())
+                                recipe = Recipe(id = recipeId ?: String(),
+                                        name = nameEditTextView.text.toString(),
+                                        desc = fragment?.getDescription() ?: String()))
                     }
                     .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
                     .show()

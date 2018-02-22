@@ -10,7 +10,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import okhttp3.internal.Util
 import org.jsoup.nodes.Document
 import java.util.regex.Pattern
 
@@ -97,7 +96,7 @@ class EdaTextParser(url: String) : BaseParser(url) {
         }
 
         return Recipe(String(), name, recipeDescription,
-                listOf(), FirebaseAuth.getInstance().currentUser?.uid,
+                arrayListOf(), listOf(), FirebaseAuth.getInstance().currentUser?.uid,
                 FirebaseAuth.getInstance().currentUser?.displayName)
     }
 

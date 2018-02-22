@@ -74,6 +74,7 @@ class EdimDomaHtmlParser(url: String) : BaseParser(url) {
                 id = String(),
                 name = name,
                 desc = description,
+                descImageUrls = arrayListOf(),
                 imageUrls = imageUrls,
                 userId = FirebaseAuth.getInstance().currentUser?.uid,
                 userName = FirebaseAuth.getInstance().currentUser?.displayName)

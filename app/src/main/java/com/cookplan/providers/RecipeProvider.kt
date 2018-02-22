@@ -19,7 +19,7 @@ interface RecipeProvider {
 
     fun update(recipe: Recipe): Single<Recipe>
 
-    fun getRecipeById(recipeId: String): Single<Recipe>
+    fun getRecipeById(recipeId: String?): Single<Recipe>
 
     fun removeRecipe(recipe: Recipe): Completable
 }

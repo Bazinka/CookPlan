@@ -25,6 +25,7 @@ import com.cookplan.recipe.edit.EditRecipePresenter
 import com.cookplan.recipe.edit.EditRecipePresenterImpl
 import com.cookplan.recipe.edit.EditRecipeView
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity
+import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.RECIPE_DESCRIPTION_IMAGES_KEY
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.RECIPE_DESCRIPTION_KEY
 import com.cookplan.recipe.edit.ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
@@ -107,8 +108,11 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
                             val text = nameEditTextView.text.toString()
                             if (!text.isEmpty()) {
                                 setName(text)
-                                editPresenter?.saveRecipe(recipe = viewPresenter?.getRecipe(), newName = text,
-                                        newDesc = viewPresenter?.getRecipe()?.desc)
+                                val recipe = viewPresenter?.getRecipe()
+                                recipe?.name = text
+                                if (recipe != null) {
+                                    editPresenter?.saveRecipe(recipe)
+                                }
                             }
                         }
                         .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
@@ -119,6 +123,8 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
             editDescriptionButton.setOnClickListener {
                 val intent = Intent(this, EditRecipeDescActivity::class.java)
                 intent.putExtra(RECIPE_DESCRIPTION_KEY, viewPresenter?.getRecipe()?.desc)
+                intent.putStringArrayListExtra(RECIPE_DESCRIPTION_IMAGES_KEY,
+                        viewPresenter?.getRecipe()?.descImageUrls ?: arrayListOf<String>())
                 startActivityForResultWithLeftAnimation(intent, CHANGE_DESCRIPTION_REQUEST)
             }
 
@@ -246,10 +252,15 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 CHANGE_DESCRIPTION_REQUEST -> {
+                    val recipe = viewPresenter?.getRecipe()
                     val text = data?.getStringExtra(CHANGE_DESCRIPTION_KEY) ?: getString(R.string.recipe_desc_is_not_needed_title)
+                    recipe?.desc = text
                     setDescription(text)
 
-                    editPresenter?.saveRecipe(recipe = viewPresenter?.getRecipe(), newDesc = text)
+                    recipe?.descImageUrls = data?.getStringArrayListExtra(CHANGE_DESCRIPTION_IMAGES_KEY) ?: arrayListOf()
+                    if (recipe != null) {
+                        editPresenter?.saveRecipe(recipe)
+                    }
                 }
             }
         }
@@ -262,6 +273,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
     companion object {
         val RECIPE_OBJECT_KEY = "recipe_name"
         val CHANGE_DESCRIPTION_KEY = "CHANGE_DESCRIPTION_KEY"
+        val CHANGE_DESCRIPTION_IMAGES_KEY = "CHANGE_DESCRIPTION_IMAGES_KEY"
         val CHANGE_DESCRIPTION_REQUEST = 11
     }
 }

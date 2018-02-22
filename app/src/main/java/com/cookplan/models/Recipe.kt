@@ -5,15 +5,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
 import java.io.Serializable
-import java.util.*
 
 /**
  * Created by DariaEfimova on 16.03.17.
  */
 
-data class Recipe(var id: String,
+data class Recipe(var id: String? = null,
                   var name: String? = null,
                   var desc: String = String(),
+                  var descImageUrls: ArrayList<String> = arrayListOf(),
                   var imageUrls: List<String> = listOf(),
                   val userId: String? = null,
                   var userName: String? = null) : Serializable, Comparable<Recipe> {
@@ -25,7 +25,9 @@ data class Recipe(var id: String,
     val recipeDB: RecipeDB
         get() {
             val auth = FirebaseAuth.getInstance()
-            return RecipeDB(id = String(), name = name, desc = desc, imageUrls = imageUrls, userId = auth.currentUser?.uid,
+            return RecipeDB(id = String(), name = name, desc = desc, descImageUrls = descImageUrls,
+                    imageUrls = imageUrls,
+                    userId = auth.currentUser?.uid,
                     userName = auth.currentUser?.displayName)
         }
 
@@ -34,7 +36,8 @@ data class Recipe(var id: String,
                         @PropertyName(DatabaseConstants.DATABASE_DESCRIPTION_FIELD) var desc: String = String(),
                         @PropertyName(DatabaseConstants.DATABASE_USER_ID_FIELD) var userId: String? = null,
                         @PropertyName(DatabaseConstants.DATABASE_USER_NAME_FIELD) var userName: String? = null,
-                        @PropertyName(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD) var imageUrls: List<String> = listOf()) {
+                        @PropertyName(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD) var imageUrls: List<String> = listOf(),
+                        @PropertyName(DatabaseConstants.DATABASE_RECIPE_DESC_IMAGE_URL_LIST_FIELD) var descImageUrls: ArrayList<String> = arrayListOf()) {
     }
 
     companion object {
@@ -44,6 +47,7 @@ data class Recipe(var id: String,
             return Recipe(id = itemSnapshot.key,
                     name = `object`.name,
                     desc = `object`.desc,
+                    descImageUrls = `object`.descImageUrls,
                     imageUrls = `object`.imageUrls,
                     userId = `object`.userId,
                     userName = `object`.userName)

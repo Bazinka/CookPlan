@@ -21,7 +21,7 @@
     <string name="new_recipe_title">Новый рецепт</string>
     <string name="add_recipe_second_screen_title">Ингредиенты для </string>
     <string name="recognize_button_title">Распознать\n текст</string>
-    <string name="recipe_desc_hint">Процесс приготовления</string>
+    <string name="recipe_desc_hint">Описание рецепта</string>
     <string name="error_required_field">Recipe name is required</string>
     <string name="product_vocabulary_title">Словарь продуктов питания</string>
     <string name="shopping_list_title">Список покупок</string>
@@ -348,7 +348,7 @@
     <string name="voise_recognition_error">Не удалость распознать строчку. Попробуйте еще раз</string>
     <string name="unexisting_measure_for_product_title">Для этого продукта нельзя задать количество в данных единицах измерения</string>
     <string name="add_product_buttom_title">Добавить продукт</string>
-    <string name="add_photo_title">Добавить\n фото</string>
+    <string name="add_photo_title">Фото\n описания</string>
     <string name="reading_text_title">Начитать\n текст</string>
     <string name="next_vioce_typing_question">Нужно начитать еще текста?</string>
     <string name="speak_please_title">Продиктуйте предложение</string>

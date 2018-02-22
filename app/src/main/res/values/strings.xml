@@ -292,7 +292,7 @@
     <string name="voise_recognition_error">We couldn\'t recognize this string. Please, try again.</string>
     <string name="unexisting_measure_for_product_title">Selected product cannot be measured in this units</string>
     <string name="add_product_buttom_title">Add product</string>
-    <string name="add_photo_title">Add \n photo</string>
+    <string name="add_photo_title">Photo of \n description</string>
     <string name="reading_text_title">Voice \n typing</string>
     <string name="next_vioce_typing_question">Do you want to voice type next part of description?</string>
     <string name="speak_please_title">Speak, please</string>

@@ -23,7 +23,9 @@ class EditRecipeDescActivity : BaseActivity() {
         if (intent.hasExtra(RECIPE_DESCRIPTION_KEY)) {
             val desc = intent.getStringExtra(RECIPE_DESCRIPTION_KEY)
 
-            fragment = EditRecipeDescFragment.newInstance(desc)
+            val urls = intent.getStringArrayListExtra(RECIPE_DESCRIPTION_IMAGES_KEY)
+
+            fragment = EditRecipeDescFragment.newInstance(desc, urls)
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()
@@ -45,6 +47,7 @@ class EditRecipeDescActivity : BaseActivity() {
         if (id == R.id.app_bar_done) {
             val intent = Intent()
             intent.putExtra(RecipeViewActivity.CHANGE_DESCRIPTION_KEY, fragment?.getDescription())
+            intent.putStringArrayListExtra(RecipeViewActivity.CHANGE_DESCRIPTION_IMAGES_KEY, fragment?.getDescriptionImageUrls())
             setResult(Activity.RESULT_OK, intent)
             finish()
             return true
@@ -64,5 +67,6 @@ class EditRecipeDescActivity : BaseActivity() {
 
     companion object {
         val RECIPE_DESCRIPTION_KEY = "RECIPE_DESCRIPTION_KEY"
+        val RECIPE_DESCRIPTION_IMAGES_KEY = "RECIPE_DESCRIPTION_IMAGES_KEY"
     }
 }

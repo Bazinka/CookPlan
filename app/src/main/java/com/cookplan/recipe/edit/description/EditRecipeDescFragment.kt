@@ -23,6 +23,7 @@ import com.cookplan.upload_image.UploadImagePresenterImpl
 import com.cookplan.upload_image.UploadImageView
 import com.cookplan.utils.PermissionUtils
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -38,6 +39,8 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
     private var language: String = String()
 
     private var description: String = String()
+    private var imageIds: ArrayList<String> = arrayListOf()
+
     private var isTextNeedsToReload: Boolean = true
 
     private var takePhotoForOCR: Boolean = false
@@ -45,6 +48,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         description = arguments?.getString(RECIPE_DESCRIPTION_KEY) ?: String()
+        imageIds = arguments?.getStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY) ?: arrayListOf()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -212,12 +216,12 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
         }
     }
 
-    override fun setImageSaved(url: String?) {
-        //TODO: доделать сохранение url в базу к этому рецепту и загрузку этой картиночки
+    override fun setImageSaved(url: String) {
+        imageIds.add(url)
         mProgressDialog?.dismiss()
     }
 
-    override fun setImageRemoved(imageId: String?) {
+    override fun setImageRemoved(imageId: String) {
         //TODO: доделать удаление url из базу этого рецепта и перезагрузить картинки
         mProgressDialog?.dismiss()
     }
@@ -227,6 +231,10 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
         var desc = recipeDescEditText?.text.toString()
         desc = if (desc.isEmpty()) getString(R.string.recipe_desc_is_not_needed_title) else desc
         return desc
+    }
+
+    fun getDescriptionImageUrls(): ArrayList<String> {
+        return imageIds
     }
 
     fun requestPermissionsResult(grantResults: IntArray) {
@@ -241,6 +249,8 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
 
     companion object {
         private val RECIPE_DESCRIPTION_KEY = "RECIPE_DESCRIPTION_KEY"
+        private val RECIPE_DESCRIPTION_IMAGES_KEY = "RECIPE_DESCRIPTION_IMAGES_KEY"
+
 
         private val PHOTO_REQUEST_CODE = 101
         val RC_IMAGE_PERMS = 102
@@ -250,10 +260,11 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
         private val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
 
         @JvmStatic
-        fun newInstance(desc: String): EditRecipeDescFragment {
+        fun newInstance(desc: String, imageUrlList: ArrayList<String>): EditRecipeDescFragment {
             return EditRecipeDescFragment().apply {
                 arguments = Bundle().apply {
                     putString(RECIPE_DESCRIPTION_KEY, desc)
+                    putStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY, imageUrlList)
                 }
             }
         }

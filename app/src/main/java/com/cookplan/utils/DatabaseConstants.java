@@ -36,6 +36,7 @@ public class DatabaseConstants {
     public static final String DATABASE_DESCRIPTION_FIELD = "desc";
 
     public static final String DATABASE_RECIPE_ID_FIELD = "recipeId";
+    public static final String DATABASE_RECIPE_DESC_IMAGE_URL_LIST_FIELD = "descImageUrls";
 
     public static final String DATABASE_SHOP_LIST_STATUS_FIELD = "shopListStatus";
     public static final String DATABASE_PRODUCT_ID_FIELD = "productId";

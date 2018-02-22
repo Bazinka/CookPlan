@@ -30,7 +30,7 @@ class IngredientsToRecipeActivity : BaseActivity(), EditRecipeView {
         setTitle(getString(R.string.step1_ingregients_title))
 
         editRecipePresenter = EditRecipePresenterImpl(this)
-        editRecipePresenter?.saveRecipe(null, getString(R.string.new_recipe_title), String())
+        editRecipePresenter?.saveRecipe(Recipe(name = getString(R.string.new_recipe_title)))
     }
 
 

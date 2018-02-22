@@ -72,7 +72,7 @@ class EdaHtmlParser(url: String) : BaseParser(url) {
 
         val imageUrls = parseImageUrlsFromDoc(doc)
 
-        return Recipe(String(), name, description, imageUrls, FirebaseAuth.getInstance().currentUser?.uid,
+        return Recipe(String(), name, description, arrayListOf(), imageUrls, FirebaseAuth.getInstance().currentUser?.uid,
                 FirebaseAuth.getInstance().currentUser?.displayName)
     }
 

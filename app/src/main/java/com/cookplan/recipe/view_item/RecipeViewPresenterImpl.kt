@@ -1,6 +1,5 @@
 package com.cookplan.recipe.view_item
 
-import com.cookplan.models.CookPlanError
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.models.ShopListStatus
@@ -29,7 +28,7 @@ class RecipeViewPresenterImpl(private val mainView: RecipeView?, private var rec
 
     override fun getIngredientList() {
         if (recipe.id != null) {
-            disposables.add(dataProvider.getIngredientListByRecipeId(recipe.id)
+            disposables.add(dataProvider.getIngredientListByRecipeId(recipe.id ?: String())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(object : DisposableObserver<List<Ingredient>>() {
@@ -38,9 +37,7 @@ class RecipeViewPresenterImpl(private val mainView: RecipeView?, private var rec
                         }
 
                         override fun onError(e: Throwable) {
-                            if (mainView != null && e is CookPlanError) {
-                                mainView.setErrorToast(e.message ?: String())
-                            }
+                            mainView?.setErrorToast(e.message ?: String())
                         }
 
                         override fun onComplete() {

@@ -92,6 +92,7 @@ class RecipeProviderImpl : RecipeProvider {
             val values = HashMap<String, Any>()
             values.put(DatabaseConstants.DATABASE_NAME_FIELD, recipe.name ?: String())
             values.put(DatabaseConstants.DATABASE_DESCRIPTION_FIELD, recipe.desc)
+            values.put(DatabaseConstants.DATABASE_RECIPE_DESC_IMAGE_URL_LIST_FIELD, recipe.descImageUrls)
             values.put(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD, recipe.imageUrls)
             val recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE)
             recipeRef.child(recipe.id).updateChildren(values) { databaseError, databaseReference ->
@@ -104,23 +105,27 @@ class RecipeProviderImpl : RecipeProvider {
         }
     }
 
-    override fun getRecipeById(recipeId: String): Single<Recipe> {
+    override fun getRecipeById(recipeId: String?): Single<Recipe> {
         return Single.create { emitter ->
-            val items = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE).child(recipeId)
-            items.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.value != null) {
-                        val recipe = Recipe.getRecipeFromDBObject(dataSnapshot)
-                        emitter?.onSuccess(recipe)
-                    } else {
-                        emitter?.onError(CookPlanError())
+            if (recipeId != null) {
+                val items = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE).child(recipeId)
+                items.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.value != null) {
+                            val recipe = Recipe.getRecipeFromDBObject(dataSnapshot)
+                            emitter?.onSuccess(recipe)
+                        } else {
+                            emitter?.onError(CookPlanError())
+                        }
                     }
-                }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    emitter?.onError(CookPlanError(databaseError))
-                }
-            })
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        emitter?.onError(CookPlanError(databaseError))
+                    }
+                })
+            }else{
+                emitter?.onError(CookPlanError())
+            }
         }
     }
 

@@ -5,7 +5,6 @@ import com.cookplan.models.Recipe
 import com.cookplan.providers.IngredientProvider
 import com.cookplan.providers.ProviderFactory
 import com.cookplan.providers.RecipeProvider
-import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,19 +20,19 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
     private val recipeDataProvider: RecipeProvider = ProviderFactory.recipeProvider
     private val ingredientDataProvider: IngredientProvider = ProviderFactory.ingredientProvider
 
-    override fun saveRecipe(recipe: Recipe?, newName: String, newDesc: String?) {
+    override fun saveRecipe(recipe: Recipe) {
         mainView?.showProgressBar()
 
-        var newRecipe = recipe
-        if (newRecipe == null) {
-            newRecipe = Recipe(id = String(), name = newName, desc = newDesc ?: String(), userId = FirebaseAuth.getInstance().currentUser?.uid,
-                    userName = FirebaseAuth.getInstance().currentUser?.displayName)
-        } else {
-            newRecipe.name = if (!newName.isEmpty()) newName else newRecipe.name
-            newRecipe.desc = newDesc ?: newRecipe.desc
-        }
-        if (newRecipe.id.isEmpty()) {
-            recipeDataProvider.createRecipe(newRecipe)
+//        var newRecipe = recipe
+//        if (newRecipe == null) {
+//            newRecipe = Recipe(id = String(), name = newName, desc = newDesc ?: String(), userId = FirebaseAuth.getInstance().currentUser?.uid,
+//                    userName = FirebaseAuth.getInstance().currentUser?.displayName)
+//        } else {
+//            newRecipe.name = if (!newName.isEmpty()) newName else newRecipe.name
+//            newRecipe.desc = newDesc ?: newRecipe.desc
+//        }
+        if (recipe.id == null) {
+            recipeDataProvider.createRecipe(recipe)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : SingleObserver<Recipe> {
@@ -52,7 +51,7 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
                         }
                     })
         } else {
-            recipeDataProvider.update(newRecipe)
+            recipeDataProvider.update(recipe)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : SingleObserver<Recipe> {
@@ -75,7 +74,7 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
 
     override fun removeRecipe(recipe: Recipe, ingredients: List<Ingredient>) {
 
-        if (recipe.id!= null) {
+        if (recipe.id != null) {
             for (ingredient in ingredients) {
                 removeIngredient(ingredient)
             }
