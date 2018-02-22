@@ -45,7 +45,7 @@ class UploadImagePresenterImpl(private val mainView: UploadImageView?, private v
                     }
 
                     override fun onError(e: Throwable) {
-                        mainView?.setError(e.message)
+                        mainView?.setError(e.message ?: String())
                     }
                 })
     }
@@ -65,7 +65,7 @@ class UploadImagePresenterImpl(private val mainView: UploadImageView?, private v
                         }
 
                         override fun onError(e: Throwable) {
-                            mainView?.setError(e.message)
+                            mainView?.setError(e.message ?: String())
                         }
                     })
         } else {
