@@ -59,7 +59,7 @@ class TotalShoppingListFragment : BaseFragment(), TotalShoppingListView {
         }
         needToBuyRecyclerView?.adapter = needToBuyAdapter
 
-        val chooseButton = mainView?.findViewById<Button>(R.id.add_shop_list_items_button)
+        val chooseButton = mainView?.findViewById<ViewGroup>(R.id.add_product_card_view)
         chooseButton?.setOnClickListener {
             val intent = Intent(activity, ProductForIngredientActivity::class.java)
             intent.putExtra(ProductForIngredientActivity.RECIPE_NEED_TO_BUY_KEY, true)

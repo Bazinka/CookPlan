@@ -39,18 +39,20 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
+                    android:layout_margin="@dimen/main_margin_left">
 
-                    <Button
+                    <TextView
                         android:id="@+id/add_shop_list_items_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="@dimen/main_item_padding"
-                        android:layout_marginRight="@dimen/main_item_padding"
+                        android:layout_marginLeft="@dimen/main_margin_left"
+                        android:layout_marginRight="@dimen/main_margin_left"
                         android:text="@string/add_product_buttom_title"
-                        android:textSize="@dimen/subheding_text_size"
-                        android:theme="@style/CookplanFlatButton"/>
+                        android:textStyle="bold"
+                        android:textSize="@dimen/title_text_size"
+                        android:textAllCaps="true"
+                        android:textColor="@color/accent_color"/>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
         </RelativeLayout>
