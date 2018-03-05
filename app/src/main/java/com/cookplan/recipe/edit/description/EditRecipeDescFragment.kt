@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -23,7 +24,6 @@ import com.cookplan.upload_image.UploadImagePresenterImpl
 import com.cookplan.upload_image.UploadImageView
 import com.cookplan.utils.PermissionUtils
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -32,23 +32,25 @@ import kotlin.collections.ArrayList
 class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageView {
 
     private var mProgressDialog: ProgressDialog? = null
-    private var presenter: EditRecipeDescPresenter? = null
 
+    private var presenter: EditRecipeDescPresenter? = null
     private var photoPresenter: UploadImagePresenter? = null
 
     private var language: String = String()
 
     private var description: String = String()
-    private var imageIds: ArrayList<String> = arrayListOf()
+    private var imageIds: MutableList<String> = mutableListOf()
 
     private var isTextNeedsToReload: Boolean = true
 
     private var takePhotoForOCR: Boolean = false
 
+    private var imageViewPagerAdapter: RecipeDescImagesPagerAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         description = arguments?.getString(RECIPE_DESCRIPTION_KEY) ?: String()
-        imageIds = arguments?.getStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY) ?: arrayListOf()
+        imageIds = arguments?.getStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY) ?: mutableListOf()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -102,6 +104,19 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
         addPhotoButton?.setOnClickListener {
             takePhotoForOCR = false
             startCameraWithPermCheck()
+        }
+
+        imageViewPagerAdapter = RecipeDescImagesPagerAdapter(imageIds.toMutableList()) { imageId ->
+            photoPresenter?.removePhoto(imageId)
+        }
+        val viewPager = mainView?.findViewById<ViewPager>(R.id.image_viewpager)
+        viewPager?.adapter = imageViewPagerAdapter
+
+        val viewPagerLayout = mainView?.findViewById<ViewGroup>(R.id.view_pager_card_view)
+        if (!imageIds.isEmpty()) {
+            viewPagerLayout?.visibility = View.VISIBLE
+        } else {
+            viewPagerLayout?.visibility = View.GONE
         }
 
         presenter = EditRecipeDescPresenterImpl(this, activity as Context)
@@ -216,13 +231,29 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
         }
     }
 
-    override fun setImageSaved(url: String) {
-        imageIds.add(url)
+    override fun setImageSaved(imageId: String) {
+        imageIds.add(imageId)
+        updateViewPagerView()
         mProgressDialog?.dismiss()
     }
 
+    private fun updateViewPagerView() {
+        imageViewPagerAdapter?.updateImages(imageIds)
+
+        val viewPager = mainView?.findViewById<ViewPager>(R.id.image_viewpager)
+        viewPager?.destroyDrawingCache()
+
+        val viewPagerLayout = mainView?.findViewById<ViewGroup>(R.id.view_pager_card_view)
+        if (!imageIds.isEmpty()) {
+            viewPagerLayout?.visibility = View.VISIBLE
+        } else {
+            viewPagerLayout?.visibility = View.GONE
+        }
+    }
+
     override fun setImageRemoved(imageId: String) {
-        //TODO: доделать удаление url из базу этого рецепта и перезагрузить картинки
+        imageIds.remove(imageId)
+        updateViewPagerView()
         mProgressDialog?.dismiss()
     }
 
@@ -234,7 +265,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
     }
 
     fun getDescriptionImageUrls(): ArrayList<String> {
-        return imageIds
+        return ArrayList(imageIds)
     }
 
     fun requestPermissionsResult(grantResults: IntArray) {

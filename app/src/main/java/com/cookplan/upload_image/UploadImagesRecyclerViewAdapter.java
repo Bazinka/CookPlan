@@ -47,7 +47,7 @@ public class UploadImagesRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             return new AddImageViewHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.upload_image_item_layout, parent, false);
+                    .inflate(R.layout.desc_image_item_layout, parent, false);
             return new UploadImageViewHolder(view);
         }
     }

@@ -8,7 +8,7 @@ interface UploadImageView {
 
     fun setError(error: String)
 
-    fun setImageSaved(url: String)
+    fun setImageSaved(imageId: String)
 
     fun setImageRemoved(imageId: String)
 }

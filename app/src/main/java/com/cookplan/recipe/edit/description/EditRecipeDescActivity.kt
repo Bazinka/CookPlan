@@ -23,9 +23,9 @@ class EditRecipeDescActivity : BaseActivity() {
         if (intent.hasExtra(RECIPE_DESCRIPTION_KEY)) {
             val desc = intent.getStringExtra(RECIPE_DESCRIPTION_KEY)
 
-            val urls = intent.getStringArrayListExtra(RECIPE_DESCRIPTION_IMAGES_KEY)
+            val imageIdList = intent.getStringArrayListExtra(RECIPE_DESCRIPTION_IMAGES_KEY)
 
-            fragment = EditRecipeDescFragment.newInstance(desc, urls)
+            fragment = EditRecipeDescFragment.newInstance(desc, imageIdList)
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()

@@ -50,4 +50,5 @@
     <dimen name="flat_button_margin">8dp</dimen>
     <dimen name="card_recipe_big_image_height">250dp</dimen>
     <dimen name="category_view_width">5dp</dimen>
+    <dimen name="recipe_desc_image_height">170dp</dimen>
 </resources>

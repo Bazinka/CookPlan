@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -27,6 +28,7 @@ import com.cookplan.recipe.edit.EditRecipeView
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.RECIPE_DESCRIPTION_IMAGES_KEY
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.RECIPE_DESCRIPTION_KEY
+import com.cookplan.recipe.edit.description.RecipeDescImagesPagerAdapter
 import com.cookplan.recipe.edit.ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +42,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
     private var viewPresenter: RecipeViewPresenter? = null
     private var editPresenter: EditRecipePresenter? = null
 
+    private var imageViewPagerAdapter: RecipeDescImagesPagerAdapter? = null
 
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +73,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
 
             viewPresenter = RecipeViewPresenterImpl(this, recipe)
 
-            setDescription(recipe.desc)
+            setDescriptionPart(recipe.desc, recipe.descImageUrls)
 
             val addToShopListButton = findViewById<Button>(R.id.add_shop_list_items_button)
             addToShopListButton.setOnClickListener {
@@ -156,9 +159,19 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         }
     }
 
-    private fun setDescription(desc: String) {
+    private fun setDescriptionPart(desc: String, imageIds: MutableList<String>) {
         val descTextView = findViewById<TextView>(R.id.description_body_textview)
         descTextView.text = desc
+
+        imageViewPagerAdapter = RecipeDescImagesPagerAdapter(imageIds)
+        val viewPager = findViewById<ViewPager>(R.id.image_viewpager)
+        viewPager?.adapter = imageViewPagerAdapter
+
+        if (!imageIds.isEmpty()) {
+            viewPager?.visibility = View.VISIBLE
+        } else {
+            viewPager?.visibility = View.GONE
+        }
     }
 
     private fun setName(name: String?) {
@@ -244,7 +257,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
 
     override fun recipeSavedSuccessfully(recipe: Recipe) {
         setName(recipe.name)
-        setDescription(recipe.desc)
+        setDescriptionPart(recipe.desc, recipe.descImageUrls)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int,
@@ -255,11 +268,11 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
                     val recipe = viewPresenter?.getRecipe()
                     val text = data?.getStringExtra(CHANGE_DESCRIPTION_KEY) ?: getString(R.string.recipe_desc_is_not_needed_title)
                     recipe?.desc = text
-                    setDescription(text)
 
                     recipe?.descImageUrls = data?.getStringArrayListExtra(CHANGE_DESCRIPTION_IMAGES_KEY) ?: arrayListOf()
                     if (recipe != null) {
                         editPresenter?.saveRecipe(recipe)
+                        setDescriptionPart(recipe.desc, recipe.descImageUrls)
                     }
                 }
             }
