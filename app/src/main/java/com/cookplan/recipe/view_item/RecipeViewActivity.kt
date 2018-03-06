@@ -6,9 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearLayoutManager.HORIZONTAL
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -25,10 +26,10 @@ import com.cookplan.models.ShopListStatus.NONE
 import com.cookplan.recipe.edit.EditRecipePresenter
 import com.cookplan.recipe.edit.EditRecipePresenterImpl
 import com.cookplan.recipe.edit.EditRecipeView
+import com.cookplan.recipe.edit.description.DescImagesRecyclerViewAdapter
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.RECIPE_DESCRIPTION_IMAGES_KEY
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.RECIPE_DESCRIPTION_KEY
-import com.cookplan.recipe.edit.description.RecipeDescImagesPagerAdapter
 import com.cookplan.recipe.edit.ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -42,7 +43,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
     private var viewPresenter: RecipeViewPresenter? = null
     private var editPresenter: EditRecipePresenter? = null
 
-    private var imageViewPagerAdapter: RecipeDescImagesPagerAdapter? = null
+    private var imageListAdapter: DescImagesRecyclerViewAdapter? = null
 
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -163,14 +164,22 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         val descTextView = findViewById<TextView>(R.id.description_body_textview)
         descTextView.text = desc
 
-        imageViewPagerAdapter = RecipeDescImagesPagerAdapter(imageIds)
-        val viewPager = findViewById<ViewPager>(R.id.image_viewpager)
-        viewPager?.adapter = imageViewPagerAdapter
+        val recyclerView = findViewById<RecyclerView>(R.id.image_list_recycler)
+        recyclerView?.setHasFixedSize(true)
+
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = HORIZONTAL
+        recyclerView?.isNestedScrollingEnabled = false
+        recyclerView?.layoutManager = layoutManager
+        recyclerView?.itemAnimator = DefaultItemAnimator()
+
+        imageListAdapter = DescImagesRecyclerViewAdapter(imageIds)
+        recyclerView?.adapter = imageListAdapter
 
         if (!imageIds.isEmpty()) {
-            viewPager?.visibility = View.VISIBLE
+            recyclerView?.visibility = View.VISIBLE
         } else {
-            viewPager?.visibility = View.GONE
+            recyclerView?.visibility = View.GONE
         }
     }
 

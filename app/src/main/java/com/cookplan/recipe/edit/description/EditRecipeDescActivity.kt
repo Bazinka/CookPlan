@@ -12,6 +12,7 @@ import com.cookplan.recipe.view_item.RecipeViewActivity
 class EditRecipeDescActivity : BaseActivity() {
 
     private var fragment: EditRecipeDescFragment? = null
+    private var savedImageIdList: ArrayList<String> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +24,9 @@ class EditRecipeDescActivity : BaseActivity() {
         if (intent.hasExtra(RECIPE_DESCRIPTION_KEY)) {
             val desc = intent.getStringExtra(RECIPE_DESCRIPTION_KEY)
 
-            val imageIdList = intent.getStringArrayListExtra(RECIPE_DESCRIPTION_IMAGES_KEY)
+            savedImageIdList = intent.getStringArrayListExtra(RECIPE_DESCRIPTION_IMAGES_KEY) ?: arrayListOf()
 
-            fragment = EditRecipeDescFragment.newInstance(desc, imageIdList)
+            fragment = EditRecipeDescFragment.newInstance(desc, savedImageIdList)
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()
@@ -53,6 +54,11 @@ class EditRecipeDescActivity : BaseActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        fragment?.removeImages(savedImageIdList)
+        super.onBackPressed()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,

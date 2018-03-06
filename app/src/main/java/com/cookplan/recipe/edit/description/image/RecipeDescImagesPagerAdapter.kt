@@ -1,4 +1,4 @@
-package com.cookplan.recipe.edit.description
+package com.cookplan.recipe.edit.description.image
 
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater

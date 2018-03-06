@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.cookplan.recipe.edit.description.DescImagesRecyclerViewAdapter;
 import com.cookplan.utils.GridSpacingItemDecoration;
 import com.cookplan.utils.PermissionUtils;
 import com.cookplan.utils.Utils;
@@ -40,7 +41,7 @@ public class UploadImageActivity extends BaseActivity implements UploadImageView
     private static final int TAKE_PHOTO_REQUEST_CODE = 19;
     private static final int RC_IMAGE_CHOOSE_PHOTO_PERMS = 20;
 
-    private UploadImagesRecyclerViewAdapter adapter;
+    private DescImagesRecyclerViewAdapter adapter;
     private UploadImagePresenter presenter;
 
     @Override
@@ -56,33 +57,33 @@ public class UploadImageActivity extends BaseActivity implements UploadImageView
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utils.INSTANCE.dpToPx(this, 16), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new UploadImagesRecyclerViewAdapter(
-                urls,
-                new UploadImagesRecyclerViewAdapter.UploadImagesEventListener() {
-                    @Override
-                    public void onAddImageEvent() {
-                        new AlertDialog.Builder(UploadImageActivity.this, R.style.AppCompatAlertDialogStyle)
-                                .setTitle(R.string.attention_title)
-                                .setMessage("Откуда брать фотографии?")
-                                .setPositiveButton("Камера", (dialog, which) -> {
-                                    startCameraWithPermCheck();
-                                })
-                                .setNeutralButton(android.R.string.cancel, null)
-                                .setNegativeButton("Память", (dialog, which) -> {
-                                                       choosePhoto();
-                                                   }
-                                )
-                                .show();
-                    }
-
-                    @Override
-                    public void onDeleteImage(String url) {
-                        if (presenter != null) {
-                            presenter.removePhoto(url);
-                        }
-                    }
-                }, this);
-        recyclerView.setAdapter(adapter);
+//        adapter = new DescImagesRecyclerViewAdapter(
+//                urls,
+//                new DescImagesRecyclerViewAdapter.UploadImagesEventListener() {
+//                    @Override
+//                    public void onAddImageEvent() {
+//                        new AlertDialog.Builder(UploadImageActivity.this, R.style.AppCompatAlertDialogStyle)
+//                                .setTitle(R.string.attention_title)
+//                                .setMessage("Откуда брать фотографии?")
+//                                .setPositiveButton("Камера", (dialog, which) -> {
+//                                    startCameraWithPermCheck();
+//                                })
+//                                .setNeutralButton(android.R.string.cancel, null)
+//                                .setNegativeButton("Память", (dialog, which) -> {
+//                                                       choosePhoto();
+//                                                   }
+//                                )
+//                                .show();
+//                    }
+//
+//                    @Override
+//                    public void onDeleteImage(String url) {
+//                        if (presenter != null) {
+//                            presenter.removePhoto(url);
+//                        }
+//                    }
+//                }, this);
+//        recyclerView.setAdapter(adapter);
         presenter = new UploadImagePresenterImpl(this, this);
     }
 
@@ -210,14 +211,14 @@ public class UploadImageActivity extends BaseActivity implements UploadImageView
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         if (adapter != null) {
-            adapter.addImage(url);
+//            adapter.addImage(url);
         }
     }
 
     @Override
     public void setImageRemoved(String imageId) {
         if (adapter != null) {
-            adapter.removeImage(imageId);
+//            adapter.removeImage(imageId);
         }
     }
 
@@ -232,9 +233,9 @@ public class UploadImageActivity extends BaseActivity implements UploadImageView
         int id = item.getItemId();
 
         if (id == R.id.app_bar_done) {
-            ArrayList<String> imagesList = new ArrayList<>(adapter.getValues());
+//            ArrayList<String> imagesList = new ArrayList<>(adapter.getValues());
             Intent intent = new Intent();
-            intent.putStringArrayListExtra(IMAGE_URL_KEY, imagesList);
+//            intent.putStringArrayListExtra(IMAGE_URL_KEY, imagesList);
             setResult(RESULT_OK, intent);
             finish();
             return true;

@@ -11,7 +11,10 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
-import android.support.v4.view.ViewPager
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearLayoutManager.HORIZONTAL
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -24,6 +27,7 @@ import com.cookplan.upload_image.UploadImagePresenterImpl
 import com.cookplan.upload_image.UploadImageView
 import com.cookplan.utils.PermissionUtils
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -39,18 +43,17 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
     private var language: String = String()
 
     private var description: String = String()
-    private var imageIds: MutableList<String> = mutableListOf()
+//    private var imageIds: MutableList<String> = mutableListOf()
 
     private var isTextNeedsToReload: Boolean = true
 
     private var takePhotoForOCR: Boolean = false
 
-    private var imageViewPagerAdapter: RecipeDescImagesPagerAdapter? = null
+    private var imageListAdapter: DescImagesRecyclerViewAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         description = arguments?.getString(RECIPE_DESCRIPTION_KEY) ?: String()
-        imageIds = arguments?.getStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY) ?: mutableListOf()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -106,13 +109,20 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
             startCameraWithPermCheck()
         }
 
-        imageViewPagerAdapter = RecipeDescImagesPagerAdapter(imageIds.toMutableList()) { imageId ->
-            photoPresenter?.removePhoto(imageId)
-        }
-        val viewPager = mainView?.findViewById<ViewPager>(R.id.image_viewpager)
-        viewPager?.adapter = imageViewPagerAdapter
+        val recyclerView = mainView?.findViewById<RecyclerView>(R.id.image_list_recycler)
+        recyclerView?.setHasFixedSize(true)
 
-        val viewPagerLayout = mainView?.findViewById<ViewGroup>(R.id.view_pager_card_view)
+        val layoutManager = LinearLayoutManager(activity)
+        layoutManager.orientation = HORIZONTAL
+        recyclerView?.isNestedScrollingEnabled = false
+        recyclerView?.layoutManager = layoutManager
+        recyclerView?.itemAnimator = DefaultItemAnimator()
+
+        val imageIds = arguments?.getStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY) ?: ArrayList<String>()
+        imageListAdapter = DescImagesRecyclerViewAdapter(imageIds.toMutableList())
+        recyclerView?.adapter = imageListAdapter
+
+        val viewPagerLayout = mainView?.findViewById<ViewGroup>(R.id.view_images_card_view)
         if (!imageIds.isEmpty()) {
             viewPagerLayout?.visibility = View.VISIBLE
         } else {
@@ -232,27 +242,23 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
     }
 
     override fun setImageSaved(imageId: String) {
-        imageIds.add(imageId)
+        imageListAdapter?.addItem(imageId)
         updateViewPagerView()
         mProgressDialog?.dismiss()
     }
 
     private fun updateViewPagerView() {
-        imageViewPagerAdapter?.updateImages(imageIds)
 
-        val viewPager = mainView?.findViewById<ViewPager>(R.id.image_viewpager)
-        viewPager?.destroyDrawingCache()
-
-        val viewPagerLayout = mainView?.findViewById<ViewGroup>(R.id.view_pager_card_view)
-        if (!imageIds.isEmpty()) {
-            viewPagerLayout?.visibility = View.VISIBLE
+        val viewImagesLayout = mainView?.findViewById<ViewGroup>(R.id.view_images_card_view)
+        if (imageListAdapter?.getItems()?.isEmpty() != true) {
+            viewImagesLayout?.visibility = View.VISIBLE
         } else {
-            viewPagerLayout?.visibility = View.GONE
+            viewImagesLayout?.visibility = View.GONE
         }
     }
 
     override fun setImageRemoved(imageId: String) {
-        imageIds.remove(imageId)
+        imageListAdapter?.removeItem(imageId)
         updateViewPagerView()
         mProgressDialog?.dismiss()
     }
@@ -265,7 +271,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
     }
 
     fun getDescriptionImageUrls(): ArrayList<String> {
-        return ArrayList(imageIds)
+        return ArrayList(imageListAdapter?.getItems())
     }
 
     fun requestPermissionsResult(grantResults: IntArray) {
@@ -303,6 +309,16 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
         @JvmStatic
         fun newInstance(): EditRecipeDescFragment {
             return EditRecipeDescFragment()
+        }
+    }
+
+    fun removeImages(savedImageIdList: ArrayList<String>) {
+        val newImageList = imageListAdapter?.getItems()?.toMutableList()?: mutableListOf()
+        newImageList.removeAll(savedImageIdList)
+        if(newImageList.isEmpty()){
+            for(image in newImageList){
+                photoPresenter?.removePhoto(image)
+            }
         }
     }
 }
