@@ -353,6 +353,7 @@
     <string name="next_vioce_typing_question">Нужно начитать еще текста?</string>
     <string name="speak_please_title">Продиктуйте предложение</string>
     <string name="desc_will_be_reload_title">Текст будет перезаписан</string>
+    <string name="from_text"> из </string>
 
 
 </resources>

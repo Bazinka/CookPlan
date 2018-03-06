@@ -20,7 +20,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/main_item_padding">
+            android:padding="@dimen/small_item_padding">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/image_list_recycler"

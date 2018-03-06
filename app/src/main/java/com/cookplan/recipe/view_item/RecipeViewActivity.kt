@@ -92,11 +92,7 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
 
             val fab = findViewById<FloatingActionButton>(R.id.step_by_step_fab)
             fab.setOnClickListener {
-                val intent = Intent(this, RecipeStepsViewActivity::class.java)
-                intent.putExtra(RecipeStepsViewActivity.RECIPE_OBJECT_KEY, viewPresenter?.getRecipe())
-                intent.putParcelableArrayListExtra(RecipeStepsViewActivity.INGREDIENT_LIST_OBJECT_KEY,
-                        adapter?.getIngredients() as ArrayList<Ingredient>)
-                startActivityWithLeftAnimation(intent)
+                startStepActivity()
             }
             val editNameLayout = findViewById<ViewGroup>(R.id.name_recipe_layout)
             editNameLayout.setOnClickListener {
@@ -173,7 +169,9 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         recyclerView?.layoutManager = layoutManager
         recyclerView?.itemAnimator = DefaultItemAnimator()
 
-        imageListAdapter = DescImagesRecyclerViewAdapter(imageIds)
+        imageListAdapter = DescImagesRecyclerViewAdapter(imageIds) {
+            startStepActivity()
+        }
         recyclerView?.adapter = imageListAdapter
 
         if (!imageIds.isEmpty()) {
@@ -181,6 +179,14 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         } else {
             recyclerView?.visibility = View.GONE
         }
+    }
+
+    private fun startStepActivity() {
+        val intent = Intent(this, RecipeStepsViewActivity::class.java)
+        intent.putExtra(RecipeStepsViewActivity.RECIPE_OBJECT_KEY, viewPresenter?.getRecipe())
+        intent.putParcelableArrayListExtra(RecipeStepsViewActivity.INGREDIENT_LIST_OBJECT_KEY,
+                adapter?.getIngredients() as ArrayList<Ingredient>)
+        startActivityWithLeftAnimation(intent)
     }
 
     private fun setName(name: String?) {

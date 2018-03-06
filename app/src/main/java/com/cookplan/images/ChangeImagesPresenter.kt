@@ -1,4 +1,4 @@
-package com.cookplan.upload_image
+package com.cookplan.images
 
 import android.net.Uri
 
@@ -6,7 +6,7 @@ import android.net.Uri
  * Created by DariaEfimova on 13.06.17.
  */
 
-interface UploadImagePresenter {
+interface ChangeImagesPresenter {
 
     fun getOutputImagePath(): Uri
 

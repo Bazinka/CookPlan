@@ -1,4 +1,4 @@
-package com.cookplan.upload_image
+package com.cookplan.images
 
 import android.app.Activity
 import android.net.Uri
@@ -17,7 +17,7 @@ import java.io.File
  * Created by DariaEfimova on 13.06.17.
  */
 
-class UploadImagePresenterImpl(private val mainView: UploadImageView?, private val context: Activity) : UploadImagePresenter {
+class ChangeImagesPresenterImpl(private val mainView: ChangeImagesView?, private val context: Activity) : ChangeImagesPresenter {
     private val imageProvider: ImageProvider? = ProviderFactory.Companion.imageProvider
     private val countPhotos: Int = 0
 
@@ -51,7 +51,6 @@ class UploadImagePresenterImpl(private val mainView: UploadImageView?, private v
     }
 
     override fun removePhoto(imageId: String) {
-        if (!Utils.isStringUrl(imageId)) {
             imageProvider?.removeImage(imageId)
                     ?.subscribeOn(Schedulers.io())
                     ?.observeOn(AndroidSchedulers.mainThread())
@@ -68,8 +67,5 @@ class UploadImagePresenterImpl(private val mainView: UploadImageView?, private v
                             mainView?.setError(e.message ?: String())
                         }
                     })
-        } else {
-            mainView?.setImageRemoved(imageId)
-        }
     }
 }

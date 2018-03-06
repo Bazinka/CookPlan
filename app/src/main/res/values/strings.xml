@@ -297,5 +297,6 @@
     <string name="next_vioce_typing_question">Do you want to voice type next part of description?</string>
     <string name="speak_please_title">Speak, please</string>
     <string name="desc_will_be_reload_title">Description will be re-recorded.</string>
+    <string name="from_text"> / </string>
 
 </resources>

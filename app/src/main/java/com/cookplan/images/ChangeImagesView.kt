@@ -1,10 +1,10 @@
-package com.cookplan.upload_image
+package com.cookplan.images
 
 /**
  * Created by DariaEfimova on 13.06.17.
  */
 
-interface UploadImageView {
+interface ChangeImagesView {
 
     fun setError(error: String)
 

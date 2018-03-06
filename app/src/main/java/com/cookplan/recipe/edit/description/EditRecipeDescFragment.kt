@@ -22,9 +22,11 @@ import android.view.ViewGroup
 import android.widget.EditText
 import com.cookplan.BaseFragment
 import com.cookplan.R
-import com.cookplan.upload_image.UploadImagePresenter
-import com.cookplan.upload_image.UploadImagePresenterImpl
-import com.cookplan.upload_image.UploadImageView
+import com.cookplan.images.ChangeImagesPresenter
+import com.cookplan.images.ChangeImagesPresenterImpl
+import com.cookplan.images.ChangeImagesView
+import com.cookplan.images.ImageEditActivity
+import com.cookplan.images.ImageEditActivity.Companion.RESULT_IMAGE_URL_KEY
 import com.cookplan.utils.PermissionUtils
 import java.util.*
 import kotlin.collections.ArrayList
@@ -33,12 +35,12 @@ import kotlin.collections.ArrayList
 /**
  * Created by DariaEfimova on 19.01.2018.
  */
-class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageView {
+class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, ChangeImagesView {
 
     private var mProgressDialog: ProgressDialog? = null
 
     private var presenter: EditRecipeDescPresenter? = null
-    private var photoPresenter: UploadImagePresenter? = null
+    private var photoPresenter: ChangeImagesPresenter? = null
 
     private var language: String = String()
 
@@ -119,7 +121,12 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
         recyclerView?.itemAnimator = DefaultItemAnimator()
 
         val imageIds = arguments?.getStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY) ?: ArrayList<String>()
-        imageListAdapter = DescImagesRecyclerViewAdapter(imageIds.toMutableList())
+        imageListAdapter = DescImagesRecyclerViewAdapter(imageIds.toMutableList()) {
+            val intent = Intent(activity, ImageEditActivity::class.java)
+            intent.putStringArrayListExtra(ImageEditActivity.START_IMAGE_URL_KEY,
+                    ArrayList(imageListAdapter?.getItems() ?: arrayListOf<String>()))
+            startActivityForResult(intent, IMAGES_LIST_REQUEST)
+        }
         recyclerView?.adapter = imageListAdapter
 
         val viewPagerLayout = mainView?.findViewById<ViewGroup>(R.id.view_images_card_view)
@@ -130,7 +137,7 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
         }
 
         presenter = EditRecipeDescPresenterImpl(this, activity as Context)
-        photoPresenter = UploadImagePresenterImpl(this, activity as Activity)
+        photoPresenter = ChangeImagesPresenterImpl(this, activity as Activity)
         return mainView
     }
 
@@ -197,6 +204,13 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
                                     isTextNeedsToReload = true
                                 }
                                 .show()
+                    }
+                }
+                IMAGES_LIST_REQUEST -> {
+                    if (resultCode == Activity.RESULT_OK && data?.hasExtra(RESULT_IMAGE_URL_KEY) == true) {
+                        val resultImages = data.getStringArrayListExtra(RESULT_IMAGE_URL_KEY)
+                        imageListAdapter?.updateItems(resultImages ?: listOf())
+                        updateViewPagerView()
                     }
                 }
                 PHOTO_REQUEST_CODE -> {
@@ -294,6 +308,8 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
 
         private val VOICE_TYPE_CHECK_CODE = 104
 
+        private val IMAGES_LIST_REQUEST = 105
+
         private val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
 
         @JvmStatic
@@ -313,10 +329,10 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, UploadImageVi
     }
 
     fun removeImages(savedImageIdList: ArrayList<String>) {
-        val newImageList = imageListAdapter?.getItems()?.toMutableList()?: mutableListOf()
+        val newImageList = imageListAdapter?.getItems()?.toMutableList() ?: mutableListOf()
         newImageList.removeAll(savedImageIdList)
-        if(newImageList.isEmpty()){
-            for(image in newImageList){
+        if (newImageList.isEmpty()) {
+            for (image in newImageList) {
                 photoPresenter?.removePhoto(image)
             }
         }

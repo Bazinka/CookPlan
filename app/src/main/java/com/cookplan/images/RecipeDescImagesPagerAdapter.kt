@@ -1,23 +1,22 @@
-package com.cookplan.recipe.edit.description.image
+package com.cookplan.images
 
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.cookplan.R
 import com.cookplan.utils.FirebaseImageLoader
 import com.google.firebase.storage.FirebaseStorage
+import java.util.*
 
 /**
  * Created by DariaEfimova on 13.04.17.
  */
 
-class RecipeDescImagesPagerAdapter(private val imageIds: MutableList<String> = mutableListOf(),
-                                   private val removelistener: ((String) -> Unit)? = null) : PagerAdapter() {
+class RecipeDescImagesPagerAdapter(private val imageIds: MutableList<String> = mutableListOf()) : PagerAdapter() {
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val inflater = LayoutInflater.from(collection.context)
@@ -31,13 +30,10 @@ class RecipeDescImagesPagerAdapter(private val imageIds: MutableList<String> = m
                 .load(imageRef)
                 .centerCrop()
                 .into(imageView)
-
-        val deleteImageView = layout.findViewById<ImageView>(R.id.delete_image_view)
-        with(deleteImageView) {
-            tag = imageId
-            setOnClickListener { removelistener?.invoke(imageId) }
-        }
-        deleteImageView.visibility = if (removelistener == null) GONE else VISIBLE
+        val numberTextView = layout.findViewById<TextView>(R.id.number_image_textview)
+        numberTextView.text = (position + 1).toString() + " " +
+                numberTextView.context.getString(R.string.from_text) + " " +
+                count.toString()
 
         collection.addView(layout)
         return layout
@@ -59,5 +55,18 @@ class RecipeDescImagesPagerAdapter(private val imageIds: MutableList<String> = m
         imageIds.clear()
         imageIds.addAll(newImageIds)
         notifyDataSetChanged()
+    }
+
+    fun removeImage(imageId: String) {
+        imageIds.remove(imageId)
+        notifyDataSetChanged()
+    }
+
+    fun getArrayListItems(): ArrayList<String>? {
+        return ArrayList(imageIds)
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        return PagerAdapter.POSITION_NONE
     }
 }

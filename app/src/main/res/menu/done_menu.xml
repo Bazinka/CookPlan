@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/app_bar_done"
-        android:icon="@drawable/ic_done_transparent_back"
+        android:icon="@drawable/ic_done_white"
         android:title="@string/done_menu_title"
         app:showAsAction="always"/><!---->
 

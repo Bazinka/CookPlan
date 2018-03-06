@@ -11,7 +11,8 @@ import com.cookplan.R
 import com.cookplan.utils.FirebaseImageLoader
 import com.google.firebase.storage.FirebaseStorage
 
-class DescImagesRecyclerViewAdapter(private val images: MutableList<String> = mutableListOf()) : RecyclerView.Adapter<DescImagesRecyclerViewAdapter.MainViewHolder>() {
+class DescImagesRecyclerViewAdapter(private val images: MutableList<String> = mutableListOf(),
+                                    private val clicklistener: ((String) -> Unit)) : RecyclerView.Adapter<DescImagesRecyclerViewAdapter.MainViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -30,7 +31,9 @@ class DescImagesRecyclerViewAdapter(private val images: MutableList<String> = mu
                 .load(imageRef)
                 .centerCrop()
                 .into(uploadImageHolder.imageView)
-
+        with(uploadImageHolder.imageView) {
+            setOnClickListener { clicklistener(imageId) }
+        }
     }
 
     override fun getItemCount() = images.size
@@ -60,5 +63,4 @@ class DescImagesRecyclerViewAdapter(private val images: MutableList<String> = mu
     fun getItems(): List<String> {
         return images
     }
-
 }

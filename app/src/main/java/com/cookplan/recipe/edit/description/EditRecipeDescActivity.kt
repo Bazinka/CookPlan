@@ -58,6 +58,10 @@ class EditRecipeDescActivity : BaseActivity() {
 
     override fun onBackPressed() {
         fragment?.removeImages(savedImageIdList)
+        val intent = Intent()
+        intent.putStringArrayListExtra(RecipeViewActivity.CHANGE_DESCRIPTION_IMAGES_KEY, fragment?.getDescriptionImageUrls())
+        setResult(Activity.RESULT_OK, intent)
+        finish()
         super.onBackPressed()
     }
 
