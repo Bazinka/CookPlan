@@ -13,18 +13,12 @@ import android.view.MenuItem
 open class BaseActivity : AppCompatActivity() {
 
     fun setTitle(title: String) {
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.title = title
-        }
+        supportActionBar?.title = title
         super.setTitle(title)
     }
 
     fun setSubTitle(subTitle: String) {
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.subtitle = subTitle
-        }
+        supportActionBar?.subtitle = subTitle
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,17 +49,13 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun hideNavigationIcon() {
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-            supportActionBar!!.setHomeButtonEnabled(false)
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setHomeButtonEnabled(false)
     }
 
     fun setNavigationArrow() {
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setHomeButtonEnabled(true)
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
     }
 
     override fun onBackPressed() {
@@ -73,7 +63,6 @@ open class BaseActivity : AppCompatActivity() {
         if (isUpAnimation) {
             isUpAnimation = false
             overridePendingTransition(R.anim.slide_in_down_activity, R.anim.slide_out_down_activity)
-
         } else {
             overridePendingTransition(R.anim.slide_in_right_activity, R.anim.slide_out_right_activity)
         }

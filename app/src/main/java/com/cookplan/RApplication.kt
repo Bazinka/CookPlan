@@ -23,16 +23,10 @@ class RApplication : Application() {
         super.onCreate()
         Fabric.with(this, Crashlytics())
         JodaTimeAndroid.init(this)
-        findAllVectorResourceIdsSlow()
         appContext = applicationContext
         if (getPriorityList().isEmpty()) {
             FillProductDatabaseProvider.savePriorityList()
         }
-    }
-
-    private fun findAllVectorResourceIdsSlow() {
-//        val ids = VectorDrawableCompat.findAllVectorResourceIdsSlow(resources, R.drawable::class.java)
-//        VectorDrawableCompat.enableResourceInterceptionFor(resources, *ids)
     }
 
     companion object {
@@ -70,8 +64,7 @@ class RApplication : Application() {
 
             editor = settings?.edit()
 
-            val gson = Gson()
-            val jsonFavorites = gson.toJson(priorityOfCategories)
+            val jsonFavorites = Gson().toJson(priorityOfCategories)
 
             editor?.putString(CATEGORY_PRIORITY_PREFS_NAME, jsonFavorites)
 
@@ -85,8 +78,7 @@ class RApplication : Application() {
 
             if (settings?.contains(CATEGORY_PRIORITY_PREFS_NAME) == true) {
                 val json = settings.getString(CATEGORY_PRIORITY_PREFS_NAME, null)
-                val gson = Gson()
-                val items = gson.fromJson(json,
+                val items = Gson().fromJson(json,
                         Array<ProductCategory>::class.java)
 
                 priorityList = Arrays.asList(*items)
