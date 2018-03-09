@@ -31,7 +31,7 @@ class ShopListByDishesPresenterImpl(private val mainView: ShopListByDishesView?,
     }
 
     override fun setError(message: String?) {
-        mainView?.setErrorToast(message!!)
+        mainView?.setErrorToast(message ?: String())
     }
 
     override fun sortIngredientList(userIngredients: List<Ingredient>) {

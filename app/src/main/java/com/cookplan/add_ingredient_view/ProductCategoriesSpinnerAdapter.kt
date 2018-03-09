@@ -24,7 +24,7 @@ class ProductCategoriesSpinnerAdapter(context: Context, private val itemsAll: Li
 
 
         val category = itemsAll[position]
-        val categoryNameTextView = view!!.findViewById<TextView>(R.id.category_product_item_name)
+        val categoryNameTextView = view.findViewById<TextView>(R.id.category_product_item_name)
         categoryNameTextView?.text = category.toString()
         categoryNameTextView?.setTextColor(ContextCompat.getColor(parent.context, category.colorId))
         return view
@@ -37,7 +37,7 @@ class ProductCategoriesSpinnerAdapter(context: Context, private val itemsAll: Li
 
         val category = itemsAll[position]
 
-        val categoryNameTextView = view!!.findViewById<TextView>(R.id.category_product_item_name)
+        val categoryNameTextView = view.findViewById<TextView>(R.id.category_product_item_name)
         categoryNameTextView?.text = category.toString()
         val categoryView = view.findViewById<View>(R.id.main_view)
         categoryView?.setBackgroundResource(category.colorId)
