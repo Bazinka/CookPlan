@@ -1,5 +1,6 @@
 package com.cookplan.recipe.edit
 
+import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.providers.IngredientProvider
@@ -78,7 +79,6 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
             for (ingredient in ingredients) {
                 removeIngredient(ingredient)
             }
-
             recipeDataProvider.removeRecipe(recipe)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -95,26 +95,32 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
                             mainView?.setErrorToast(e.message ?: String())
                         }
                     })
+        } else {
+            mainView?.setErrorToast(R.string.recipe_doesnt_exist)
         }
     }
 
 
     private fun removeIngredient(ingredient: Ingredient) {
-        ingredientDataProvider.removeIngredient(ingredient)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : CompletableObserver {
-                    override fun onSubscribe(d: Disposable) {
+        if (ingredient.id != null) {
+            ingredientDataProvider.removeIngredient(ingredient)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : CompletableObserver {
+                        override fun onSubscribe(d: Disposable) {
 
-                    }
+                        }
 
-                    override fun onComplete() {
+                        override fun onComplete() {
 
-                    }
+                        }
 
-                    override fun onError(e: Throwable) {
-                        mainView?.setErrorToast(e.message ?: String())
-                    }
-                })
+                        override fun onError(e: Throwable) {
+                            mainView?.setErrorToast(e.message ?: String())
+                        }
+                    })
+        } else {
+            mainView?.setErrorToast(R.string.ingred_remove_error)
+        }
     }
 }

@@ -270,6 +270,10 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show()
     }
 
+    override fun setErrorToast(errorId: Int) {
+        Toast.makeText(this, getString(errorId), Toast.LENGTH_LONG).show()
+    }
+
     override fun recipeSavedSuccessfully(recipe: Recipe) {
         setName(recipe.name)
         setDescriptionPart(recipe.desc, recipe.descImageUrls)

@@ -14,36 +14,6 @@ import java.util.regex.Pattern
 
 object Utils {
 
-
-    val volumeUnitList: MutableList<MeasureUnit>
-        get() {
-            val volumeUnitArray = arrayOf(LITRE, MILILITRE, CUP, TEASPOON, TABLESPOON, PACKAGE, BOTTLE)
-            return volumeUnitArray.toMutableList()
-        }
-
-    // 250 мл.
-    // 5 мл.
-    // 15 мл.
-    val litreUnitMap: Map<MeasureUnit, Double>
-        get() = UnitsMapBuilder()
-                .put(MILILITRE, 1000.0)
-                .put(CUP, 4.0)
-                .put(TEASPOON, 202.0)
-                .put(TABLESPOON, 67.0)
-                .build()
-
-    val weightUnitList: MutableList<MeasureUnit>
-        get() {
-            val weightUnitArray = arrayOf(GRAMM, KILOGRAMM, CUP, TEASPOON, TABLESPOON, PACKAGE, UNITS)
-            return weightUnitArray.toMutableList()
-        }
-
-    val kilogramUnitMap: Map<MeasureUnit, Double>
-        get() = UnitsMapBuilder()
-                .put(GRAMM, 1000.0)
-                .put(CUP, 4.0)
-                .build()
-
     fun log(tag: String, textLog: String) {
         Log.d(tag, textLog)
     }
@@ -94,50 +64,6 @@ object Utils {
 
     fun isStringUrl(url: String): Boolean {
         return url.contains("http")
-    }
-
-
-    private class UnitsMapBuilder {
-        private val measureUnitToAmoutMap: MutableMap<MeasureUnit, Double>
-
-        constructor() {
-            measureUnitToAmoutMap = HashMap()
-        }
-
-        constructor(map: Map<MeasureUnit, Double>) {
-            measureUnitToAmoutMap = HashMap(map)
-        }
-
-        fun put(unit: MeasureUnit, amount: Double): UnitsMapBuilder {
-            measureUnitToAmoutMap.put(unit, amount)
-            return this
-        }
-
-        fun build(): Map<MeasureUnit, Double> {
-            return measureUnitToAmoutMap
-        }
-    }
-
-    private class UnitsListBuilder {
-        private val measureUnitList: MutableList<MeasureUnit>
-
-        init {
-            measureUnitList = LinkedList()
-        }
-
-        fun add(unit: MeasureUnit): UnitsListBuilder {
-            measureUnitList.add(unit)
-            return this
-        }
-
-        fun addAll(unit: Array<MeasureUnit>): UnitsListBuilder {
-            measureUnitList.addAll(Arrays.asList(*unit))
-            return this
-        }
-
-        fun build(): List<MeasureUnit> {
-            return measureUnitList
-        }
     }
 
     fun getRegexAtLeastOneWord(name: String): String {

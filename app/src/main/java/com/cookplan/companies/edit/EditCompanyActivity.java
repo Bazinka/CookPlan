@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.utils.FirebaseImageLoader;
 import com.cookplan.utils.PermissionUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -94,7 +93,7 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
             mapView.onCreate(null);
             mapView.setClickable(false);
             mapView.getMapAsync(googleMap -> {
-                MapsInitializer.initialize(RApplication.Companion.getAppContext());
+                MapsInitializer.initialize(this);
                 LatLng location = new LatLng(latitude, longitude);
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f));
                 googleMap.addMarker(new MarkerOptions().position(location));

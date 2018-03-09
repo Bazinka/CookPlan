@@ -2,7 +2,6 @@ package com.cookplan.recipe.import_recipe.approve_result
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import android.widget.Filter
 import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Product
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
@@ -62,7 +61,7 @@ class ProductListAdapter(context: Context, private val itemsAll: List<Product>) 
         productNameTextView?.text = product.toStringName()
 
         val categoryNameTextView = view.findViewById<TextView>(R.id.category_product_item_name)
-        categoryNameTextView?.text = product.category.toString()
+        categoryNameTextView?.setText(product.category.getNameResourceId())
         categoryNameTextView?.setTextColor(ContextCompat.getColor(parent.context, product.category.colorId))
 
         val categoryView = view.findViewById<View>(R.id.category_view)

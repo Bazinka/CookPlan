@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.models.Company;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,7 +47,7 @@ public class GeoFenceActivity extends BaseActivity implements GeoFenceView {
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.company_review_map);
             mapFragment.getMapAsync(_googleMap -> {
-                MapsInitializer.initialize(RApplication.Companion.getAppContext());
+                MapsInitializer.initialize(this);
                 googleMap = _googleMap;
                 LatLng location = new LatLng(company.getLatitude(), company.getLongitude());
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f));

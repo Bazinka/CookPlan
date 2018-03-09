@@ -12,6 +12,7 @@ import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.models.ShopListStatus
+import com.cookplan.utils.MeasureUnitUtils
 
 
 class ShopListExpandableListAdapter(private val context: Context,
@@ -64,7 +65,9 @@ class ShopListExpandableListAdapter(private val context: Context,
 
             if (ingredient.mainAmount != 0.0) {
                 amountTextView?.visibility = View.VISIBLE
-                val amount = ingredient.mainMeasureUnit.toValueString(ingredient.mainAmount)
+                val amount = MeasureUnitUtils.valueToString(
+                        ingredient.mainMeasureUnit,
+                        ingredient.mainAmount) { amountTextView.context }
                 amountTextView?.text = amount
             } else {
                 amountTextView?.visibility = View.GONE

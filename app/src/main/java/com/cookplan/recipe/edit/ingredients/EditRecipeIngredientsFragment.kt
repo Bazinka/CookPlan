@@ -88,6 +88,10 @@ class EditRecipeIngredientsFragment : BaseFragment(), EditRecipeIngredientsView 
         Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
     }
 
+    override fun setErrorToast(errorId: Int) {
+        Toast.makeText(activity, getString(errorId), Toast.LENGTH_LONG).show()
+    }
+
     fun getIngredientsList(): List<Ingredient> {
         return adapter?.getItems() ?: listOf()
     }

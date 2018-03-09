@@ -68,7 +68,7 @@ public class GeofenceTransitionsIntentService extends IntentService implements G
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
             int errorMessage = GeofenceErrorMessages.getErrorString(geofencingEvent.getErrorCode());
-            Log.e(TAG, RApplication.Companion.getAppContext().getString(errorMessage));
+            Log.e(TAG, getApplicationContext().getString(errorMessage));
             return;
         }
 

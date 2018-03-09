@@ -40,7 +40,7 @@ class MeasureUnitsSpinnerAdapter : ArrayAdapter<MeasureUnit>, SpinnerAdapter {
 
         val unit = itemsAll[position]
         val customerNameLabel = view?.findViewById<TextView>(R.id.item_name)
-        customerNameLabel?.text = unit.toString()
+        customerNameLabel?.text = parent.context.getString(unit.getNameRecourseId())
         return view
     }
 
@@ -65,7 +65,7 @@ class MeasureUnitsSpinnerAdapter : ArrayAdapter<MeasureUnit>, SpinnerAdapter {
         }
 
         val customerNameLabel = view?.findViewById<TextView>(R.id.item_name)
-        customerNameLabel?.text = unit.toString()
+        customerNameLabel?.text = parent.context.getString(unit.getNameRecourseId())
         return view
     }
 }

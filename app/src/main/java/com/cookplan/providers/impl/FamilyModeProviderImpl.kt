@@ -1,7 +1,5 @@
 package com.cookplan.providers.impl
 
-import com.cookplan.R
-import com.cookplan.RApplication
 import com.cookplan.models.CookPlanError
 import com.cookplan.models.ShareUserInfo
 import com.cookplan.providers.FamilyModeProvider
@@ -98,8 +96,7 @@ class FamilyModeProviderImpl : FamilyModeProvider {
             val userShareRef = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
             userShareRef.push().setValue(dataSharedItem) { databaseError, reference ->
                 if (databaseError != null) {
-                    emitter.onError(CookPlanError(
-                            RApplication.appContext!!.getString(R.string.error_share_title)))
+                    emitter.onError(CookPlanError(databaseError))
                 } else {
                     dataSharedItem.id = reference.key
                     emitter.onSuccess(dataSharedItem)
@@ -121,8 +118,7 @@ class FamilyModeProviderImpl : FamilyModeProvider {
                     .updateChildren(values
                     ) { databaseError, reference ->
                         if (databaseError != null) {
-                            emitter.onError(CookPlanError(
-                                    RApplication.appContext!!.getString(R.string.error_share_title)))
+                            emitter.onError(CookPlanError(databaseError))
                         } else {
                             emitter.onSuccess(dataSharedItem)
                         }

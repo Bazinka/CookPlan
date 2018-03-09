@@ -9,7 +9,7 @@ import com.cookplan.providers.ProviderFactory
 import com.cookplan.providers.RecipeProvider
 import com.cookplan.recipe.import_recipe.parser.ParserFactory
 import com.cookplan.recipe.import_recipe.parser.ParserResultListener
-import com.cookplan.utils.Utils
+import com.cookplan.utils.MeasureUnitUtils
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -39,17 +39,16 @@ class ImportRecipePresenterImpl(private val mainView: ImportRecipeView?) : Impor
 
     override fun importRecipeFromUrl(uri: String) {
         getAsyncProductList()
-        ParserFactory.createParser(uri)?.parceUrl(object : ParserResultListener {
-            override fun onSuccess(recipe: Recipe, ingredientList: MutableMap<String, List<Ingredient>>) {
-                mainView?.setImportResult(recipe, ingredientList)
-            }
+        ParserFactory.createParser(uri) { mainView?.getContext() }
+                ?.parceUrl(object : ParserResultListener {
+                    override fun onSuccess(recipe: Recipe, ingredientList: MutableMap<String, List<Ingredient>>) {
+                        mainView?.setImportResult(recipe, ingredientList)
+                    }
 
-            override fun onError(error: String) {
-                mainView?.setError(error)
-            }
-        }) ?: mainView?.setError(
-                RApplication.appContext!!
-                        .getString(R.string.error_import_from_the_wrong_site_title))
+                    override fun onError(error: String) {
+                        mainView?.setError(error)
+                    }
+                }) ?: mainView?.setError(mainView.getContext().getString(R.string.error_import_from_the_wrong_site_title))
     }
 
     override fun getAllProductsList() = allProductsList
@@ -113,12 +112,12 @@ class ImportRecipePresenterImpl(private val mainView: ImportRecipeView?) : Impor
         var map: Map<MeasureUnit, Double> = mapOf()
         var measureUnitList: MutableList<MeasureUnit> = MeasureUnit.values().toMutableList()
         if (measureUnit === MeasureUnit.KILOGRAMM) {
-            map = Utils.kilogramUnitMap
-            measureUnitList = Utils.weightUnitList
+            map = MeasureUnitUtils.kilogramUnitMap
+            measureUnitList = MeasureUnitUtils.weightUnitList
         }
         if (measureUnit === MeasureUnit.LITRE) {
-            map = Utils.litreUnitMap
-            measureUnitList = Utils.volumeUnitList
+            map = MeasureUnitUtils.litreUnitMap
+            measureUnitList = MeasureUnitUtils.volumeUnitList
         }
         var rusName: String? = null
         var engName: String? = null

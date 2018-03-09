@@ -1,7 +1,5 @@
 package com.cookplan.providers.impl
 
-import com.cookplan.R
-import com.cookplan.RApplication
 import com.cookplan.models.Company
 import com.cookplan.models.CookPlanError
 import com.cookplan.providers.CompanyProvider
@@ -128,8 +126,6 @@ class CompanyProviderImpl : CompanyProvider {
                                 emitter.onComplete()
                             }
                         }
-            } else {
-                emitter.onError(CookPlanError(RApplication.appContext?.getString(R.string.error_remove_todo_item)))
             }
         }
     }

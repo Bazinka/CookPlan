@@ -1,7 +1,5 @@
 package com.cookplan.providers.impl
 
-import com.cookplan.R
-import com.cookplan.RApplication
 import com.cookplan.models.CookPlanError
 import com.cookplan.models.Recipe
 import com.cookplan.models.ShareUserInfo
@@ -123,7 +121,7 @@ class RecipeProviderImpl : RecipeProvider {
                         emitter?.onError(CookPlanError(databaseError))
                     }
                 })
-            }else{
+            } else {
                 emitter?.onError(CookPlanError())
             }
         }
@@ -131,19 +129,15 @@ class RecipeProviderImpl : RecipeProvider {
 
     override fun removeRecipe(recipe: Recipe): Completable {
         return Completable.create { emitter ->
-            if (recipe.id != null) {
-                val recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE)
-                val ref = recipeRef.child(recipe.id)
-                ref.removeValue()
-                        .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
-                        .addOnCompleteListener { task ->
-                            if (task.isComplete) {
-                                emitter.onComplete()
-                            }
+            val recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE)
+            val ref = recipeRef.child(recipe.id)
+            ref.removeValue()
+                    .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
+                    .addOnCompleteListener { task ->
+                        if (task.isComplete) {
+                            emitter.onComplete()
                         }
-            } else {
-                emitter.onError(CookPlanError(RApplication.appContext!!.getString(R.string.recipe_doesnt_exist)))
-            }
+                    }
         }
     }
 }

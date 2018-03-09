@@ -1,8 +1,6 @@
 package com.cookplan.models
 
 import com.cookplan.R
-import com.cookplan.RApplication
-
 import java.io.Serializable
 
 /**
@@ -43,8 +41,8 @@ enum class ProductCategory private constructor(private val nameResourceId: Int, 
     BOOKS_PRINTED_PRODUCTS(R.string.books_and_printed_matter_title, R.color.category_blue_grey, 30),
     GADREN_PRODUCTS(R.string.products_for_garden_title, R.color.category_dark_blue_grey, 31);
 
-    override fun toString(): String {
-        return RApplication.appContext?.getString(nameResourceId) ?: ""
+    fun getNameResourceId(): Int {
+        return nameResourceId
     }
 
     companion object {

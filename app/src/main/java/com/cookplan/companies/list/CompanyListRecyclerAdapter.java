@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.models.Company;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -120,7 +119,7 @@ public class CompanyListRecyclerAdapter extends RecyclerView.Adapter<CompanyList
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            MapsInitializer.initialize(RApplication.Companion.getAppContext());
+            MapsInitializer.initialize(mainView.getContext());
             map = googleMap;
             Company company = (Company) mapView.getTag();
             if (company != null) {

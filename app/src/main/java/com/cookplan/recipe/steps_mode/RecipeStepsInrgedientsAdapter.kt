@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
+import com.cookplan.utils.MeasureUnitUtils
 
 /**
  * Created by DariaEfimova on 18.03.17.
@@ -23,7 +24,9 @@ class RecipeStepsInrgedientsAdapter(private val ingredients: List<Ingredient>) :
         val item = ingredients[position]
         holder.nameTextView.text = item.name
 
-        holder.amountTextView.text = item.mainMeasureUnit.toValueString(item.mainAmount)
+        holder.amountTextView.text = MeasureUnitUtils.valueToString(
+                item.mainMeasureUnit,
+                item.mainAmount) { holder.amountTextView.context }
         holder.amountTextView.visibility = if (item.mainAmount > 0.0) View.VISIBLE else View.GONE
 
         holder.mainView.setBackgroundResource(

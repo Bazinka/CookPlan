@@ -8,7 +8,9 @@ import com.cookplan.models.Recipe
 
 interface EditRecipeView {
 
-    fun setErrorToast(error: String)
+    fun setErrorToast(errorString: String)
+
+    fun setErrorToast(errorId: Int)
 
     fun showProgressBar()
 

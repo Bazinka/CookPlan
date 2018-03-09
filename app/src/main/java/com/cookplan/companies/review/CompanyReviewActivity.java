@@ -156,7 +156,7 @@ public class CompanyReviewActivity extends BaseActivity implements OnMapReadyCal
 
     @Override
     public void onMapReady(GoogleMap _googleMap) {
-        MapsInitializer.initialize(RApplication.Companion.getAppContext());
+        MapsInitializer.initialize(this);
         GoogleMap googleMap = _googleMap;
         LatLng location = new LatLng(company.getLatitude(), company.getLongitude());
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 13f));

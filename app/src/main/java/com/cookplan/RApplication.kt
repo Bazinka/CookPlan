@@ -39,21 +39,20 @@ class RApplication : Application() {
         private val CATEGORY_PRIORITY_PREFS_NAME = "CATEGORY_PRIORITY_PREFS_NAME"
         private val USER_SAW_VOICE_RECOGNITION_ALERT_PREFS_NAME = "USER_SAW_VOICE_RECOGNITION_ALERT_PREFS_NAME"
 
-        var appContext: Context? = null
-            private set
+        private var appContext: Context? = null
 
 
-        private val currentLocale: Locale
+        private val currentLocale: Locale?
             get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                appContext!!.resources.configuration.locales.get(0)
+                appContext?.resources?.configuration?.locales?.get(0)
             } else {
-                appContext!!.resources.configuration.locale
+                appContext?.resources?.configuration?.locale
             }
 
         val isCurrentLocaleRus: Boolean
             get() {
-                val currentLanguage = RApplication.currentLocale.displayLanguage
-                val russianLanguage = RApplication.appContext!!.getString(R.string.russian_language)
+                val currentLanguage = RApplication.currentLocale?.displayLanguage
+                val russianLanguage = RApplication.appContext?.getString(R.string.russian_language)
                 return currentLanguage == russianLanguage
             }
 

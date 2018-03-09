@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.recipe.import_recipe.approve_result.ParsedIngredientsRecyclerAdapter.ParsedIngredientsViewHolder
+import com.cookplan.utils.MeasureUnitUtils
 
 
 class ParsedIngredientsRecyclerAdapter(val ingredients: List<Ingredient> = listOf(),
@@ -47,7 +48,9 @@ class ParsedIngredientsRecyclerAdapter(val ingredients: List<Ingredient> = listO
 
         holder.nameTextView.text = ingredient.name
 
-        val amount = ingredient.mainMeasureUnit.toValueString(ingredient.mainAmount)
+        val amount = MeasureUnitUtils.valueToString(
+                ingredient.mainMeasureUnit,
+                ingredient.mainAmount) { holder.amountTextView.context }
 
         if (!amount.isEmpty()) {
             holder.amountTextView.visibility = View.VISIBLE

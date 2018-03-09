@@ -22,8 +22,11 @@ import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.RApplication
 import com.cookplan.models.MeasureUnit
+import com.cookplan.models.MeasureUnit.UNITS
+import com.cookplan.models.MeasureUnit.values
 import com.cookplan.models.Product
 import com.cookplan.models.ProductCategory
+import com.cookplan.utils.MeasureUnitUtils
 
 class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
 
@@ -224,7 +227,7 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
         val measureUnits = mutableListOf<MeasureUnit>()
         if (name == selectedProduct?.toStringName()) {
             measureUnits.addAll(selectedProduct?.mainMeasureUnitList ?: listOf<MeasureUnit>())
-            for (unit in selectedProduct?.measureUnitList ?: listOf(MeasureUnit.UNITS)) {
+            for (unit in selectedProduct?.measureUnitList ?: listOf(UNITS)) {
                 val isMainUnit = (selectedProduct?.mainMeasureUnitList ?: listOf<MeasureUnit>()).any { unit === it }
                 if (!isMainUnit) {
                     measureUnits.add(unit)
@@ -232,7 +235,7 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
             }
             mainMeasureUnits = selectedProduct?.mainMeasureUnitList ?: listOf<MeasureUnit>()
         } else {
-            measureUnits.addAll(MeasureUnit.values().toMutableList())
+            measureUnits.addAll(values().toMutableList())
         }
         val adapter = MeasureUnitsSpinnerAdapter(this,
                 measureUnits,
@@ -306,7 +309,9 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
                 }
 
                 parsedAmount = presenter?.parseAmountFromString(ingredientString)
-                unitAmountEditText.setText(parsedMeasure?.getStringOfValue(parsedAmount ?: 0.toDouble()) ?: String())
+                unitAmountEditText.setText(MeasureUnitUtils.getStringOfValueInUnit(
+                        parsedMeasure ?: UNITS,
+                        parsedAmount ?: 0.toDouble()) ?: String())
 
             } else {
                 setErrorToast(getString(R.string.voise_recognition_error))

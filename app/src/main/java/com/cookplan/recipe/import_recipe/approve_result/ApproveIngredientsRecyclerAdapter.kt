@@ -1,5 +1,6 @@
 package com.cookplan.recipe.import_recipe.approve_result
 
+import android.content.Context
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,6 +15,7 @@ import com.cookplan.add_ingredient_view.ProductCategoriesSpinnerAdapter
 import com.cookplan.models.*
 import com.cookplan.recipe.import_recipe.approve_result.ApproveIngredientsRecyclerAdapter.ItemType.INGREDIENT
 import com.cookplan.recipe.import_recipe.approve_result.ApproveIngredientsRecyclerAdapter.ItemType.RECIPE
+import com.cookplan.utils.MeasureUnitUtils
 import com.cookplan.utils.Utils
 
 
@@ -119,7 +121,7 @@ open class ApproveIngredientsRecyclerAdapter(var recipe: Recipe,
                         val productName = ingredientViewHolder.productNameEditText.text.toString()
                         if (!productName.isEmpty()) {
                             val amount = getAmountFromString(key)
-                            val unit = getMeasureUnitFromString(key)
+                            val unit = getMeasureUnitFromString(key) { ingredientViewHolder.mainView.context }
                             var product: Product? = null
                             if (ingredientViewHolder.productNameEditText.tag != null) {
                                 product = ingredientViewHolder.productNameEditText.tag as Product
@@ -174,9 +176,9 @@ open class ApproveIngredientsRecyclerAdapter(var recipe: Recipe,
         }
     }
 
-    private fun getMeasureUnitFromString(tag: String): MeasureUnit {
+    private fun getMeasureUnitFromString(tag: String, getContext: () -> Context): MeasureUnit {
         val splits = tag.split("\\d+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        return MeasureUnit.parseUnit(splits[splits.size - 1])
+        return MeasureUnitUtils.parseUnit(splits[splits.size - 1], getContext)
 //        String[] splits = tag.split("\\d+");
 //        return MeasureUnit.Companion.parseUnit(splits[splits.length - 1]);
 

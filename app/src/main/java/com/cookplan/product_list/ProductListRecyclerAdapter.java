@@ -46,8 +46,8 @@ public class ProductListRecyclerAdapter extends RecyclerView.Adapter<ProductList
         if (product.getCategory() != null) {
             holder.categoryNameView.setVisibility(View.VISIBLE);
             holder.categoryColorView.setVisibility(View.VISIBLE);
-            holder.categoryNameView.setText(product.getCategory().toString());
-            int color = ContextCompat.getColor(RApplication.Companion.getAppContext(),
+            holder.categoryNameView.setText(product.getCategory().getNameResourceId());
+            int color = ContextCompat.getColor(holder.categoryNameView.getContext(),
                                                product.getCategory().getColorId());
             holder.categoryNameView.setTextColor(color);
             holder.categoryColorView.setBackgroundResource(product.getCategory().getColorId());

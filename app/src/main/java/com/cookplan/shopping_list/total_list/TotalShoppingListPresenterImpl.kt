@@ -6,6 +6,7 @@ import com.cookplan.models.Ingredient
 import com.cookplan.models.MeasureUnit
 import com.cookplan.models.ShopListStatus
 import com.cookplan.shopping_list.ShoppingListBasePresenterImpl
+import com.cookplan.utils.MeasureUnitUtils
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -17,7 +18,7 @@ import kotlin.collections.Map.Entry
  */
 
 class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView?) : ShoppingListBasePresenterImpl(), TotalShoppingListPresenter {
-    private var ProductToIngredientMap: HashMap<String, List<Ingredient>> = hashMapOf()
+    private var productToIngredientMap: HashMap<String, List<Ingredient>> = hashMapOf()
 
     override fun setError(message: String?) {
         mainView?.setErrorToast(message ?: "")
@@ -26,19 +27,19 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
     override fun sortIngredientList(userIngredients: List<Ingredient>) {
 
         //fill the map
-        ProductToIngredientMap.clear()
+        productToIngredientMap.clear()
         for (ingredient in userIngredients) {
             if (ingredient.shopListStatus !== ShopListStatus.NONE) {
-                val ingredients = (ProductToIngredientMap.get(ingredient.name) ?: arrayListOf()) as ArrayList<Ingredient>
+                val ingredients = (productToIngredientMap.get(ingredient.name) ?: arrayListOf()) as ArrayList<Ingredient>
 
                 ingredients.add(ingredient)
-                ProductToIngredientMap.put(ingredient.name ?: String(), ingredients)
+                productToIngredientMap.put(ingredient.name ?: String(), ingredients)
             }
         }
 
         //calculate amounts
         val needToBuyIngredients = ArrayList<Ingredient>()
-        for (entry in ProductToIngredientMap.entries) {
+        for (entry in productToIngredientMap.entries) {
             val needToBuyIng = getShopListIngredient(entry, ShopListStatus.NEED_TO_BUY)
             if (needToBuyIng != null) {
                 needToBuyIngredients.add(needToBuyIng)
@@ -57,7 +58,7 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
                 }
             }
         }
-        if (ProductToIngredientMap.size != 0) {
+        if (productToIngredientMap.size != 0) {
             mainView?.setIngredientLists(needToBuySortedIngredients)
         } else {
             mainView?.setEmptyView()
@@ -99,7 +100,7 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
 
             var shopAmountString = ""
             for ((key, value) in shopMap) {
-                val string = key.toStringForShopList(value)
+                val string = MeasureUnitUtils.valueToStringForShopList(key, value) { mainView?.getContext() }
                 if (shopAmountString.isEmpty()) {
                     shopAmountString = string
                 } else {
@@ -108,14 +109,14 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
             }
             var restAmountString = ""
             for ((key, value) in restMap) {
-                val string = key.toStringForShopList(value)
+                val string = MeasureUnitUtils.valueToStringForShopList(key, value) { mainView?.getContext() }
                 restAmountString = if (restAmountString.isEmpty()) string else restAmountString + " + " + string
             }
-            when{
-                !restAmountString.isEmpty() && !shopAmountString.isEmpty()->{
+            when {
+                !restAmountString.isEmpty() && !shopAmountString.isEmpty() -> {
                     shopAmountString = shopAmountString + " + " + restAmountString
                 }
-                !restAmountString.isEmpty() && shopAmountString.isEmpty()->{
+                !restAmountString.isEmpty() && shopAmountString.isEmpty() -> {
                     shopAmountString = restAmountString
                 }
             }
@@ -127,7 +128,7 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
 
 
     override fun changeShopListStatus(ingredient: Ingredient, newStatus: ShopListStatus) {
-        val ingredientList = ProductToIngredientMap.get(ingredient.name) ?: listOf()
+        val ingredientList = productToIngredientMap.get(ingredient.name) ?: listOf()
         for (realIngredient in ingredientList) {
             realIngredient.shopListStatus = newStatus
             ingredientDataProvider.updateShopStatus(realIngredient)
@@ -151,7 +152,7 @@ class TotalShoppingListPresenterImpl(private val mainView: TotalShoppingListView
 
     override fun deleteIngredients(ingredients: List<Ingredient>) {
         for ((_, _, _, name, _, _, _, _, _, _, _, status) in ingredients) {
-            val realIngredients = ProductToIngredientMap.get(name) ?: listOf()
+            val realIngredients = productToIngredientMap.get(name) ?: listOf()
             for (realIngredient in realIngredients) {
                 if (status === realIngredient.shopListStatus) {
                     realIngredient.shopListStatus = ShopListStatus.NONE

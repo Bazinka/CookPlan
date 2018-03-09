@@ -1,5 +1,6 @@
 package com.cookplan
 
+import android.content.Context
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.View
@@ -10,7 +11,7 @@ import android.widget.Toast
  * Created by DariaEfimova on 13.10.17.
  */
 
-open class BaseFragment : Fragment() {
+open class BaseFragment : Fragment(), BaseView {
 
     protected var mainView: ViewGroup? = null
 
@@ -26,5 +27,9 @@ open class BaseFragment : Fragment() {
         } else {
             Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun getContext(): Context {
+        return activity as Context
     }
 }

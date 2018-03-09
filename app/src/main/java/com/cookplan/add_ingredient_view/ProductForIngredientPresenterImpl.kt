@@ -5,7 +5,7 @@ import com.cookplan.models.*
 import com.cookplan.providers.IngredientProvider
 import com.cookplan.providers.ProductProvider
 import com.cookplan.providers.ProviderFactory
-import com.cookplan.utils.Utils
+import com.cookplan.utils.MeasureUnitUtils
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
@@ -100,12 +100,12 @@ class ProductForIngredientPresenterImpl(private val mainView: ProductForIngredie
         var map: Map<MeasureUnit, Double>? = null
         var measureUnitList: MutableList<MeasureUnit> = Arrays.asList(*MeasureUnit.values())
         if (measureUnit === MeasureUnit.KILOGRAMM) {
-            map = Utils.kilogramUnitMap
-            measureUnitList = Utils.weightUnitList
+            map = MeasureUnitUtils.kilogramUnitMap
+            measureUnitList = MeasureUnitUtils.weightUnitList
         }
         if (measureUnit === MeasureUnit.LITRE) {
-            map = Utils.litreUnitMap
-            measureUnitList = Utils.volumeUnitList
+            map = MeasureUnitUtils.litreUnitMap
+            measureUnitList = MeasureUnitUtils.volumeUnitList
         }
 
         var rusName: String? = null
@@ -168,7 +168,7 @@ class ProductForIngredientPresenterImpl(private val mainView: ProductForIngredie
         val measureMatcher = Pattern.compile(INGRIDIENT_MEASURE_PATTERN).matcher(string)
         var unit = MeasureUnit.UNITS
         if (measureMatcher.find()) {
-            unit = MeasureUnit.parseUnit(measureMatcher.group().toString())
+            unit = MeasureUnitUtils.parseUnit(measureMatcher.group().toString()) { mainView?.getContext() }
         }
         return unit
     }

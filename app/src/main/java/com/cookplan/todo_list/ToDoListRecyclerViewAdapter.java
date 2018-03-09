@@ -88,7 +88,7 @@ public class ToDoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         }
 
                         if (toDoItem.getToDoStatus() == HAVE_DONE) {
-                            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
+                            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(itemHolder.mainView.getContext(),
                                                                                         R.color.white));
                             itemHolder.nameTextView.setPaintFlags(
                                     itemHolder.nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -103,7 +103,7 @@ public class ToDoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                 itemHolder.mainView.setBackgroundResource(R.color.primary_light);
                             }
                         } else {
-                            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
+                            itemHolder.nameTextView.setTextColor(ContextCompat.getColor(itemHolder.mainView.getContext(),
                                                                                         R.color.primary_text_color));
                             itemHolder.nameTextView.setPaintFlags(itemHolder.nameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             itemHolder.mainView.setBackgroundResource(R.color.white);
@@ -138,7 +138,7 @@ public class ToDoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                         categoryHolder.nameTextView.setText(toDoCategory.getName());
                         categoryHolder.nameTextView.setTextColor(
-                                ContextCompat.getColor(RApplication.Companion.getAppContext(),
+                                ContextCompat.getColor(categoryHolder.mainView.getContext(),
                                                        toDoCategory.getColor().getColorId()));
                         categoryHolder.categoryView.setBackgroundResource(toDoCategory.getColor().getColorId());
 

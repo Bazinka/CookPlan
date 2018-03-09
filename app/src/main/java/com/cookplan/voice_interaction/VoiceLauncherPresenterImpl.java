@@ -55,7 +55,7 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
     @Override
     public void handleText(String text) {
         text = text.toLowerCase();
-        String buyStringPattern = RApplication.Companion.getAppContext().getString(R.string.buy_pattern).toLowerCase();
+        String buyStringPattern = mainView.getContext().getString(R.string.buy_pattern).toLowerCase();
 
         Pattern buyPattern = Pattern.compile(buyStringPattern);
 
@@ -79,9 +79,9 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
                         public void onError(Throwable e) {
                             if (mainView != null) {
                                 if (e instanceof CookPlanError) {
-                                    mainView.setErrorString(RApplication.Companion.getAppContext().getString(R.string.saving_ingredient_error));
+                                    mainView.setErrorString(mainView.getContext().getString(R.string.saving_ingredient_error));
                                 } else {
-                                    mainView.setErrorString(RApplication.Companion.getAppContext().getString(R.string.didnt_find_product_error));
+                                    mainView.setErrorString(mainView.getContext().getString(R.string.didnt_find_product_error));
                                 }
                             }
                         }
@@ -188,7 +188,7 @@ public class VoiceLauncherPresenterImpl implements VoiceLauncherPresenter {
                     @Override
                     public void onError(Throwable e) {
                         if (mainView != null && e instanceof CookPlanError) {
-                            mainView.setErrorString(RApplication.Companion.getAppContext().getString(R.string.saving_ingredient_error));
+                            mainView.setErrorString(mainView.getContext().getString(R.string.saving_ingredient_error));
                         }
                     }
                 });

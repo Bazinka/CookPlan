@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.models.Product;
 
 import java.util.ArrayList;
@@ -37,8 +36,8 @@ public class CompanyProductsRecyclerAdapter extends RecyclerView.Adapter<Company
         if (product.getCategory() != null) {
             holder.categoryNameView.setVisibility(View.VISIBLE);
             holder.categoryColorView.setVisibility(View.VISIBLE);
-            holder.categoryNameView.setText(product.getCategory().toString());
-            int color = ContextCompat.getColor(RApplication.Companion.getAppContext(),
+            holder.categoryNameView.setText(product.getCategory().getNameResourceId());
+            int color = ContextCompat.getColor(holder.mainView.getContext(),
                                                product.getCategory().getColorId());
             holder.categoryNameView.setTextColor(color);
             holder.categoryColorView.setBackgroundResource(product.getCategory().getColorId());

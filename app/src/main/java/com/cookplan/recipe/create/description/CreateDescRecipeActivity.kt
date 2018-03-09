@@ -82,6 +82,10 @@ class CreateDescRecipeActivity : BaseActivity(), EditRecipeView {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show()
     }
 
+    override fun setErrorToast(errorId: Int) {
+        Toast.makeText(this, getString(errorId), Toast.LENGTH_LONG).show()
+    }
+
     override fun showProgressBar() {
         val progressBar = findViewById<View>(R.id.progress_bar_layout)
         progressBar.visibility = View.VISIBLE

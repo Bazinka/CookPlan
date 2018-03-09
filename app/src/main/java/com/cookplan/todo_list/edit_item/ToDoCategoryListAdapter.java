@@ -11,7 +11,6 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.models.ToDoCategory;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class ToDoCategoryListAdapter extends ArrayAdapter<ToDoCategory> {
             if (nameTextView != null) {
                 //              Log.i(MY_DEBUG_TAG, "getView Customer Name:"+customer.getStringName());
                 nameTextView.setText(toDoCategory.getName());
-                nameTextView.setTextColor(ContextCompat.getColor(RApplication.Companion.getAppContext(),
+                nameTextView.setTextColor(ContextCompat.getColor(v.getContext(),
                                                                  toDoCategory.getColor().getColorId()));
             }
 

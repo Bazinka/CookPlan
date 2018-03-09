@@ -1,5 +1,6 @@
 package com.cookplan
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -10,7 +11,7 @@ import android.view.MenuItem
  * Created by DariaEfimova on 13.10.17.
  */
 
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), BaseView {
 
     fun setTitle(title: String) {
         supportActionBar?.title = title
@@ -76,6 +77,10 @@ open class BaseActivity : AppCompatActivity() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun getContext(): Context {
+        return this
     }
 
     companion object {

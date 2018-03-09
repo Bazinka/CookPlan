@@ -29,7 +29,7 @@ class ProductForIngredientListAdapter(private val productList: MutableList<Produ
 
         holder.productNameTextView.text = product.toStringName()
 
-        holder.categoryNameTextView.text = product.category.toString()
+        holder.categoryNameTextView.setText(product.category.getNameResourceId())
 
 
         val background = holder.categoryView.background

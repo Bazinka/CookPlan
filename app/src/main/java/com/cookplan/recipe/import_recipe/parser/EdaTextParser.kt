@@ -1,9 +1,11 @@
 package com.cookplan.recipe.import_recipe.parser
 
+import android.content.Context
 import android.util.Log
 import com.cookplan.models.*
 import com.cookplan.providers.ProductProvider
 import com.cookplan.providers.impl.ProductProviderImpl
+import com.cookplan.utils.MeasureUnitUtils
 import com.cookplan.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,7 +19,7 @@ import java.util.regex.Pattern
  * Created by DariaEfimova on 09.06.17.
  */
 
-class EdaTextParser(url: String) : BaseParser(url) {
+class EdaTextParser(url: String, private val getContext: () -> Context?) : BaseParser(url) {
 
     private val productDataProvider: ProductProvider
     private val disposables: CompositeDisposable
@@ -144,8 +146,8 @@ class EdaTextParser(url: String) : BaseParser(url) {
         val measureMatcher = Pattern.compile(RECIPE_MEASURE_PATTERN).matcher(ingredientAllText)
         var unit = MeasureUnit.UNITS
         if (measureMatcher.find()) {
-            unit = MeasureUnit.parseUnit(measureMatcher.group().toString())
-            Log.d("PARSING", "amount: " + amount!!)
+            unit = MeasureUnitUtils.parseUnit(measureMatcher.group().toString(), getContext)
+            Log.d("PARSING", "amount: " + amount)
         }
 
         return Ingredient(id = null,

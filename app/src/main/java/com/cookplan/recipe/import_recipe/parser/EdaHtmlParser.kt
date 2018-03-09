@@ -1,10 +1,10 @@
 package com.cookplan.recipe.import_recipe.parser
 
-import com.cookplan.R
-import com.cookplan.RApplication
+import android.content.Context
 import com.cookplan.models.*
 import com.cookplan.providers.ProductProvider
 import com.cookplan.providers.impl.ProductProviderImpl
+import com.cookplan.utils.MeasureUnitUtils
 import com.cookplan.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +19,7 @@ import org.jsoup.select.Elements
  * Created by DariaEfimova on 09.06.17.
  */
 
-class EdaHtmlParser(url: String) : BaseParser(url) {
+class EdaHtmlParser(url: String, private val getContext: () -> Context) : BaseParser(url) {
 
 
     private val productDataProvider: ProductProvider
@@ -168,18 +168,18 @@ class EdaHtmlParser(url: String) : BaseParser(url) {
     }
 
     private fun parseMeasureUnit(amount: Double, element: Element): MeasureUnit =
-            MeasureUnit.parseUnit(getMeasureUnitString(amount, element))
+            MeasureUnitUtils.parseUnit(getMeasureUnitString(amount, element), getContext)
 
     private fun parseAmount(element: Element): Double {
         var amount = 0.toDouble()
         val amountElem = element.select(amountTag)
         if (amountElem.size == 1) {
             val amountString = amountElem.text()
-            if (!amountString.contains(RApplication.appContext!!.getString(R.string.by_the_taste))) {
+            if (!amountString.contains(MeasureUnit.Companion.getByTasteString())) {
                 val splited = amountString.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 amount = Utils.getDoubleFromString(splited[0])
             }
-//            if (!amountString.contains(RApplication.Companion.getAppContext().getString(R.string.by_the_taste))) {
+//            if (!amountString.contains(MeasureUnit.Companion.getByTasteString())) {
 //                String[] splited = amountString.split("\\s+");
 //                amount = Utils.getDoubleFromString(splited[0]);
 //            }

@@ -38,6 +38,10 @@ class IngredientsToRecipeActivity : BaseActivity(), EditRecipeView {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show()
     }
 
+    override fun setErrorToast(errorId: Int) {
+        Toast.makeText(this, getString(errorId), Toast.LENGTH_LONG).show()
+    }
+
     override fun showProgressBar() {
         val progressBar = findViewById<View>(R.id.progress_bar_layout)
         progressBar.visibility = View.VISIBLE
@@ -95,7 +99,7 @@ class IngredientsToRecipeActivity : BaseActivity(), EditRecipeView {
                     getString(R.string.and_recipe_name_separator) + " " +
                     ingredList.get(1).name
 
-            3 -> exampleName = ingredList.get(0).name+
+            3 -> exampleName = ingredList.get(0).name +
                     getString(R.string.second_name_separator) + " " +
                     ingredList.get(1).name + " " +
                     getString(R.string.and_recipe_name_separator) + " " +

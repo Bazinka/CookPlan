@@ -101,19 +101,15 @@ class IngredientProviderImpl : IngredientProvider {
 
     override fun removeIngredient(ingredient: Ingredient): Completable {
         return Completable.create { emitter ->
-            if (ingredient.id != null) {
-                val ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE)
-                val ref = ingredRef.child(ingredient.id)
-                ref.removeValue()
-                        .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
-                        .addOnCompleteListener { task ->
-                            if (task.isComplete) {
-                                emitter.onComplete()
-                            }
+            val ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE)
+            val ref = ingredRef.child(ingredient.id)
+            ref.removeValue()
+                    .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
+                    .addOnCompleteListener { task ->
+                        if (task.isComplete) {
+                            emitter.onComplete()
                         }
-            } else {
-                emitter.onError(CookPlanError(RApplication.appContext?.getString(R.string.ingred_remove_error)))
-            }
+                    }
         }
     }
 
@@ -126,8 +122,6 @@ class IngredientProviderImpl : IngredientProvider {
                         if (id != null) {
                             val ref = mutableData.child(id)
                             ref.value = null
-                        } else {
-                            emitter.onError(CookPlanError(RApplication.appContext?.getString(R.string.ingred_remove_error)))
                         }
                     }
                     emitter.onComplete()

@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.ShopListStatus
+import com.cookplan.utils.MeasureUnitUtils
 import com.cookplan.views.dynamic_grid.DynamicGridAdapter
 
 class DishIngredientsGridAdapter(val ingredients: List<Ingredient> = listOf(), val context: Context) : DynamicGridAdapter() {
@@ -34,7 +35,9 @@ class DishIngredientsGridAdapter(val ingredients: List<Ingredient> = listOf(), v
 
         nameTextView.text = ingredient.name
 
-        val amount = ingredient.mainMeasureUnit.toValueString(ingredient.mainAmount)
+        val amount = MeasureUnitUtils.valueToString(
+                ingredient.mainMeasureUnit,
+                ingredient.mainAmount) { amountTextView.context }
 
         if (!amount.isEmpty()) {
             amountTextView.visibility = View.VISIBLE

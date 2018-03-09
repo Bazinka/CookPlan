@@ -11,6 +11,7 @@ import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.ShopListStatus
 import com.cookplan.recipe.view_item.RecipeViewInrgedientsAdapter.MainViewHolder
+import com.cookplan.utils.MeasureUnitUtils
 
 /**
  * Created by DariaEfimova on 18.03.17.
@@ -30,7 +31,9 @@ class RecipeViewInrgedientsAdapter(private val ingredients: MutableList<Ingredie
         if (ingredient.mainAmount > 0.0) {
             holder.amountTextView.visibility = View.VISIBLE
 
-            holder.amountTextView.text = ingredient.mainMeasureUnit.toValueString(ingredient.mainAmount)
+            holder.amountTextView.text = MeasureUnitUtils.valueToString(
+                    ingredient.mainMeasureUnit,
+                    ingredient.mainAmount) { holder.amountTextView.context }
 
         } else {
             holder.amountTextView.visibility = View.GONE

@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
+import com.cookplan.utils.MeasureUnitUtils
 
 /**
  * Created by DariaEfimova on 18.03.17.
@@ -28,7 +29,9 @@ class EditRecipeInrgedientsAdapter(private val removelistener: (Ingredient) -> U
 
         if (ingredient.mainAmount > 1e-8) {
             holder.amountTextView.visibility = View.VISIBLE
-            holder.amountTextView.text = ingredient.mainMeasureUnit.toValueString(ingredient.mainAmount)
+            holder.amountTextView.text = MeasureUnitUtils.valueToString(
+                    ingredient.mainMeasureUnit,
+                    ingredient.mainAmount) { holder.amountTextView.context }
         } else {
             holder.amountTextView.visibility = View.GONE
         }

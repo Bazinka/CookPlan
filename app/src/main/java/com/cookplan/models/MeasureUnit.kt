@@ -1,16 +1,14 @@
 package com.cookplan.models
 
 import com.cookplan.R
-import com.cookplan.RApplication
+import com.cookplan.RApplication.Companion.isCurrentLocaleRus
 import java.io.Serializable
-import java.util.*
-import java.util.regex.Pattern
 
 /**
  * Created by DariaEfimova on 20.03.17.
  */
 
-enum class MeasureUnit private constructor(val id: Int, private val nameRecourseId: Int, private val isItIntValue: Boolean) : Serializable {
+enum class MeasureUnit constructor(val id: Int, private val nameRecourseId: Int, private val isItIntValue: Boolean) : Serializable {
     UNITS(0, R.string.unit_title_main, false),
     GRAMM(1, R.string.gramm_title_main, true),
     KILOGRAMM(2, R.string.kilogramm_title_main, false),
@@ -22,69 +20,13 @@ enum class MeasureUnit private constructor(val id: Int, private val nameRecourse
     BOTTLE(8, R.string.bottle_title_main, false),
     PACKAGE(9, R.string.package_title_main, false);
 
-    override fun toString(): String {
-        return RApplication.appContext?.getString(nameRecourseId) ?: ""
+    fun getNameRecourseId(): Int {
+        return nameRecourseId
     }
 
-    fun toValueString(value: Double): String {
-        val valueString: String
-        if (value < 1e-8 && value > -1e-8) {//value==0.0
-            return RApplication.appContext?.getString(R.string.by_the_taste) ?: ""
-        }
-
-        if (this == KILOGRAMM && value < 1.0) {
-            valueString = getStringOfValue(value * 1000) + " " + GRAMM.toString()
-        } else if (this == GRAMM && value > 1000.0) {
-            valueString = getStringOfValue(value / 1000) + " " + KILOGRAMM.toString()
-        } else if (this == LITRE && value < 1.0) {
-            valueString = getStringOfValue(value * 1000) + " " + MILILITRE.toString()
-        } else if (this == MILILITRE && value > 1000.0) {
-            valueString = getStringOfValue(value / 1000) + " " + LITRE.toString()
-        } else {
-            valueString = getStringOfValue(value) + " " + toString()
-        }
-        return valueString
-    }
-
-    fun toStringForShopList(value: Double): String {
-        val valueString: String
-        if (value < 1e-8 && value > -1e-8) {//value==0.0
-            return ""
-        }
-
-        if (this == KILOGRAMM && value < 1.0) {
-            valueString = getStringOfValue(value * 1000) + " " + GRAMM.toString()
-        } else if (this == GRAMM && value > 1000.0) {
-            valueString = getStringOfValue(value / 1000) + " " + KILOGRAMM.toString()
-        } else if (this == LITRE && value < 1.0) {
-            valueString = getStringOfValue(value * 1000) + " " + MILILITRE.toString()
-        } else if (this == MILILITRE && value > 1000.0) {
-            valueString = getStringOfValue(value / 1000) + " " + LITRE.toString()
-        } else {
-            valueString = getStringOfValue(value) + " " + toString()
-        }
-        return valueString
-    }
-
-    fun getStringOfValue(value: Double): String {
-        val valueString: String
-        if (isItIntValue(value)) {
-            valueString = Math.round(value).toString()
-        } else {
-            if (value > 10.0) {
-                valueString = Math.round(value).toString()
-            } else {
-                valueString = String.format(Locale.getDefault(), "%.1f", value)
-            }
-        }
-        return valueString
-    }
-
-    private fun isItIntValue(value: Double): Boolean {
+    fun isItIntValue(value: Double): Boolean {
         return if (!isItIntValue) {
-            if (value == Math.floor(value) && !java.lang.Double.isInfinite(value)) {
-                true
-            } else false
+            value == Math.floor(value) && !java.lang.Double.isInfinite(value)
         } else {
             true
         }
@@ -209,88 +151,17 @@ enum class MeasureUnit private constructor(val id: Int, private val nameRecourse
             }
         }
 
-        /*
-    This method works only for russian language
-     */
-        fun parseUnit(unitString: String): MeasureUnit {
-            var unit = UNITS
+        private val BY_TASTE_ENG_STRING = "by taste"
+        private val BY_TASTE_RUS_STRING = "по вкусу"
 
-            //try to find UNIT
-            val unitsArray = RApplication.appContext?.resources?.getStringArray(R.array.unit_title_array)
-            var matcher = Pattern.compile(getUnitRegex(unitsArray)).matcher(unitString)
-            if (matcher.find()) {
-                unit = UNITS
-            }
 
-            //try to find GRAMM
-            val grammArray = RApplication.appContext?.resources?.getStringArray(R.array.gramm_title_array)
-            matcher = Pattern.compile(getUnitRegex(grammArray)).matcher(unitString)
-            if (matcher.find()) {
-                unit = GRAMM
+        fun getByTasteString(): String {
+            return if (isCurrentLocaleRus) {
+                BY_TASTE_RUS_STRING
+            } else {
+                BY_TASTE_ENG_STRING
             }
-
-            //try to find KILOGRAMM
-            val kilogrammTitle = RApplication.appContext?.resources?.getStringArray(R.array.kilogramm_title_array)
-            matcher = Pattern.compile(getUnitRegex(kilogrammTitle)).matcher(unitString)
-            if (matcher.find()) {
-                unit = KILOGRAMM
-            }
-
-            //try to find LITRE
-            val litreTitle = RApplication.appContext?.resources?.getStringArray(R.array.litre_title_array)
-            matcher = Pattern.compile(getUnitRegex(litreTitle)).matcher(unitString)
-            if (matcher.find()) {
-                unit = LITRE
-            }
-
-            //try to find MILILITRE
-            val mililitreTitle = RApplication.appContext?.resources?.getStringArray(R.array.mililitre_title_array)
-            matcher = Pattern.compile(getUnitRegex(mililitreTitle)).matcher(unitString)
-            if (matcher.find()) {
-                unit = MILILITRE
-            }
-
-            //try to find CUP
-            val cupTitle = RApplication.appContext?.resources?.getStringArray(R.array.cup_title_array)
-            matcher = Pattern.compile(getUnitRegex(cupTitle)).matcher(unitString)
-            if (matcher.find()) {
-                unit = CUP
-            }
-
-            //try to find PACKAGE
-            val packageTitle = RApplication.appContext?.resources?.getStringArray(R.array.package_title_array)
-            matcher = Pattern.compile(getUnitRegex(packageTitle)).matcher(unitString)
-            if (matcher.find()) {
-                unit = PACKAGE
-            }
-
-            //try to find TEASPOON
-            val teaspoonTitle = RApplication.appContext?.resources?.getStringArray(R.array.teaspoon_title_array)
-            matcher = Pattern.compile(getUnitRegex(teaspoonTitle)).matcher(unitString)
-            if (matcher.find()) {
-                unit = TEASPOON
-            }
-
-            //try to find TABLESPOON
-            val tablespoonTitle = RApplication.appContext?.resources?.getStringArray(R.array.tablespoon_title_array)
-            matcher = Pattern.compile(getUnitRegex(tablespoonTitle)).matcher(unitString)
-            if (matcher.find()) {
-                unit = TABLESPOON
-            }
-
-            //try to find BOTTLE
-            val bottleTitle = RApplication.appContext?.resources?.getStringArray(R.array.bottle_title_array)
-            matcher = Pattern.compile(getUnitRegex(bottleTitle)).matcher(unitString)
-            if (matcher.find()) {
-                unit = BOTTLE
-            }
-            return unit
         }
 
-        private fun getUnitRegex(unitsArray: Array<String>?): String {
-            val unitsArrayString = unitsArray?.joinToString("|", "(", ")") { it }
-
-            return "" + unitsArrayString + "\\.*"
-        }
     }
 }
