@@ -80,6 +80,14 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
                 runSpeakAction()
             }
 
+            val unitAmountEditText = findViewById<EditText>(R.id.unit_amount_edit_text)
+            unitAmountEditText.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    checkFieldsToSaveIngredient()
+                }
+                false
+            }
+
         } else {
             finish()
         }
@@ -328,22 +336,30 @@ class ProductForIngredientActivity : BaseActivity(), ProductForIngredientView {
         val id = item.itemId
 
         if (id == R.id.app_bar_done) {
-
-            val name = findViewById<TextView>(R.id.product_name_text).text.toString()
-            if (!name.isEmpty() || name == getString(R.string.enter_product_title)) {
-                val text = findViewById<EditText>(R.id.unit_amount_edit_text).text.toString()
-                if (!text.isEmpty()) {
-                    saveInrgedient(text.toDouble())
-                } else {
-                    AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
-                            .setMessage(R.string.product_required_field)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show()
-                }
-            }
+            checkFieldsToSaveIngredient()
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun checkFieldsToSaveIngredient() {
+        val name = findViewById<TextView>(R.id.product_name_text).text.toString()
+        if (!name.isEmpty() || name == getString(R.string.enter_product_title)) {
+            val text = findViewById<EditText>(R.id.unit_amount_edit_text).text.toString()
+            if (!text.isEmpty()) {
+                saveInrgedient(text.toDouble())
+            } else {
+                AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle).setTitle(R.string.attention_title)
+                        .setMessage(R.string.product_amount_not_exist)
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                            saveInrgedient(0.toDouble())
+                        }
+                        .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+            }
+        }
     }
 
     private fun saveInrgedient(amount: Double) {
