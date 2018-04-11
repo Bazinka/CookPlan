@@ -34,7 +34,7 @@ open class ApproveIngredientsRecyclerAdapter(var recipe: Recipe,
     private val values: MutableList<String> = recipeToingredientsMap.keys.toMutableList()
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == 0 && recipe.id == null) {
+        return if (position == 0 && recipe.id.isNullOrEmpty()) {
             RECIPE.id
         } else {
             INGREDIENT.id
@@ -65,7 +65,7 @@ open class ApproveIngredientsRecyclerAdapter(var recipe: Recipe,
     }
 
     override fun getItemCount(): Int {
-        return if (recipe.id == null) values.size + 1 else values.size
+        return if (recipe.id.isNullOrEmpty()) values.size + 1 else values.size
     }
 
     fun updateRecipe(newRecipe: Recipe) {
@@ -76,7 +76,7 @@ open class ApproveIngredientsRecyclerAdapter(var recipe: Recipe,
     fun removeIngredientItem(key: String) {
         values.remove(key)
         recipeToingredientsMap.remove(key)
-        if (values.size == 0 && recipe.id != null) {
+        if (values.size == 0 && !recipe.id.isNullOrEmpty()) {
             allItemsDone()
         } else {
             notifyDataSetChanged()
@@ -112,7 +112,7 @@ open class ApproveIngredientsRecyclerAdapter(var recipe: Recipe,
         with(ingredientViewHolder.saveButton) {
             tag = key
             setOnClickListener {
-                if (recipe.id != null) {
+                if (!recipe.id.isNullOrEmpty()) {
                     if (adapter.selectedIngred != null) {
                         val ingredient = adapter.selectedIngred
                         ingredient?.recipeId = recipe.id

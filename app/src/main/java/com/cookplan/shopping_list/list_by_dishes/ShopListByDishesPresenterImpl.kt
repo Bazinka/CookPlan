@@ -125,8 +125,7 @@ class ShopListByDishesPresenterImpl(private val mainView: ShopListByDishesView?,
     }
 
     override fun recipeIngredBought(recipe: Recipe, ingredientList: List<Ingredient>) {
-        val isNeedToRemove = recipe.id == null
-        if (isNeedToRemove) {
+        if (recipe.id.isNullOrEmpty()) {
             ingredientDataProvider.removeIngredientList(ingredientList)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

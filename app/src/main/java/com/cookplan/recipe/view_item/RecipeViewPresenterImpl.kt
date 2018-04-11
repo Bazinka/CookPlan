@@ -27,7 +27,7 @@ class RecipeViewPresenterImpl(private val mainView: RecipeView?, private var rec
     }
 
     override fun getIngredientList() {
-        if (recipe.id != null) {
+        if (!recipe.id.isNullOrEmpty()) {
             disposables.add(dataProvider.getIngredientListByRecipeId(recipe.id ?: String())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

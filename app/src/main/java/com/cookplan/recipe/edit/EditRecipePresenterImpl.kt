@@ -32,7 +32,7 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
 //            newRecipe.name = if (!newName.isEmpty()) newName else newRecipe.name
 //            newRecipe.desc = newDesc ?: newRecipe.desc
 //        }
-        if (recipe.id == null) {
+        if (recipe.id.isNullOrEmpty()) {
             recipeDataProvider.createRecipe(recipe)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -75,7 +75,7 @@ open class EditRecipePresenterImpl(private val mainView: EditRecipeView?) : Edit
 
     override fun removeRecipe(recipe: Recipe, ingredients: List<Ingredient>) {
 
-        if (recipe.id != null) {
+        if (!recipe.id.isNullOrEmpty()) {
             for (ingredient in ingredients) {
                 removeIngredient(ingredient)
             }
