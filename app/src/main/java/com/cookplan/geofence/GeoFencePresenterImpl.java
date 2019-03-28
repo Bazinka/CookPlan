@@ -191,20 +191,20 @@ public class GeoFencePresenterImpl implements GeoFencePresenter,
             return;
         }
         try {
-            LocationServices.GeofencingApi.addGeofences(
-                    mGoogleApiClient,
-                    getGeofencingRequest(getGeoFence(company, radius, millisec)),
-                    getGeofencePendingIntent()
-            ).setResultCallback(status -> {
-                if (status.isSuccess()) {
-                    company.setAddedToGeoFence(true);
-                    updateCompany(company);
-                } else {
-                    if (mainView != null) {
-                        mainView.setGeoFenceError(GeofenceErrorMessages.getErrorString(status.getStatusCode()));
-                    }
-                }
-            });
+            //            LocationServices.GeofencingApi.addGeofences(
+            //                    mGoogleApiClient,
+            //                    getGeofencingRequest(getGeoFence(company, radius, millisec)),
+            //                    getGeofencePendingIntent()
+            //            ).setResultCallback(status -> {
+            //                if (status.isSuccess()) {
+            //                    company.setAddedToGeoFence(true);
+            //                    updateCompany(company);
+            //                } else {
+            //                    if (mainView != null) {
+            //                        mainView.setGeoFenceError(GeofenceErrorMessages.getErrorString(status.getStatusCode()));
+            //                    }
+            //                }
+            //            });
         } catch (SecurityException securityException) {
             logSecurityException(securityException);
         }

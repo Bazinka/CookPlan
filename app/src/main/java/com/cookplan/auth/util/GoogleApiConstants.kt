@@ -1,6 +1,7 @@
 package com.cookplan.auth.util
 
-import android.support.annotation.RestrictTo
+import androidx.annotation.RestrictTo
+
 
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 object GoogleApiConstants {

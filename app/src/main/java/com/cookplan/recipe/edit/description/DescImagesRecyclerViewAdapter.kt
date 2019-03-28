@@ -1,11 +1,11 @@
 package com.cookplan.recipe.edit.description
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cookplan.R
 import com.cookplan.utils.FirebaseImageLoader
@@ -27,9 +27,9 @@ class DescImagesRecyclerViewAdapter(private val images: MutableList<String> = mu
 
         val imageRef = FirebaseStorage.getInstance().getReference(imageId)
         Glide.with(uploadImageHolder.context)
-                .using(FirebaseImageLoader())
+//                .using(FirebaseImageLoader())
                 .load(imageRef)
-                .centerCrop()
+//                .centerCrop()
                 .into(uploadImageHolder.imageView)
         with(uploadImageHolder.imageView) {
             setOnClickListener { clicklistener(imageId) }

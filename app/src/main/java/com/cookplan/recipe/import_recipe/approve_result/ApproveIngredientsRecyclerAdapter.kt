@@ -1,15 +1,15 @@
 package com.cookplan.recipe.import_recipe.approve_result
 
 import android.content.Context
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cookplan.R
 import com.cookplan.add_ingredient_view.ProductCategoriesSpinnerAdapter
 import com.cookplan.models.*

@@ -93,7 +93,7 @@ class RecipeProviderImpl : RecipeProvider {
             values.put(DatabaseConstants.DATABASE_RECIPE_DESC_IMAGE_URL_LIST_FIELD, recipe.descImageUrls)
             values.put(DatabaseConstants.DATABASE_IMAGE_URL_LIST_FIELD, recipe.imageUrls)
             val recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE)
-            recipeRef.child(recipe.id).updateChildren(values) { databaseError, databaseReference ->
+            recipeRef.child(recipe.id!!).updateChildren(values) { databaseError, databaseReference ->
                 if (databaseError != null) {
                     emitter?.onError(CookPlanError(databaseError))
                 } else {
@@ -130,7 +130,7 @@ class RecipeProviderImpl : RecipeProvider {
     override fun removeRecipe(recipe: Recipe): Completable {
         return Completable.create { emitter ->
             val recipeRef = database.child(DatabaseConstants.DATABASE_RECIPE_TABLE)
-            val ref = recipeRef.child(recipe.id)
+            val ref = recipeRef.child(recipe.id!!)
             ref.removeValue()
                     .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
                     .addOnCompleteListener { task ->

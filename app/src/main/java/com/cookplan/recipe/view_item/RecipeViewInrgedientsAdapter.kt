@@ -1,12 +1,11 @@
 package com.cookplan.recipe.view_item
 
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.ShopListStatus
@@ -18,7 +17,7 @@ import com.cookplan.utils.MeasureUnitUtils
  */
 
 class RecipeViewInrgedientsAdapter(private val ingredients: MutableList<Ingredient> = mutableListOf(),
-                                   private val itemSelectListener: (Ingredient) -> Unit) : Adapter<MainViewHolder>() {
+                                   private val itemSelectListener: (Ingredient) -> Unit) : RecyclerView.Adapter<MainViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder =
             MainViewHolder(LayoutInflater.from(parent.context)

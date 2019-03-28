@@ -3,17 +3,17 @@ package com.cookplan.images
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.viewpager.widget.ViewPager
 import com.cookplan.BaseActivity
 import com.cookplan.R
+import com.google.android.material.snackbar.Snackbar
 
 class ImageEditActivity : BaseActivity(), ChangeImagesView, ActivityCompat.OnRequestPermissionsResultCallback {
 

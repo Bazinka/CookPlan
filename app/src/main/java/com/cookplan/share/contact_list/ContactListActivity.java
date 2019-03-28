@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +17,7 @@ import com.cookplan.BaseActivity;
 import com.cookplan.R;
 import com.cookplan.models.Contact;
 import com.cookplan.utils.PermissionUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 

@@ -3,8 +3,6 @@ package com.cookplan.todo_list.edit_item;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +19,8 @@ import com.cookplan.models.Company;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 import com.cookplan.views.ChooseColorView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

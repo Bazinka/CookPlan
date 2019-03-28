@@ -11,15 +11,15 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearLayoutManager.HORIZONTAL
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cookplan.BaseFragment
 import com.cookplan.R
 import com.cookplan.images.ChangeImagesPresenter
@@ -120,7 +120,8 @@ class EditRecipeDescFragment : BaseFragment(), EditRecipeDescView, ChangeImagesV
         recyclerView?.layoutManager = layoutManager
         recyclerView?.itemAnimator = DefaultItemAnimator()
 
-        val imageIds = arguments?.getStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY) ?: ArrayList<String>()
+        val imageIds = arguments?.getStringArrayList(RECIPE_DESCRIPTION_IMAGES_KEY)
+                ?: ArrayList<String>()
         imageListAdapter = DescImagesRecyclerViewAdapter(imageIds.toMutableList()) {
             val intent = Intent(activity, ImageEditActivity::class.java)
             intent.putStringArrayListExtra(ImageEditActivity.START_IMAGE_URL_KEY,

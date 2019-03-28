@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.graphics.drawable.VectorDrawableCompat;
+import androidx.annotation.DrawableRes;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 
 /**

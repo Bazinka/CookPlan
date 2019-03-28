@@ -102,7 +102,7 @@ class IngredientProviderImpl : IngredientProvider {
     override fun removeIngredient(ingredient: Ingredient): Completable {
         return Completable.create { emitter ->
             val ingredRef = database.child(DatabaseConstants.DATABASE_INRGEDIENT_TABLE)
-            val ref = ingredRef.child(ingredient.id)
+            val ref = ingredRef.child(ingredient.id!!)
             ref.removeValue()
                     .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
                     .addOnCompleteListener { task ->
@@ -142,7 +142,7 @@ class IngredientProviderImpl : IngredientProvider {
             ingredientRef.runTransaction(object : Transaction.Handler {
                 override fun doTransaction(mutableData: MutableData): Transaction.Result {
                     ingredientRef
-                            .child(ingredient.id)
+                            .child(ingredient.id!!)
                             .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
                             .setValue(ingredient.shopListStatus)
                     return Transaction.success(mutableData)
@@ -163,7 +163,7 @@ class IngredientProviderImpl : IngredientProvider {
                 override fun doTransaction(mutableData: MutableData): Transaction.Result {
                     for (ingred in ingredients) {
                         mutableData
-                                .child(ingred.id)
+                                .child(ingred.id!!)
                                 .child(DatabaseConstants.DATABASE_SHOP_LIST_STATUS_FIELD)
                                 .value = ingred.shopListStatus
                     }

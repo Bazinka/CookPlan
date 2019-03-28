@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
-import com.cookplan.utils.FirebaseImageLoader;
 import com.cookplan.utils.PermissionUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +28,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
 
 public class EditCompanyActivity extends BaseActivity implements EditCompanyView {
 
@@ -172,10 +172,11 @@ public class EditCompanyActivity extends BaseActivity implements EditCompanyView
             ImageView ii = new ImageView(this);
             ii.setPadding(10, 0, 10, 0);
             Glide.with(this)
-                    .using(new FirebaseImageLoader())
-                    .load(pref).placeholder(R.drawable.logo)
-                    .centerCrop()
-                    .crossFade()
+                    //                    .using(new FirebaseImageLoader())
+                    .load(pref)
+                    //                    .placeholder(R.drawable.logo)
+                    //                    .centerCrop()
+                    //                    .crossFade()
                     .into(ii);
             ll.addView(ii);
         }

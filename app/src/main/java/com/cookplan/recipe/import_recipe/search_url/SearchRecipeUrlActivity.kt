@@ -3,19 +3,19 @@ package com.cookplan.recipe.import_recipe.search_url
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.models.network.GoogleRecipe
 import com.cookplan.recipe.import_recipe.web_browser.WebBrowserActivity
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class SearchRecipeUrlActivity : BaseActivity(), SearchRecipeUrlView {

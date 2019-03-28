@@ -1,8 +1,9 @@
 package com.cookplan.utils;
 
 import android.graphics.Rect;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * RecyclerView item decoration - give equal margin around grid item

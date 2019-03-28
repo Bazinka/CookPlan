@@ -1,12 +1,11 @@
 package com.cookplan.recipe.import_recipe.approve_result
 
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.recipe.import_recipe.approve_result.ParsedIngredientsRecyclerAdapter.ParsedIngredientsViewHolder
@@ -14,7 +13,7 @@ import com.cookplan.utils.MeasureUnitUtils
 
 
 class ParsedIngredientsRecyclerAdapter(val ingredients: List<Ingredient> = listOf(),
-                                       private val itemSelect: (Ingredient) -> Unit) : Adapter<ParsedIngredientsViewHolder>() {
+                                       private val itemSelect: (Ingredient) -> Unit) : RecyclerView.Adapter<ParsedIngredientsViewHolder>() {
 
     var selectedIngred: Ingredient? = null
 

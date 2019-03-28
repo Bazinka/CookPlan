@@ -127,7 +127,7 @@ data class Product(var id: String? = null,
                     for (childUnit in child.children) {
                         if (childUnit.value is Map<*, *>) {
                             try {
-                                product.ratioMeasureList.add(childUnit.getValue(RatioMeasure::class.java))
+                                product.ratioMeasureList.add(childUnit.getValue(RatioMeasure::class.java)!!)
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
@@ -147,7 +147,7 @@ data class Product(var id: String? = null,
                     product.companyIdList = java.util.ArrayList()
                     for (childUnit in child.children) {
                         if (childUnit.value is String) {
-                            product.companyIdList.add(childUnit.getValue(String::class.java))
+                            product.companyIdList.add(childUnit.getValue(String::class.java)!!)
                         }
                     }
                 }

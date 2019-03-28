@@ -2,8 +2,6 @@ package com.cookplan.companies.review.todo_fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,9 @@ import com.cookplan.models.ToDoItem;
 import com.cookplan.todo_list.edit_item.EditToDoItemActivity;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CompanyToDoListFragment extends BaseFragment implements CompanyToDoListView {
 

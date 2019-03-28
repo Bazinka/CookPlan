@@ -1,11 +1,11 @@
 package com.cookplan.main
 
 import android.content.Context
-import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.viewpager.widget.PagerAdapter
 
 import com.bumptech.glide.Glide
 import com.cookplan.R
@@ -33,9 +33,9 @@ class ImageViewPagerAdapter(private val imageUrls: List<String>, private val con
         } else {
             val imageRef = FirebaseStorage.getInstance().getReference(url)
             Glide.with(context)
-                    .using(FirebaseImageLoader())
+//                    .using(FirebaseImageLoader())
                     .load(imageRef)
-                    .centerCrop()
+//                    .centerCrop()
                     .into(imageView)
         }
         collection.addView(layout)

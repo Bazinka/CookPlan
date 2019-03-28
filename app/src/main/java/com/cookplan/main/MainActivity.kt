@@ -3,18 +3,16 @@ package com.cookplan.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.design.widget.TabLayout
-import android.support.v4.view.GravityCompat
-import android.support.v4.view.ViewPager
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.cookplan.BaseActivity
 import com.cookplan.R
@@ -25,6 +23,8 @@ import com.cookplan.share.add_users.ShareDataFragment
 import com.cookplan.shopping_list.list_by_dishes.ShopListByDishesFragment
 import com.cookplan.shopping_list.total_list.TotalShoppingListFragment
 import com.cookplan.todo_list.ToDoListFragment
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -63,7 +63,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val photoImageView = headerView.findViewById<ImageView>(R.id.user_photo_imageView)
         Glide.with(this)
                 .load(user?.photoUrl?.path)
-                .placeholder(R.drawable.main_drawable)
+//                .placeholder(R.drawable.main_drawable)
                 .into(photoImageView)
 
         val nameTextView = headerView.findViewById<TextView>(R.id.user_name_textView)

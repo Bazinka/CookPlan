@@ -3,12 +3,12 @@ package com.cookplan.add_ingredient_view
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.cookplan.R
 import com.cookplan.add_ingredient_view.ProductForIngredientListAdapter.ViewHolder
 import com.cookplan.models.Product

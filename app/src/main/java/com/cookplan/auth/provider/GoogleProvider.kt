@@ -18,11 +18,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
+import androidx.fragment.app.FragmentActivity
 import com.cookplan.R
 import com.cookplan.auth.util.GoogleApiConstants
 import com.google.android.gms.auth.api.Auth

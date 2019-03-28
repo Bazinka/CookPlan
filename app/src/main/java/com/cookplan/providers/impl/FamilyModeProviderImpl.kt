@@ -37,8 +37,8 @@ class FamilyModeProviderImpl : FamilyModeProvider {
                 val sharedInfoList = ArrayList<ShareUserInfo>()
                 for (itemSnapshot in dataSnapshot.children) {
                     val userInfo = itemSnapshot.getValue(ShareUserInfo::class.java)
-                    userInfo.id = itemSnapshot.key
-                    sharedInfoList.add(userInfo)
+                    userInfo?.id = itemSnapshot.key
+                    sharedInfoList.add(userInfo!!)
                 }
                 subjectShareUserList.onNext(sharedInfoList)
             }
@@ -73,7 +73,7 @@ class FamilyModeProviderImpl : FamilyModeProvider {
                         if (dataSnapshot.childrenCount == 1L) {
                             for (itemSnapshot in dataSnapshot.children) {
                                 shareUserInfo = itemSnapshot.getValue(ShareUserInfo::class.java)
-                                shareUserInfo.id = itemSnapshot.key
+                                shareUserInfo?.id = itemSnapshot.key
                             }
                             emitter.onSuccess(shareUserInfo)
                         } else {
@@ -114,7 +114,7 @@ class FamilyModeProviderImpl : FamilyModeProvider {
             values.put(DatabaseConstants.DATABASE_SHARED_CLIENT_EMAILS_FIELD, dataSharedItem.clientUserEmailList)
 
             userShareRef
-                    .child(dataSharedItem.id)
+                    .child(dataSharedItem.id!!)
                     .updateChildren(values
                     ) { databaseError, reference ->
                         if (databaseError != null) {
@@ -136,7 +136,7 @@ class FamilyModeProviderImpl : FamilyModeProvider {
 
                         override fun onSuccess(shareUserInfo: ShareUserInfo) {
                             val userShareRef = database.child(DatabaseConstants.DATABASE_SHARE_TO_GOOGLE_USER_TABLE)
-                            val ref = userShareRef.child(shareUserInfo.id)
+                            val ref = userShareRef.child(shareUserInfo.id!!)
                             ref.removeValue()
                                     .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
                                     .addOnCompleteListener { task ->

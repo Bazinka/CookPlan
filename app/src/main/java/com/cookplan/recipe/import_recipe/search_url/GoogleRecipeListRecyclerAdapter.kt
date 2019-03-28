@@ -1,12 +1,11 @@
 package com.cookplan.recipe.import_recipe.search_url
 
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cookplan.R
 import com.cookplan.models.network.GoogleRecipe
@@ -15,7 +14,7 @@ import com.cookplan.recipe.import_recipe.search_url.GoogleRecipeListRecyclerAdap
 
 class GoogleRecipeListRecyclerAdapter(private val values: MutableList<GoogleRecipe>,
                                       private val loadNextDatalistener: (Int) -> Unit,
-                                      private val openUrlListener: (String) -> Unit) : Adapter<GoogleRecipeViewHolder>() {
+                                      private val openUrlListener: (String) -> Unit) : RecyclerView.Adapter<GoogleRecipeViewHolder>() {
     private var needToLoadNextPart: Boolean = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoogleRecipeViewHolder =
@@ -30,8 +29,8 @@ class GoogleRecipeListRecyclerAdapter(private val values: MutableList<GoogleReci
         if (item.imageUrl != null) {
             Glide.with(holderGoogleRecipe.imageView.context)
                     .load(item.imageUrl)
-                    .placeholder(R.drawable.ic_default_recipe_image)
-                    .centerCrop()
+//                    .placeholder(R.drawable.ic_default_recipe_image)
+//                    .centerCrop()
                     .into(holderGoogleRecipe.imageView)
         }
 

@@ -2,17 +2,17 @@ package com.cookplan.recipe.import_recipe.approve_result
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.Recipe
 import com.cookplan.recipe.view_item.RecipeViewActivity
+import com.google.android.material.snackbar.Snackbar
 
 class ImportRecipeActivity : BaseActivity(), ImportRecipeView {
 

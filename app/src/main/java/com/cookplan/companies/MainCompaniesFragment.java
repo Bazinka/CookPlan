@@ -3,8 +3,6 @@ package com.cookplan.companies;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,9 @@ import com.cookplan.R;
 import com.cookplan.companies.list.CompanyListFragment;
 import com.cookplan.companies.map.search_new_point.SearchNewPointActivity;
 import com.cookplan.companies.review.CompanyReviewActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.fragment.app.FragmentTransaction;
 
 public class MainCompaniesFragment extends BaseFragment {
 

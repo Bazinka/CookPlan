@@ -1,20 +1,20 @@
 package com.cookplan.todo_list;
 
 import android.graphics.Paint;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.models.ToDoCategory;
 import com.cookplan.models.ToDoItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.cookplan.models.ToDoItemStatus.HAVE_DONE;
 import static com.cookplan.models.ToDoItemStatus.NEED_TO_DO;

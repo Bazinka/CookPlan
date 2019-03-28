@@ -69,7 +69,7 @@ class CompanyProviderImpl : CompanyProvider {
             items.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var company = dataSnapshot.getValue(Company::class.java)
-                    company.id = dataSnapshot.key
+                    company?.id = dataSnapshot.key
                     emitter?.onSuccess(company)
                 }
 
@@ -104,7 +104,7 @@ class CompanyProviderImpl : CompanyProvider {
             values.put(DatabaseConstants.DATABASE_COMPANY_LONGITUDE_FIELD, company.longitude)
             values.put(DatabaseConstants.DATABASE_ADDED_TO_GEOFENCE_FIELD, company.isAddedToGeoFence)
             val companyItemRef = database.child(DatabaseConstants.DATABASE_COMPANY_TABLE)
-            companyItemRef.child(company.id).updateChildren(values) { databaseError, databaseReference ->
+            companyItemRef.child(company.id!!).updateChildren(values) { databaseError, databaseReference ->
                 if (databaseError != null) {
                     emitter?.onError(CookPlanError(databaseError))
                 } else {
@@ -118,7 +118,7 @@ class CompanyProviderImpl : CompanyProvider {
         return Completable.create { emitter ->
             if (company.id != null) {
                 val companyItemRef = database.child(DatabaseConstants.DATABASE_COMPANY_TABLE)
-                val ref = companyItemRef.child(company.id)
+                val ref = companyItemRef.child(company.id!!)
                 ref.removeValue()
                         .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
                         .addOnCompleteListener { task ->

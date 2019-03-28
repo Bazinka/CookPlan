@@ -2,11 +2,11 @@ package com.cookplan.recipe.steps_mode
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.WindowManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.models.Ingredient

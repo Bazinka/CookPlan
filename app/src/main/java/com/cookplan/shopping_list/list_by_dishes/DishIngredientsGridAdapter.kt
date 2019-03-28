@@ -5,10 +5,10 @@ import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.cookplan.R
 import com.cookplan.models.Ingredient
 import com.cookplan.models.ShopListStatus

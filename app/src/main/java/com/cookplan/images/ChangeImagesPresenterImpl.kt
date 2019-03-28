@@ -2,7 +2,7 @@ package com.cookplan.images
 
 import android.app.Activity
 import android.net.Uri
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import com.cookplan.providers.ImageProvider
 import com.cookplan.providers.ProviderFactory
 import com.cookplan.utils.Utils

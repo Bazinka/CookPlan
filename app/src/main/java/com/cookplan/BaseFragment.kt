@@ -1,11 +1,11 @@
 package com.cookplan
 
 import android.content.Context
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Created by DariaEfimova on 13.10.17.

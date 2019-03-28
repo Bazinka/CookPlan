@@ -1,14 +1,13 @@
 package com.cookplan.images
 
-import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.cookplan.R
-import com.cookplan.utils.FirebaseImageLoader
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
@@ -26,9 +25,9 @@ class RecipeDescImagesPagerAdapter(private val imageIds: MutableList<String> = m
         val imageId = imageIds[position]
         val imageRef = FirebaseStorage.getInstance().getReference(imageId)
         Glide.with(collection.context)
-                .using(FirebaseImageLoader())
+//                .using(FirebaseImageLoader())
                 .load(imageRef)
-                .centerCrop()
+//                .cent erCrop()
                 .into(imageView)
         val numberTextView = layout.findViewById<TextView>(R.id.number_image_textview)
         numberTextView.text = (position + 1).toString() + " " +

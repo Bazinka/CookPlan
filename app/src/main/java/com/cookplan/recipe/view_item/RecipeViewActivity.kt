@@ -4,19 +4,17 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearLayoutManager.HORIZONTAL
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.models.Ingredient
@@ -32,6 +30,8 @@ import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.REC
 import com.cookplan.recipe.edit.description.EditRecipeDescActivity.Companion.RECIPE_DESCRIPTION_KEY
 import com.cookplan.recipe.edit.ingredients.EditRecipeIngredientsActivity
 import com.cookplan.recipe.steps_mode.RecipeStepsViewActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
@@ -83,10 +83,12 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
 
                 if (!isAllIngredientsChecked) {
                     isAllIngredientsChecked = true
-                    viewPresenter?.changeIngredListShopStatus(adapter?.getIngredients() ?: listOf(), NEED_TO_BUY)
+                    viewPresenter?.changeIngredListShopStatus(adapter?.getIngredients()
+                            ?: listOf(), NEED_TO_BUY)
                 } else {
                     isAllIngredientsChecked = false
-                    viewPresenter?.changeIngredListShopStatus(adapter?.getIngredients() ?: listOf(), NONE)
+                    viewPresenter?.changeIngredListShopStatus(adapter?.getIngredients()
+                            ?: listOf(), NONE)
                 }
             }
 
@@ -143,7 +145,8 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
                             .setMessage(R.string.are_you_sure_remove_recipe)
                             .setPositiveButton(android.R.string.ok) { _, _ ->
                                 findViewById<View>(R.id.progress_bar_layout)?.visibility = View.VISIBLE
-                                editPresenter?.removeRecipe(recipe, adapter?.getIngredients() ?: listOf())
+                                editPresenter?.removeRecipe(recipe, adapter?.getIngredients()
+                                        ?: listOf())
                             }
                             .setNegativeButton(android.R.string.cancel, null)
                             .show()
@@ -285,10 +288,12 @@ class RecipeViewActivity : BaseActivity(), RecipeView, EditRecipeView {
             when (requestCode) {
                 CHANGE_DESCRIPTION_REQUEST -> {
                     val recipe = viewPresenter?.getRecipe()
-                    val text = data?.getStringExtra(CHANGE_DESCRIPTION_KEY) ?: getString(R.string.recipe_desc_is_not_needed_title)
+                    val text = data?.getStringExtra(CHANGE_DESCRIPTION_KEY)
+                            ?: getString(R.string.recipe_desc_is_not_needed_title)
                     recipe?.desc = text
 
-                    recipe?.descImageUrls = data?.getStringArrayListExtra(CHANGE_DESCRIPTION_IMAGES_KEY) ?: arrayListOf()
+                    recipe?.descImageUrls = data?.getStringArrayListExtra(CHANGE_DESCRIPTION_IMAGES_KEY)
+                            ?: arrayListOf()
                     if (recipe != null) {
                         editPresenter?.saveRecipe(recipe)
                         setDescriptionPart(recipe.desc, recipe.descImageUrls)

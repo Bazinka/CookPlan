@@ -2,13 +2,13 @@ package com.cookplan.recipe.create.description
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.models.Recipe
@@ -40,7 +40,7 @@ class CreateDescRecipeActivity : BaseActivity(), EditRecipeView {
 
             fragment = EditRecipeDescFragment.newInstance()
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, fragment)
+            transaction.replace(R.id.fragment_container, fragment!!)
             transaction.commit()
 
             editRecipePresenter = EditRecipePresenterImpl(this)

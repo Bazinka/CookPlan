@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Environment
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import com.cookplan.R
 import com.cookplan.utils.Utils
 import com.googlecode.tesseract.android.TessBaseAPI

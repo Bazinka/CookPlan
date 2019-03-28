@@ -2,7 +2,7 @@ package com.cookplan.product_list.multiselect;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.models.Product;
 import com.cookplan.models.ProductCategory;
 

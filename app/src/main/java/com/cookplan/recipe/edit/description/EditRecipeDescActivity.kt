@@ -28,7 +28,7 @@ class EditRecipeDescActivity : BaseActivity() {
 
             fragment = EditRecipeDescFragment.newInstance(desc, savedImageIdList)
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, fragment)
+            transaction.replace(R.id.fragment_container, fragment!!)
             transaction.commit()
 
         } else {

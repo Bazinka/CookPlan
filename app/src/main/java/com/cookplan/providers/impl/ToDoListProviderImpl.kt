@@ -42,8 +42,8 @@ class ToDoListProviderImpl : ToDoListProvider {
                         val toDoItemCategoriesList = mutableListOf<ToDoCategory>()
                         for (itemSnapshot in dataSnapshot.children) {
                             val toDoCategory = itemSnapshot.getValue(ToDoCategory::class.java)
-                            toDoCategory.id = itemSnapshot.key
-                            toDoItemCategoriesList.add(toDoCategory)
+                            toDoCategory?.id = itemSnapshot.key
+                            toDoItemCategoriesList.add(toDoCategory!!)
                         }
                         subjectToDoCategoriesList.onNext(toDoItemCategoriesList)
                     }
@@ -63,8 +63,8 @@ class ToDoListProviderImpl : ToDoListProvider {
                         val todoList = mutableListOf<ToDoItem>()
                         for (itemSnapshot in dataSnapshot.children) {
                             val toDoItem = itemSnapshot.getValue(ToDoItem::class.java)
-                            toDoItem.id = itemSnapshot.key
-                            todoList.add(toDoItem)
+                            toDoItem?.id = itemSnapshot.key
+                            todoList.add(toDoItem!!)
                         }
                         subjectToDoList.onNext(todoList)
                     }
@@ -131,7 +131,7 @@ class ToDoListProviderImpl : ToDoListProvider {
             values.put(DatabaseConstants.DATABASE_CATEGORY_ID_FIELD, item.categoryId ?: String())
             values.put(DatabaseConstants.DATABASE_TO_DO_STATUS_FIELD, item.toDoStatus)
             val todoItemRef = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE)
-            todoItemRef.child(item.id).updateChildren(values) { databaseError, databaseReference ->
+            todoItemRef.child(item.id!!).updateChildren(values) { databaseError, databaseReference ->
                 if (databaseError != null) {
                     emitter?.onError(CookPlanError(databaseError))
                 } else {
@@ -144,7 +144,7 @@ class ToDoListProviderImpl : ToDoListProvider {
     override fun removeToDoItem(item: ToDoItem): Completable {
         return Completable.create { emitter ->
             val todoItemRef = database.child(DatabaseConstants.DATABASE_TO_DO_ITEMS_TABLE)
-            val ref = todoItemRef.child(item.id)
+            val ref = todoItemRef.child(item.id!!)
             ref.removeValue()
                     .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
                     .addOnCompleteListener { task ->
@@ -158,7 +158,7 @@ class ToDoListProviderImpl : ToDoListProvider {
     override fun removeToDoCategory(category: ToDoCategory): Completable {
         return Completable.create { emitter ->
             val todoItemRef = database.child(DatabaseConstants.DATABASE_TO_DO_CATEGORY_ITEMS_TABLE)
-            val ref = todoItemRef.child(category.id)
+            val ref = todoItemRef.child(category.id!!)
             ref.removeValue()
                     .addOnFailureListener { exeption -> emitter.onError(CookPlanError(exeption.message)) }
                     .addOnCompleteListener { task ->

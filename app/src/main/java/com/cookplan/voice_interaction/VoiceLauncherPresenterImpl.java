@@ -1,10 +1,9 @@
 package com.cookplan.voice_interaction;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.cookplan.R;
-import com.cookplan.RApplication;
 import com.cookplan.models.CookPlanError;
 import com.cookplan.models.Ingredient;
 import com.cookplan.models.Product;

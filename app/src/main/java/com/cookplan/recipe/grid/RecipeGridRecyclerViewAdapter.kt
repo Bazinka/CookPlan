@@ -1,24 +1,22 @@
 package com.cookplan.recipe.grid
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cookplan.R
 import com.cookplan.models.Recipe
 import com.cookplan.recipe.grid.RecipeGridRecyclerViewAdapter.ViewHolder
-import com.cookplan.utils.FirebaseImageLoader
 import com.cookplan.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
 class RecipeGridRecyclerViewAdapter(private val clicklistener: (Recipe) -> Any,
-                                    private val context: Context) : Adapter<ViewHolder>() {
+                                    private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     private val mValues: MutableList<Recipe> = mutableListOf()
 
@@ -41,17 +39,17 @@ class RecipeGridRecyclerViewAdapter(private val clicklistener: (Recipe) -> Any,
             if (Utils.isStringUrl(recipe.imageUrls[0])) {
                 Glide.with(context)
                         .load(recipe.imageUrls[0])
-                        .placeholder(R.drawable.ic_default_recipe_image)
-                        .centerCrop()
+//                        .placeholder(R.drawable.ic_default_recipe_image)
+//                        .centerCrop()
                         .into(holder.recipeImageView)
             } else {
                 val imageRef = FirebaseStorage.getInstance().getReference(recipe.imageUrls[0])
                 Glide.with(context)
-                        .using(FirebaseImageLoader())
+//                        .using(FirebaseImageLoader())
                         .load(imageRef)
-                        .placeholder(R.drawable.ic_default_recipe_image)
-                        .centerCrop()
-                        .crossFade()
+//                        .placeholder(R.drawable.ic_default_recipe_image)
+//                        .centerCrop()
+//                        .crossFade()
                         .into(holder.recipeImageView)
             }
         } else {

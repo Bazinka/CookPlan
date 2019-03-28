@@ -63,7 +63,7 @@ class IngredientsToRecipeActivity : BaseActivity(), EditRecipeView {
 
         ingredientsFragment = EditRecipeIngredientsFragment.newInstance(recipe)
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, ingredientsFragment)
+        transaction.replace(R.id.fragment_container, ingredientsFragment!!)
         transaction.commit()
     }
 

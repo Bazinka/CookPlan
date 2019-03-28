@@ -117,7 +117,7 @@ class ProductProviderImpl : ProductProvider {
             values.put(DatabaseConstants.DATABASE_PRODUCT_RUS_NAME_FIELD, product.rusName)
             values.put(DatabaseConstants.DATABASE_PRODUCT_ENG_NAME_FIELD, product.engName)
             val productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE)
-            productRef.child(product.id).updateChildren(values) { databaseError, databaseReference ->
+            productRef.child(product.id!!).updateChildren(values) { databaseError, databaseReference ->
                 if (databaseError != null) {
                     emitter?.onError(CookPlanError(databaseError))
                 } else {
@@ -132,7 +132,7 @@ class ProductProviderImpl : ProductProvider {
             val values = mutableMapOf<String, Any>()
             values.put(DatabaseConstants.DATABASE_COMPANY_ID_LIST_FIELD, product.companyIdList)
             val productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE)
-            productRef.child(product.id).updateChildren(values) { databaseError, databaseReference ->
+            productRef.child(product.id!!).updateChildren(values) { databaseError, databaseReference ->
                 if (databaseError != null) {
                     emitter?.onError(CookPlanError(databaseError))
                 } else {
@@ -143,21 +143,21 @@ class ProductProviderImpl : ProductProvider {
     }
 
     override fun getProductByName(name: String): Observable<Product> {
-        return subjectProductList.map { productList ->
+        return subjectProductList.map {
             var productRes: Product? = null
-            for (product in productList) {
+            for (product in it) {
                 if (product.toStringName().toLowerCase() == name) {
                     productRes = product
                 }
             }
-            productRes
+            productRes!!
         }
     }
 
     override fun increaseCountUsages(product: Product): Completable {
         return Completable.create { emitter ->
             val productRef = database.child(DatabaseConstants.DATABASE_PRODUCT_TABLE)
-            productRef.child(product.id)
+            productRef.child(product.id!!)
                     .child(DatabaseConstants.DATABASE_PRODUCT_COUNT_USING_FIELD)
                     .setValue(product.increasingCount()) { databaseError, reference ->
                         if (emitter != null) {

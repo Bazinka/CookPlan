@@ -1,10 +1,10 @@
 package com.cookplan.product_list.update_database;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 
 import com.cookplan.BaseActivity;
 import com.cookplan.R;
+import com.google.android.material.snackbar.Snackbar;
 
 public class UpdateProductDatabaseActivity extends BaseActivity implements UpdateProductDatabaseView {
 

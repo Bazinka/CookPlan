@@ -2,12 +2,12 @@ package com.cookplan.auth.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.widget.Button
 import com.cookplan.BaseActivity
 import com.cookplan.R
 import com.cookplan.main.MainActivity
+import com.google.android.material.snackbar.Snackbar
 
 class AuthActivity : BaseActivity(), AuthView {
 
@@ -24,10 +24,10 @@ class AuthActivity : BaseActivity(), AuthView {
         presenter?.firstAuthSignIn()
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        super.onActivityResult(requestCode, resultCode, data)
-        presenter?.onActivityResult(requestCode, resultCode, data)
-    }
+//    public fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        presenter?.onActivityResult(requestCode, resultCode, data)
+//    }
 
     override fun showSnackbar(messageRes: Int) {
         Snackbar.make(findViewById(R.id.firebase_auth_root), messageRes, Snackbar.LENGTH_LONG).show()

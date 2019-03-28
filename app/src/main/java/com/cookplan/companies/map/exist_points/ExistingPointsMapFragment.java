@@ -2,11 +2,10 @@ package com.cookplan.companies.map.exist_points;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.cookplan.companies.list.CompanyListPresenterImpl;
 import com.cookplan.companies.list.CompanyListView;
 import com.cookplan.companies.map.MapEventListener;
 import com.cookplan.models.Company;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.List;
 

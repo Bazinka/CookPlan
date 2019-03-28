@@ -24,8 +24,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
 import android.widget.Toast;
 
 public abstract class PermissionUtils {
@@ -87,7 +88,7 @@ public abstract class PermissionUtils {
      * Checks if the result contains a {@link PackageManager#PERMISSION_GRANTED} result for a
      * permission from a runtime permissions request.
      *
-     * @see android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback
+     * @see androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
      */
     public static boolean isPermissionGranted(String[] grantPermissions, int[] grantResults,
                                               String permission) {

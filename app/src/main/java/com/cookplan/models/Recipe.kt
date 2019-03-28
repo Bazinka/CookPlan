@@ -45,8 +45,8 @@ data class Recipe(var id: String? = null,
         fun getRecipeFromDBObject(itemSnapshot: DataSnapshot): Recipe {
             val `object` = itemSnapshot.getValue(RecipeDB::class.java)
             return Recipe(id = itemSnapshot.key,
-                    name = `object`.name,
-                    desc = `object`.desc,
+                    name = `object`?.name,
+                    desc = `object`!!.desc,
                     descImageUrls = `object`.descImageUrls,
                     imageUrls = `object`.imageUrls,
                     userId = `object`.userId,
